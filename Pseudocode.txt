@@ -1,0 +1,105 @@
+FUNCTION tenantEntryForm(tenantlist,n):
+    newForm=[]
+    for i in range(n)
+        newForm=[]
+        PRINT("Enter tenant name:"\n)
+        GET name
+        PRINT("Enter tenant gender: (m/f):\n")
+        GET gender
+        PRINT("Enter tenant phone number: (############):\n")
+        GET pnum
+        PRINT("Enter tenant nationality: (Malaysian/non-Malaysian):\n")
+        GET nationality
+        PRINT("Enter Rental start date: (YYYY,MM,DD):\n")
+        GET date1
+        PRINT("Enter tenant income range(RM):\n")
+        GET income
+        PRINT("Enter tenant rental status(current/past):\n")
+        GET rental 
+        APPEND name TO newForm
+        APPEND gender TO newForm
+        APPEND pnum TO newForm
+        APPEND nationality TO newForm
+        APPEND date1 TO newForm
+        APPEND income TO newForm
+        APPEND rental TO newForm
+    APPEND newForm TO tenantlist
+    RETURN tenantlist
+ENDFUNCTION
+
+FUNCTION appendFile(list, listBool):
+    IF listBool == TRUE:
+        OPEN "tenant.txt" IN APPEND AS Thandler
+            for record from list:
+                for item in record:
+                    WRITE item TO Thandler
+                    WRITE "\n" TO Thandler
+                WRITE "\n" TO Thandler
+    ELSE:
+        OPEN "apartment.txt" IN APPEND AS Ahandler 
+            for record from list:
+                for item in record:
+                    WRITE item TO Ahandler
+                    WRITE "\n" TO Ahandler
+                WRITE "\n" TO Ahandler
+        CLOSE apartment.txt
+
+FUNCTION read_file(listBool):
+    IF listBool == TRUE:
+        OPEN "tenant.txt" IN READ AS Thandler:
+            FOR record FROM Ahandler:
+                PRINT(record.rstrip().rstrip(","))
+
+    ELSE:
+        OPEN "apartment.txt" IN READ AS Ahandler:
+            FOR record FROM Ahandler:
+                PRINT(record.rstrip().rstrip(","))
+
+
+FUNCTION apartment_entry_form():
+    PRINT("Enter the apartment code:")
+    GET apartmentcode
+
+FUNCTION apartment():
+    
+
+FUNCTION apartmentupdate():
+
+FUNCTION roomdetails():
+    PRINT("Dimensions, Pricing, Number of rooms, Apartment ID")
+    PRINT("Please type the keyword search based on the listing above: ")
+    GET keywordsearch
+    
+
+
+FUNCTION menu():
+    PRINT("\nTenant Management System")
+    PRINT("\n1.Review all apartment information\n2. Register new tenant\n3. Search box\n4. Exit")
+    PRINT("\nPlease select which operation that you want to do: ")
+
+    IF opt == 1:
+        CALLFUNCTION apartment()
+
+    ELSEIF opt == 2:
+        PRINT("Number of new tenants: ")
+        GET n
+        tenantlist=[]
+        tenantlist = CALLFUNCTION tenantEntryForm(tenantlist,n)
+        bool=TRUE
+        appendFile(tenantlist,list_type)
+        
+    ELSEIF opt == 3:
+        CALL FUNCTION search()
+
+    ELSEIF opt == 4:
+        PRINT("\nThank you for using, have a nice day~")
+
+    ELSE:
+        PRINT("\nError! Please try again")
+        RETURN menu()
+ENDFUNCTION
+
+BEGIN
+IMPORT datetime AS dt
+CALLFUNCTION menu()
+END
