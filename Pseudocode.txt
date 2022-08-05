@@ -27,6 +27,69 @@ FUNCTION tenantEntryForm(tenantlist,n):
     RETURN tenantlist
 ENDFUNCTION
 
+FUNCTION validityMessage(message)
+    IF message==0:
+        print("Format error")
+
+FUNCTION getname():
+    WHILE TRUE
+        PRINT("Enter tenant name: Firstname Familyname Lastname"\n)
+        GET name
+        namecheck=name
+        SPLIT namecheck INTO LIST WITH ","
+        FOR words IN namecheck:
+            IF characters IN words LOCATION[0] IS UPPERCASE
+                BREAK
+            ELSE:
+                nameFormat=0
+                CALLFUNCTION validityMessage(nameFormat)
+            ENDFOR
+    RETURN name
+ENDFUNCTION
+
+FUNCTION getgender():
+    PRINT("Enter tenant gender: (m/f):\n")
+    GET gender
+        gendercheck=gender
+        IF gendercheck.length==1:
+            BREAK
+        ELSE:
+            length=1
+            CALLFUNCTION validityMessage(length)
+    RETURN gender
+ENDFUNCTION
+
+FUNCTION getpnum():
+    PRINT("Enter tenant phone number: (############):\n")
+        pnumcheck=pnum
+        FOR digit IN pnum:
+            IF digit IS NOT INTEGER:
+                
+    GET pnum
+    RETURN pnum
+ENDFUNCTION
+
+FUNCTION getnationality():
+    PRINT("Enter tenant nationality: (m: Malaysian/n: non-Malaysian):\n")
+        GET nationality
+    RETURN nationality
+ENDFUNCTION
+
+FUNCTION getdate1():
+    PRINT("Enter Rental start date: (YYYY,MM,DD):\n")
+    GET date1
+    RETURN date1
+ENDFUNCTION
+
+FUNCTION getincome():
+    PRINT("Enter tenant income range(RM):\n")
+    GET income
+    RETURN income
+ENDFUNCTION
+
+FUNCTION getrental():
+ENDFUNCTION
+
 FUNCTION appendFile(list, listBool):
     IF listBool == TRUE:
         OPEN "tenant.txt" IN APPEND AS Thandler
@@ -103,3 +166,5 @@ BEGIN
 IMPORT datetime AS dt
 CALLFUNCTION menu()
 END
+
+git end collaboration update
