@@ -220,5 +220,3 @@ BEGIN
 IMPORT datetime AS dt
 CALLFUNCTION login()
 END
-
-git end collaboration update
