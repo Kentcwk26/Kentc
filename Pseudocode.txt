@@ -87,6 +87,13 @@ ENDFUNCTION
 FUNCTION getrental():
 ENDFUNCTION
 
+FUNCTION deleterecords(recordName, recordNum)
+    IF recordName==tenant
+        OPEN "tenant.txt" IN READ AS Thandler
+            FOR record from list:
+                FOR item in record:
+
+
 FUNCTION appendFile(list, listBool):
     IF listBool == TRUE:
         OPEN "tenant.txt" IN APPEND AS Thandler
