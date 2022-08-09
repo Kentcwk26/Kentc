@@ -1,4 +1,20 @@
 FUNCTION login()
+    chance=3
+    WHILE chance>0
+        PRINT("Enter username:"\n)
+        GET username
+        PINT("Enter password:"\n)
+        GET password
+        IF username IS IN usernameList AND password IS IN passwordList:
+            IF password==1234u-78 OR password==55467913:
+                CALLFUNCTION adminMenu()
+            ELSE:
+                CALLFUNCTION tenantMenu()
+        ELSE:
+            chance-=1
+            PRINT("Error, incorrect username or password."\n ,chance,"chances remaining"\n)
+ENDFUNCTION
+
 ENDFUNCTION
 
 FUNCTION Update():
@@ -57,7 +73,7 @@ FUNCTION getname():
         SPLIT namecheck INTO LIST WITH ","
         FOR words IN namecheck:
             IF characters IN words LOCATION[0] IS UPPERCASE
-                BREAK
+                BREAK LOOP
             ELSE:
                 nameFormat=0
                 CALLFUNCTION validityMessage(nameFormat)
@@ -70,7 +86,7 @@ FUNCTION getgender():
     GET gender
         gendercheck=gender
         IF gendercheck LENGTH==1:
-            BREAK
+            BREAK LOOP
         ELSE:
             code=1
             CALLFUNCTION validityMessage(length)
@@ -173,36 +189,36 @@ FUNCTION validityMessage(code)
     IF code==1:
         PRINT("Incorrect data type present")
 
-FUNCTION menu():
-    PRINT("\nTenant Management System")
-    PRINT("\n1.Review all apartment information\n2. Register new tenant\n3. Search box\n4. Exit")
-    PRINT("\nPlease select which operation that you want to do: ")
+FUNCTION adminMenu():
+    WHILE TRUE
+        PRINT("\nTenant Management System")
+        PRINT("\n1.Review all apartment information\n2. Register new tenant\n3. Search box\n4. Exit")
+        PRINT("\nPlease select which operation that you want to do: ")
 
-    IF opt == 1:
-        CALLFUNCTION apartment()
+        IF opt == 1:
+            CALLFUNCTION apartment()
 
-    ELSEIF opt == 2:
-        PRINT("Number of new tenants: ")
-        GET n
-        tenantlist=[]
-        tenantlist = CALLFUNCTION tenantEntryForm(tenantlist,n)
-        bool=TRUE
-        appendFile(tenantlist,list_type)
-        
-    ELSEIF opt == 3:
-        CALL FUNCTION search()
+        ELSEIF opt == 2:
+            PRINT("Number of new tenants: ")
+            GET n
+            tenantlist=[]
+            tenantlist = CALLFUNCTION tenantEntryForm(tenantlist,n)
+            bool=TRUE
+            appendFile(tenantlist,list_type)
+            
+        ELSEIF opt == 3:
+            CALL FUNCTION search()
 
-    ELSEIF opt == 4:
-        PRINT("\nThank you for using, have a nice day~")
-
-    ELSE:
-        PRINT("\nError! Please try again")
-        RETURN menu()
+        ELSEIF opt == 4:
+            PRINT("\nThank you for using, have a nice day~")
+            BREAK LOOP
+        ELSE:
+            PRINT("\nError! Please try again")
 ENDFUNCTION
 
 BEGIN
 IMPORT datetime AS dt
-CALLFUNCTION menu()
+CALLFUNCTION login()
 END
 
 git end collaboration update
