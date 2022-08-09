@@ -1,3 +1,25 @@
+FUNCTION login()
+ENDFUNCTION
+
+FUNCTION Update():
+    IF input=T:
+ENDFUNCTION
+
+FUNCTION deletedRecord()
+ENDFUNCTION
+
+FUNCTION search()
+ENDFUNCTION
+
+FUNCTION transactionEntryForm()
+ENDFUNCTION
+
+FUNCTION logEntryForm()
+ENDFUNCTION
+
+FUNCTION display()
+ENDFUNCTION
+
 FUNCTION tenantEntryForm(tenantlist,n):
     newForm=[]
     for i in range(n)
@@ -96,13 +118,13 @@ FUNCTION deleterecords(recordName, recordNum)
                 FOR item in record:
                 
 FUNCTION searchTenant(details):
-#    OPEN "tenant.txt" IN READ AS TSearch
-#        TSearch.read()
-#        TSearch.strip(",")
-#        list = JOIN TSearch INTO string(",")
-#        for record in flight:
-#            if record.startswith(details):
-#                print("found record", record.rstrip(",").rstrip(""))
+    OPEN "tenant.txt" IN READ AS TSearch
+        TSearch.read()
+        TSearch.strip(",")
+        list = JOIN TSearch INTO string(",")
+        for record in flight:
+            if record.startswith(details):
+                print("found record", record.rstrip(",").rstrip(""))
 
 FUNCTION appendFile(list, listBool):
     IF listBool == TRUE:
