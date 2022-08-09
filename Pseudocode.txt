@@ -3,8 +3,12 @@ FUNCTION login()
     WHILE chance>0
         PRINT("Enter username:"\n)
         GET username
+        #
+
         PINT("Enter password:"\n)
         GET password
+        #
+
         IF username IS IN usernameList AND password IS IN passwordList:
             IF password==1234u-78 OR password==55467913:
                 CALLFUNCTION adminMenu()
@@ -15,10 +19,16 @@ FUNCTION login()
             PRINT("Error, incorrect username or password."\n ,chance,"chances remaining"\n)
 ENDFUNCTION
 
-ENDFUNCTION
-
 FUNCTION Update():
-    IF input=T:
+    PRINT("Enter[T] for tenant record; [A] for apartment record; [P] for transaction record)
+    GET INPUT
+    IF input==T OR input==t:
+
+    ELSE IF input==A OR input==a:
+
+    ELSE IF input==P OR input==p:
+
+    
 ENDFUNCTION
 
 FUNCTION deletedRecord()
