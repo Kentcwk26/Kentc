@@ -204,5 +204,3 @@ BEGIN
 IMPORT datetime AS dt
 CALLFUNCTION menu()
 END
-
-git end collaboration update
