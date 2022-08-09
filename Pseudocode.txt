@@ -90,9 +90,19 @@ ENDFUNCTION
 FUNCTION deleterecords(recordName, recordNum)
     IF recordName==tenant
         OPEN "tenant.txt" IN READ AS Thandler
+            READ Thandler
+            STRIP (",") FROM Thandler
             FOR record from list:
                 FOR item in record:
-
+                
+FUNCTION searchTenant(details):
+#    OPEN "tenant.txt" IN READ AS TSearch
+#        TSearch.read()
+#        TSearch.strip(",")
+#        list = JOIN TSearch INTO string(",")
+#        for record in flight:
+#            if record.startswith(details):
+#                print("found record", record.rstrip(",").rstrip(""))
 
 FUNCTION appendFile(list, listBool):
     IF listBool == TRUE:
