@@ -7,11 +7,11 @@ FUNCTION tenantEntryForm(tenantlist,n):
         PRINT("Enter tenant gender: (m/f):\n")
         GET gender
         PRINT("Enter tenant phone number: (############):\n")
-        GET pnum
+        GET pNum
         PRINT("Enter tenant nationality: (Malaysian/non-Malaysian):\n")
         GET nationality
         PRINT("Enter Rental start date: (YYYY,MM,DD):\n")
-        GET date1
+        GET startDate
         PRINT("Enter tenant income range(RM):\n")
         GET income
         PRINT("Enter tenant rental status(current/past):\n")
@@ -26,10 +26,6 @@ FUNCTION tenantEntryForm(tenantlist,n):
     APPEND newForm TO tenantlist
     RETURN tenantlist
 ENDFUNCTION
-
-FUNCTION validityMessage(message)
-    IF message==0:
-        print("Format error")
 
 FUNCTION getname():
     WHILE TRUE
@@ -51,22 +47,23 @@ FUNCTION getgender():
     PRINT("Enter tenant gender: (m/f):\n")
     GET gender
         gendercheck=gender
-        IF gendercheck.length==1:
+        IF gendercheck LENGTH==1:
             BREAK
         ELSE:
-            length=1
+            code=1
             CALLFUNCTION validityMessage(length)
     RETURN gender
 ENDFUNCTION
 
-FUNCTION getpnum():
+FUNCTION getpNum():
     PRINT("Enter tenant phone number: (############):\n")
-        pnumcheck=pnum
+    GET pnum
+    pNumCheck=pNum
         FOR digit IN pnum:
             IF digit IS NOT INTEGER:
-                
-    GET pnum
-    RETURN pnum
+                CALLFUNCTION 
+
+    RETURN pNum
 ENDFUNCTION
 
 FUNCTION getnationality():
@@ -75,10 +72,10 @@ FUNCTION getnationality():
     RETURN nationality
 ENDFUNCTION
 
-FUNCTION getdate1():
+FUNCTION getStartDate():
     PRINT("Enter Rental start date: (YYYY,MM,DD):\n")
-    GET date1
-    RETURN date1
+    GET startDate
+    RETURN startDate
 ENDFUNCTION
 
 FUNCTION getincome():
@@ -122,8 +119,6 @@ FUNCTION read_file(listBool):
 FUNCTION apartment_entry_form():
     PRINT("Enter the apartment code:")
     GET apartmentcode
-
-FUNCTION apartment():
     
 
 FUNCTION apartmentupdate():
@@ -133,7 +128,11 @@ FUNCTION roomdetails():
     PRINT("Please type the keyword search based on the listing above: ")
     GET keywordsearch
     
-
+FUNCTION validityMessage(code)
+    IF code==0:
+        PRINT("Format error")
+    IF code==1:
+        PRINT("Incorrect data type present")
 
 FUNCTION menu():
     PRINT("\nTenant Management System")
