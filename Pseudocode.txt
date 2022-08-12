@@ -3,10 +3,14 @@ FUNCTION login()
     WHILE chance>0
         PRINT("Enter username:"\n)
         GET username
-        #
-
         PINT("Enter password:"\n)
         GET password
+        OPEN (username.txt) IN READ MODE AS userInfo
+            userCheck=userInfo.readlines()
+        
+
+
+
         #
 
         IF username IS IN usernameList AND password IS IN passwordList:
