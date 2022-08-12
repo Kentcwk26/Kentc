@@ -3,24 +3,21 @@ FUNCTION login()
     WHILE chance>0
         PRINT("Enter username:"\n)
         GET username
-        PINT("Enter password:"\n)
+        PRINT("Enter password:"\n)
         GET password
-        OPEN (username.txt) IN READ MODE AS userInfo
+        OPENFILE (username.txt) IN READ MODE AS userInfo
             userCheck=userInfo.readlines()
-        
-
-
-
-        #
-
-        IF username IS IN usernameList AND password IS IN passwordList:
-            IF password==1234u-78 OR password==55467913:
-                CALLFUNCTION adminMenu()
-            ELSE:
-                CALLFUNCTION tenantMenu()
-        ELSE:
-            chance-=1
-            PRINT("Error, incorrect username or password."\n ,chance,"chances remaining"\n)
+            CLOSEFILE
+        FOR record in userCheck:
+            FOR index IN record:
+                IF username = index LOCATION 0 AND password = index LOCATION 1:
+                    IF password==1234u-78 OR password==55467913:
+                        CALLFUNCTION adminMenu()
+                    ELSE:
+                        CALLFUNCTION tenantMenu()
+                ELSE:
+                    chance-=1
+                    PRINT("Error, incorrect username or password."\n ,chance,"chances remaining"\n)
 ENDFUNCTION
 
 FUNCTION Update():

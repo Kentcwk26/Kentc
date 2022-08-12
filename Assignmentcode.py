@@ -119,7 +119,9 @@ def menu():
       print("\nThank you for using, have a nice day~")
 
    else:
-      print("\nError! Please1 try again")
+      print("\nError! Please try again")
       return menu()
 
 menu()
+
+print("1. r\n2. e")
