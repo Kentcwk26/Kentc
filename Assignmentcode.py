@@ -1,3 +1,26 @@
+
+def login():  #define the login function
+   chance=3 #set the amount of chances for login
+   while chance>0:
+      #input login credentials
+      username=input("Enter username:\n")
+      password=input("Enter password:\n")
+
+      with open("user.txt",'r') as userInfo:
+         userCheck=userInfo.readlines()
+         for record in userCheck:
+            listRecord=record.split(",")
+            for index in listRecord:
+               if username == index[0]:
+                  if password == index[1]:
+                     if password=="1234u-78" or password=="55467913":
+                        print("adminMenu()")
+                     else:
+                     menu()
+            else:
+               chance-=1
+               print("Error, incorrect username or password.\n",chance,"chances remaining\n")
+
 #Define tenant_entry form function
 def tenant_entry_form(bulklist,n):
    newForm=[]
@@ -26,45 +49,54 @@ def tenant_entry_form(bulklist,n):
 
 #Define apartment function
 def apartment():
-    
-   print()
-   print("Apartment info:")
-   print()
-   masterlist=[]
+   print("\nApartment info:\n")
+   record=[]
 
    #Put sample data
-   list1=["Standard Room","Code: SR1(Triple),SR2(Twin)","Dimensions: 120+ sqft - 140+ sqft","Pricing: RM350(Triple),RM450(Twin)","Number of Rooms: 40","Apartment ID: A01-L1-R1 to A01-L1-R41"]
-   list2=["Standard Room A/C","Code: SRAC3(Triple),SRAC4(Twin)","Dimensions: 130+ sqft - 150+ sqft","Pricing: RM450(Triple),RM550(Twin)","Number of Rooms: 40","Apartment ID: A01-L2-R1 to A01-L2-R41"]
-   list3=["Deluxe Room","Code: DR1(Triple),DR2(Twin)","Dimensions: 140+ sqft - 170+ sqft","Pricing: RM650(Triple),RM740(Twin)","Number of Rooms: 40","Apartment ID: A01-L4-R1 to A01-L4-R41"]
-   list4=["Deluxe Room A/C with shared attached bath / toilet","Code: DRAC3(Triple),DRAC4(Single)","Dimensions: 150+ sqft - 180+ sqft","Pricing: RM750(Triple),RM840(Single)","Number of Rooms: 40","Apartment ID: A01-L3-R1 to A01-L3-R41"]
-   list5=["Compact Premium Single","Code: CPS","Dimensions: 130+ sqft","Pricing: RM690","Number of Rooms: 20","Apartment ID: A01-L5-R1 to A01-L5-R41"]
-   list6=["Medium Premium Single","Code: MPS","Dimensions: 150+ sqft","Pricing: RM700","Number of Rooms: 20","Apartment ID: A02-L1-R1 to A02-L1-R41"]
-   list7=["Medium Premium Twin","Code: MPT1(Twin),MPT2(Single)","Dimensions: 180+ sqft","Pricing: RM690(Twin),RM1150(Single)","Number of Rooms: 40","Apartment ID: A02-L2-R1 to A02-L2-R41"]
-   list8=["Medium Premium with attached bath / toilet","Code: MPA1(Twin),MPA2(Single)","Dimensions: 160+ sqft - 180+ sqft","Pricing: RM740(Twin),RM1250 (Single)","Number of Rooms: 40","Apartment ID: A02-L3-R1 to A02-L3-R41"]
-   list9=["En-Suite Single (Super Premium)","Code: SR1(Triple),SR2(Twin)","Dimensions: 140+ sqft","Pricing: RM1200","Number of Rooms: 20","Apartment ID: A02-L4-R1 to A02-L4-R41"]
-   list10=["En-Suite Twin (Super Premium)","Code: SR1(Triple),SR2(Twin)","Dimensions: 200+ sqft","Pricing: RM920(per person)","Number of Rooms: 20","Apartment ID: A02-L5-R1 to A02-L5-R41"]
+   list1=[["Standard Room (Triple)"],["Code: SR1"],["Dimensions: 140+ sqft"],["Pricing: RM350"],["Number of Rooms: 20"],["Apartment ID: A01-L1-R1 to A01-L1-R21"]]
+   list2=[["Standard Room (Twin)"],["Code: SR2"],["Dimensions: 120+ sqft"],["Pricing: RM450"],["Number of Rooms: 20"],["Apartment ID: A01-L1-R22 to A01-L1-R41"]]
+   list3=[["Standard Room A/C (Triple)"],["Code: SR3"],["Dimensions: 150+ sqft"],["Pricing: RM550"],["Number of Rooms: 20"],["Apartment ID: A01-L2-R1 to A01-L2-R21"]]
+   list4=[["Standard Room A/C (Twin)"],["Code: SR4"],["Dimensions: 130+ sqft"],["Pricing: RM650"],["Number of Rooms: 20"],["Apartment ID: A01-L2-R22 to A01-L2-R41"]]
+   list5=[["Deluxe Room (Triple)"],["Code: DR1"],["Dimensions: 170+ sqft"],["Pricing: RM750"],["Number of Rooms: 20"],["Apartment ID: A01-L4-R1 to A01-L4-R21"]]
+   list6=[["Deluxe Room (Twin)"],["Code: DR2"],["Dimensions: 160+ sqft"],["Pricing: RM840"],["Number of Rooms: 20"],["Apartment ID: A01-L4-R22 to A01-L4-R41"]]
+   list7=[["Deluxe Room A/C with shared attached bath / toilet (Triple)"],["Code: DR3"],["Dimensions: 180+ sqft"],["Pricing: RM950"],["Number of Rooms: 20"],["Apartment ID: A01-L3-R1 to A01-L3-R21"]]
+   list8=[["Deluxe Room A/C with shared attached bath / toilet"],["Code: DR4"],["Dimensions: 170+ sqft"],["Pricing: RM1040"],["Number of Rooms: 20"],["Apartment ID: A01-L3-R22 to A01-L3-R41"]]
+   list9=[["Compact Premium Single"],["Code: CPS"],["Dimensions: 130+ sqft"],["Pricing: RM690"],["Number of Rooms: 20"],["Apartment ID: A01-L5-R1 to A01-L5-R41"]]
+   list10=[["Medium Premium Single"],["Code: MPS"],["Dimensions: 150+ sqft"],["Pricing: RM750"],["Number of Rooms: 20"],["Apartment ID: A02-L1-R1 to A02-L1-R21"]]
+   list11=[["Medium Premium Twin"],["Code: MPT"],["Dimensions: 180+ sqft"],["Pricing: RM890"],["Number of Rooms: 20"],["Apartment ID: A02-L2-R1 to A02-L2-R21"]]
+   list12=[["Medium Premium with attached bath / toilet (Twin)"],["Code: MP1"],["Dimensions: 180+ sqft"],["Pricing: RM940"],["Number of Rooms: 20"],["Apartment ID: A02-L3-R1 to A02-L3-R21"]]
+   list13=[["Medium Premium with attached bath / toilet (Single)"],["Code: MP2"],["Dimensions: 160+ sqft"],["Pricing: RM1050"],["Number of Rooms: 20"],["Apartment ID: A02-L3-R22 to A02-L3-R41"]]
+   list14=[["En-Suite Single (Super Premium - Triple)"],["Code: ESS3"],["Dimensions: 160+ sqft"],["Pricing: RM700"],["Number of Rooms: 20"],["Apartment ID: A02-L4-R1 to A02-L4-R41"]]
+   list15=[["En-Suite Single (Super Premium - Twin)"],["Code: ESS2"],["Dimensions: 140+ sqft"],["Pricing: RM800"],["Number of Rooms: 20"],["Apartment ID: A02-L4-R1 to A02-L4-R41"]]
+   list16=[["En-Suite Twin (Super Premium)"],["Code: EST2"],["Dimensions: 200+ sqft"],["Pricing: RM900"],["Number of Rooms: 20"],["Apartment ID: A02-L5-R1 to A02-L5-R41"]]
 
    #Apply data at the list
-   masterlist.append(list1)
-   masterlist.append(list2)
-   masterlist.append(list3)
-   masterlist.append(list4)
-   masterlist.append(list5)
-   masterlist.append(list6)
-   masterlist.append(list7)
-   masterlist.append(list8)
-   masterlist.append(list9)
-   masterlist.append(list10)
+   record.append(list1)
+   record.append(list2)
+   record.append(list3)
+   record.append(list4)
+   record.append(list5)
+   record.append(list6)
+   record.append(list7)
+   record.append(list8)
+   record.append(list9)
+   record.append(list10)
+   record.append(list11)
+   record.append(list12)
+   record.append(list13)
+   record.append(list14)
+   record.append(list15)
+   record.append(list16)
 
-   with open("apartment.txt","w") as Ahandler:
-      for record in masterlist:
-         for item in record:
-            Ahandler.write(item)
-            Ahandler.write("\n")
+   with open("Apartment.txt","w") as Ahandler:
+      for item in record:
+         iString=(",").join(item)
+         Ahandler.write(iString)
          Ahandler.write("\n")
+      Ahandler.write("\n")
 
-   with open("apartment.txt","r") as Ahandler:
-      for record in Ahandler:
+   with open("Apartment.txt","r") as Ahandler:
+      for item in Ahandler:
          print(record.rstrip().rstrip(","))
 
 #return the list
@@ -74,28 +106,51 @@ def apartment():
 def search():
 
    print("\nWelcome to search box!")
-   print("\n1. Search room specific details")
-   print("2. Search specific tenant details")
-   print("3. Search both tenant and room details")
-   print("4. Exit")
-   option=int(input("\nPlease select a number to start the program: "))
+   print("\n1. Search room specific details.\n2. Search specific tenant details\n3. Search both tenant and room details\n4. Exit\n")
+   option=int(input("Please select a number to start the program: "))
 
    if option==1:
-      print("Room")
+      print()
+      opt=input("Room(r), Pricing(p)\nPlease type the keyword search based on the listing above: ")
+      if opt=='r':
+         print("\nSR1,SR2,SR3,SR4,DR1,DR2,DR3,DR4,CPS,MPS,MPT,MP1,MP2,ESS3,ESS2,EST2")
+         num=1
+         searchinformation(num)
+      elif opt=='p':
+         print("\nRM350,RM450,RM550,RM650,RM690,RM700,RM750,RM800,RM840,RM890,RM900,RM940,RM950,RM1040,RM1050")
+         num=3
+         searchinformation(num)
+      else:
+         print("Invalid input or no records")
+   
    elif option==2:
-      print("Tenant")
+      options=input("\nName(N),Apartment Details(A)\nPlease type the keyword search based on the listing above: ")
+      print()
+
    elif option==3:
-      print("Room and Tenant")
+      print()
+
    elif option==4:
       print("\nReturn to main menu")
+      #return menu function
       return menu()
+
    else:
       print("\nError! Please try again")
+      #return search function
       return search()
 
-#Return the list
-   return menu()
-
+#define searchinformation function:
+def searchinformation(num):
+   searchinformation=input("Select and enter text to begin search: ")
+   print()
+   with open("Apartment.txt","r") as Xhandler:
+      for record in Xhandler:
+         strippeditem=record.rstrip()
+         data=strippeditem.split(", ")
+         if searchinformation in data[num]:
+            print("Results:\n",record)
+            
 #define menu function:
 def menu():
    
@@ -122,6 +177,4 @@ def menu():
       print("\nError! Please try again")
       return menu()
 
-menu()
-
-print("1. r\n2. e")
+login()

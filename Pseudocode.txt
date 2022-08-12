@@ -24,7 +24,7 @@ FUNCTION Update():
     PRINT("Enter[T] for tenant record; [A] for apartment record; [P] for transaction record)
     GET INPUT
     IF input==T OR input==t:
-
+        
     ELSE IF input==A OR input==a:
 
     ELSE IF input==P OR input==p:
@@ -188,6 +188,7 @@ FUNCTION apartment_entry_form():
     
 
 FUNCTION apartmentupdate():
+    PRINT("")
 
 FUNCTION roomdetails():
     PRINT("Dimensions, Pricing, Number of rooms, Apartment ID")
