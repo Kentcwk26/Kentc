@@ -11,17 +11,16 @@ def login():  #define the login function
          userCheck=userInfo.readlines()
          for record in userCheck:
             listRecord=record.split(",")
-            for index in listRecord:
-               if username == index[0]:
-                  if password == index[1]:
-                     if password=="1234u-78" or password=="55467913":
-                        print("\nLogin successful\n")
-                        print("adminMenu()")
-                     else:
-                        menu()
-            else:
-               chance-=1
-               print("\nError, incorrect username or password.\n",chance,"chances remaining.\n")
+            if username == listRecord[0]:
+               if password == listRecord[1]:
+                  if password=="1234u-78" or password=="55467913":
+                     print("\nLogin successful\n")
+                     print("adminMenu()")
+                  else:
+                     menu()
+         else:
+            chance-=1
+            print("\nError, incorrect username or password.\n",chance,"chances remaining.\n")
 
 #Define tenant_entry form function
 def tenant_entry_form(bulklist,n):
