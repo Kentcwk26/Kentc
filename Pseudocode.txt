@@ -180,21 +180,50 @@ FUNCTION read_file(listBool):
         OPEN "apartment.txt" IN READ AS Ahandler:
             FOR record FROM Ahandler:
                 PRINT(record.rstrip().rstrip(","))
-
-
-FUNCTION apartment_entry_form():
-    PRINT("Enter the apartment code:")
-    GET apartmentcode
     
-
 FUNCTION apartmentupdate():
-    PRINT("")
+    PRINT("Apartment Update")
 
-FUNCTION roomdetails():
-    PRINT("Dimensions, Pricing, Number of rooms, Apartment ID")
+FUNCTION searchbox():
+    PRINT("\nWelcome to search box!")
+    PRINT("\n1. Search room specific details.\n2. Search specific tenant details\n3. Search both tenant and room details\n4. Exit\n")
     PRINT("Please type the keyword search based on the listing above: ")
-    GET keywordsearch
-    
+    GET option
+
+    IF option==1 THEN:
+        print()
+        PRINT("Room(r), Pricing(p)\nPlease type the keyword search based on the listing above: ")
+        GET opt
+
+        IF opt=='r' THEN:
+        PRINT("\nSR1,SR2,SR3,SR4,DR1,DR2,DR3,DR4,CPS,MPS,MPT,MP1,MP2,ESS3,ESS2,EST2")
+        num=1
+        CALLFUNCTION searchinformation(num)
+
+        IF opt=='p' THEN:
+        PRINT("\nRM350,RM450,RM550,RM650,RM690,RM700,RM750,RM800,RM840,RM890,RM900,RM940,RM950,RM1040,RM1050")
+        num=3
+        CALLFUNCTION searchinformation(num)
+
+        ELSE:
+        PRINT("Invalid input or no records")
+
+    IF option==2 THEN:
+    print()
+    PRINT("\nName(N),Apartment Details(A)\nPlease type the keyword search based on the listing above: ")
+    GET options
+
+        IF options=='N' THEN:
+        
+
+        IF opt=='A' THEN:
+        
+
+        ELSE:
+        PRINT("Invalid input or no records")
+
+        
+
 FUNCTION validityMessage(code)
     IF code==0:
         PRINT("Format error")
@@ -232,5 +261,3 @@ BEGIN
 IMPORT datetime AS dt
 CALLFUNCTION login()
 END
-
-khjkgj

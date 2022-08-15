@@ -3,8 +3,9 @@ def login():  #define the login function
    chance=3 #set the amount of chances for login
    while chance>0:
       #input login credentials
-      username=input("Enter username:\n")
-      password=input("Enter password:\n")
+      print("\nWelcome to Tenant Management System.\nPlease enter username and password to proceed.\n")
+      username=input("Enter username:")
+      password=input("Enter password:")
 
       with open("user.txt",'r') as userInfo:
          userCheck=userInfo.readlines()
@@ -16,10 +17,10 @@ def login():  #define the login function
                      if password=="1234u-78" or password=="55467913":
                         print("adminMenu()")
                      else:
-                     menu()
+                        menu()
             else:
                chance-=1
-               print("Error, incorrect username or password.\n",chance,"chances remaining\n")
+               print("\nError, incorrect username or password.\n",chance,"chances remaining\n")
 
 #Define tenant_entry form function
 def tenant_entry_form(bulklist,n):
@@ -49,6 +50,7 @@ def tenant_entry_form(bulklist,n):
 
 #Define apartment function
 def apartment():
+   
    print("\nApartment info:\n")
    record=[]
 
@@ -103,7 +105,7 @@ def apartment():
    return menu()
 
 #define search function
-def search():
+def searchbox():
 
    print("\nWelcome to search box!")
    print("\n1. Search room specific details.\n2. Search specific tenant details\n3. Search both tenant and room details\n4. Exit\n")
@@ -112,10 +114,12 @@ def search():
    if option==1:
       print()
       opt=input("Room(r), Pricing(p)\nPlease type the keyword search based on the listing above: ")
+      
       if opt=='r':
          print("\nSR1,SR2,SR3,SR4,DR1,DR2,DR3,DR4,CPS,MPS,MPT,MP1,MP2,ESS3,ESS2,EST2")
          num=1
          searchinformation(num)
+      
       elif opt=='p':
          print("\nRM350,RM450,RM550,RM650,RM690,RM700,RM750,RM800,RM840,RM890,RM900,RM940,RM950,RM1040,RM1050")
          num=3
@@ -137,11 +141,12 @@ def search():
 
    else:
       print("\nError! Please try again")
-      #return search function
-      return search()
+      #return searchbox function
+      return searchbox()
 
 #define searchinformation function:
 def searchinformation(num):
+   
    searchinformation=input("Select and enter text to begin search: ")
    print()
    with open("Apartment.txt","r") as Xhandler:
@@ -150,7 +155,13 @@ def searchinformation(num):
          data=strippeditem.split(", ")
          if searchinformation in data[num]:
             print("Results:\n",record)
-            
+
+   exitsearch=input("Exit program? Enter any key to exit, Enter 'C' to continue. ")
+   if exitsearch == 'C':
+      searchbox()
+   else:
+      menu()
+
 #define menu function:
 def menu():
    
@@ -163,7 +174,7 @@ def menu():
       apartment()
 
    elif opt==2:
-      search()
+      searchbox()
       
    elif opt==3:
       bulklist=[]
@@ -171,10 +182,10 @@ def menu():
       print(bulklist)
 
    elif opt==4:
-      print("\nThank you for using, have a nice day~")
+      print("\nThank you for using, have a nice day~\n")
 
    else:
-      print("\nError! Please try again")
+      print("\nError! Please try again\n")
       return menu()
 
-login()
+menu()
