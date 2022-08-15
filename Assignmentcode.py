@@ -188,4 +188,4 @@ def menu():
       print("\nError! Please try again\n")
       return menu()
 
-menu()
+login()
