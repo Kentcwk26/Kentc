@@ -1,9 +1,9 @@
 
 def login():  #define the login function
-   chance=3 #set the amount of chances for login
+   chance=3
    while chance>0:
       #input login credentials
-      print("\nWelcome to Tenant Management System.\nPlease enter username and password to proceed.\n")
+      print("Welcome to Tenant Management System.\nPlease enter username and password to proceed.\n")
       username=input("Enter username:")
       password=input("Enter password:")
 
@@ -13,13 +13,13 @@ def login():  #define the login function
             listRecord=record.split(",")
             if username == listRecord[0]:
                if password == listRecord[1]:
-                  if password=="1234u-78" or password=="55467913":
+                  if password == "1234u-78" or password == "55467913":
                      print("\nLogin successful\n")
                      print("adminMenu()")
                   else:
                      menu()
-                     chance==0
-                     break
+                     chance=0
+               break
             else:
                chance-=1
                print("\nError, incorrect username or password.\n",chance,"chances remaining.\n")
