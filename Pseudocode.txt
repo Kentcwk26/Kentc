@@ -6,18 +6,30 @@ FUNCTION login()
         PRINT("Enter password:"\n)
         GET password
         OPENFILE (username.txt) IN READ MODE AS userInfo
-            userCheck=userInfo.readlines()
-            CLOSEFILE
-        FOR record in userCheck:
-            FOR index IN record:
-                IF username = index LOCATION 0 AND password = index LOCATION 1:
-                    IF password==1234u-78 OR password==55467913:
-                        CALLFUNCTION adminMenu()
-                    ELSE:
-                        CALLFUNCTION tenantMenu()
+            userCheck= read userInfo line-by-line()
+            FOR record in userCheck:
+                listRecord = SPLIT record INTO LIST SEPARATED BY ","
+                IF username == listRecord LOCATION 0:
+                    IF password == listRecord LOCATION 1:
+                        print("\nLogin successful\n")
+                        IF (username == "john" AND password == "1234u-78") OR (username == "Dave" AND password == "55467913"):
+                            CALLFUNCTION adminMenu()
+                            chance=0
+                            break
+                        ELSE:
+                            CALLFUNCTION tenantMenu()
+                            chance=0
+                            BREAK LOOP
+                        ENDIF
+                    ENDIF
                 ELSE:
                     chance-=1
                     PRINT("Error, incorrect username or password."\n ,chance,"chances remaining"\n)
+                    BREAK LOOP
+                ENDIF
+            ENDFOR
+        CLOSEFILE
+    ENDWHILE
 ENDFUNCTION
 
 FUNCTION Update():

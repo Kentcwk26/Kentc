@@ -1,28 +1,31 @@
-
 def login():  #define the login function
+   print("Welcome to Tenant Management System.\nPlease enter username and password to proceed.\n")   
    chance=3
    while chance>0:
       #input login credentials
-      print("Welcome to Tenant Management System.\nPlease enter username and password to proceed.\n")
       username=input("Enter username:")
       password=input("Enter password:")
-
+      #open file and match for correct login
       with open("user.txt",'r') as userInfo:
          userCheck=userInfo.readlines()
          for record in userCheck:
-            listRecord=record.split(",")
+            listRecord = record.split(",")
             if username == listRecord[0]:
                if password == listRecord[1]:
-                  if password == "1234u-78" or password == "55467913":
-                     print("\nLogin successful\n")
-                     print("adminMenu()")
+                  print("\nLogin successful\n")
+                  #check for admin credentials
+                  if (username == "john" and password == "1234u-78") or (username == "Dave" and password == "55467913"):
+                     adminMenu()
+                     chance=0
+                     break
                   else:
                      menu()
                      chance=0
-               break
-            else:
-               chance-=1
-               print("\nError, incorrect username or password.\n",chance,"chances remaining.\n")
+                     break            
+         else:
+            chance-=1
+            print("\nError, incorrect username or password.\n",chance,"chances remaining.\n")
+
 
 #Define tenant_entry form function
 def tenant_entry_form(bulklist,n):
@@ -162,10 +165,37 @@ def searchinformation(num):
    else:
       menu()
 
+
 #define menu function:
-def menu():
+def adminmenu():
    while True:
       print("\n- Tenant Management System -")
+      print("\n1. Review all apartment information\n2. Search box\n3. Register new tenant\n4. Exit")
+
+      opt=int(input("\nPlease select which operation that you want to do: "))
+
+      if opt==1:
+         apartment()
+
+      elif opt==2:
+         searchbox()
+         
+      elif opt==3:
+         bulklist=[]
+         bulklist = tenant_entry_form()
+         print(bulklist)
+
+      elif opt==4:
+         print("\nThank you for using, have a nice day~\n")
+         return False
+
+      else:
+         print("\nError! Please try again\n")
+
+#define menu function:
+def tenantmenu():
+   while True:
+      print("\n- Tenant page -")
       print("\n1. Review all apartment information\n2. Search box\n3. Register new tenant\n4. Exit")
 
       opt=int(input("\nPlease select which operation that you want to do: "))
