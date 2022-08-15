@@ -15,12 +15,13 @@ def login():  #define the login function
                if username == index[0]:
                   if password == index[1]:
                      if password=="1234u-78" or password=="55467913":
+                        print("\nLogin successful\n")
                         print("adminMenu()")
                      else:
                         menu()
             else:
                chance-=1
-               print("\nError, incorrect username or password.\n",chance,"chances remaining\n")
+               print("\nError, incorrect username or password.\n",chance,"chances remaining.\n")
 
 #Define tenant_entry form function
 def tenant_entry_form(bulklist,n):
@@ -89,17 +90,18 @@ def apartment():
    record.append(list14)
    record.append(list15)
    record.append(list16)
-
+   
    with open("Apartment.txt","w") as Ahandler:
       for item in record:
-         iString=(",").join(item)
-         Ahandler.write(iString)
+         for data in item:
+            for element in data:
+               Ahandler.write(element)
+            Ahandler.write(", ")
          Ahandler.write("\n")
-      Ahandler.write("\n")
-
+       
    with open("Apartment.txt","r") as Ahandler:
       for item in Ahandler:
-         print(record.rstrip().rstrip(","))
+         print(item.rstrip().rstrip(","))
 
 #return the list
    return menu()
@@ -108,10 +110,10 @@ def apartment():
 def searchbox():
 
    print("\nWelcome to search box!")
-   print("\n1. Search room specific details.\n2. Search specific tenant details\n3. Search both tenant and room details\n4. Exit\n")
-   option=int(input("Please select a number to start the program: "))
+   print("\n1. Search room specific details.\n2. Search specific tenant details.\n\nEnter 'X' to EXIT search box \n")
+   option=input("Select and insert input in order to start the program: ")
 
-   if option==1:
+   if option=='1':
       print()
       opt=input("Room(r), Pricing(p)\nPlease type the keyword search based on the listing above: ")
       
@@ -127,15 +129,12 @@ def searchbox():
       else:
          print("Invalid input or no records")
    
-   elif option==2:
+   elif option=='2':
       options=input("\nName(N),Apartment Details(A)\nPlease type the keyword search based on the listing above: ")
       print()
 
-   elif option==3:
-      print()
-
-   elif option==4:
-      print("\nReturn to main menu")
+   elif option=='X':
+      print("\nReturn to main menu\n\n--------------------------------")
       #return menu function
       return menu()
 
@@ -165,7 +164,7 @@ def searchinformation(num):
 #define menu function:
 def menu():
    
-   print("\nTenant Management System")
+   print("\n- Tenant Management System -")
    print("\n1. Review all apartment information\n2. Search box\n3. Register new tenant\n4. Exit")
 
    opt=int(input("\nPlease select which operation that you want to do: "))
@@ -182,6 +181,7 @@ def menu():
       print(bulklist)
 
    elif opt==4:
+      
       print("\nThank you for using, have a nice day~\n")
 
    else:
