@@ -19,7 +19,7 @@ def login():  #define the login function
                      chance=0
                      break
                   else:
-                     menu()
+                     tenantMenu()
                      chance=0
                      break            
          else:
@@ -167,7 +167,7 @@ def searchinformation(num):
 
 
 #define menu function:
-def adminmenu():
+def adminMenu():
    while True:
       print("\n- Tenant Management System -")
       print("\n1. Review all apartment information\n2. Search box\n3. Register new tenant\n4. Exit")
@@ -193,7 +193,7 @@ def adminmenu():
          print("\nError! Please try again\n")
 
 #define menu function:
-def tenantmenu():
+def tenantMenu():
    while True:
       print("\n- Tenant page -")
       print("\n1. Review all apartment information\n2. Search box\n3. Register new tenant\n4. Exit")
