@@ -112,40 +112,40 @@ def apartment():
 
 #define search function
 def searchbox():
-
    print("\nWelcome to search box!")
-   print("\n1. Search room specific details.\n2. Search specific tenant details.\n\nEnter 'X' to EXIT search box \n")
-   option=input("Select and insert input in order to start the program: ")
+   while True:
+      print("\n1. Search room specific details.\n2. Search specific tenant details.\n\nEnter 'X' to EXIT search box \n")
+      option=input("Select and insert input in order to start the program: ")
 
-   if option=='1':
-      print()
-      opt=input("Room(r), Pricing(p)\nPlease type the keyword search based on the listing above: ")
+      if option=='1':
+         print()
+         opt=input("Room(r), Pricing(p)\nPlease type the keyword search based on the listing above: ")
+         
+         if opt=='r':
+            print("\nSR1,SR2,SR3,SR4,DR1,DR2,DR3,DR4,CPS,MPS,MPT,MP1,MP2,ESS3,ESS2,EST2")
+            num=1
+            searchinformation(num)
+         
+         elif opt=='p':
+            print("\nRM350,RM450,RM550,RM650,RM690,RM700,RM750,RM800,RM840,RM890,RM900,RM940,RM950,RM1040,RM1050")
+            num=3
+            searchinformation(num)
+         else:
+            print("Invalid input or no records")
       
-      if opt=='r':
-         print("\nSR1,SR2,SR3,SR4,DR1,DR2,DR3,DR4,CPS,MPS,MPT,MP1,MP2,ESS3,ESS2,EST2")
-         num=1
-         searchinformation(num)
-      
-      elif opt=='p':
-         print("\nRM350,RM450,RM550,RM650,RM690,RM700,RM750,RM800,RM840,RM890,RM900,RM940,RM950,RM1040,RM1050")
-         num=3
-         searchinformation(num)
+      elif option=='2':
+         options=input("\nName(N),Apartment Details(A)\nPlease type the keyword search based on the listing above: ")
+         print()
+
+      elif option=='X':
+         print("\nReturn to main menu\n\n--------------------------------")
+         #return menu function
+         return False
+
       else:
-         print("Invalid input or no records")
-   
-   elif option=='2':
-      options=input("\nName(N),Apartment Details(A)\nPlease type the keyword search based on the listing above: ")
-      print()
+         print("\nError! Please try again")
+         #return searchbox function
 
-   elif option=='X':
-      print("\nReturn to main menu\n\n--------------------------------")
-      #return menu function
-      return menu()
-
-   else:
-      print("\nError! Please try again")
-      #return searchbox function
-      return searchbox()
 
 #define searchinformation function:
 def searchinformation(num):
