@@ -18,9 +18,11 @@ def login():  #define the login function
                      print("adminMenu()")
                   else:
                      menu()
-         else:
-            chance-=1
-            print("\nError, incorrect username or password.\n",chance,"chances remaining.\n")
+                     chance==0
+                     break
+            else:
+               chance-=1
+               print("\nError, incorrect username or password.\n",chance,"chances remaining.\n")
 
 #Define tenant_entry form function
 def tenant_entry_form(bulklist,n):
@@ -162,29 +164,28 @@ def searchinformation(num):
 
 #define menu function:
 def menu():
-   
-   print("\n- Tenant Management System -")
-   print("\n1. Review all apartment information\n2. Search box\n3. Register new tenant\n4. Exit")
+   while True:
+      print("\n- Tenant Management System -")
+      print("\n1. Review all apartment information\n2. Search box\n3. Register new tenant\n4. Exit")
 
-   opt=int(input("\nPlease select which operation that you want to do: "))
+      opt=int(input("\nPlease select which operation that you want to do: "))
 
-   if opt==1:
-      apartment()
+      if opt==1:
+         apartment()
 
-   elif opt==2:
-      searchbox()
-      
-   elif opt==3:
-      bulklist=[]
-      bulklist = tenant_entry_form()
-      print(bulklist)
+      elif opt==2:
+         searchbox()
+         
+      elif opt==3:
+         bulklist=[]
+         bulklist = tenant_entry_form()
+         print(bulklist)
 
-   elif opt==4:
-      
-      print("\nThank you for using, have a nice day~\n")
+      elif opt==4:
+         print("\nThank you for using, have a nice day~\n")
+         return False
 
-   else:
-      print("\nError! Please try again\n")
-      return menu()
+      else:
+         print("\nError! Please try again\n")
 
 login()
