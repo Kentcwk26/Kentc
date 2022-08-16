@@ -14,7 +14,7 @@ def login():  #define the login function
                if password == listRecord[1]:
                   print("\nLogin successful\n")
                   #check for admin credentials
-                  if (username == "john" and password == "1234u-78") or (username == "Dave" and password == "55467913"):
+                  if (username == "john" and password == "1234u-78") or (username == "david" and password == "55467913"):
                      adminMenu()             #redirect to admin menu
                   else:
                      tenantMenu()
@@ -23,7 +23,6 @@ def login():  #define the login function
          else:
             chance-=1
             print("\nError, incorrect username or password.\n",chance,"chances remaining.\n")
-
 
 #Define tenant_entry form function
 def tenant_entry_form(tenantList,n):
@@ -55,8 +54,7 @@ def tenant_entry_form(tenantList,n):
 def apartment():
    
    print("\nApartment info:\n")
-   record=[]
-
+   record=[]         
    #Put sample data
    list1=[["Standard Room (Triple)"],["Code: SR1"],["Dimensions: 140+ sqft"],["Pricing: RM350"],["Number of Rooms: 20"],["Apartment ID: A01-L1-R1 to A01-L1-R21"]]
    list2=[["Standard Room (Twin)"],["Code: SR2"],["Dimensions: 120+ sqft"],["Pricing: RM450"],["Number of Rooms: 20"],["Apartment ID: A01-L1-R22 to A01-L1-R41"]]
@@ -105,6 +103,52 @@ def apartment():
       for item in Ahandler:
          print(item.rstrip().rstrip(","))
 
+def modifydata():
+
+   print("1. Add data\n2. Edit Data\n3. Delete Data\n4. Exit")
+   datainput=int(input('Please select which operation: '))
+
+   if datainput==1:
+      print("Add Data")
+      apartmentadddatafunction()
+
+   elif datainput==2:
+      print("Edit Data")
+      apartmenteditdatafunction()
+
+   elif datainput==3:
+      print("Delete Data")
+      apartmentdeletedatafunction()
+
+   elif datainput==4:
+      print("Exit")
+      exitprogram()
+
+   else:
+      print("Error")
+      modifydata()
+
+def apartmentadddatafunction():
+   adddatanum=int(input('How many records that you decide to add? '))
+
+def apartmenteditdatafunction():
+   editdatanum=int(input('How many records that you decide to edit? '))
+
+def apartmentdeletedatafunction():
+   deletedatanum=int(input('How many records that you decide to add? '))
+
+def exitprogram():
+   print("Exit program")
+   exitoption=str(input("We are about to exit to the program. \nAre you sure that you want to exit? Enter 'C to continue, Enter''X' to exit"))
+   if exitoption=='C':
+      print("Continue")
+   elif exitoption=='X':
+      print("Exit program")
+      return tenantMenu()
+   else:
+      print("Invalid input")
+      return exitprogram()
+
 #define search function
 def searchbox():
    print("\nWelcome to search box!")
@@ -113,8 +157,7 @@ def searchbox():
       option=input("Select and insert input in order to start the program: ")
 
       if option=='1':
-         print()
-         opt=input("Room(r), Pricing(p)\nPlease type the keyword search based on the listing above: ")
+         opt=input("\nRoom(r), Pricing(p)\nPlease type the keyword search based on the listing above: ")
          
          if opt=='r':
             print("\nSR1,SR2,SR3,SR4,DR1,DR2,DR3,DR4,CPS,MPS,MPT,MP1,MP2,ESS3,ESS2,EST2")
@@ -130,7 +173,6 @@ def searchbox():
       
       elif option=='2':
          options=input("\nName(N),Apartment Details(A)\nPlease type the keyword search based on the listing above: ")
-         print()
 
       elif option=='X':
          print("\nReturn to main menu\n\n--------------------------------")
@@ -139,8 +181,7 @@ def searchbox():
 
       else:
          print("\nError! Please try again")
-         #return searchbox function
-
+         return searchbox()
 
 #define searchinformation function:
 def searchinformation(num):
@@ -159,7 +200,6 @@ def searchinformation(num):
       searchbox()
    else:
       adminMenu()
-
 
 #define menu function:
 def adminMenu():
@@ -186,6 +226,7 @@ def adminMenu():
 
       else:
          print("\nError! Please try again\n")
+         return searchbox()
 
 #define menu function:
 def tenantMenu():
