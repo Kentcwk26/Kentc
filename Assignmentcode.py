@@ -143,6 +143,8 @@ def apartment():
       for item in Ahandler:
          print(item.rstrip().rstrip(","))
 
+   modifydata()
+
 def modifydata():
 
    print("1. Add data\n2. Edit Data\n3. Delete Data\n4. Exit")
@@ -170,6 +172,22 @@ def modifydata():
 
 def apartmentadddatafunction():
    adddatanum=int(input('How many records that you decide to add? '))
+   adddata=[]
+   print("Now, you are required to enter the new data\n")
+   for i in range(0,adddatanum):
+      newapartment=str(input("Apartment: "))
+      newapartmentcode=input("Code: ")
+      newapartmentdimension=input("Dimension (Range): ")
+      newapartmentpricing=input("Pricing in RM: ")
+      newapartmentnumberofrooms=int(input("Number of rooms: "))
+      newapartmentID=input("Apartment ID: ")
+      adddata.append(newapartment)
+      adddata.append(newapartmentcode)
+      adddata.append(newapartmentdimension)
+      adddata.append(newapartmentpricing)
+      adddata.append(newapartmentnumberofrooms)
+      adddata.append(newapartmentID)
+      print("\n",adddata)
 
 def apartmenteditdatafunction():
    editdatanum=int(input('How many records that you decide to edit? '))
