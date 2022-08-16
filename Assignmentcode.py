@@ -1,45 +1,5 @@
-# def loginpage():
-#    while True:
-#       print("\nWelcome to Tenant Management System Login page.\n")
-#       login=input("Are you an admin of Tenant Management System or a tenant?\nInsert 'A' for Admin, Insert 'T' for Tenant: ")
-
-#       if login=='A':
-#          adminlogin()
-
-#       elif login=='T':
-#          tenantlogin()
-
-#       else:
-#          print("\nInvalid Input\nPlease try again\n")
-
-def adminlogin():  #define the login function
-   print("\nPlease enter username and password to proceed.\n")  
-   chance=3
-   while chance>0:
-      #input login credentials
-      username=input("Enter username:")
-      password=input("Enter password:")
-      #open file and match for correct login
-      with open("user.txt",'r') as userInfo:
-         userCheck=userInfo.readlines()
-         for record in userCheck:
-            listRecord = record.split(",")
-            if username == listRecord[0]:
-               if password == listRecord[1]:
-                  print("\nLogin successful\n")
-                  #check for admin credentials
-                  if (username == "john" and password == "1234u-78") or (username == "david" and password == "55467913"):
-                     adminMenu()             #redirect to admin menu
-                  else:
-                     tenantMenu()
-                  chance=0                   #empty login chances
-                  break                      #break loop to avoid running error message
-         else:
-            chance-=1
-            print("\nError, incorrect username or password.\n",chance,"chances remaining.\n")
-
-def tenantlogin():  #define the login function
-   print("Please enter username and password to proceed.")  
+def login():  #define the login function
+   print("\nWelcome to Tenant Management System Login page.\nPlease enter username and password to proceed.\n")  
    chance=3
    while chance>0:
       #input login credentials
@@ -294,4 +254,4 @@ def tenantMenu():
       else:
          print("\nError! Please try again\n")
 
-adminlogin()
+login()
