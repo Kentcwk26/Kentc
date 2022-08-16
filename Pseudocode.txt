@@ -6,7 +6,7 @@ FUNCTION login()
         PRINT("Enter password:"\n)
         GET password
         OPENFILE (username.txt) IN READ MODE AS userInfo
-            userCheck= read userInfo line-by-line()
+            userCheck= READ userInfo LINE-BY-LINE()
             FOR record in userCheck:
                 listRecord = SPLIT record INTO LIST SEPARATED BY ","
                 IF username == listRecord LOCATION 0:
@@ -14,12 +14,10 @@ FUNCTION login()
                         print("\nLogin successful\n")
                         IF (username == "john" AND password == "1234u-78") OR (username == "Dave" AND password == "55467913"):
                             CALLFUNCTION adminMenu()
-                            chance=0
-                            break
                         ELSE:
                             CALLFUNCTION tenantMenu()
-                            chance=0
-                            BREAK LOOP
+                        chance=0
+                        BREAK LOOP
                         ENDIF
                     ENDIF
                 ELSE:
@@ -39,12 +37,10 @@ FUNCTION Update():
         
     ELSE IF input==A OR input==a:
 
-    ELSE IF input==P OR input==p:
-
-    
+    ELSE IF input==P OR input==p:   
 ENDFUNCTION
 
-FUNCTION deletedRecord()
+FUNCTION deleted()
 ENDFUNCTION
 
 FUNCTION search()
@@ -57,7 +53,25 @@ FUNCTION logEntryForm()
 ENDFUNCTION
 
 FUNCTION display()
+    WHILE TRUE
+        PRINT("Choose a Category: NEWLINE [T]-Tenant NEWLINE [A]-Apartment NEWLINE [P]-Transaction")
+        GET category
+        IF category == "T" OR "t":
+            CALLFUNCTION tenant()
+        ELSE IF category == "A" OR "a":
+            CALLFUNCTION apartment()
+        ELSE IF category == "P" OR "p":
+            CALLFUNCTION transaction()
+        ELSE:
+            code = 0
+            CALLFUNCTION message(code)
 ENDFUNCTION
+
+FUNCTION tenant():
+    OPENFILE (tenant.txt) IN READ MODE AS fTenant
+        tenantList = READ fTenant LINE-BY-LINE
+        FOR record IN tenantList:
+            PRINT(record RIGHTSTRIP(",") RIGHTSTRIP("\n"))
 
 FUNCTION tenantEntryForm(tenantlist,n):
     newForm=[]
@@ -98,8 +112,8 @@ FUNCTION getname():
             IF characters IN words LOCATION[0] IS UPPERCASE
                 BREAK LOOP
             ELSE:
-                nameFormat=0
-                CALLFUNCTION validityMessage(nameFormat)
+                code=2
+                CALLFUNCTION message(code)
             ENDFOR
     RETURN name
 ENDFUNCTION
@@ -112,7 +126,7 @@ FUNCTION getgender():
             BREAK LOOP
         ELSE:
             code=1
-            CALLFUNCTION validityMessage(length)
+            CALLFUNCTION message(code)
     RETURN gender
 ENDFUNCTION
 
@@ -148,22 +162,22 @@ ENDFUNCTION
 FUNCTION getrental():
 ENDFUNCTION
 
-FUNCTION deleterecords(recordName, recordNum)
+FUNCTION deleteTenant(recordName, recordNum)
     IF recordName==tenant
-        OPEN "tenant.txt" IN READ AS Thandler
+        OPEN "tenant.txt" IN READ MODE AS Thandler
             READ Thandler
-            STRIP (",") FROM Thandler
+            Thandler STRIP (",") 
             FOR record from list:
                 FOR item in record:
                 
 FUNCTION searchTenant(details):
-    OPEN "tenant.txt" IN READ AS TSearch
-        TSearch.read()
-        TSearch.strip(",")
+    OPEN "tenant.txt" IN READ MODE AS TSearch
+        READ TSearch
+        TSearch STRIP (",")
         list = JOIN TSearch INTO string(",")
         for record in flight:
             if record.startswith(details):
-                print("found record", record.rstrip(",").rstrip(""))
+                print("found record", record RIGHTSTRIP(",") RIGHTSTRIP(""))
 
 FUNCTION appendFile(list, listBool):
     IF listBool == TRUE:
@@ -186,12 +200,12 @@ FUNCTION read_file(listBool):
     IF listBool == TRUE:
         OPEN "tenant.txt" IN READ AS Thandler:
             FOR record FROM Ahandler:
-                PRINT(record.rstrip().rstrip(","))
+                PRINT(record RIGHTSTRIP() RIGHTSTRIP(","))
 
     ELSE:
         OPEN "apartment.txt" IN READ AS Ahandler:
             FOR record FROM Ahandler:
-                PRINT(record.rstrip().rstrip(","))
+                PRINT(record RIGHTSTRIP() RIGHTSTRIP(","))
     
 FUNCTION apartmentupdate():
     PRINT("Apartment Update")
@@ -236,20 +250,23 @@ FUNCTION searchbox():
 
         
 
-FUNCTION validityMessage(code)
-    IF code==0:
-        PRINT("Format error")
-    IF code==1:
+FUNCTION message(code)
+    IF code == 0:
+        PRINT("Incorrect input")
+    ELSE IF code == 1:
         PRINT("Incorrect data type present")
+    ELSE IF code == 2:
+        PRINT("Format error")
+    PRINT("Please try again.")
 
 FUNCTION adminMenu():
     WHILE TRUE
         PRINT("\nTenant Management System")
-        PRINT("\n1.Review all apartment information\n2. Register new tenant\n3. Search box\n4. Exit")
+        PRINT("\n1.Review information\n2. Register new tenant\n3. Search box\n4. Exit")
         PRINT("\nPlease select which operation that you want to do: ")
-
+        GET opt
         IF opt == 1:
-            CALLFUNCTION apartment()
+            CALLFUNCTION display()
 
         ELSEIF opt == 2:
             PRINT("Number of new tenants: ")

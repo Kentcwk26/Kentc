@@ -1,5 +1,5 @@
 def login():  #define the login function
-   print("Welcome to Tenant Management System.\nPlease enter username and password to proceed.\n")   
+   print("Welcome to Tenant Management System.Please enter username and password to proceed.")  
    chance=3
    while chance>0:
       #input login credentials
@@ -15,20 +15,18 @@ def login():  #define the login function
                   print("\nLogin successful\n")
                   #check for admin credentials
                   if (username == "john" and password == "1234u-78") or (username == "Dave" and password == "55467913"):
-                     adminMenu()
-                     chance=0
-                     break
+                     adminMenu()             #redirect to admin menu
                   else:
                      tenantMenu()
-                     chance=0
-                     break            
+                  chance=0                   #empty login chances
+                  break                      #break loop to avoid running error message
          else:
             chance-=1
             print("\nError, incorrect username or password.\n",chance,"chances remaining.\n")
 
 
 #Define tenant_entry form function
-def tenant_entry_form(bulklist,n):
+def tenant_entry_form(tenantList,n):
    newForm=[]
    for i in range(n):
       #Get input for tenant data
@@ -49,9 +47,9 @@ def tenant_entry_form(bulklist,n):
       newForm.append(date1)
       newForm.append(income)
       newForm.append(rental)
-      bulklist.append(newForm)
+      tenantList.append(newForm)
    #Return the list
-   return newForm
+   return tenantList
 
 #Define apartment function
 def apartment():
@@ -107,9 +105,6 @@ def apartment():
       for item in Ahandler:
          print(item.rstrip().rstrip(","))
 
-#return the list
-   return menu()
-
 #define search function
 def searchbox():
    print("\nWelcome to search box!")
@@ -163,14 +158,14 @@ def searchinformation(num):
    if exitsearch == 'C':
       searchbox()
    else:
-      menu()
+      adminMenu()
 
 
 #define menu function:
 def adminMenu():
    while True:
       print("\n- Tenant Management System -")
-      print("\n1. Review all apartment information\n2. Search box\n3. Register new tenant\n4. Exit")
+      print("\n[1]-Review all apartment information\n[2]-Search box\n[3]-Register new tenant\n[4]-Exit")
 
       opt=int(input("\nPlease select which operation that you want to do: "))
 
@@ -181,9 +176,9 @@ def adminMenu():
          searchbox()
          
       elif opt==3:
-         bulklist=[]
-         bulklist = tenant_entry_form()
-         print(bulklist)
+         tenantList=[]
+         tenantList = tenant_entry_form()
+         print(tenantList)
 
       elif opt==4:
          print("\nThank you for using, have a nice day~\n")
@@ -207,9 +202,9 @@ def tenantMenu():
          searchbox()
          
       elif opt==3:
-         bulklist=[]
-         bulklist = tenant_entry_form()
-         print(bulklist)
+         tenantList=[]
+         tenantList = tenant_entry_form()
+         print(tenantList)
 
       elif opt==4:
          print("\nThank you for using, have a nice day~\n")
