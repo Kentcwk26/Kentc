@@ -12,7 +12,7 @@
 #       else:
 #          print("\nInvalid Input\nPlease try again\n")
 
-def adminlogin():  #define the login function
+def adminLogin():  #define the login function
    print("\nPlease enter username and password to proceed.\n")  
    chance=3
    while chance>0:
@@ -38,7 +38,7 @@ def adminlogin():  #define the login function
             chance-=1
             print("\nError, incorrect username or password.\n",chance,"chances remaining.\n")
 
-def tenantlogin():  #define the login function
+def tenantLogin():  #define the login function
    print("Please enter username and password to proceed.")  
    chance=3
    while chance>0:
@@ -190,7 +190,7 @@ def exitprogram():
       return exitprogram()
 
 #define search function
-def searchbox():
+def searchBox():
    print("\nWelcome to search box!")
    while True:
       print("\n1. Search room specific details.\n2. Search specific tenant details.\n\nEnter 'X' to EXIT search box \n")
@@ -202,12 +202,12 @@ def searchbox():
          if opt=='r':
             print("\nSR1,SR2,SR3,SR4,DR1,DR2,DR3,DR4,CPS,MPS,MPT,MP1,MP2,ESS3,ESS2,EST2")
             num=1
-            searchinformation(num)
+            searchInformation(num)
          
          elif opt=='p':
             print("\nRM350,RM450,RM550,RM650,RM690,RM700,RM750,RM800,RM840,RM890,RM900,RM940,RM950,RM1040,RM1050")
             num=3
-            searchinformation(num)
+            searchInformation(num)
          else:
             print("Invalid input or no records")
       
@@ -221,10 +221,10 @@ def searchbox():
 
       else:
          print("\nError! Please try again")
-         return searchbox()
+         return searchBox()
 
 #define searchinformation function:
-def searchinformation(num):
+def searchInformation(num):
    
    searchinformation=input("Select and enter text to begin search: ")
    print()
@@ -237,7 +237,7 @@ def searchinformation(num):
 
    exitsearch=input("Exit program? Enter any key to exit, Enter 'C' to continue. ")
    if exitsearch == 'C':
-      searchbox()
+      searchBox()
    else:
       adminMenu()
 
@@ -253,7 +253,7 @@ def adminMenu():
          apartment()
 
       elif opt==2:
-         searchbox()
+         searchBox()
          
       elif opt==3:
          tenantList=[]
@@ -266,7 +266,7 @@ def adminMenu():
 
       else:
          print("\nError! Please try again\n")
-         return searchbox()
+         return searchBox()
 
 #define menu function:
 def tenantMenu():
@@ -280,7 +280,7 @@ def tenantMenu():
          apartment()
 
       elif opt==2:
-         searchbox()
+         searchBox()
          
       elif opt==3:
          tenantList=[]
@@ -294,4 +294,4 @@ def tenantMenu():
       else:
          print("\nError! Please try again\n")
 
-adminlogin()
+adminMenu()
