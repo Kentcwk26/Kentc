@@ -1,30 +1,31 @@
-
 def login():  #define the login function
-   chance=3 #set the amount of chances for login
+   print("Welcome to Tenant Management System.Please enter username and password to proceed.")  
+   chance=3
    while chance>0:
       #input login credentials
-      print("\nWelcome to Tenant Management System.\nPlease enter username and password to proceed.\n")
       username=input("Enter username:")
       password=input("Enter password:")
-
+      #open file and match for correct login
       with open("user.txt",'r') as userInfo:
          userCheck=userInfo.readlines()
          for record in userCheck:
-            listRecord=record.split(",")
-            for index in listRecord:
-               if username == index[0]:
-                  if password == index[1]:
-                     if password=="1234u-78" or password=="55467913":
-                        print("\nLogin successful\n")
-                        print("adminMenu()")
-                     else:
-                        menu()
-            else:
-               chance-=1
-               print("\nError, incorrect username or password.\n",chance,"chances remaining.\n")
+            listRecord = record.split(",")
+            if username == listRecord[0]:
+               if password == listRecord[1]:
+                  print("\nLogin successful\n")
+                  #check for admin credentials
+                  if (username == "john" and password == "1234u-78") or (username == "david" and password == "55467913"):
+                     adminMenu()             #redirect to admin menu
+                  else:
+                     tenantMenu()
+                  chance=0                   #empty login chances
+                  break                      #break loop to avoid running error message
+         else:
+            chance-=1
+            print("\nError, incorrect username or password.\n",chance,"chances remaining.\n")
 
 #Define tenant_entry form function
-def tenant_entry_form(bulklist,n):
+def tenant_entry_form(tenantList,n):
    newForm=[]
    for i in range(n):
       #Get input for tenant data
@@ -45,16 +46,15 @@ def tenant_entry_form(bulklist,n):
       newForm.append(date1)
       newForm.append(income)
       newForm.append(rental)
-      bulklist.append(newForm)
+      tenantList.append(newForm)
    #Return the list
-   return newForm
+   return tenantList
 
 #Define apartment function
 def apartment():
    
    print("\nApartment info:\n")
-   record=[]
-
+   record=[]         
    #Put sample data
    list1=[["Standard Room (Triple)"],["Code: SR1"],["Dimensions: 140+ sqft"],["Pricing: RM350"],["Number of Rooms: 20"],["Apartment ID: A01-L1-R1 to A01-L1-R21"]]
    list2=[["Standard Room (Twin)"],["Code: SR2"],["Dimensions: 120+ sqft"],["Pricing: RM450"],["Number of Rooms: 20"],["Apartment ID: A01-L1-R22 to A01-L1-R41"]]
@@ -103,45 +103,85 @@ def apartment():
       for item in Ahandler:
          print(item.rstrip().rstrip(","))
 
-#return the list
-   return menu()
+def modifydata():
+
+   print("1. Add data\n2. Edit Data\n3. Delete Data\n4. Exit")
+   datainput=int(input('Please select which operation: '))
+
+   if datainput==1:
+      print("Add Data")
+      apartmentadddatafunction()
+
+   elif datainput==2:
+      print("Edit Data")
+      apartmenteditdatafunction()
+
+   elif datainput==3:
+      print("Delete Data")
+      apartmentdeletedatafunction()
+
+   elif datainput==4:
+      print("Exit")
+      exitprogram()
+
+   else:
+      print("Error")
+      modifydata()
+
+def apartmentadddatafunction():
+   adddatanum=int(input('How many records that you decide to add? '))
+
+def apartmenteditdatafunction():
+   editdatanum=int(input('How many records that you decide to edit? '))
+
+def apartmentdeletedatafunction():
+   deletedatanum=int(input('How many records that you decide to add? '))
+
+def exitprogram():
+   print("Exit program")
+   exitoption=str(input("We are about to exit to the program. \nAre you sure that you want to exit? Enter 'C to continue, Enter''X' to exit"))
+   if exitoption=='C':
+      print("Continue")
+   elif exitoption=='X':
+      print("Exit program")
+      return tenantMenu()
+   else:
+      print("Invalid input")
+      return exitprogram()
 
 #define search function
 def searchbox():
-
    print("\nWelcome to search box!")
-   print("\n1. Search room specific details.\n2. Search specific tenant details.\n\nEnter 'X' to EXIT search box \n")
-   option=input("Select and insert input in order to start the program: ")
+   while True:
+      print("\n1. Search room specific details.\n2. Search specific tenant details.\n\nEnter 'X' to EXIT search box \n")
+      option=input("Select and insert input in order to start the program: ")
 
-   if option=='1':
-      print()
-      opt=input("Room(r), Pricing(p)\nPlease type the keyword search based on the listing above: ")
+      if option=='1':
+         opt=input("\nRoom(r), Pricing(p)\nPlease type the keyword search based on the listing above: ")
+         
+         if opt=='r':
+            print("\nSR1,SR2,SR3,SR4,DR1,DR2,DR3,DR4,CPS,MPS,MPT,MP1,MP2,ESS3,ESS2,EST2")
+            num=1
+            searchinformation(num)
+         
+         elif opt=='p':
+            print("\nRM350,RM450,RM550,RM650,RM690,RM700,RM750,RM800,RM840,RM890,RM900,RM940,RM950,RM1040,RM1050")
+            num=3
+            searchinformation(num)
+         else:
+            print("Invalid input or no records")
       
-      if opt=='r':
-         print("\nSR1,SR2,SR3,SR4,DR1,DR2,DR3,DR4,CPS,MPS,MPT,MP1,MP2,ESS3,ESS2,EST2")
-         num=1
-         searchinformation(num)
-      
-      elif opt=='p':
-         print("\nRM350,RM450,RM550,RM650,RM690,RM700,RM750,RM800,RM840,RM890,RM900,RM940,RM950,RM1040,RM1050")
-         num=3
-         searchinformation(num)
+      elif option=='2':
+         options=input("\nName(N),Apartment Details(A)\nPlease type the keyword search based on the listing above: ")
+
+      elif option=='X':
+         print("\nReturn to main menu\n\n--------------------------------")
+         #return menu function
+         return False
+
       else:
-         print("Invalid input or no records")
-   
-   elif option=='2':
-      options=input("\nName(N),Apartment Details(A)\nPlease type the keyword search based on the listing above: ")
-      print()
-
-   elif option=='X':
-      print("\nReturn to main menu\n\n--------------------------------")
-      #return menu function
-      return menu()
-
-   else:
-      print("\nError! Please try again")
-      #return searchbox function
-      return searchbox()
+         print("\nError! Please try again")
+         return searchbox()
 
 #define searchinformation function:
 def searchinformation(num):
@@ -155,38 +195,63 @@ def searchinformation(num):
          if searchinformation in data[num]:
             print("Results:\n",record)
 
-   exitsearch=input("Exit program? \nEnter any key to exit, Enter 'C' to continue. ")
+   exitsearch=input("Exit program? Enter any key to exit, Enter 'C' to continue. ")
    if exitsearch == 'C':
       searchbox()
    else:
-      print("\n------------------------")
-      menu()
+      adminMenu()
 
 #define menu function:
-def menu():
-   
-   print("\n- Tenant Management System -")
-   print("\n1. Apartment\n2. Tenant\n3. Print Specific House & Tenant Details\n4. Search box\n5. Inquiry of Past Tenant Details\n6. Transaction History\n7. Login History\n8. Exit\n9. Register new tenant\n")
+def adminMenu():
+   while True:
+      print("\n- Tenant Management System -")
+      print("\n[1]-Review all apartment information\n[2]-Search box\n[3]-Register new tenant\n[4]-Exit")
 
-   opt=int(input("\nPlease select which operation that you want to do: "))
+      opt=int(input("\nPlease select which operation that you want to do: "))
 
-   if opt==1:
-      apartment()
+      if opt==1:
+         apartment()
 
-   elif opt==4:
-      searchbox()
-      
-   elif opt==8:
-      bulklist=[]
-      bulklist = tenant_entry_form()
-      print(bulklist)
+      elif opt==2:
+         searchbox()
+         
+      elif opt==3:
+         tenantList=[]
+         tenantList = tenant_entry_form()
+         print(tenantList)
 
-   elif opt==4:
-      
-      print("\nThank you for using, have a nice day~\n")
+      elif opt==4:
+         print("\nThank you for using, have a nice day~\n")
+         return False
 
-   else:
-      print("\nError! Please try again\n")
-      return menu()
+      else:
+         print("\nError! Please try again\n")
+         return searchbox()
 
-menu()
+#define menu function:
+def tenantMenu():
+   while True:
+      print("\n- Tenant page -")
+      print("\n1. Review all apartment information\n2. Search box\n3. Register new tenant\n4. Exit")
+
+      opt=int(input("\nPlease select which operation that you want to do: "))
+
+      if opt==1:
+         apartment()
+
+      elif opt==2:
+         searchbox()
+         
+      elif opt==3:
+         tenantList=[]
+         tenantList = tenant_entry_form()
+         print(tenantList)
+
+      elif opt==4:
+         print("\nThank you for using, have a nice day~\n")
+         return False
+
+      else:
+         print("\nError! Please try again\n")
+
+login()
