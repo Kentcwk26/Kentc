@@ -1,4 +1,4 @@
-def adminlogin():  #define the login function
+def login():  #define the login function
    print("\nWelcome to Tenant Management System Login page.\n")
    print("\nPlease enter username and password to proceed.\n")  
    chance=3
