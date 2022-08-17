@@ -360,9 +360,15 @@ ENDFUNCTION
 FUNCTION apartmentadddata():
     
     DECLARE adddatanum,newapartmentnumberofrooms AS INTEGER
+    DECLARE newapartment AS STRING
     adddata=[]
     PRINT("NEWLINE Now, you are required to enter the new data NEWLINE")
     FOR i FROM 0 to adddatanum
+        PRINT("Apartment: ")
+        GET newapartment
+        PRINT("Code: ")
+        PRINT("Dimension (in range): ")
+        PRINT("")
 
 
 ENDFUNCTION
