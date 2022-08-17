@@ -52,7 +52,7 @@ def tenant_entry_form(tenantList,n):
    return tenantList
 
 #Define apartment function
-def apartment():
+def adminapartment():
    
    print("\nApartment info:\n")
    record=[]         
@@ -108,23 +108,23 @@ def apartment():
 
 def modifydata():
 
-   print("1. Add data\n2. Edit Data\n3. Delete Data\n4. Exit")
+   print("\n1. Add data\n2. Edit Data\n3. Delete Data\n4. Exit\n")
    datainput=int(input('Please select which operation: '))
 
    if datainput==1:
-      print("Add Data")
+      print("\nAdd Data\n")
       apartmentadddatafunction()
 
    elif datainput==2:
-      print("Edit Data")
+      print("\nEdit Data\n")
       apartmenteditdatafunction()
 
    elif datainput==3:
-      print("Delete Data")
+      print("\nDelete Data\n")
       apartmentdeletedatafunction()
 
    elif datainput==4:
-      print("Exit")
+      print("\nExit\n")
       exitprogram()
 
    else:
@@ -133,6 +133,7 @@ def modifydata():
 
 def apartmentadddatafunction():
    adddatanum=int(input('How many records that you decide to add? '))
+   print()
    adddata=[]
    print("Now, you are required to enter the new data\n")
    for i in range(0,adddatanum):
@@ -148,7 +149,7 @@ def apartmentadddatafunction():
       adddata.append(newapartmentpricing)
       adddata.append(newapartmentnumberofrooms)
       adddata.append(newapartmentID)
-      print("\n",adddata)
+      print("\n",adddata,"\n")
 
 def apartmenteditdatafunction():
    editdatanum=int(input('How many records that you decide to edit? '))
@@ -158,15 +159,68 @@ def apartmentdeletedatafunction():
 
 def exitprogram():
    print("Exit program")
-   exitoption=str(input("We are about to exit to the program. \nAre you sure that you want to exit? Enter 'C to continue, Enter''X' to exit"))
+   exitoption=str(input("We are about to exit to the program. \nAre you sure that you want to exit? Enter 'C to continue, Enter''X' to exit: "))
    if exitoption=='C':
-      print("Continue")
+      print("\nContinue\n")
    elif exitoption=='X':
-      print("Exit program")
-      return tenantMenu()
+      print("\nExit program, return to main menu\n")
+      tenantMenu()
    else:
-      print("Invalid input")
-      return exitprogram()
+      print("\nInvalid input\n")
+      exitprogram()
+
+#Define apartment function
+def tenantapartment():
+   
+   print("\nApartment info:\n")
+   record=[]         
+   #Put sample data
+   list1=[["Standard Room (Triple)"],["Code: SR1"],["Dimensions: 140+ sqft"],["Pricing: RM350"],["Number of Rooms: 20"],["Apartment ID: A01-L1-R1 to A01-L1-R21"]]
+   list2=[["Standard Room (Twin)"],["Code: SR2"],["Dimensions: 120+ sqft"],["Pricing: RM450"],["Number of Rooms: 20"],["Apartment ID: A01-L1-R22 to A01-L1-R41"]]
+   list3=[["Standard Room A/C (Triple)"],["Code: SR3"],["Dimensions: 150+ sqft"],["Pricing: RM550"],["Number of Rooms: 20"],["Apartment ID: A01-L2-R1 to A01-L2-R21"]]
+   list4=[["Standard Room A/C (Twin)"],["Code: SR4"],["Dimensions: 130+ sqft"],["Pricing: RM650"],["Number of Rooms: 20"],["Apartment ID: A01-L2-R22 to A01-L2-R41"]]
+   list5=[["Deluxe Room (Triple)"],["Code: DR1"],["Dimensions: 170+ sqft"],["Pricing: RM750"],["Number of Rooms: 20"],["Apartment ID: A01-L4-R1 to A01-L4-R21"]]
+   list6=[["Deluxe Room (Twin)"],["Code: DR2"],["Dimensions: 160+ sqft"],["Pricing: RM840"],["Number of Rooms: 20"],["Apartment ID: A01-L4-R22 to A01-L4-R41"]]
+   list7=[["Deluxe Room A/C with shared attached bath / toilet (Triple)"],["Code: DR3"],["Dimensions: 180+ sqft"],["Pricing: RM950"],["Number of Rooms: 20"],["Apartment ID: A01-L3-R1 to A01-L3-R21"]]
+   list8=[["Deluxe Room A/C with shared attached bath / toilet"],["Code: DR4"],["Dimensions: 170+ sqft"],["Pricing: RM1040"],["Number of Rooms: 20"],["Apartment ID: A01-L3-R22 to A01-L3-R41"]]
+   list9=[["Compact Premium Single"],["Code: CPS"],["Dimensions: 130+ sqft"],["Pricing: RM690"],["Number of Rooms: 20"],["Apartment ID: A01-L5-R1 to A01-L5-R41"]]
+   list10=[["Medium Premium Single"],["Code: MPS"],["Dimensions: 150+ sqft"],["Pricing: RM750"],["Number of Rooms: 20"],["Apartment ID: A02-L1-R1 to A02-L1-R21"]]
+   list11=[["Medium Premium Twin"],["Code: MPT"],["Dimensions: 180+ sqft"],["Pricing: RM890"],["Number of Rooms: 20"],["Apartment ID: A02-L2-R1 to A02-L2-R21"]]
+   list12=[["Medium Premium with attached bath / toilet (Twin)"],["Code: MP1"],["Dimensions: 180+ sqft"],["Pricing: RM940"],["Number of Rooms: 20"],["Apartment ID: A02-L3-R1 to A02-L3-R21"]]
+   list13=[["Medium Premium with attached bath / toilet (Single)"],["Code: MP2"],["Dimensions: 160+ sqft"],["Pricing: RM1050"],["Number of Rooms: 20"],["Apartment ID: A02-L3-R22 to A02-L3-R41"]]
+   list14=[["En-Suite Single (Super Premium - Triple)"],["Code: ESS3"],["Dimensions: 160+ sqft"],["Pricing: RM700"],["Number of Rooms: 20"],["Apartment ID: A02-L4-R1 to A02-L4-R41"]]
+   list15=[["En-Suite Single (Super Premium - Twin)"],["Code: ESS2"],["Dimensions: 140+ sqft"],["Pricing: RM800"],["Number of Rooms: 20"],["Apartment ID: A02-L4-R1 to A02-L4-R41"]]
+   list16=[["En-Suite Twin (Super Premium)"],["Code: EST2"],["Dimensions: 200+ sqft"],["Pricing: RM900"],["Number of Rooms: 20"],["Apartment ID: A02-L5-R1 to A02-L5-R41"]]
+
+   #Apply data at the list
+   record.append(list1)
+   record.append(list2)
+   record.append(list3)
+   record.append(list4)
+   record.append(list5)
+   record.append(list6)
+   record.append(list7)
+   record.append(list8)
+   record.append(list9)
+   record.append(list10)
+   record.append(list11)
+   record.append(list12)
+   record.append(list13)
+   record.append(list14)
+   record.append(list15)
+   record.append(list16)
+   
+   with open("Apartment.txt","w") as Ahandler:
+      for item in record:
+         for data in item:
+            for element in data:
+               Ahandler.write(element)
+            Ahandler.write(", ")
+         Ahandler.write("\n")
+       
+   with open("Apartment.txt","r") as Ahandler:
+      for item in Ahandler:
+         print(item.rstrip().rstrip(","))
 
 #define search function
 def searchBox():
@@ -223,54 +277,55 @@ def searchInformation(num):
 #define menu function:
 def adminMenu():
    while True:
-      print("\n- Tenant Management System -")
-      print("\n[1]-Review all apartment information\n[2]-Search box\n[3]-Register new tenant\n[4]-Exit")
+      print("\n- Welcome admin, you are Tenant Management System -")
+      print("\n1. Apartment\n2. Tenant\n3. Print Specific House & Tenant Details\n4. Search box\n5. Inquiry of Past Tenant Details\n6. Transaction History\n7. Login History\n8. Exit\n9. Register new tenant\n")
 
       opt=int(input("\nPlease select which operation that you want to do: "))
 
       if opt==1:
-         apartment()
+         adminapartment()
 
-      elif opt==2:
+      elif opt==4:
          searchBox()
          
-      elif opt==3:
+      elif opt==9:
          tenantList=[]
          tenantList = tenant_entry_form()
          print(tenantList)
 
-      elif opt==4:
+      elif opt==8:
          print("\nThank you for using, have a nice day~\n")
          return False
 
       else:
          print("\nError! Please try again\n")
-         return searchBox()
+         adminMenu()
 
 #define menu function:
 def tenantMenu():
    while True:
-      print("\n- Tenant page -")
-      print("\n1. Review all apartment information\n2. Search box\n3. Register new tenant\n4. Exit")
+      print("- Tenant page -")
+      print("\n1. Review all apartment information\n2. Search box\n3. Transaction Details\n4. Print Specific House and Tenant Details\n5. Exit\n6.Register new tenant")
 
       opt=int(input("\nPlease select which operation that you want to do: "))
 
       if opt==1:
-         apartment()
+         tenantapartment()
 
       elif opt==2:
          searchBox()
          
-      elif opt==3:
+      elif opt==6:
          tenantList=[]
          tenantList = tenant_entry_form()
          print(tenantList)
 
-      elif opt==4:
+      elif opt==5:
          print("\nThank you for using, have a nice day~\n")
          return False
 
       else:
          print("\nError! Please try again\n")
+         tenantMenu()
 
-adminMenu()
+login()
