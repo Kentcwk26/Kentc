@@ -107,30 +107,30 @@ def adminApartment():
    modifydata()
 
 def modifydata():
+   while True:
+      print("\n1. Add data\n2. Edit Data\n3. Delete Data\n4. Exit\n")
+      dataInput=int(input('Please select which operation: '))
 
-   print("\n1. Add data\n2. Edit Data\n3. Delete Data\n4. Exit\n")
-   datainput=int(input('Please select which operation: '))
+      if dataInput==1:
+         print("\nAdd Data\n")
+         apartmentAddData()
 
-   if datainput==1:
-      print("\nAdd Data\n")
-      apartmentadddata()
+      elif dataInput==2:
+         print("\nEdit Data\n")
+         apartmentEditData()
 
-   elif datainput==2:
-      print("\nEdit Data\n")
-      apartmenteditdata()
+      elif dataInput==3:
+         print("\nDelete Data\n")
+         apartmentDeleteData()
 
-   elif datainput==3:
-      print("\nDelete Data\n")
-      apartmentdeletedata()
+      elif dataInput==4:
+         print("Exit")
+         return False
 
-   elif datainput==4:
-      print()
+      else:
+         print("Error!")
 
-   else:
-      print("Error!")
-      modifydata()
-
-def apartmentadddata():
+def apartmentAddData():
    adddatanum=int(input('How many records that you decide to add? '))
    adddata=[]
    print("\nNow, you are required to enter the new data\n")
@@ -149,10 +149,10 @@ def apartmentadddata():
       adddata.append(newapartmentID)
       print("\n",adddata,"\n")
 
-def apartmenteditdata():
+def apartmentEditData():
    editdatanum=int(input('How many records that you decide to edit? '))
 
-def apartmentdeletedata():
+def apartmentDeleteData():
    deletedatanum=int(input('How many records that you decide to add? '))
 
 def apartmentexitprogram():
@@ -250,7 +250,7 @@ def searchBox():
 
       else:
          print("\nError! Please try again")
-         searchBox()
+         searchBox() 
 
 #define searchinformation function:
 def searchInformation(num):
@@ -295,7 +295,7 @@ def adminMenu():
 
       else:
          print("\nError! Please try again\n")
-         adminMenu()
+         adminMenu() 
 
 #define menu function:
 def tenantMenu():

@@ -17,13 +17,13 @@ FUNCTION login()
                         ELSE THEN
                             CALLFUNCTION tenantMenu()
                         chance = 0
-                        BREAK LOOP
+                        BREAKLOOP
                         ENDIF
                     ENDIF
                 ELSE THEN
                     chance -= 1
                     PRINT("Error, incorrect username or password."\n ,chance,"chances remaining"\n)
-                    BREAK LOOP
+                    BREAKLOOP
                 ENDIF
             ENDFOR
         CLOSEFILE
@@ -132,7 +132,7 @@ ENDFUNCTION
 FUNCTION log()
 ENDFUNCTION
 
-FUNCTION tenantRead():
+FUNCTION tenantRead()
     OPENFILE (tenant.txt) IN READ MODE AS fTenant
         tenantList = READ fTenant LINE-BY-LINE
         FOR record IN tenantList:
@@ -161,7 +161,7 @@ FUNCTION tenantEntryForm(tenantlist,n)
     RETURN tenantList
 ENDFUNCTION
 
-FUNCTION getname():
+FUNCTION getname()
     WHILE TRUE
         PRINT("Enter tenant name: Firstname Familyname Lastname"\n)
         GET name
@@ -169,7 +169,7 @@ FUNCTION getname():
         SPLIT nameCheck INTO LIST WITH ","
         FOR words IN nameCheck
             IF characters IN words LOCATION 0 IS UPPERCASE THEN
-                BREAK LOOP
+                BREAKLOOP
             ELSE THEN
                 code = 2
                 CALLFUNCTION message(code)
@@ -179,13 +179,13 @@ FUNCTION getname():
     RETURN name
 ENDFUNCTION
 
-FUNCTION getgender():
+FUNCTION getgender()
     PRINT("Enter tenant gender: (m/f):\n")
     GET gender
     genderCheck = gender
     IF genderCheck LENGTH == 1 THEN
-        IF genderCheck IS NOT A NUMBER:
-            BREAK LOOP
+        IF genderCheck IS NOT A NUMBER THEN
+            BREAKLOOP
         ELSE THEN
             code = 1
             CALLFUNCTION message(code)
@@ -199,16 +199,25 @@ FUNCTION getpNum():
     PRINT("Enter tenant phone number: (############):\n")
     GET pNum
     pNumCheck=pNum
-        FOR digit IN pNum
-            IF digit IS NOT INTEGER THEN
-                CALLFUNCTION Pseudocode.txt
-
+    FOR digit IN pNum
+        IF digit IS INTEGER THEN
+            BREAKLOOP
+        ELSE THEN
+            code = 1
+            CALLFUNCTION message(code)
+        ENDIF
+    ENDFOR
     RETURN pNum
 ENDFUNCTION
 
 FUNCTION getnationality():
-    PRINT("Enter tenant nationality: (m: Malaysian/n: non-Malaysian):\n")
-        GET nationality
+    PRINT("Enter tenant nationality: (M: Malaysian/N: non-Malaysian):\n")
+    GET nationality
+    nationality = nationalityCheck
+    IF nationalityCheck LENGTH = 1 THEN
+        BREAKLOOP
+    ELSE THEN 
+
     RETURN nationality
 ENDFUNCTION
 
@@ -240,9 +249,12 @@ FUNCTION searchTenant(details):
         READ TSearch
         TSearch STRIP (",")
         list = JOIN TSearch INTO string(",")
-        for record in flight:
-            if record.startswith(details):
-                print("found record", record RIGHTSTRIP(",") RIGHTSTRIP(""))
+        FOR record IN list
+            IF record STARTS WITH details THEN
+                PRINT("Found record", record RIGHTSTRIP(",") RIGHTSTRIP(""))
+            ENDIF
+        ENDFOR
+    CLOSEFILE
 
 FUNCTION appendFile(list, listBool):
     IF listBool == TRUE:
@@ -333,28 +345,27 @@ FUNCTION modifydata():
     PRINT("Please select which operation: ")
     GET dataInput
 
-    IF dataInput==1 THEN:
+    IF dataInput==1 THEN
         PRINT("NEWLINE Add Data NEWLINE")
-        CALLFUNCTION apartmentadddata()
+        CALLFUNCTION apartmentAddData()
 
-    IF dataInput==2 THEN:
+    ELSE IF dataInput==2 THEN
         PRINT("NEWLINE Add Data NEWLINE")
-        CALLFUNCTION apartmenteditdata()
+        CALLFUNCTION apartmentEditData()
 
-    IF dataInput==3 THEN:
+    ELSE IF dataInput==3 THEN
         PRINT("NEWLINE Add Data NEWLINE")
-        CALLFUNCTION apartmentdeletedata()
+        CALLFUNCTION apartmentDeleteData()
 
-    IF dataInput==4 THEN:
+    ELSE IF dataInput==4 THEN
         PRINT("Exit")
 
-    ELSE:
+    ELSE THEN
         PRINT("Error!")
-        CALLFUNCTIONmodifydata
 
 ENDFUNCTION
 
-FUNCTION apartmentadddata():
+FUNCTION apartmentAddData():
     
     DECLARE adddatanum,newapartmentnumberofrooms AS INTEGER
     DECLARE newapartment AS STRING
