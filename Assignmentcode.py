@@ -109,22 +109,22 @@ def adminApartment():
 def modifydata():
 
    print("\n1. Add data\n2. Edit Data\n3. Delete Data\n4. Exit\n")
-   dataInput=int(input('Please select which operation: '))
+   datainput=int(input('Please select which operation: '))
 
-   if dataInput==1:
+   if datainput==1:
       print("\nAdd Data\n")
       apartmentadddata()
 
-   elif dataInput==2:
+   elif datainput==2:
       print("\nEdit Data\n")
       apartmenteditdata()
 
-   elif dataInput==3:
+   elif datainput==3:
       print("\nDelete Data\n")
       apartmentdeletedata()
 
-   elif dataInput==4:
-      exitprogram()
+   elif datainput==4:
+      print()
 
    else:
       print("Error!")
@@ -132,9 +132,8 @@ def modifydata():
 
 def apartmentadddata():
    adddatanum=int(input('How many records that you decide to add? '))
-   print()
    adddata=[]
-   print("Now, you are required to enter the new data\n")
+   print("\nNow, you are required to enter the new data\n")
    for i in range(0,adddatanum):
       newapartment=str(input("Apartment: "))
       newapartmentcode=input("Code: ")
@@ -156,16 +155,15 @@ def apartmenteditdata():
 def apartmentdeletedata():
    deletedatanum=int(input('How many records that you decide to add? '))
 
-def exitprogram():
+def apartmentexitprogram():
    exitoption=str(input("We are about to exit to the program. \nAre you sure that you want to exit? Enter 'C to continue, Enter''X' to exit: "))
    if exitoption=='C':
       print("\nContinue\n")
    elif exitoption=='X':
       print("\nExit program, return to main menu\n")
-      tenantMenu()
    else:
       print("\nInvalid input\n")
-      exitprogram()
+      apartmentexitprogram()
 
 #Define apartment function
 def tenantApartment():
@@ -252,7 +250,7 @@ def searchBox():
 
       else:
          print("\nError! Please try again")
-         return searchBox()
+         searchBox()
 
 #define searchinformation function:
 def searchInformation(num):
@@ -275,7 +273,7 @@ def searchInformation(num):
 #define menu function:
 def adminMenu():
    while True:
-      print("\n- Welcome admin, you are entering Tenant Management System -")
+      print("\n- Welcome back admin, you are now entering Tenant Management System -")
       print("\n1. Apartment\n2. Tenant\n3. Print Specific House & Tenant Details\n4. Search box\n5. Inquiry of Past Tenant Details\n6. Transaction History\n7. Login History\n8. Exit\n9. Register new tenant\n")
 
       opt=int(input("\nPlease select which operation that you want to do: "))
@@ -303,7 +301,7 @@ def adminMenu():
 def tenantMenu():
    while True:
       print("- Tenant page -")
-      print("\n1. Review all apartment information\n2. Search box\n3. Transaction Details\n4. Print Specific House and Tenant Details\n5. Exit\n6.Register new tenant")
+      print("\n1. Review all apartment information\n2. Search box\n3. Transaction Details\n4. Print Specific House and Tenant Details\n5. Exit\n6. Register new tenant")
 
       opt=int(input("\nPlease select which operation that you want to do: "))
 

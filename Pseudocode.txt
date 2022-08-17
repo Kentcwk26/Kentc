@@ -274,10 +274,25 @@ FUNCTION read_file(listBool):
         OPEN "apartment.txt" IN READ AS Ahandler:
             FOR record FROM Ahandler:
                 PRINT(record RIGHTSTRIP() RIGHTSTRIP(","))
-    
+
+FUNCTION message(code)
+    IF code == 0:
+        PRINT("Incorrect input")
+    ELSE IF code == 1:
+        PRINT("Incorrect data type present")
+    ELSE IF code == 2:
+        PRINT("Format error")
+    ELSE IF code == 3:
+        PRINT("Length error")
+    PRINT("Please try again.")
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 FUNCTION adminApartment():
+    
     PRINT("NEWLINE Apartment Info: NEWLINE")
     record=[]
+
     list1=[["Standard Room (Triple)"],["Code: SR1"],["Dimensions: 140+ sqft"],["Pricing: RM350"],["Number of Rooms: 20"],["Apartment ID: A01-L1-R1 to A01-L1-R21"]]
     list2=[["Standard Room (Twin)"],["Code: SR2"],["Dimensions: 120+ sqft"],["Pricing: RM450"],["Number of Rooms: 20"],["Apartment ID: A01-L1-R22 to A01-L1-R41"]]
     list3=[["Standard Room A/C (Triple)"],["Code: SR3"],["Dimensions: 150+ sqft"],["Pricing: RM550"],["Number of Rooms: 20"],["Apartment ID: A01-L2-R1 to A01-L2-R21"]]
@@ -316,8 +331,10 @@ ENDFUNCTION
 
 FUNCTION modifydata():
 
+    DECLARE dataInput AS INTEGER
     PRINT("NEWLINE 1. Add data NEWLINE 2. Edit Data NEWLINE 3. Delete Data NEWLINE 4. Exit NEWLINE")
-    GEt dataInput
+    PRINT("Please select which operation: ")
+    GET dataInput
 
     IF dataInput==1 THEN:
         PRINT("NEWLINE Add Data NEWLINE")
@@ -332,7 +349,7 @@ FUNCTION modifydata():
         CALLFUNCTIONapartmentdeletedata()
 
     IF dataInput==4 THEN:
-        CALLFUNCTIONexitprogram()
+        PRINT("Exit")
 
     ELSE:
         PRINT("Error!")
@@ -341,11 +358,20 @@ FUNCTION modifydata():
 ENDFUNCTION
 
 FUNCTION apartmentadddata():
+    
+    DECLARE adddatanum,newapartmentnumberofrooms AS INTEGER
+    adddata=[]
+    PRINT("NEWLINE Now, you are required to enter the new data NEWLINE")
+    FOR i FROM 0 to adddatanum
+
+
 ENDFUNCTION
 
 FUNCTION searchbox():
 
 WHILE True
+    DECLARE option AS INTEGER
+    DECLARE opt AS STRING
     PRINT("NEWLINE Welcome to search box!")
     PRINT("NEWLINE 1. Search room specific details.NEWLINE 2. Search specific tenant details NEWLINE 4. Exit NEWLINE")
     PRINT("Please type the keyword search based on the listing above: ")
@@ -367,6 +393,7 @@ WHILE True
 
         ELSE:
         PRINT("Invalid input or no records")
+        PRINT("Continue? Enter 'C' NEWLINE Exit? Enter 'X' ")
 
     IF option=='2' THEN:
         PRINT("NEWLINE Name(N),Apartment Details(A) NEWLINE Please type the keyword search based on the listing above: ")
@@ -387,7 +414,8 @@ WHILE True
 
     ELSE:
         PRINT(" NEWLINE Error! Please try again")
-        
+        CALLFUNCTION searchBox()
+
 ENDFUNCTION
 
 FUNCTION searchinformation(num)
@@ -403,17 +431,6 @@ FUNCTION searchinformation(num)
                     PRINT("Results: NEWLINE",record)
 
 ENDFUNCTION
-
-FUNCTION message(code)
-    IF code == 0:
-        PRINT("Incorrect input")
-    ELSE IF code == 1:
-        PRINT("Incorrect data type present")
-    ELSE IF code == 2:
-        PRINT("Format error")
-    ELSE IF code == 3:
-        PRINT("Length error")
-    PRINT("Please try again.")
 
 FUNCTION adminMenu():
     WHILE TRUE
