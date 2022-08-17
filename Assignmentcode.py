@@ -320,7 +320,7 @@ def tenantMenu():
 
       elif opt==5:
          print("\nThank you for using, have a nice day~\n")
-         return False
+         break
 
       else:
          print("\nError! Please try again\n")
