@@ -35,14 +35,14 @@ FUNCTION add()
         PRINT("[T]-Tenant  NEWLINE [A]-Apartment  NEWLINE [P]-Transaction  NEWLINE [L]-Leave NEWLINE Choose a category:)
         GET category
         IF category IS IN  ("T","t") THEN
-            
+            tenantEntryForm()
         ELSE IF category IS IN  ("A","a") THEN
-
+            apartment()
         ELSE IF category IS IN  ("P","p") THEN
 
         ELSE IF category IS IN  ("L","l") THEN
             RETURN FALSE
-        ELSE:
+        ELSE THEN
             code = 0
             CALLFUNCTION message(code)
         ENDIF
@@ -51,15 +51,17 @@ ENDFUNCTION
 
 FUNCTION display()
     WHILE TRUE
-        PRINT("NEWLINE [T]-Tenant NEWLINE [A]-Apartment NEWLINE [P]-Transaction NEWLINE Choose a Category: ")
+        PRINT("[T]-Tenant NEWLINE [A]-Apartment NEWLINE [P]-Transaction NEWLINE [L]-Leave NEWLINE Choose a Category: ")
         GET category
-        IF category == "T" OR "t":
-            CALLFUNCTION tenant()
-        ELSE IF category == "A" OR "a":
+        IF category IS IN  ("T","t") THEN
+            CALLFUNCTION tenantRead()
+        ELSE IF category IS IN  ("A","a") THEN
             CALLFUNCTION apartment()
-        ELSE IF category == "P" OR "p":
+        ELSE IF category IS IN  ("P","p") THEN
             CALLFUNCTION transaction()
-        ELSE:
+        ELSE IF category IS IN  ("L","l") THEN
+            RETURN FALSE
+        ELSE THEN
             code = 0
             CALLFUNCTION message(code)
         ENDIF
@@ -130,7 +132,7 @@ ENDFUNCTION
 FUNCTION log()
 ENDFUNCTION
 
-FUNCTION tenant():
+FUNCTION tenantRead():
     OPENFILE (tenant.txt) IN READ MODE AS fTenant
         tenantList = READ fTenant LINE-BY-LINE
         FOR record IN tenantList:
@@ -138,11 +140,6 @@ FUNCTION tenant():
         ENDFOR
     CLOSEFILE
 ENDFUNCTION
-
-FUNCTION appendData(contentsList)
-    list = []
-    list.extend(contentsList)
-    return list
 
 FUNCTION tenantEntryForm(tenantlist,n)
     for i in range(n)
@@ -170,10 +167,10 @@ FUNCTION getname():
         GET name
         nameCheck = name
         SPLIT nameCheck INTO LIST WITH ","
-        FOR words IN nameCheck:
-            IF characters IN words LOCATION 0 IS UPPERCASE:
+        FOR words IN nameCheck
+            IF characters IN words LOCATION 0 IS UPPERCASE THEN
                 BREAK LOOP
-            ELSE:
+            ELSE THEN
                 code = 2
                 CALLFUNCTION message(code)
             ENDIF
@@ -202,8 +199,8 @@ FUNCTION getpNum():
     PRINT("Enter tenant phone number: (############):\n")
     GET pNum
     pNumCheck=pNum
-        FOR digit IN pNum:
-            IF digit IS NOT INTEGER:
+        FOR digit IN pNum
+            IF digit IS NOT INTEGER THEN
                 CALLFUNCTION Pseudocode.txt
 
     RETURN pNum
@@ -338,15 +335,15 @@ FUNCTION modifydata():
 
     IF dataInput==1 THEN:
         PRINT("NEWLINE Add Data NEWLINE")
-        CALLFUNCTIONapartmentadddata()
+        CALLFUNCTION apartmentadddata()
 
     IF dataInput==2 THEN:
         PRINT("NEWLINE Add Data NEWLINE")
-        CALLFUNCTIONapartmenteditdata()
+        CALLFUNCTION apartmenteditdata()
 
     IF dataInput==3 THEN:
         PRINT("NEWLINE Add Data NEWLINE")
-        CALLFUNCTIONapartmentdeletedata()
+        CALLFUNCTION apartmentdeletedata()
 
     IF dataInput==4 THEN:
         PRINT("Exit")
@@ -375,54 +372,54 @@ ENDFUNCTION
 
 FUNCTION searchbox():
 
-WHILE True
-    DECLARE option AS INTEGER
-    DECLARE opt AS STRING
-    PRINT("NEWLINE Welcome to search box!")
-    PRINT("NEWLINE 1. Search room specific details.NEWLINE 2. Search specific tenant details NEWLINE 4. Exit NEWLINE")
-    PRINT("Please type the keyword search based on the listing above: ")
-    GET option
+    WHILE True
+        DECLARE option AS INTEGER
+        DECLARE opt AS STRING
+        PRINT("NEWLINE Welcome to search box!")
+        PRINT("NEWLINE 1. Search room specific details.NEWLINE 2. Search specific tenant details NEWLINE 4. Exit NEWLINE")
+        PRINT("Please type the keyword search based on the listing above: ")
+        GET option
 
-    IF option=='1' THEN:
-        PRINT("NEWLINE Room(r), Pricing(p)\nPlease type the keyword search based on the listing above: ")
-        GET opt
+        IF option=='1' THEN:
+            PRINT("NEWLINE Room(r), Pricing(p)\nPlease type the keyword search based on the listing above: ")
+            GET opt
 
-        IF opt=='r' THEN:
-        PRINT("NEWLINE SR1,SR2,SR3,SR4,DR1,DR2,DR3,DR4,CPS,MPS,MPT,MP1,MP2,ESS3,ESS2,EST2")
-        num=1
-        CALLFUNCTION searchinformation(num)
+            IF opt=='r' THEN:
+            PRINT("NEWLINE SR1,SR2,SR3,SR4,DR1,DR2,DR3,DR4,CPS,MPS,MPT,MP1,MP2,ESS3,ESS2,EST2")
+            num=1
+            CALLFUNCTION searchinformation(num)
 
-        IF opt=='p' THEN:
-        PRINT("NEWLINE RM350,RM450,RM550,RM650,RM690,RM700,RM750,RM800,RM840,RM890,RM900,RM940,RM950,RM1040,RM1050")
-        num=3
-        CALLFUNCTION searchinformation(num)
+            IF opt=='p' THEN:
+            PRINT("NEWLINE RM350,RM450,RM550,RM650,RM690,RM700,RM750,RM800,RM840,RM890,RM900,RM940,RM950,RM1040,RM1050")
+            num=3
+            CALLFUNCTION searchinformation(num)
+
+            ELSE:
+            PRINT("Invalid input or no records")
+            PRINT("Continue? Enter 'C' NEWLINE Exit? Enter 'X' ")
+
+        IF option=='2' THEN:
+            PRINT("NEWLINE Name(N),Apartment Details(A) NEWLINE Please type the keyword search based on the listing above: ")
+            GET options
+
+            IF options=='N' THEN:
+                PRINT()
+
+            IF opt=='A' THEN:
+                PRINT()
+
+            ELSE:
+            PRINT("Invalid input or no records")
+
+        IF option=='X' THEN:
+            PRINT(" NEWLINE Return to main menu NEWLINE NEWLINE --------------------------- ")
+            RETURN FALSE
 
         ELSE:
-        PRINT("Invalid input or no records")
-        PRINT("Continue? Enter 'C' NEWLINE Exit? Enter 'X' ")
+            PRINT(" NEWLINE Error! Please try again")
+            CALLFUNCTION searchBox()
 
-    IF option=='2' THEN:
-        PRINT("NEWLINE Name(N),Apartment Details(A) NEWLINE Please type the keyword search based on the listing above: ")
-        GET options
-
-        IF options=='N' THEN:
-            PRINT()
-
-        IF opt=='A' THEN:
-            PRINT()
-
-        ELSE:
-        PRINT("Invalid input or no records")
-
-    IF option=='X' THEN:
-        PRINT(" NEWLINE Return to main menu NEWLINE NEWLINE --------------------------- ")
-        RETURN FALSE
-
-    ELSE:
-        PRINT(" NEWLINE Error! Please try again")
-        CALLFUNCTION searchBox()
-
-ENDFUNCTION
+    ENDFUNCTION
 
 FUNCTION searchinformation(num)
 
