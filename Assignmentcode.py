@@ -52,7 +52,7 @@ def tenant_entry_form(tenantList,n):
    return tenantList
 
 #Define apartment function
-def adminapartment():
+def adminApartment():
    
    print("\nApartment info:\n")
    record=[]         
@@ -109,28 +109,28 @@ def adminapartment():
 def modifydata():
 
    print("\n1. Add data\n2. Edit Data\n3. Delete Data\n4. Exit\n")
-   datainput=int(input('Please select which operation: '))
+   dataInput=int(input('Please select which operation: '))
 
-   if datainput==1:
+   if dataInput==1:
       print("\nAdd Data\n")
-      apartmentadddatafunction()
+      apartmentadddata()
 
-   elif datainput==2:
+   elif dataInput==2:
       print("\nEdit Data\n")
-      apartmenteditdatafunction()
+      apartmenteditdata()
 
-   elif datainput==3:
+   elif dataInput==3:
       print("\nDelete Data\n")
-      apartmentdeletedatafunction()
+      apartmentdeletedata()
 
-   elif datainput==4:
+   elif dataInput==4:
       exitprogram()
 
    else:
-      print("Error")
+      print("Error!")
       modifydata()
 
-def apartmentadddatafunction():
+def apartmentadddata():
    adddatanum=int(input('How many records that you decide to add? '))
    print()
    adddata=[]
@@ -150,10 +150,10 @@ def apartmentadddatafunction():
       adddata.append(newapartmentID)
       print("\n",adddata,"\n")
 
-def apartmenteditdatafunction():
+def apartmenteditdata():
    editdatanum=int(input('How many records that you decide to edit? '))
 
-def apartmentdeletedatafunction():
+def apartmentdeletedata():
    deletedatanum=int(input('How many records that you decide to add? '))
 
 def exitprogram():
@@ -168,7 +168,7 @@ def exitprogram():
       exitprogram()
 
 #Define apartment function
-def tenantapartment():
+def tenantApartment():
    
    print("\nApartment info:\n")
    record=[]         
@@ -281,7 +281,7 @@ def adminMenu():
       opt=int(input("\nPlease select which operation that you want to do: "))
 
       if opt==1:
-         adminapartment()
+         adminApartment()
 
       elif opt==4:
          searchBox()
@@ -308,7 +308,7 @@ def tenantMenu():
       opt=int(input("\nPlease select which operation that you want to do: "))
 
       if opt==1:
-         tenantapartment()
+         tenantApartment()
 
       elif opt==2:
          searchBox()

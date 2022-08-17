@@ -204,7 +204,7 @@ FUNCTION getpNum():
     pNumCheck=pNum
         FOR digit IN pNum:
             IF digit IS NOT INTEGER:
-                CALLFUNCTION 
+                CALLFUNCTION Pseudocode.txt
 
     RETURN pNum
 ENDFUNCTION
@@ -275,10 +275,76 @@ FUNCTION read_file(listBool):
             FOR record FROM Ahandler:
                 PRINT(record RIGHTSTRIP() RIGHTSTRIP(","))
     
-FUNCTION apartmentupdate():
-    PRINT("Apartment Update")
+FUNCTION adminApartment():
+    PRINT("NEWLINE Apartment Info: NEWLINE")
+    record=[]
+    list1=[["Standard Room (Triple)"],["Code: SR1"],["Dimensions: 140+ sqft"],["Pricing: RM350"],["Number of Rooms: 20"],["Apartment ID: A01-L1-R1 to A01-L1-R21"]]
+    list2=[["Standard Room (Twin)"],["Code: SR2"],["Dimensions: 120+ sqft"],["Pricing: RM450"],["Number of Rooms: 20"],["Apartment ID: A01-L1-R22 to A01-L1-R41"]]
+    list3=[["Standard Room A/C (Triple)"],["Code: SR3"],["Dimensions: 150+ sqft"],["Pricing: RM550"],["Number of Rooms: 20"],["Apartment ID: A01-L2-R1 to A01-L2-R21"]]
+    list4=[["Standard Room A/C (Twin)"],["Code: SR4"],["Dimensions: 130+ sqft"],["Pricing: RM650"],["Number of Rooms: 20"],["Apartment ID: A01-L2-R22 to A01-L2-R41"]]
+    list5=[["Deluxe Room (Triple)"],["Code: DR1"],["Dimensions: 170+ sqft"],["Pricing: RM750"],["Number of Rooms: 20"],["Apartment ID: A01-L4-R1 to A01-L4-R21"]]
+    list6=[["Deluxe Room (Twin)"],["Code: DR2"],["Dimensions: 160+ sqft"],["Pricing: RM840"],["Number of Rooms: 20"],["Apartment ID: A01-L4-R22 to A01-L4-R41"]]
+    list7=[["Deluxe Room A/C with shared attached bath / toilet (Triple)"],["Code: DR3"],["Dimensions: 180+ sqft"],["Pricing: RM950"],["Number of Rooms: 20"],["Apartment ID: A01-L3-R1 to A01-L3-R21"]]
+    list8=[["Deluxe Room A/C with shared attached bath / toilet"],["Code: DR4"],["Dimensions: 170+ sqft"],["Pricing: RM1040"],["Number of Rooms: 20"],["Apartment ID: A01-L3-R22 to A01-L3-R41"]]
+    list9=[["Compact Premium Single"],["Code: CPS"],["Dimensions: 130+ sqft"],["Pricing: RM690"],["Number of Rooms: 20"],["Apartment ID: A01-L5-R1 to A01-L5-R41"]]
+    list10=[["Medium Premium Single"],["Code: MPS"],["Dimensions: 150+ sqft"],["Pricing: RM750"],["Number of Rooms: 20"],["Apartment ID: A02-L1-R1 to A02-L1-R21"]]
+    list11=[["Medium Premium Twin"],["Code: MPT"],["Dimensions: 180+ sqft"],["Pricing: RM890"],["Number of Rooms: 20"],["Apartment ID: A02-L2-R1 to A02-L2-R21"]]
+    list12=[["Medium Premium with attached bath / toilet (Twin)"],["Code: MP1"],["Dimensions: 180+ sqft"],["Pricing: RM940"],["Number of Rooms: 20"],["Apartment ID: A02-L3-R1 to A02-L3-R21"]]
+    list13=[["Medium Premium with attached bath / toilet (Single)"],["Code: MP2"],["Dimensions: 160+ sqft"],["Pricing: RM1050"],["Number of Rooms: 20"],["Apartment ID: A02-L3-R22 to A02-L3-R41"]]
+    list14=[["En-Suite Single (Super Premium - Triple)"],["Code: ESS3"],["Dimensions: 160+ sqft"],["Pricing: RM700"],["Number of Rooms: 20"],["Apartment ID: A02-L4-R1 to A02-L4-R41"]]
+    list15=[["En-Suite Single (Super Premium - Twin)"],["Code: ESS2"],["Dimensions: 140+ sqft"],["Pricing: RM800"],["Number of Rooms: 20"],["Apartment ID: A02-L4-R1 to A02-L4-R41"]]
+    list16=[["En-Suite Twin (Super Premium)"],["Code: EST2"],["Dimensions: 200+ sqft"],["Pricing: RM900"],["Number of Rooms: 20"],["Apartment ID: A02-L5-R1 to A02-L5-R41"]]
+    APPEND [list1,list2,list3,list4,list5,list6,list7,list8,list9,list10,list11,list12,list13,list14,list15,list16] TO record
+
+    OPEN "Apartment.txt" IN WRITE AS Ahandler
+        for item in record:
+            for data in item:
+                for element in data:
+                    WRITE element TO Ahandler
+                WRITE ", " TO Ahandler
+            WRITE "\n" TO Ahandler
+    CLOSE apartment.txt
+
+    OPEN "Apartment.txt" IN READ AS Ahandler
+        for item in Ahandler:
+            PRINT(item,RIGHTSTRIP() RIGHTSTRIP(","))
+    CLOSE apartment.txt
+
+    CALLFUNCTIONmodifydata()
+
+ENDFUNCTION
+
+FUNCTION modifydata():
+
+    PRINT("NEWLINE 1. Add data NEWLINE 2. Edit Data NEWLINE 3. Delete Data NEWLINE 4. Exit NEWLINE")
+    GEt dataInput
+
+    IF dataInput==1 THEN:
+        PRINT("NEWLINE Add Data NEWLINE")
+        CALLFUNCTIONapartmentadddata()
+
+    IF dataInput==2 THEN:
+        PRINT("NEWLINE Add Data NEWLINE")
+        CALLFUNCTIONapartmenteditdata()
+
+    IF dataInput==3 THEN:
+        PRINT("NEWLINE Add Data NEWLINE")
+        CALLFUNCTIONapartmentdeletedata()
+
+    IF dataInput==4 THEN:
+        CALLFUNCTIONexitprogram()
+
+    ELSE:
+        PRINT("Error!")
+        CALLFUNCTIONmodifydata
+
+ENDFUNCTION
+
+FUNCTION apartmentadddata():
+ENDFUNCTION
 
 FUNCTION searchbox():
+
 WHILE True
     PRINT("NEWLINE Welcome to search box!")
     PRINT("NEWLINE 1. Search room specific details.NEWLINE 2. Search specific tenant details NEWLINE 4. Exit NEWLINE")
@@ -322,6 +388,7 @@ WHILE True
     ELSE:
         PRINT(" NEWLINE Error! Please try again")
         
+ENDFUNCTION
 
 FUNCTION searchinformation(num)
 
