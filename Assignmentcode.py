@@ -124,7 +124,6 @@ def modifydata():
       apartmentdeletedatafunction()
 
    elif datainput==4:
-      print("\nExit\n")
       exitprogram()
 
    else:
@@ -158,7 +157,6 @@ def apartmentdeletedatafunction():
    deletedatanum=int(input('How many records that you decide to add? '))
 
 def exitprogram():
-   print("Exit program")
    exitoption=str(input("We are about to exit to the program. \nAre you sure that you want to exit? Enter 'C to continue, Enter''X' to exit: "))
    if exitoption=='C':
       print("\nContinue\n")
@@ -277,7 +275,7 @@ def searchInformation(num):
 #define menu function:
 def adminMenu():
    while True:
-      print("\n- Welcome admin, you are Tenant Management System -")
+      print("\n- Welcome admin, you are entering Tenant Management System -")
       print("\n1. Apartment\n2. Tenant\n3. Print Specific House & Tenant Details\n4. Search box\n5. Inquiry of Past Tenant Details\n6. Transaction History\n7. Login History\n8. Exit\n9. Register new tenant\n")
 
       opt=int(input("\nPlease select which operation that you want to do: "))
@@ -295,7 +293,7 @@ def adminMenu():
 
       elif opt==8:
          print("\nThank you for using, have a nice day~\n")
-         return False
+         break
 
       else:
          print("\nError! Please try again\n")
