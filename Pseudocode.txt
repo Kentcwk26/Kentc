@@ -240,8 +240,8 @@ FUNCTION deleteTenant(recordName, recordNum)
         OPEN "tenant.txt" IN READ MODE AS Thandler
             READ Thandler
             Thandler STRIP (",") 
-            FOR record from list:
-                FOR item in record:
+            FOR record from list
+                FOR item in record
                 
 FUNCTION searchTenant(details):
     OPEN "tenant.txt" IN READ MODE AS TSearch
@@ -255,7 +255,7 @@ FUNCTION searchTenant(details):
         ENDFOR
     CLOSEFILE
 
-FUNCTION appendFile(list, listBool):
+FUNCTION appendFile(list, listBool)
     IF listBool == TRUE:
         OPEN "tenant.txt" IN APPEND AS Thandler
             for record from list:
@@ -381,7 +381,6 @@ FUNCTION apartmentAddData():
 ENDFUNCTION
 
 FUNCTION searchbox():
-
     WHILE True
         DECLARE option AS INTEGER
         DECLARE opt AS STRING
@@ -394,12 +393,12 @@ FUNCTION searchbox():
             PRINT("NEWLINE Room(r), Pricing(p)\nPlease type the keyword search based on the listing above: ")
             GET opt
 
-            IF opt=='r' THEN:
+            IF opt=='r' THEN
             PRINT("NEWLINE SR1,SR2,SR3,SR4,DR1,DR2,DR3,DR4,CPS,MPS,MPT,MP1,MP2,ESS3,ESS2,EST2")
             num=1
             CALLFUNCTION searchinformation(num)
 
-            IF opt=='p' THEN:
+            IF opt=='p' THEN
             PRINT("NEWLINE RM350,RM450,RM550,RM650,RM690,RM700,RM750,RM800,RM840,RM890,RM900,RM940,RM950,RM1040,RM1050")
             num=3
             CALLFUNCTION searchinformation(num)
@@ -408,28 +407,26 @@ FUNCTION searchbox():
             PRINT("Invalid input or no records")
             PRINT("Continue? Enter 'C' NEWLINE Exit? Enter 'X' ")
 
-        IF option=='2' THEN:
+        IF option=='2' THEN
             PRINT("NEWLINE Name(N),Apartment Details(A) NEWLINE Please type the keyword search based on the listing above: ")
             GET options
 
-            IF options=='N' THEN:
+            IF options=='N' THEN
                 PRINT()
 
-            IF opt=='A' THEN:
+            IF opt=='A' THEN
                 PRINT()
 
             ELSE:
             PRINT("Invalid input or no records")
 
-        IF option=='X' THEN:
+        IF option=='X' THEN
             PRINT(" NEWLINE Return to main menu NEWLINE NEWLINE --------------------------- ")
             RETURN FALSE
 
         ELSE:
-            PRINT(" NEWLINE Error! Please try again")
-            CALLFUNCTION searchBox()
-
-    ENDFUNCTION
+            PRINT("NEWLINE Error! Please try again")
+ENDFUNCTION
 
 FUNCTION searchinformation(num)
 
