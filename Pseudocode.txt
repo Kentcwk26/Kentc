@@ -442,13 +442,13 @@ FUNCTION searchinformation(num)
 
 ENDFUNCTION
 
-FUNCTION adminMenu():
+FUNCTION adminMenu()
     WHILE TRUE
         PRINT("\nTenant Management System")
         PRINT("\n1.Review information\n2. Search box\n3.Register new tenant \n4. Exit")
         PRINT("\nPlease select which operation that you want to do: ")
         GET opt
-        IF opt == 1:
+        IF opt == 1
             CALLFUNCTION display()
 
         ELSEIF opt == 2:

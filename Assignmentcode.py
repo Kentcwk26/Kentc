@@ -206,14 +206,6 @@ def tenantApartment():
    record.append(list15)
    record.append(list16)
    
-   with open("Apartment.txt","w") as Ahandler:
-      for item in record:
-         for data in item:
-            for element in data:
-               Ahandler.write(element)
-            Ahandler.write(", ")
-         Ahandler.write("\n")
-       
    with open("Apartment.txt","r") as Ahandler:
       for item in Ahandler:
          print(item.rstrip().rstrip(","))
@@ -301,7 +293,7 @@ def adminMenu():
 def tenantMenu():
    while True:
       print("- Tenant page -")
-      print("\n1. Review all apartment information\n2. Search box\n3. Transaction Details\n4. Print Specific House and Tenant Details\n5. Exit\n6. Register new tenant")
+      print("\n[R]-Review all apartment information\n[S]-Search box\n[T]-Transaction Details\n4.[P]-Print Specific House and Tenant Details\n[E]-Exit")
 
       opt=int(input("\nPlease select which operation that you want to do: "))
 
