@@ -1,8 +1,7 @@
-def login():  #define the login function
-   print("\nWelcome to Tenant Management System Login page.\n")
-   print("\nPlease enter username and password to proceed.\n")  
-   chance=3
-   while chance>0:
+def login():                                 #define the login function
+   print("\nWelcome to Tenant Management System Login page.\nPlease enter username and password to proceed.\n") 
+   chance=3                                  #Specify login chances
+   while chance>0:                           #iterate when there are more than 0 chances remaining
       #input login credentials
       username=input("Enter username:")
       password=input("Enter password:")
@@ -16,18 +15,18 @@ def login():  #define the login function
                   print("\nLogin successful\n")
                   #check for admin credentials
                   if (username == "john" and password == "1234u-78") or (username == "david" and password == "55467913"):
-                     adminMenu()             #redirect to admin menu
+                     masterKey = True        #activate masterKey
                   else:
-                     tenantMenu()
+                     masterKey = False       #deactivate masterKey
+                  menu(masterKey)            #redirect to menu
                   chance=0                   #empty login chances
                   break                      #break loop to avoid running error message
          else:
-            chance-=1
+            chance-=1                        #decrease chances by 1
             print("\nError, incorrect username or password.\n",chance,"chances remaining.\n")
 
 #Define tenant_entry form function
-def tenant_entry_form(tenantList,n):
-   newForm=[]
+def tenantEntryForm(tenantList,n):
    for i in range(n):
       #Get input for tenant data
       name = getname()
@@ -43,8 +42,30 @@ def tenant_entry_form(tenantList,n):
    return tenantList
 
 
-def getname():
+
+
+
+def search():
    while True:
+      category = input("[T]-Tenant\n[A]-Apartment\n[P]-Transaction\n[L]-Leave\nChoose a category:")
+      if category in ["T","t"]:
+         tenantsearch()
+      elif category in  ["A","a"]:
+         searchbox()
+      elif category in  ["P","p"]:
+         transactionsearch()
+      elif category in  ["L","l"]:
+         return False
+      else:
+         code = 0
+         message(code)
+
+
+
+
+
+def getname():
+  while True:
       name = input("Enter tenant name: Firstname Familyname Lastname\n")
       nameCheck = name
       nameCheck.split(",")
@@ -80,7 +101,7 @@ def getpNum():
    return pNum
 
 def getnationality():
-   while True:
+  while True:
       nationality = input("Enter tenant nationality: (M: Malaysian/N: non-Malaysian):\n")
       nationalityCheck = nationality
       if len(nationalityCheck) == 1:
@@ -119,19 +140,8 @@ def message(code):
    elif code == 3:
       print("Length error")
    print("Please try again.")
-
-def message(code):
-   if code == 0:
-      print("Incorrect input")
-   elif code == 1:
-      print("Incorrect data type present")
-   elif code == 2:
-      print("Format error")
-   elif code == 3:
-      print("Length error")
-   print("Please try again.")
     
-#Define apartment function
+#Define apartment def
 def adminApartment():
    
    print("\nApartment info:\n")
@@ -187,7 +197,7 @@ def adminApartment():
    modifyData()
 
 def modifyData():
-   while True:
+  while True:
       print("\n1. Add data\n2. Edit Data\n3. Delete Data\n4. Exit\n")
       dataInput=int(input('Please select which operation: '))
 
@@ -209,7 +219,7 @@ def modifyData():
 
       else:
          print("Error!")
-         return True
+
 
 def apartmentAddData(record):
    adddatanum=int(input('How many records that you decide to add? '))
@@ -239,7 +249,7 @@ def apartmentDeleteData():
 
 def apartmentExitProgram():
    
-   while True:
+  while True:
       exitoption=str(input("We are about to exit to the program. \nAre you sure that you want to exit? Enter 'C to continue, Enter''X' to exit: "))
       if exitoption=='C':
          print("\nContinue\n")
@@ -248,9 +258,8 @@ def apartmentExitProgram():
          return False
       else:
          print("\nInvalid input\n")
-         return True
 
-#Define apartment function
+#Define apartment def
 def tenantApartment():
    
    print("\nApartment info:\n")
@@ -295,10 +304,10 @@ def tenantApartment():
       for item in Ahandler:
          print(item.rstrip().rstrip(","))
 
-#define search function
+#define search def
 def searchBox():
    
-   while True:
+  while True:
 
       print("\nWelcome to search box!")
       print("\n1. Search room specific details.\n2. Search specific tenant details.\n\nEnter 'X' to EXIT search box \n")
@@ -331,13 +340,12 @@ def searchBox():
 
       else:
          print("\nError! Please try again")
-         #return search function
-         return True
+
 
 #define searchinformation function:
 def searchInformation(num):
    
-   while True:
+  while True:
       searchinformation=input("Select and enter text to begin search: ")
       print()
       with open("Apartment.txt","r") as Xhandler:
@@ -354,59 +362,35 @@ def searchInformation(num):
          return False
 
 #define menu function:
-def adminMenu():
-
+def menu(masterKey):
    while True:
-      print("\n- Welcome back admin, you are now entering Tenant Management System -")
-      print("\n[A]- Apartment\n[T]- Tenant\n[D]- Print Specific House & Tenant Details\n[S]- Search box\n[I]- Inquiry of Past Tenant Details\n[P]- Transaction History\n[L]- Login History\n[E]- Exit\n[R]- Register new tenant\n")
-
-      opt=int(input("\nPlease select which operation that you want to do: "))
+      print("\n- Welcome back, you are now entering Tenant Management System -")
+      if masterKey == False:
+         print("\n[R]-Review all apartment information\n[S]-Search box\n[T]-Transaction Details\n[P]-Print Specific House and Tenant Details\n[E]-Exit\n")
+      else:
+         print("\n[A]-Apartment\n[T]-Tenant\n[D]-Print Specific House & Tenant Details\n[S]-Search box\n[I]-Inquiry of Past Tenant Details\n[P]-Transaction History\n[L]-Login History\n[E]-Exit\n[R]-Register new tenant")
+      opt=input("\nPlease select which operation that you want to do: ")
 
       if opt in ["A","a"]:
-         adminApartment()
+         if masterKey == False:
+            tenantApartment()
+         else:
+            adminApartment()
 
       elif opt in ["S","s"]:
          searchBox()
          
       elif opt in ["I","i"]:
          tenantList=[]
-         tenantList = tenant_entry_form()
+         tenantList = tenantEntryForm()
          print(tenantList)
 
-      elif opt in ["L","l"]:
+      elif opt in ["E","e"]:
          print("\nThank you for using, have a nice day~\n")
          return False
 
       else:
          print("\nError! Please try again\n")
-         return True
 
-#define menu function:
-def tenantMenu():
-
-   while True:
-      print("- Tenant page -")
-      print("\n[R]-Review all apartment information\n[S]-Search box\n[T]-Transaction Details\n[P]-Print Specific House and Tenant Details\n[E]-Exit")
-
-      opt=int(input("\nPlease select which operation that you want to do: "))
-
-      if opt==1:
-         tenantApartment()
-
-      elif opt==2:
-         searchBox()
-         
-      elif opt==6:
-         tenantList=[]
-         tenantList = tenant_entry_form()
-         print(tenantList)
-
-      elif opt==5:
-         print("\nThank you for using, have a nice day~\n")
-         return False
-
-      else:
-         print("\nError! Please try again\n")
-         return True
 
 login()

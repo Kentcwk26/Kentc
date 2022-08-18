@@ -1,4 +1,5 @@
 FUNCTION login()
+    print("NEWLINE Welcome to Tenant Management System Login page. NEWLINE Please enter username and password to proceed.NEWLINE")
     chance=3
     WHILE chance>0
         PRINT("Enter username:")
@@ -13,9 +14,10 @@ FUNCTION login()
                     IF password == listRecord LOCATION 1 THEN
                         print("\nLogin successful\n")
                         IF (username == "john" AND password == "1234u-78") OR (username == "david" AND password == "55467913"):
-                            CALLFUNCTION adminMenu()
+                            masterKey = TRUE
                         ELSE THEN
-                            CALLFUNCTION tenantMenu()
+                            masterKey = FALSE
+                        CALLFUNCTION menu(masterKey)
                         chance = 0
                         BREAKLOOP
                         ENDIF
@@ -29,6 +31,8 @@ FUNCTION login()
         CLOSEFILE
     ENDWHILE
 ENDFUNCTION
+
+FUNCTION Tenant
 
 FUNCTION add()
     WHILE TRUE
@@ -415,6 +419,12 @@ FUNCTION apartmentAddData():
 
 ENDFUNCTION
 
+FUNCTIONapartmentEditData():
+ENDFUNCTION
+
+FUNCTIONapartmentDeleteData():
+ENDFUNCTION
+
 FUNCTION searchbox():
 
     WHILE TRUE
@@ -431,12 +441,12 @@ FUNCTION searchbox():
             GET opt
 
             IF opt=='r' THEN
-            PRINT("NEWLINE SR1,SR2,SR3,SR4,DR1,DR2,DR3,DR4,CPS,MPS,MPT,MP1,MP2,ESS3,ESS2,EST2")
+            PRINT("NEWLINE SR1,SR2,SR3,SR4,DR1,DR2,DR3,DR4,CPS,MPS,MPT,MP1,MP2,ESS3,ESS2,EST2.... NEWLINE Please enter the apartment code to begin the search: ")
             num=1
             CALLFUNCTION searchinformation(num)
 
             ELSEIF opt=='p' THEN
-            PRINT("NEWLINE RM350,RM450,RM550,RM650,RM690,RM700,RM750,RM800,RM840,RM890,RM900,RM940,RM950,RM1040,RM1050")
+            PRINT("NEWLINE RM350,RM450,RM550,RM650,RM690,RM700,RM750,RM800,RM840,RM890,RM900,RM940,RM950,RM1040,RM1050.... NEWLINE Please enter the pricing to begin the search: ")
             num=3
             CALLFUNCTION searchinformation(num)
 
@@ -483,31 +493,34 @@ FUNCTION searchinformation(num)
     PRINT()
     OPEN "Apartment.txt" IN READ AS Xhandler
         FOR record FROM Xhandler:
-            strippeditem = record RIGHTSTRIP(",") RIGHTSTRIP("\n")
+            strippeditem = record RIGHTSTRIP(",") RIGHTSTRIP("NEWLINE")
             data = SPLIT strippeditem INTO string(", ")
             IF searchinformation IN data[num]:
                 PRINT("Results: NEWLINE",record)
 
 ENDFUNCTION
 
-FUNCTION adminMenu()
+FUNCTION menu(masterKey)
     
     WHILE TRUE
-        
-        PRINT("\nTenant Management System")
-        PRINT("\n1.Review information\n2. Search box\n3.Register new tenant \n4. Exit")
-        PRINT("\nPlease select which operation that you want to do: ")
+
+        PRINT("NEWLINE - Welcome back, you are now entering Tenant Management System -")
+        IF masterKey == False THEN
+           print("NEWLINE [R]-Review all apartment information NEWLINE [S]-Search box NEWLINE [T]-Transaction Details NEWLINE [P]-Print Specific House and Tenant Details NEWLINE [E]-Exit\n")
+        ELSE THEN
+            PRINT("NEWLINE [A]- Apartment NEWLINE[T]- Tenant NEWLINE[D]- Print Specific House & Tenant Details NEWLINE[S]- Search box NEWLINE[I]- Inquiry of Past Tenant Details NEWLINE[P]- Transaction History\n[L]- Login History\n[E]- Exit\n[R]- Register new tenant")
+        PRINT("Please select which operation that you want to do: ")
         GET opt
         
-        IF opt == 1:
+        IF opt IN ["A","a"] THEN
 
             CALLFUNCTION display()
 
-        ELSE IF opt == 2:
+        ELSE IF opt IN ["S","s"] THEN
 
             CALLFUNCTION search()
             
-        ELSE IF opt == 3:
+        ELSE IF opt IN ["I","i"] THEN
 
             PRINT("Number of new tenants: ")
             GET n
@@ -516,19 +529,20 @@ FUNCTION adminMenu()
             bool=TRUE
             appendFile(tenantlist,n)
 
-        ELSE IF opt == 4:
+        ELSE IF opt IN ["E","e"] THEN:
 
-            PRINT("\nThank you for using, have a nice day~")
+            PRINT("NEWLINE Thank you for using, have a nice day~ NEWLINE")
             RETURN FALSE
 
         ELSE:
 
-            PRINT("\nError! Please try again")
+            PRINT("NEWLINE Error! Please try again NEWLINE")
             RETURN TRUE
 
         ENDIF
 
 ENDFUNCTION
+
 
 BEGIN
 IMPORT datetime AS dt
