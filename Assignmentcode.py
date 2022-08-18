@@ -41,29 +41,6 @@ def tenantEntryForm(tenantList,n):
    #Return the list
    return tenantList
 
-
-
-
-
-def search():
-   while True:
-      category = input("[T]-Tenant\n[A]-Apartment\n[P]-Transaction\n[L]-Leave\nChoose a category:")
-      if category in ["T","t"]:
-         tenantsearch()
-      elif category in  ["A","a"]:
-         searchbox()
-      elif category in  ["P","p"]:
-         transactionsearch()
-      elif category in  ["L","l"]:
-         return False
-      else:
-         code = 0
-         message(code)
-
-
-
-
-
 def getname():
   while True:
       name = input("Enter tenant name: Firstname Familyname Lastname\n")
@@ -363,26 +340,27 @@ def searchInformation(num):
 
 #define menu function:
 def menu(masterKey):
+   print("\n- Welcome back, you are now entering Tenant Management System -")
    while True:
-      print("\n- Welcome back, you are now entering Tenant Management System -")
       if masterKey == False:
-         print("\n[R]-Review all apartment information\n[S]-Search box\n[T]-Transaction Details\n[P]-Print Specific House and Tenant Details\n[E]-Exit\n")
+         print("\n[S]-Search box\n[R]-Review all apartment information\n[T]-Transaction Details\n[P]-Print Specific House and Tenant Details\n[E]-Exit\n")
       else:
-         print("\n[A]-Apartment\n[T]-Tenant\n[D]-Print Specific House & Tenant Details\n[S]-Search box\n[I]-Inquiry of Past Tenant Details\n[P]-Transaction History\n[L]-Login History\n[E]-Exit\n[R]-Register new tenant")
+         print("\n[S]-Search box\n[A]-Apartment\n[T]-Tenant\n[D]-Print Specific House & Tenant Details\n[I]-Inquiry of Past Tenant Details\n[P]-Transaction History\n[L]-Login History\n[E]-Exit\n[R]-Register new tenant")
       opt=input("\nPlease select which operation that you want to do: ")
 
-      if opt in ["A","a"]:
+      if opt in ["S","s"]:
+         searchBox()
+
+      elif opt in ["A","a"]:
          if masterKey == False:
             tenantApartment()
          else:
             adminApartment()
-
-      elif opt in ["S","s"]:
-         searchBox()
          
-      elif opt in ["I","i"]:
+      elif opt in ["R","r"] and masterKey == True:
+         n = input("Number of new tenants: ")
          tenantList=[]
-         tenantList = tenantEntryForm()
+         tenantList = tenantEntryForm(tenantList,n)
          print(tenantList)
 
       elif opt in ["E","e"]:
@@ -390,7 +368,8 @@ def menu(masterKey):
          return False
 
       else:
-         print("\nError! Please try again\n")
+         code = 3
+         message(code)
 
 
 login()
