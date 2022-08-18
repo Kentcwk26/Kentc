@@ -184,9 +184,9 @@ def adminApartment():
       for item in Ahandler:
          print(item.rstrip().rstrip(","))
 
-   modifydata()
+   modifyData()
 
-def modifydata():
+def modifyData():
    while True:
       print("\n1. Add data\n2. Edit Data\n3. Delete Data\n4. Exit\n")
       dataInput=int(input('Please select which operation: '))
@@ -211,7 +211,7 @@ def modifydata():
          print("Error!")
          return True
 
-def apartmentAddData():
+def apartmentAddData(record):
    adddatanum=int(input('How many records that you decide to add? '))
    adddata=[]
    print("\nNow, you are required to enter the new data\n")
@@ -229,6 +229,7 @@ def apartmentAddData():
       adddata.append(newapartmentnumberofrooms)
       adddata.append(newapartmentID)
       print("\n",adddata,"\n")
+      record.extend(adddata)
 
 def apartmentEditData():
    editdatanum=int(input('How many records that you decide to edit? '))
@@ -236,15 +237,18 @@ def apartmentEditData():
 def apartmentDeleteData():
    deletedatanum=int(input('How many records that you decide to add? '))
 
-def apartmentexitprogram():
-   exitoption=str(input("We are about to exit to the program. \nAre you sure that you want to exit? Enter 'C to continue, Enter''X' to exit: "))
-   if exitoption=='C':
-      print("\nContinue\n")
-   elif exitoption=='X':
-      print("\nExit program, return to main menu\n")
-   else:
-      print("\nInvalid input\n")
-      apartmentexitprogram()
+def apartmentExitProgram():
+   
+   while True:
+      exitoption=str(input("We are about to exit to the program. \nAre you sure that you want to exit? Enter 'C to continue, Enter''X' to exit: "))
+      if exitoption=='C':
+         print("\nContinue\n")
+      elif exitoption=='X':
+         print("\nExit program, return to main menu\n")
+         return False
+      else:
+         print("\nInvalid input\n")
+         return True
 
 #Define apartment function
 def tenantApartment():
@@ -295,6 +299,7 @@ def tenantApartment():
 def searchBox():
    
    while True:
+
       print("\nWelcome to search box!")
       print("\n1. Search room specific details.\n2. Search specific tenant details.\n\nEnter 'X' to EXIT search box \n")
       option=input("Select and insert input in order to start the program: ")
@@ -311,11 +316,13 @@ def searchBox():
             print("\nRM350,RM450,RM550,RM650,RM690,RM700,RM750,RM800,RM840,RM890,RM900,RM940,RM950,RM1040,RM1050")
             num=3
             searchInformation(num)
+
          else:
             print("Invalid input or no records")
+            return True
       
       elif option=='2':
-         options=input("\nName(N),Apartment Details(A)\nPlease type the keyword search based on the listing above: ")
+         options=str(input("\nName(N),Apartment Details(A)\nPlease type the keyword search based on the listing above: "))
 
       elif option=='X':
          print("\nReturn to main menu\n\n--------------------------------")
@@ -324,47 +331,49 @@ def searchBox():
 
       else:
          print("\nError! Please try again")
+         #return search function
          return True
 
 #define searchinformation function:
 def searchInformation(num):
    
-   searchinformation=input("Select and enter text to begin search: ")
-   print()
-   with open("Apartment.txt","r") as Xhandler:
-      for record in Xhandler:
-         strippeditem=record.rstrip()
-         data=strippeditem.split(", ")
-         if searchinformation in data[num]:
-            print("Results:\n",record)
+   while True:
+      searchinformation=input("Select and enter text to begin search: ")
+      print()
+      with open("Apartment.txt","r") as Xhandler:
+         for record in Xhandler:
+            strippeditem=record.rstrip()
+            data=strippeditem.split(", ")
+            if searchinformation in data[num]:
+               print("Results:\n",record)
 
-   exitsearch=input("Exit program? Enter any key to exit, Enter 'C' to continue. ")
-   if exitsearch == 'C':
-      searchBox()
-   else:
-      adminMenu()
+      exitsearch=input("Exit program? Enter any key to exit, Enter 'C' to continue. ")
+      if exitsearch == 'C':
+         return True
+      else:
+         return False
 
 #define menu function:
 def adminMenu():
 
    while True:
       print("\n- Welcome back admin, you are now entering Tenant Management System -")
-      print("\n1. Apartment\n2. Tenant\n3. Print Specific House & Tenant Details\n4. Search box\n5. Inquiry of Past Tenant Details\n6. Transaction History\n7. Login History\n8. Exit\n9. Register new tenant\n")
+      print("\n[A]- Apartment\n[T]- Tenant\n[D]- Print Specific House & Tenant Details\n[S]- Search box\n[I]- Inquiry of Past Tenant Details\n[P]- Transaction History\n[L]- Login History\n[E]- Exit\n[R]- Register new tenant\n")
 
       opt=int(input("\nPlease select which operation that you want to do: "))
 
-      if opt==1:
+      if opt in ["A","a"]:
          adminApartment()
 
-      elif opt==4:
+      elif opt in ["S","s"]:
          searchBox()
          
-      elif opt==9:
+      elif opt in ["I","i"]:
          tenantList=[]
          tenantList = tenant_entry_form()
          print(tenantList)
 
-      elif opt==8:
+      elif opt in ["L","l"]:
          print("\nThank you for using, have a nice day~\n")
          return False
 
@@ -377,7 +386,7 @@ def tenantMenu():
 
    while True:
       print("- Tenant page -")
-      print("\n[R]-Review all apartment information\n[S]-Search box\n[T]-Transaction Details\n4.[P]-Print Specific House and Tenant Details\n[E]-Exit")
+      print("\n[R]-Review all apartment information\n[S]-Search box\n[T]-Transaction Details\n[P]-Print Specific House and Tenant Details\n[E]-Exit")
 
       opt=int(input("\nPlease select which operation that you want to do: "))
 

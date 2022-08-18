@@ -37,7 +37,7 @@ FUNCTION add()
         IF category IS IN  ("T","t") THEN
             tenantEntryForm()
         ELSE IF category IS IN  ("A","a") THEN
-            apartment()
+            apartmentAddData()
         ELSE IF category IS IN  ("P","p") THEN
 
         ELSE IF category IS IN  ("L","l") THEN
@@ -75,7 +75,7 @@ FUNCTION Update()
         IF category IS IN  ("T","t") THEN
             
         ELSE IF category IS IN  ("A","a") THEN
-
+            CALLFUNCTION apartmentEditData()
         ELSE IF category IS IN  ("P","p") THEN
 
         ELSE IF category IS IN  ("L","l") THEN
@@ -94,7 +94,7 @@ FUNCTION delete()
         IF category IS IN  ("T","t") THEN
             
         ELSE IF category IS IN  ("A","a") THEN
-
+            CALLFUNCTION apartmentDeleteData()
         ELSE IF category IS IN  ("P","p") THEN
 
         ELSE IF category IS IN  ("L","l") THEN
@@ -113,7 +113,7 @@ FUNCTION search()
         IF category IS IN  ("T","t") THEN
             
         ELSE IF category IS IN  ("A","a") THEN
-            searchinformation(num)
+            searchbox()
         ELSE IF category IS IN  ("P","p") THEN
 
         ELSE IF category IS IN  ("L","l") THEN
@@ -334,6 +334,7 @@ ENDFUNCTION
 FUNCTION modifydata():
 
     DECLARE dataInput AS INTEGER
+    WHILE TRUE:
     PRINT("NEWLINE 1. Add data NEWLINE 2. Edit Data NEWLINE 3. Delete Data NEWLINE 4. Exit NEWLINE")
     PRINT("Please select which operation: ")
     GET dataInput
@@ -352,9 +353,11 @@ FUNCTION modifydata():
 
     ELSE IF dataInput==4 THEN
         PRINT("Exit")
+        RETURN FALSE
 
     ELSE THEN
         PRINT("Error!")
+        RETURN TRUE
 
 ENDFUNCTION
 
@@ -407,6 +410,7 @@ FUNCTION apartmentAddData():
         ELSE:
             PRINT("NEWLINE Invalid input")
             RETURN TRUE
+
         ENDIF
 
 ENDFUNCTION
