@@ -65,7 +65,6 @@ FUNCTION display()
             code = 0
             CALLFUNCTION message(code)
         ENDIF
-    
     ENDWHILE
 ENDFUNCTION
 
@@ -114,7 +113,7 @@ FUNCTION search()
         IF category IS IN  ("T","t") THEN
             
         ELSE IF category IS IN  ("A","a") THEN
-
+            searchinformation(num)
         ELSE IF category IS IN  ("P","p") THEN
 
         ELSE IF category IS IN  ("L","l") THEN
@@ -135,7 +134,7 @@ ENDFUNCTION
 FUNCTION tenantRead()
     OPENFILE (tenant.txt) IN READ MODE AS fTenant
         tenantList = READ fTenant LINE-BY-LINE
-        FOR record IN tenantList:
+        FOR record IN tenantList
             PRINT(record RIGHTSTRIP(",") RIGHTSTRIP("\n"))
         ENDFOR
     CLOSEFILE
