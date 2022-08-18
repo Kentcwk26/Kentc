@@ -144,18 +144,12 @@ FUNCTION tenantEntryForm(tenantlist,n)
     for i in range(n)
         newForm=[]
         name = CALL FUNCTION getname()
-        CALLFUNCTION getgender()
-        GET gender
-        CALLFUNCTION getpNum()
-        GET pNum
-        CALLFUNCTION getnationality()
-        GET nationality
-        CALLFUNCTION getstartDate()
-        GET startDate
-        CALLFUNCTION getincome()
-        GET income
-        CALLFUNCTION getrental()
-        GET rental
+        gender = CALLFUNCTION getgender()
+        pNum = CALLFUNCTION getpNum()
+        nationality = CALLFUNCTION getnationality()
+        startDate = CALLFUNCTION getstartDate()
+        income = CALLFUNCTION getincome()
+        rental = CALLFUNCTION getrental()
         APPEND [name,gender,pNum,nationality,startDate,income,rental] TO tenantList
     RETURN tenantList
 ENDFUNCTION

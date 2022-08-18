@@ -33,21 +33,13 @@ def tenant_entry_form(tenantList,n):
       name = input("Enter tenant name:\n")
       age = input("Enter tenant age: (##)\n")
       gender = input("Enter tenant gender: (m/f)\n")
-      pnum = input("Enter tenant phone number: (############)\n")
+      pNum = input("Enter tenant phone number: (############)\n")
       nationality = input("Enter tenant nationality: (Malaysian/non-Malaysian)\n")
-      date1 = input("Enter Rental start date: (YYYY/MM/DD)\n")
+      startDate = input("Enter Rental start date: (YYYY/MM/DD)\n")
       income = input("Enter tenant income range(RM)\n")
       rental = input("Enter tenant rental status(current/past)\n")
       #Apply data to end of list
-      newForm.append(name)
-      newForm.append(age)
-      newForm.append(gender)
-      newForm.append(pnum)
-      newForm.append(nationality)
-      newForm.append(date1)
-      newForm.append(income)
-      newForm.append(rental)
-      tenantList.append(newForm)
+      tenantList.append(name,age,gender,pNum,nationality,startDate,income,rental)
    #Return the list
    return tenantList
 
@@ -283,11 +275,10 @@ def adminMenu():
 
       elif opt==8:
          print("\nThank you for using, have a nice day~\n")
-         break
+         return False
 
       else:
          print("\nError! Please try again\n")
-         adminMenu() 
 
 #define menu function:
 def tenantMenu():
@@ -310,10 +301,9 @@ def tenantMenu():
 
       elif opt==5:
          print("\nThank you for using, have a nice day~\n")
-         break
+         return False
 
       else:
          print("\nError! Please try again\n")
-         tenantMenu()
 
 login()
