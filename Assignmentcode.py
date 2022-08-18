@@ -30,19 +30,107 @@ def tenant_entry_form(tenantList,n):
    newForm=[]
    for i in range(n):
       #Get input for tenant data
-      name = input("Enter tenant name:\n")
-      age = input("Enter tenant age: (##)\n")
-      gender = input("Enter tenant gender: (m/f)\n")
-      pNum = input("Enter tenant phone number: (############)\n")
-      nationality = input("Enter tenant nationality: (Malaysian/non-Malaysian)\n")
-      startDate = input("Enter Rental start date: (YYYY/MM/DD)\n")
-      income = input("Enter tenant income range(RM)\n")
-      rental = input("Enter tenant rental status(current/past)\n")
+      name = getname()
+      gender = getgender()
+      pNum = getpNum()
+      nationality = getnationality()
+      startDate = getstartDate()
+      income = getincome()
+      rental = getrental()
       #Apply data to end of list
-      tenantList.append(name,age,gender,pNum,nationality,startDate,income,rental)
+      tenantList.append(name,gender,pNum,nationality,startDate,income,rental)
    #Return the list
    return tenantList
 
+
+def getname():
+   while True:
+      name = input("Enter tenant name: Firstname Familyname Lastname\n")
+      nameCheck = name
+      nameCheck.split(",")
+      for words in nameCheck:
+         if words[0].isupper:
+            break
+         else:
+            code = 2
+            message(code)
+      return name
+
+def getgender():
+   gender = input("Enter tenant gender: (m/f):\n")
+   genderCheck = gender
+   if genderCheck.len == 1:
+      if type(genderCheck) != str:
+         code = 1
+         message(code)
+   else: 
+      code = 3
+      message(code)
+   return gender
+
+def getpNum():
+   pNum = input("Enter tenant phone number: (############):\n")
+   pNumCheck = pNum
+   for digit in pNumCheck:
+      if type(digit) != int():
+         continue
+      else:
+         code = 1
+         message(code)
+   return pNum
+
+def getnationality():
+   while True:
+      nationality = input("Enter tenant nationality: (M: Malaysian/N: non-Malaysian):\n")
+      nationalityCheck = nationality
+      if len(nationalityCheck) == 1:
+         if type(nationalityCheck) == str:
+            continue
+         else:
+            code = 1
+            message(code)
+      else: 
+         code = 3
+         message(code)
+      return nationality
+
+def getstartDate():
+   startDate = input("Enter Rental start date: (YYYY,MM,DD):\n")
+
+   return startDate
+
+
+def getincome():
+   income = input("Enter tenant income range(RM):\n")
+
+   return income
+
+def getrental():
+   rental = input("Enter tenant rental status(current/past)\n")
+   return rental
+
+def message(code):
+   if code == 0:
+      print("Incorrect input")
+   elif code == 1:
+      print("Incorrect data type present")
+   elif code == 2:
+      print("Format error")
+   elif code == 3:
+      print("Length error")
+   print("Please try again.")
+
+def message(code):
+   if code == 0:
+      print("Incorrect input")
+   elif code == 1:
+      print("Incorrect data type present")
+   elif code == 2:
+      print("Format error")
+   elif code == 3:
+      print("Length error")
+   print("Please try again.")
+    
 #Define apartment function
 def adminApartment():
    
@@ -121,6 +209,7 @@ def modifydata():
 
       else:
          print("Error!")
+         return True
 
 def apartmentAddData():
    adddatanum=int(input('How many records that you decide to add? '))
@@ -204,8 +293,9 @@ def tenantApartment():
 
 #define search function
 def searchBox():
-   print("\nWelcome to search box!")
+   
    while True:
+      print("\nWelcome to search box!")
       print("\n1. Search room specific details.\n2. Search specific tenant details.\n\nEnter 'X' to EXIT search box \n")
       option=input("Select and insert input in order to start the program: ")
 
@@ -234,7 +324,7 @@ def searchBox():
 
       else:
          print("\nError! Please try again")
-         searchBox() 
+         return True
 
 #define searchinformation function:
 def searchInformation(num):
@@ -256,6 +346,7 @@ def searchInformation(num):
 
 #define menu function:
 def adminMenu():
+
    while True:
       print("\n- Welcome back admin, you are now entering Tenant Management System -")
       print("\n1. Apartment\n2. Tenant\n3. Print Specific House & Tenant Details\n4. Search box\n5. Inquiry of Past Tenant Details\n6. Transaction History\n7. Login History\n8. Exit\n9. Register new tenant\n")
@@ -279,9 +370,11 @@ def adminMenu():
 
       else:
          print("\nError! Please try again\n")
+         return True
 
 #define menu function:
 def tenantMenu():
+
    while True:
       print("- Tenant page -")
       print("\n[R]-Review all apartment information\n[S]-Search box\n[T]-Transaction Details\n4.[P]-Print Specific House and Tenant Details\n[E]-Exit")
@@ -305,5 +398,6 @@ def tenantMenu():
 
       else:
          print("\nError! Please try again\n")
+         return True
 
 login()

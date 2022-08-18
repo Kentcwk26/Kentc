@@ -161,7 +161,7 @@ FUNCTION getname()
         nameCheck = name
         SPLIT nameCheck INTO LIST WITH ","
         FOR words IN nameCheck
-            IF characters IN words LOCATION 0 IS UPPERCASE THEN
+            IF words LOCATION 0 IS UPPERCASE THEN
                 BREAKLOOP
             ELSE THEN
                 code = 2
@@ -182,7 +182,7 @@ FUNCTION getgender()
         ELSE THEN
             code = 1
             CALLFUNCTION message(code)
-    ELSE:
+    ELSE THEN
         code = 3
         CALLFUNCTION message(code)
     RETURN gender
@@ -360,22 +360,60 @@ ENDFUNCTION
 
 FUNCTION apartmentAddData():
     
-    DECLARE adddatanum,newapartmentnumberofrooms AS INTEGER
-    DECLARE newapartment AS STRING
-    adddata=[]
+    WHILE TRUE:
+    DECLARE adddatanum,newapartmentnumberofrooms,adddataconfirmation,rewritedataconfirmation AS INTEGER
+    DEFINE adddata AS ARRAY
+
     PRINT("NEWLINE Now, you are required to enter the new data NEWLINE")
+
     FOR i FROM 0 to adddatanum
+
         PRINT("Apartment: ")
         GET newapartment
         PRINT("Code: ")
+        GET newapartmentcode
         PRINT("Dimension (in range): ")
-        PRINT("")
+        GET newapartmentdimension
+        PRINT("Pricing in RM:")
+        GET newapartmentpricing
+        PRINT("Number of rooms: ")
+        GET newapartmentnumberofrooms
+        PRINT("Apartment ID: ")
+        GEt newapartmentID
+        APPEND [newapartment,newapartmentcode,newapartmentdimension,newapartmentpricing,newapartmentnumberofrooms,newapartmentID] TO adddata
+        PRINT(NEWLINE, adddata, NEWLINE)
 
+    ENDFOR
+
+        PRINT("Are you sure with the records you inserted just now? Enter '1' to save record, Enter '0' to unsave record: )
+        GET adddataconfirmation
+
+        IF adddataconfirmation == 1 THEN
+
+            PRINT("NEWLINE Data Saved NEWLINE ")
+            RETURN FALSE
+
+        ELSE IF adddataconfirmation == 0 THEN
+
+            PRINT("NEWLINE Enter 'W' to rewrite the data again, Enter any key to exit: ")
+            GET rewritedataconfirmation
+            IF rewritedataconfirmation == 'W' THEN
+                RETURN TRUE
+            ELSE:
+                PRINT("Return to main menu....")
+                RETURN FALSE
+            ENDIF
+
+        ELSE:
+            PRINT("NEWLINE Invalid input")
+            RETURN TRUE
+        ENDIF
 
 ENDFUNCTION
 
 FUNCTION searchbox():
-    WHILE True
+
+    WHILE TRUE
         DECLARE option AS INTEGER
         DECLARE opt AS STRING
         PRINT("NEWLINE Welcome to search box!")
@@ -383,7 +421,8 @@ FUNCTION searchbox():
         PRINT("Please type the keyword search based on the listing above: ")
         GET option
 
-        IF option=='1' THEN:
+        IF option=='1' THEN
+
             PRINT("NEWLINE Room(r), Pricing(p)\nPlease type the keyword search based on the listing above: ")
             GET opt
 
@@ -392,7 +431,7 @@ FUNCTION searchbox():
             num=1
             CALLFUNCTION searchinformation(num)
 
-            IF opt=='p' THEN
+            ELSEIF opt=='p' THEN
             PRINT("NEWLINE RM350,RM450,RM550,RM650,RM690,RM700,RM750,RM800,RM840,RM890,RM900,RM940,RM950,RM1040,RM1050")
             num=3
             CALLFUNCTION searchinformation(num)
@@ -401,25 +440,36 @@ FUNCTION searchbox():
             PRINT("Invalid input or no records")
             PRINT("Continue? Enter 'C' NEWLINE Exit? Enter 'X' ")
 
-        IF option=='2' THEN
+            ENDIF
+
+        ELSE IF option=='2' THEN
+
             PRINT("NEWLINE Name(N),Apartment Details(A) NEWLINE Please type the keyword search based on the listing above: ")
             GET options
 
             IF options=='N' THEN
                 PRINT()
 
-            IF opt=='A' THEN
+            ELSEIF opt=='A' THEN
                 PRINT()
 
             ELSE:
-            PRINT("Invalid input or no records")
+                PRINT("Invalid input or no records")
 
-        IF option=='X' THEN
+            ENDIF
+
+        ELSE IF option=='X' THEN
+
             PRINT(" NEWLINE Return to main menu NEWLINE NEWLINE --------------------------- ")
             RETURN FALSE
 
         ELSE:
+
             PRINT("NEWLINE Error! Please try again")
+            RETURN TRUE
+
+        ENDIF
+
 ENDFUNCTION
 
 FUNCTION searchinformation(num)
@@ -428,27 +478,33 @@ FUNCTION searchinformation(num)
     GET searchinformation
     PRINT()
     OPEN "Apartment.txt" IN READ AS Xhandler
-            FOR record FROM Xhandler:
-                strippeditem = record RIGHTSTRIP(",") RIGHTSTRIP("\n")
-                data = SPLIT strippeditem INTO string(", ")
-                IF searchinformation IN data[num]:
-                    PRINT("Results: NEWLINE",record)
+        FOR record FROM Xhandler:
+            strippeditem = record RIGHTSTRIP(",") RIGHTSTRIP("\n")
+            data = SPLIT strippeditem INTO string(", ")
+            IF searchinformation IN data[num]:
+                PRINT("Results: NEWLINE",record)
 
 ENDFUNCTION
 
 FUNCTION adminMenu()
+    
     WHILE TRUE
+        
         PRINT("\nTenant Management System")
         PRINT("\n1.Review information\n2. Search box\n3.Register new tenant \n4. Exit")
         PRINT("\nPlease select which operation that you want to do: ")
         GET opt
-        IF opt == 1
+        
+        IF opt == 1:
+
             CALLFUNCTION display()
 
-        ELSEIF opt == 2:
+        ELSE IF opt == 2:
+
             CALLFUNCTION search()
             
-        ELSEIF opt == 3:
+        ELSE IF opt == 3:
+
             PRINT("Number of new tenants: ")
             GET n
             tenantlist=[]
@@ -456,11 +512,18 @@ FUNCTION adminMenu()
             bool=TRUE
             appendFile(tenantlist,n)
 
-        ELSEIF opt == 4:
+        ELSE IF opt == 4:
+
             PRINT("\nThank you for using, have a nice day~")
             RETURN FALSE
+
         ELSE:
+
             PRINT("\nError! Please try again")
+            RETURN TRUE
+
+        ENDIF
+
 ENDFUNCTION
 
 BEGIN
