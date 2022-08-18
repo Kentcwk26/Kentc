@@ -139,21 +139,22 @@ def apartmentadddata():
       newapartmentcode=input("Code: ")
       newapartmentdimension=input("Dimension (Range): ")
       newapartmentpricing=input("Pricing in RM: ")
-      newapartmentnumberofrooms=int(input("Number of rooms: "))
+      newapartmentnumberofrooms=str(input("Number of rooms: "))
       newapartmentID=input("Apartment ID: ")
       adddata.append(newapartment)
-      adddata.append(newapartmentcode)
-      adddata.append(newapartmentdimension)
-      adddata.append(newapartmentpricing)
-      adddata.append(newapartmentnumberofrooms)
-      adddata.append(newapartmentID)
+      adddata.append("Code: ",newapartmentcode)
+      adddata.append("Dimensions: "+newapartmentdimension+"sqft")
+      adddata.append("Pricing: "+"RM"+newapartmentpricing)
+      adddata.append("Number of Rooms: ",newapartmentnumberofrooms)
+      adddata.append("Apartment ID: ",newapartmentID)
       print("\n",adddata,"\n")
+   
 
 def apartmenteditdata():
-   editdatanum=int(input('How many records that you decide to edit? '))
+   print()
 
 def apartmentdeletedata():
-   deletedatanum=int(input('How many records that you decide to add? '))
+   deletedatanum=int(input('How many records that you decide to delete? '))
 
 def apartmentexitprogram():
    exitoption=str(input("We are about to exit to the program. \nAre you sure that you want to exit? Enter 'C to continue, Enter''X' to exit: "))
@@ -250,7 +251,7 @@ def searchBox():
 
       else:
          print("\nError! Please try again")
-         searchBox()
+         #searchBox()
 
 #define searchinformation function:
 def searchInformation(num):
