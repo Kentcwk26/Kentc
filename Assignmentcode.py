@@ -25,10 +25,11 @@ def login():                                 #define the login function
             chance-=1                        #decrease chances by 1
             print("\nError, incorrect username or password.\n",chance,"chances remaining.\n")
 
-def tenant(masterKey):
+def tenant(masterKey,UID):
    if masterKey == False:
-      print("searchTenan(Details)")
+      print("tenantSearch(UID)")
    else:
+      
       n = input("Number of new tenants: ")
       tenantList=[]
       tenantList = tenantEntryForm(tenantList,n)
@@ -124,7 +125,6 @@ def message(code):
    elif code == 3:
       print("Length error")
    print("Please try again.")
-    
 
 def adminApartment():                        #Define apartment function
    
@@ -242,7 +242,7 @@ def apartmentExitProgram():
       else:
          print("\nInvalid input\n")
 
-def tenantApartment():           #Define apartment function
+def tenantApartment():                       #Define apartment function
    
    print("\nApartment info:\n")
    record=[]         
@@ -286,7 +286,7 @@ def tenantApartment():           #Define apartment function
       for item in Ahandler:
          print(item.rstrip().rstrip(","))
 
-def searchBox():                 #Define search function
+def searchBox():                             #Define search function
    
   while True:
 
@@ -322,7 +322,7 @@ def searchBox():                 #Define search function
       else:
          print("\nError! Please try again")
 
-def searchInformation(num):      #Define searchinformation function
+def searchInformation(num):                  #Define searchinformation function
    
   while True:
       searchinformation=input("Select and enter text to begin search: ")
@@ -340,11 +340,11 @@ def searchInformation(num):      #Define searchinformation function
       else:
          return False
 
-def menu(masterKey):             #Define menu function
+def menu(masterKey):                      #Define menu function
    print("\n- Welcome back, you are now entering Tenant Management System -")
    while True:
       if masterKey == False:
-         print("\n[S]-Search box\nReview all information about:\n[A]-Apartment\n[P]-Transaction\n[P]-my Tenant details\n\n[D]-Print Specific my House and Tenant Details\n[E]-Exit\n")
+         print("\n[S]-Search box\nReview all information about:\n[A]-Apartment\n[P]-Transaction\n[T]-my Tenant details\n\n[D]-Print my House and Tenant Details\n[E]-Exit\n")
       else:
          print("\n[S]-Search box\nReview all information about:\n[A]-Apartment\n[P]-Transaction\n[T]-Tenant\n\n[D]-Print Specific House and Tenant Details\n[I]-Inquiry of Past Tenant Details\n[L]-Login History\n[E]-Exit\n")
       opt=input("\nPlease select which operation that you want to do: ")
