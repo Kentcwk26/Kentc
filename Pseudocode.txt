@@ -47,6 +47,16 @@ FUNCTION tenantRead()
     CLOSEFILE
 ENDFUNCTION
 
+FUNCTION tenant(masterKey,UID)
+   IF masterKey == FALSE THEN
+        CALLFUNCTION searchTenant(UID)
+   ELSE THEN
+        PRINT("Number of new tenants: ")
+        GET n
+        tenantlist=[]
+        tenantlist = CALLFUNCTION tenantEntryForm(tenantlist,n)
+        appendFile(tenantlist,n)
+      
 FUNCTION tenantEntryForm(tenantlist,n)
     for i in range(n)
         newForm=[]
@@ -143,7 +153,7 @@ FUNCTION deleteTenant(recordName, recordNum)
             Thandler STRIP (",") 
             FOR record from list
                 FOR item in record
-                
+ENDFUNCTION             
 FUNCTION searchTenant(details):
     OPEN "tenant.txt" IN READ MODE AS TSearch
         READ TSearch
@@ -155,7 +165,7 @@ FUNCTION searchTenant(details):
             ENDIF
         ENDFOR
     CLOSEFILE
-
+ENDFUNCTION
 FUNCTION appendFile(list, listCode)
     IF listCode == T THEN
         OPEN "tenant.txt" IN APPEND AS TAppend
@@ -180,7 +190,7 @@ FUNCTION appendFile(list, listCode)
                     WRITE item TO PAppend
                     WRITE "\n" TO PAppend
                 WRITE "\n" TO PAppend
-
+ENDFUNCTION
 FUNCTION readFile(listCode):
     IF listCode == TRUE:
         OPEN "tenant.txt" IN READ AS Thandler:
@@ -191,7 +201,7 @@ FUNCTION readFile(listCode):
         OPEN "apartment.txt" IN READ AS Ahandler:
             FOR record FROM Ahandler:
                 PRINT(record RIGHTSTRIP() RIGHTSTRIP(","))
-
+ENDFUNCTION
 FUNCTION message(code)
     IF code == 0:
         PRINT("Incorrect input")
@@ -202,6 +212,7 @@ FUNCTION message(code)
     ELSE IF code == 3:
         PRINT("Length error")
     PRINT("Please try again.")
+ENDFUNCTION
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -243,7 +254,6 @@ FUNCTION adminApartment():
     CLOSE apartment.txt
 
     CALLFUNCTIONmodifydata()
-
 ENDFUNCTION
 
 FUNCTION modifydata():
@@ -273,7 +283,7 @@ FUNCTION modifydata():
     ELSE THEN
         PRINT("Error!")
         RETURN TRUE
-
+    ENDIF
 ENDFUNCTION
 
 FUNCTION apartmentAddData():
@@ -327,7 +337,6 @@ FUNCTION apartmentAddData():
             RETURN TRUE
 
         ENDIF
-
 ENDFUNCTION
 
 FUNCTIONapartmentEditData():
@@ -394,7 +403,6 @@ FUNCTION searchbox():
             RETURN TRUE
 
         ENDIF
-
 ENDFUNCTION
 
 FUNCTION searchinformation(num)
@@ -408,7 +416,6 @@ FUNCTION searchinformation(num)
             data = SPLIT strippeditem INTO string(",")
             IF searchinformation IN data[num]:
                 PRINT("Results: NEWLINE",record)
-
 ENDFUNCTION
 
 FUNCTION menu(masterKey)
@@ -418,8 +425,10 @@ FUNCTION menu(masterKey)
 
         IF masterKey == FALSE THEN
             PRINT("NEWLINE [S]-Search box NEWLINE Review information about: NEWLINE [A]-apartment NEWLINE [P]-Transaction NEWLINE [P]-My Tenant details NEWLINE NEWLINE [D]-Print Specific my House and Tenant Details NEWLINE [E]-Exit NEWLINE ")
+        
         ELSE THEN
             PRINT("NEWLINE [S]-Search box NEWLINE Review information about: NEWLINE [A]-apartment NEWLINE [P]-Transaction NEWLINE [T]-Tenant NEWLINE NEWLINE [D]-Print Specific House & Tenant Details NEWLINE [I]-Inquiry of Past Tenant Details NEWLINE [L]-Login History NEWLINE [E]- Exit NEWLINE")
+        
         PRINT("Please select which operation that you want to do: ")
         GET opt
         
@@ -439,16 +448,17 @@ FUNCTION menu(masterKey)
         ELSE IF opt IN ["T","t"] THEN
             CALLFUNCTION tenant(masterKey)
             
-        ELSE IF opt IN ["R","r"] AND masterKey == TRUE THEN
+        ELSE IF opt IN ["D","d"] THEN
+            CALLFUNCTION tenantAndApartment()
+        
+        ELSE IF opt in ["I","i"] AND masterKey == TRUE THEN
+            details = "past"
+            CALLFUNCTION searchTenant(details)
 
-            PRINT("Number of new tenants: ")
-            GET n
-            tenantlist=[]
-            tenantlist = CALLFUNCTION tenantEntryForm(tenantlist,n)
+        ELSE IF opt in ["L","l"] AND masterKey == TRUE THEN
+            CALLFUNCTION loginHistory()
 
-            appendFile(tenantlist,n)
-
-        ELSE IF opt IN ["E","e"] THEN:
+        ELSE IF opt IN ["E","e"] THEN
 
             PRINT("NEWLINE Thank you for using, have a nice day~ NEWLINE")
             RETURN FALSE

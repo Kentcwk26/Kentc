@@ -25,7 +25,7 @@ def login():                                 #define the login function
             chance-=1                        #decrease chances by 1
             print("\nError, incorrect username or password.\n",chance,"chances remaining.\n")
 
-def tenant(masterKey)
+def tenant(masterKey):
    if masterKey == False:
       print("searchTenan(Details)")
    else:
@@ -48,7 +48,6 @@ def tenantEntryForm(tenantList,n):           #Define tenantEntryForm function
       tenantList.append(name,gender,pNum,nationality,startDate,income,rental)
    #Return the list
    return tenantList
-
 
 def getname():
   while True:
@@ -126,8 +125,8 @@ def message(code):
       print("Length error")
    print("Please try again.")
     
-#Define apartment def
-def adminApartment():
+
+def adminApartment():                        #Define apartment function
    
    print("\nApartment info:\n")
    record=[]         
@@ -366,8 +365,14 @@ def menu(masterKey):             #Define menu function
          tenant(masterKey)
       #Check for quick functions
       elif opt in ["D","d"]:
-         print("")
-
+         print("tenantAndApartment()")
+      
+      elif opt in ["I","i"] and masterKey == True:
+         details = "past"
+         print("searchTenant(details)")
+      
+      elif opt in ["L","l"] and masterKey == True:
+         print("loginHistory()")
 
       elif opt in ["E","e"]:
          print("\nThank you for using, have a nice day~\n")
