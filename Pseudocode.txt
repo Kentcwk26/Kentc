@@ -181,7 +181,7 @@ FUNCTION appendFile(list, listCode)
                     WRITE "\n" TO PAppend
                 WRITE "\n" TO PAppend
 
-FUNCTION read_file(listCode):
+FUNCTION readFile(listCode):
     IF listCode == TRUE:
         OPEN "tenant.txt" IN READ AS Thandler:
             FOR record FROM Ahandler:
@@ -417,19 +417,27 @@ FUNCTION menu(masterKey)
     WHILE TRUE
 
         IF masterKey == FALSE THEN
-            print("NEWLINE [S]-Search box NEWLINE [A]-Review all apartment information NEWLINE [P]-Transaction Details NEWLINE [P]-Print Specific House and Tenant Details NEWLINE [E]-Exit\n")
+            PRINT("NEWLINE [S]-Search box NEWLINE Review information about: NEWLINE [A]-apartment NEWLINE [P]-Transaction NEWLINE [P]-My Tenant details NEWLINE NEWLINE [D]-Print Specific my House and Tenant Details NEWLINE [E]-Exit NEWLINE ")
         ELSE THEN
-            PRINT("NEWLINE [S]-Search box NEWLINE [A]-Apartment NEWLINE [T]-Tenant NEWLINE [D]-Print Specific House & Tenant Details NEWLINE [I]-Inquiry of Past Tenant Details NEWLINE [P]-Transaction History NEWLINE [L]-Login History NEWLINE [R]-Register new tenant NEWLINE [E]- Exit")
+            PRINT("NEWLINE [S]-Search box NEWLINE Review information about: NEWLINE [A]-apartment NEWLINE [P]-Transaction NEWLINE [T]-Tenant NEWLINE NEWLINE [D]-Print Specific House & Tenant Details NEWLINE [I]-Inquiry of Past Tenant Details NEWLINE [L]-Login History NEWLINE [E]- Exit NEWLINE")
         PRINT("Please select which operation that you want to do: ")
         GET opt
         
         IF opt IN ["S","s"] THEN
 
-            CALLFUNCTION search()
+            CALLFUNCTION searchbox()
 
         ELSE IF opt IN ["A","a"] THEN
+            IF masterKey == FALSE THEN
+                CALLFUNCTION tenantApartment()
+            ELSE THEN 
+                CALLFUNCTION adminApartment()
+        
+        ELSE IF opt IN ["P","p"] THEN
+            CALLFUNCTION transaction(masterKey)
 
-            CALLFUNCTION display()
+        ELSE IF opt IN ["T","t"] THEN
+            CALLFUNCTION tenant(masterKey)
             
         ELSE IF opt IN ["R","r"] AND masterKey == TRUE THEN
 
