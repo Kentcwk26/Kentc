@@ -381,26 +381,27 @@ FUNCTION searchbox():
             PRINT("NEWLINE Name(N),Apartment Details(A) NEWLINE Please type the keyword search based on the listing above: ")
             GET options
 
-            IF options=='N' THEN
+            IF options IN ["N","n"] THEN
                 PRINT()
 
-            ELSEIF opt=='A' THEN
+            ELSEIF opt IN ["A","a"] THEN
                 PRINT()
 
             ELSE:
-                PRINT("Invalid input or no records")
+                code = 0
+                CALLFUNCTION message(code)
 
             ENDIF
 
-        ELSE IF option=='X' THEN
+        ELSE IF option IN ["X","x"] THEN
 
             PRINT(" NEWLINE Return to main menu NEWLINE NEWLINE --------------------------- ")
             RETURN FALSE
 
         ELSE:
 
-            PRINT("NEWLINE Error! Please try again")
-            RETURN TRUE
+            code = 0
+            CALLFUNCTION message(code)
 
         ENDIF
 ENDFUNCTION
