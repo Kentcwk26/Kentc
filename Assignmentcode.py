@@ -293,72 +293,108 @@ def tenantApartment():                       #Define apartment function
          print(item.rstrip().rstrip(","))
 
 def searchBox():                             #Define search function
-   
-  while True:
-
-      print("\nWelcome to search box!")
-      print("\n1. Search room specific details.\n2. Search specific tenant details.\n\nEnter 'X' to EXIT search box \n")
-      option=input("Select and insert input in order to start the program: ")
-
-      if option=='1':
-         opt=input("\nRoom(r), Pricing(p)\nPlease type the keyword search based on the listing above: ")
-         
-         if opt=='r':
+   print("\nWelcome to search box!")
+   while True:
+      print("\n1. Search room specific details.\n2. Search transaction details\n3. Search specific tenant details\n\n4. Exit search box\n")
+      option=int(input("Please type the search number based on the listing above:"))
+      print("\n Please type the search criteria based on the keywords below:")
+      if option == 1:
+         listCode= "a"
+         opt = input("\n[A]-Apartment code, [P]-Pricing\n")     
+         if opt in ["A","a"]:
             print("\nSR1,SR2,SR3,SR4,DR1,DR2,DR3,DR4,CPS,MPS,MPT,MP1,MP2,ESS3,ESS2,EST2")
-            num=1
-            searchInformation(num)
-         
-         elif opt=='p':
+            num = 1
+         elif opt in ["P","p"]:
             print("\nRM350,RM450,RM550,RM650,RM690,RM700,RM750,RM800,RM840,RM890,RM900,RM940,RM950,RM1040,RM1050")
-            num=3
-            searchInformation(num)
-
+            num = 3
          else:
-            print("Invalid input or no records")
-            return True
+            code = 0
+            message(code)
       
-      elif option=='2':
-         options=str(input("\nName(N),Apartment Details(A)\nPlease type the keyword search based on the listing above: "))
+      elif option == 2:
+         listCode = "p"
+         opt = input("NEWLINE [R]-Reference number,[D]-Transaction date,[T]-TenantID,[A]-Apartment code,[S]-Amount")
+         if opt in ["R","r"]:
+            num = 0
+         elif opt in ["D","d"]:
+            num = 1
+         elif opt in ["T","t"]:
+            num = 2
+         elif opt in ["A","a"]:
+            print("NEWLINE SR1,SR2,SR3,SR4,DR1,DR2,DR3,DR4,CPS,MPS,MPT,MP1,MP2,ESS3,ESS2,EST2.... NEWLINE Please enter the apartment code to begin the search: ")
+            num = 3
+         elif opt in ["S","s"]:
+            num = 4
+         else:
+            code = 0
+            message(code)     
+      
+      elif option =='3':
+         listCode = "t"
+         opt = input("NEWLINE [N]-Name,[G]-Gender,[P]-Phone number,[R]-Nationality,[D]-Rental start date,[I]-Income,[S]-Tenant status")
+         if opt in ["N","n"]:
+            num = 0
+         elif opt in ["G","g"]:
+            num = 1
+         elif opt in ["P","p"]:
+            num = 2
+         elif opt in ["R","r"]:
+            num = 3
+         elif opt in ["D","d"]:
+            num = 4
+         elif opt in ["I","i"]:
+            num = 5
+         elif opt in ["S","s"]:
+            num = 6
+         else:
+            code = 0
+            message(code)
 
-      elif option=='X':
+      elif option == 4:
          print("\nReturn to main menu\n\n--------------------------------")
-         #return menu function
-         return False
-
+         return False                                 #return to menu function
+      
       else:
-         print("\nError! Please try again")
-         searchBox() 
+         code = 0
+         message(code)
+      searchInformation(listCode,num)
 
-def searchInformation(num):                  #Define searchinformation function
-   
-  while True:
+def searchInformation(listCode,num):                  #Define searchinformation function
+   if listCode == "p":
+      l="transaction.txt"
+   elif listCode=="a":
+      l="Apartment.txt"
+   else:
+      l="tenant.txt"   
+   while True:
       searchinformation=input("Select and enter text to begin search: ")
 
-      with open("Apartment.txt","r") as Xhandler:
+      with open(l,"r") as Xhandler:
          for record in Xhandler:
             strippeditem=record.rstrip()
             data=strippeditem.split(", ")
             if searchinformation in data[num]:
                print("\nResults:\n",record)
 
-      exitsearch=input("Exit program? Enter any key to exit, Enter 'C' to continue. ")
-      if exitsearch == 'C':
+      exitSearch=input("Exit program? Enter any key to exit, Enter 'C' to continue.")
+      if exitSearch == "C":
          continue
       else:
          return False
 
-def menu(masterKey):                      #Define menu function
+def menu(masterKey):                                  #Define menu function
    print("\n- Welcome back, you are now entering Tenant Management System -")
    while True:
-      print("\n- Welcome back admin, you are now entering Tenant Management System -")
-      print("\n1. Apartment\n2. Tenant\n3. Print Specific House & Tenant Details\n4. Search box\n5. Inquiry of Past Tenant Details\n6. Transaction History\n7. Login History\n8. Exit\n9. Register new tenant\n")
+      print("\n[S]-Search box\nReview information about:\n")
 
-      opt=int(input("\nPlease select which operation that you want to do: "))
+      if masterKey == False:
+         print("[A]-Apartment\n[P]-Transaction\n[T]-My Tenant details\n\n[D]-Print my House and Tenant Details\n[E]-Exit\n")
+      else:
+         print("[A]-Apartment\n[P]-Transaction\n[T]-Tenant\n\n[D]-Print Specific House & Tenant Details\n[I]-Inquiry of Past Tenant Details\n[L]-Login History\n[E]- Exit\n")
 
-      if opt==1:
-         adminApartment()
+      opt=input("\nPlease select which operation that you want to do: ")
 
-      elif opt==4:
+      if opt in ["S","s"]:
          searchBox()
       #Check for basic Functions
       elif opt in ["A","a"]:
