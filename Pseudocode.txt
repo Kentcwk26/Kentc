@@ -1,4 +1,5 @@
 FUNCTION login()
+    print("NEWLINE Welcome to Tenant Management System Login page. NEWLINE Please enter username and password to proceed.NEWLINE")
     chance=3
     WHILE chance>0
         PRINT("Enter username:")
@@ -13,9 +14,10 @@ FUNCTION login()
                     IF password == listRecord LOCATION 1 THEN
                         print("\nLogin successful\n")
                         IF (username == "john" AND password == "1234u-78") OR (username == "david" AND password == "55467913"):
-                            CALLFUNCTION adminMenu()
+                            masterKey = TRUE
                         ELSE THEN
-                            CALLFUNCTION tenantMenu()
+                            masterKey = FALSE
+                        CALLFUNCTION menu(masterKey)
                         chance = 0
                         BREAKLOOP
                         ENDIF
@@ -30,19 +32,11 @@ FUNCTION login()
     ENDWHILE
 ENDFUNCTION
 
-FUNCTION add()
-    WHILE TRUE
-        PRINT("[T]-Tenant  NEWLINE [A]-Apartment  NEWLINE [P]-Transaction  NEWLINE [L]-Leave NEWLINE Choose a category:)
-        GET category
-        IF category IS IN  ("T","t") THEN
-            tenantEntryForm()
-        ELSE IF category IS IN  ("A","a") THEN
-            apartment()
-        ELSE IF category IS IN  ("P","p") THEN
-
-        ELSE IF category IS IN  ("L","l") THEN
-            RETURN FALSE
-        ELSE THEN
+FUNCTION tenant(masterKey,UID)
+    listCode = "t"
+    IF masterKey == FALSE THEN
+        CALLFUNCTION tenantSearch(UID)
+    ELSE THEN
             code = 0
             CALLFUNCTION message(code)
         ENDIF
@@ -141,23 +135,40 @@ FUNCTION tenantRead()
 ENDFUNCTION
 
 FUNCTION tenantEntryForm(tenantlist,n)
+    PRINT("Number of new tenants: ")
+    GET n
     for i in range(n)
         newForm=[]
         name = CALL FUNCTION getname()
-        CALLFUNCTION getgender()
-        GET gender
-        CALLFUNCTION getpNum()
-        GET pNum
-        CALLFUNCTION getnationality()
-        GET nationality
-        CALLFUNCTION getstartDate()
-        GET startDate
-        CALLFUNCTION getincome()
-        GET income
-        CALLFUNCTION getrental()
-        GET rental
+        gender = CALLFUNCTION getgender()
+        pNum = CALLFUNCTION getpNum()
+        nationality = CALLFUNCTION getnationality()
+        startDate = CALLFUNCTION getstartDate()
+        income = CALLFUNCTION getincome()
+        rental = CALLFUNCTION getrental()
         APPEND [name,gender,pNum,nationality,startDate,income,rental] TO tenantList
     RETURN tenantList
+ENDFUNCTION
+
+FUNCTION tenantDelete(recordName, recordNum)
+    OPEN "tenant.txt" IN READ MODE AS Thandler
+        READ Thandler
+        Thandler STRIP (",") 
+        FOR record from list
+            FOR item in record
+ENDFUNCTION
+
+FUNCTION tenantSearch(details):
+    OPEN "tenant.txt" IN READ MODE AS TSearch
+        READ TSearch
+        TSearch STRIP (",")
+        list = JOIN TSearch INTO string(",")
+        FOR record IN list
+            IF record STARTS WITH details THEN
+                PRINT("Found record", record RIGHTSTRIP(",") RIGHTSTRIP(""))
+            ENDIF
+        ENDFOR
+    CLOSEFILE
 ENDFUNCTION
 
 FUNCTION getname()
@@ -167,7 +178,7 @@ FUNCTION getname()
         nameCheck = name
         SPLIT nameCheck INTO LIST WITH ","
         FOR words IN nameCheck
-            IF characters IN words LOCATION 0 IS UPPERCASE THEN
+            IF words LOCATION 0 IS UPPERCASE THEN
                 BREAKLOOP
             ELSE THEN
                 code = 2
@@ -188,7 +199,7 @@ FUNCTION getgender()
         ELSE THEN
             code = 1
             CALLFUNCTION message(code)
-    ELSE:
+    ELSE THEN
         code = 3
         CALLFUNCTION message(code)
     RETURN gender
@@ -235,45 +246,33 @@ ENDFUNCTION
 FUNCTION getrental():
 ENDFUNCTION
 
-FUNCTION deleteTenant(recordName, recordNum)
-    IF recordName==tenant
-        OPEN "tenant.txt" IN READ MODE AS Thandler
-            READ Thandler
-            Thandler STRIP (",") 
-            FOR record from list
-                FOR item in record
-                
-FUNCTION searchTenant(details):
-    OPEN "tenant.txt" IN READ MODE AS TSearch
-        READ TSearch
-        TSearch STRIP (",")
-        list = JOIN TSearch INTO string(",")
-        FOR record IN list
-            IF record STARTS WITH details THEN
-                PRINT("Found record", record RIGHTSTRIP(",") RIGHTSTRIP(""))
-            ENDIF
-        ENDFOR
-    CLOSEFILE
-
-FUNCTION appendFile(list, listBool)
-    IF listBool == TRUE:
-        OPEN "tenant.txt" IN APPEND AS Thandler
-            for record from list:
-                for item in record:
-                    WRITE item TO Thandler
-                    WRITE "\n" TO Thandler
-                WRITE "\n" TO Thandler
-    ELSE:
-        OPEN "apartment.txt" IN APPEND AS Ahandler 
-            for record from list:
-                for item in record:
-                    WRITE item TO Ahandler
-                    WRITE "\n" TO Ahandler
-                WRITE "\n" TO Ahandler
-        CLOSE apartment.txt
-
-FUNCTION read_file(listBool):
-    IF listBool == TRUE:
+FUNCTION appendFile(list, listCode)
+    IF listCode == "t" THEN
+        OPEN "tenant.txt" IN APPEND AS TAppend
+            for record from list
+                for item in record
+                    WRITE item TO TAppend
+                    WRITE "\n" TO TAppend
+                WRITE "\n" TO TAppend
+        CLOSEFILE
+    ELSEIF listCode == "a" THEN
+        OPEN "apartment.txt" IN APPEND AS AAppend
+            for record from list
+                for item in record
+                    WRITE item TO AAppend
+                    WRITE "\n" TO AAppend
+                WRITE "\n" TO AAppend
+        CLOSEFILE
+    ELSE THEN
+        OPEN "transaction.txt" IN APPEND AS PAppend
+            for record from list
+                for item in record
+                    WRITE item TO PAppend
+                    WRITE "\n" TO PAppend
+                WRITE "\n" TO PAppend
+ENDFUNCTION
+FUNCTION readFile(listCode):
+    IF listCode == t:
         OPEN "tenant.txt" IN READ AS Thandler:
             FOR record FROM Ahandler:
                 PRINT(record RIGHTSTRIP() RIGHTSTRIP(","))
@@ -282,18 +281,24 @@ FUNCTION read_file(listBool):
         OPEN "apartment.txt" IN READ AS Ahandler:
             FOR record FROM Ahandler:
                 PRINT(record RIGHTSTRIP() RIGHTSTRIP(","))
-
+ENDFUNCTION
 FUNCTION message(code)
-    IF code == 0:
+    IF code == 0 THEN
         PRINT("Incorrect input")
-    ELSE IF code == 1:
+    ELSEIF code == 1 THEN
         PRINT("Incorrect data type present")
-    ELSE IF code == 2:
+    ELSEIF code == 2 THEN
         PRINT("Format error")
-    ELSE IF code == 3:
+    ELSEIF code == 3 THEN
         PRINT("Length error")
     PRINT("Please try again.")
+ENDFUNCTION
 
+FUNCTION transactionEntryForm()
+ENDFUNCTION
+
+FUNCTION log()
+ENDFUNCTION
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 FUNCTION adminApartment():
@@ -321,14 +326,14 @@ FUNCTION adminApartment():
         SET list16=[["En-Suite Twin (Super Premium)"],["Code: EST2"],["Dimensions: 200+ sqft"],["Pricing: RM900"],["Number of Rooms: 20"],["Apartment ID: A02-L5-R1 to A02-L5-R41"]]
         APPEND [list1,list2,list3,list4,list5,list6,list7,list8,list9,list10,list11,list12,list13,list14,list15,list16] IN record
 
-        OPEN "Apartment.txt" IN WRITE AS Ahandler
-            for item in record:
-                for data in item:
-                    for element in data:
-                        WRITE element TO Ahandler
-                    WRITE ", " TO Ahandler
-                WRITE "\n" TO Ahandler
-        CLOSE apartment.txt
+    OPEN "Apartment.txt" IN WRITE AS Ahandler
+        for item in record:
+            for data in item:
+                for element in data:
+                    WRITE element TO Ahandler
+                WRITE ", " TO Ahandler
+            WRITE "\n" TO Ahandler
+    CLOSE apartment.txt
 
         OPEN "Apartment.txt" IN READ AS Ahandler
             for item in Ahandler:
@@ -342,82 +347,64 @@ ENDFUNCTION
 
 FUNCTION modifydata():
 
-    START
-
     DECLARE dataInput AS INTEGER
-    PRINT("NEWLINE 1. Add data NEWLINE 2. Edit Data NEWLINE 3. Delete Data NEWLINE 4. Exit NEWLINE")
-    PRINT("Please select which operation: ")
-    GET dataInput
+    WHILE TRUE:
+        PRINT("NEWLINE 1. Add data NEWLINE 2. Edit Data NEWLINE 3. Delete Data NEWLINE 4. Exit NEWLINE")
+        PRINT("Please select which operation: ")
+        GET dataInput
+        list = []
+        IF dataInput == 1 THEN
+            PRINT("NEWLINE Add Data NEWLINE")
+            IF listCode == "a" THEN
+                CALLFUNCTION apartmentAddData()
+            ELSEIF listCode == "t" THEN
+                list = CALLFUNCTION tenantEntryForm(list)
+            ELSE THEN
+                CALLFUNCTION transactionEntryForm()
+        appendFile(list,listCode)
 
-    IF dataInput==1 THEN
+        ELSEIF dataInput==2 THEN
+            PRINT("NEWLINE Edit Data NEWLINE")
+            IF listCode == "a" THEN
+                CALLFUNCTION apartmentEditData()
+            ELSEIF listCode == "t" THEN
+                CALLFUNCTION tenantEdit()
+            ELSE THEN
+                CALLFUNCTION transactionEdit()
+
+    ELSE IF dataInput==3 THEN
         PRINT("NEWLINE Add Data NEWLINE")
-        CALLFUNCTION apartmentAddData()
+        CALLFUNCTION apartmentDeleteData()
 
-    IF dataInput==2 THEN:
-        PRINT("NEWLINE Add Data NEWLINE")
-        CALLFUNCTIONapartmenteditdata()
-
-    IF dataInput==3 THEN:
-        PRINT("NEWLINE Add Data NEWLINE")
-        CALLFUNCTIONapartmentdeletedata()
-
-    IF dataInput==4 THEN:
+    ELSE IF dataInput==4 THEN
         PRINT("Exit")
-        CALLFUNCTIONadminMenu()
 
     ELSE THEN
         PRINT("Error!")
-        CALLFUNCTIONmodifydata()
-
-    ENDIF
 
 ENDFUNCTION
 
 FUNCTION apartmentadddata():
     
-    DECLARE adddatanum,newapartmentnumberofrooms AS INTEGER
-    DECLARE newapartment AS STRING
-    adddata=[]
+    WHILE TRUE:
+    DECLARE adddatanum,newapartmentnumberofrooms,adddataconfirmation,rewritedataconfirmation AS INTEGER
+    DEFINE adddata AS ARRAY
+
     PRINT("NEWLINE Now, you are required to enter the new data NEWLINE")
 
     FOR i FROM 0 to adddatanum
+
         PRINT("Apartment: ")
         GET newapartment
         PRINT("Code: ")
         GET newapartmentcode
         PRINT("Dimension (in range): ")
-        GET newapartmentdimension
-        PRINT("Pricing in RM:")
-        GET newapartmentpricing
-        PRINT("Number of rooms: ")
-        GET newapartmentnumberofrooms
-        PRINT("Apartment ID: ")
-        GEt newapartmentID
-        APPEND [newapartment,newapartmentcode,newapartmentdimension,newapartmentpricing,newapartmentnumberofrooms,newapartmentID] TO adddata
-        PRINT(NEWLINE, adddata, NEWLINE)
-    ENDFOR
+        PRINT("")
 
-        PRINT("Are you sure with the records you inserted just now? Enter '1' to save record, Enter '0' to unsave record: )
-        GET adddataconfirmation
+FUNCTIONapartmentEditData():
+ENDFUNCTION
 
-        IF adddataconfirmation == 1 THEN
-            PRINT("NEWLINE Data Saved NEWLINE ")
-
-        ELIF adddataconfirmation == 0 THEN
-            PRINT("NEWLINE Enter 'W' to rewrite the data again, Enter any key to exit: ")
-            GET rewritedataconfirmation
-            IF rewritedataconfirmation == 'W' THEN
-                apartmentdata()
-            ELSE:
-                PRINT("Return to main menu....")
-                adminMenu()
-            ENDIF
-
-        ELSE:
-            PRINT("Invalid input")
-            apartmentdata()
-        ENDIF
-
+FUNCTIONapartmentDeleteData():
 ENDFUNCTION
 
 FUNCTION apartmenteditdata():
@@ -436,7 +423,8 @@ FUNCTION apartmentdeletedata():
         CALLFUNCTIONapartmentexitprogram()
 
 FUNCTION searchbox():
-    WHILE True
+
+    WHILE TRUE
         DECLARE option AS INTEGER
         DECLARE opt AS STRING
         PRINT("NEWLINE Welcome to search box!")
@@ -444,9 +432,9 @@ FUNCTION searchbox():
         PRINT("Please type the keyword search based on the listing above: ")
         GET option
 
-    IF option=='1' THEN
-        PRINT("NEWLINE Room(r), Pricing(p)\nPlease type the keyword search based on the listing above: ")
-        GET opt
+        IF option=='1' THEN:
+            PRINT("NEWLINE Room(r), Pricing(p)\nPlease type the keyword search based on the listing above: ")
+            GET opt
 
         IF opt=='r' THEN
         PRINT("NEWLINE SR1,SR2,SR3,SR4,DR1,DR2,DR3,DR4,CPS,MPS,MPT,MP1,MP2,ESS3,ESS2,EST2")
@@ -483,10 +471,8 @@ FUNCTION searchbox():
         PRINT(" NEWLINE Return to main menu NEWLINE NEWLINE --------------------------- ")
         RETURN FALSE
 
-    ELSE:
-        PRINT(" NEWLINE Error! Please try again")
-        CALLFUNCTION searchBox()
-
+        ELSE:
+            PRINT("NEWLINE Error! Please try again")
 ENDFUNCTION
 
 FUNCTION searchinformation(num)
@@ -495,40 +481,66 @@ FUNCTION searchinformation(num)
     GET searchinformation
     PRINT()
     OPEN "Apartment.txt" IN READ AS Xhandler
-            FOR record FROM Xhandler:
-                strippeditem = record RIGHTSTRIP(",") RIGHTSTRIP("\n")
-                data = SPLIT strippeditem INTO string(", ")
-                IF searchinformation IN data[num]:
-                    PRINT("Results: NEWLINE",record)
-
+        FOR record FROM Xhandler:
+            strippeditem = record RIGHTSTRIP(",") RIGHTSTRIP("NEWLINE")
+            data = SPLIT strippeditem INTO string(",")
+            IF searchinformation IN data[num]:
+                PRINT("Results: NEWLINE",record)
 ENDFUNCTION
 
-FUNCTION adminMenu()
+FUNCTION menu(masterKey)
+    PRINT("NEWLINE - Welcome back, you are now entering Tenant Management System -")
+
     WHILE TRUE
-        PRINT("\nTenant Management System")
-        PRINT("\n1.Review information\n2. Search box\n3.Register new tenant \n4. Exit")
-        PRINT("\nPlease select which operation that you want to do: ")
+
+        IF masterKey == FALSE THEN
+            PRINT("NEWLINE [S]-Search box NEWLINE Review information about: NEWLINE [A]-apartment NEWLINE [P]-Transaction NEWLINE [T]-My Tenant details NEWLINE NEWLINE [D]-Print my House and Tenant Details NEWLINE [E]-Exit NEWLINE ")
+        
+        ELSE THEN
+            PRINT("NEWLINE [S]-Search box NEWLINE Review information about: NEWLINE [A]-apartment NEWLINE [P]-Transaction NEWLINE [T]-Tenant NEWLINE NEWLINE [D]-Print Specific House & Tenant Details NEWLINE [I]-Inquiry of Past Tenant Details NEWLINE [L]-Login History NEWLINE [E]- Exit NEWLINE")
+        
+        PRINT("Please select which operation that you want to do: ")
         GET opt
-        IF opt == 1
-            CALLFUNCTION display()
+        
+        IF opt IN ["S","s"] THEN
 
-        ELSEIF opt == 2:
-            CALLFUNCTION search()
+            CALLFUNCTION searchbox()
+
+        ELSEIF opt IN ["A","a"] THEN
+            IF masterKey == FALSE THEN
+                CALLFUNCTION tenantApartment()
+            ELSE THEN 
+                CALLFUNCTION adminApartment()
+        
+        ELSEIF opt IN ["P","p"] THEN
+            CALLFUNCTION transaction(masterKey)
+
+        ELSEIF opt IN ["T","t"] THEN
+            CALLFUNCTION tenant(masterKey)
             
-        ELSEIF opt == 3:
-            PRINT("Number of new tenants: ")
-            GET n
-            tenantlist=[]
-            tenantlist = CALLFUNCTION tenantEntryForm(tenantlist,n)
-            bool=TRUE
-            appendFile(tenantlist,n)
+        ELSEIF opt IN ["D","d"] THEN
+            CALLFUNCTION tenantAndApartment()
+        
+        ELSEIF opt in ["I","i"] AND masterKey == TRUE THEN
+            details = "past"
+            CALLFUNCTION tenantSearch(details)
 
-        ELSEIF opt == 4:
-            PRINT("\nThank you for using, have a nice day~")
+        ELSEIF opt in ["L","l"] AND masterKey == TRUE THEN
+            CALLFUNCTION loginHistory()
+
+        ELSEIF opt IN ["E","e"] THEN
+
+            PRINT("NEWLINE Thank you for using, have a nice day~ NEWLINE")
             RETURN FALSE
+
         ELSE:
-            PRINT("\nError! Please try again")
+
+            code = 3
+            CALLFUNCTION message(code)
+        ENDIF
+    ENDWHILE
 ENDFUNCTION
+
 
 BEGIN
 IMPORT datetime AS dt
