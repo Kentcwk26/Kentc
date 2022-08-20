@@ -1,13 +1,13 @@
 def login():                                 #define the login function
    print("\nWelcome to Tenant Management System Login page.\nPlease enter username and password to proceed.\n") 
-   chance=3                                  #Specify login chances
+   chance = 3                                  #Specify login chances
    while chance>0:                           #iterate when there are more than 0 chances remaining
       #input login credentials
-      username=input("Enter username:")
-      password=input("Enter password:")
+      username = input("Enter username:")
+      password = input("Enter password:")
       #open file and match for correct login
       with open("user.txt",'r') as userInfo:
-         userCheck=userInfo.readlines()
+         userCheck = userInfo.readlines()
          for record in userCheck:
             listRecord = record.split(",")
             if username == listRecord[0]:
@@ -326,13 +326,13 @@ def searchInformation(num):                  #Define searchinformation function
    
   while True:
       searchinformation=input("Select and enter text to begin search: ")
-      print()
+
       with open("Apartment.txt","r") as Xhandler:
          for record in Xhandler:
             strippeditem=record.rstrip()
             data=strippeditem.split(", ")
             if searchinformation in data[num]:
-               print("Results:\n",record)
+               print("\nResults:\n",record)
 
       exitsearch=input("Exit program? Enter any key to exit, Enter 'C' to continue. ")
       if exitsearch == 'C':

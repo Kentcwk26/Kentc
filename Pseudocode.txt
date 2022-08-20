@@ -12,7 +12,7 @@ FUNCTION login()
                 listRecord = SPLIT record INTO LIST SEPARATED BY ","
                 IF username == listRecord LOCATION 0 THEN
                     IF password == listRecord LOCATION 1 THEN
-                        print("\nLogin successful\n")
+                        print("NEWLINELogin successfulNEWLINE")
                         IF (username == "john" AND password == "1234u-78") OR (username == "david" AND password == "55467913"):
                             masterKey = TRUE
                         ELSE THEN
@@ -24,7 +24,7 @@ FUNCTION login()
                     ENDIF
                 ELSE THEN
                     chance -= 1
-                    PRINT("Error, incorrect username or password."\n ,chance,"chances remaining"\n)
+                    PRINT("Error, incorrect username or password."NEWLINE ,chance,"chances remaining"NEWLINE)
                     BREAKLOOP
                 ENDIF
             ENDFOR
@@ -42,7 +42,7 @@ FUNCTION tenant(masterKey,UID)
         PRINT("[R]-inspect specific tenant NEWLINE [M]-Modify tenant data")
         GET opt
         IF opt IN ["R","r"] THEN
-            tenantSearch()
+            CALLFUNCTION tenantSearch(details)
         ELSEIF opt IN ["M","m"] THEN
             modifyData(listCode)
         ENDIF
@@ -53,7 +53,7 @@ FUNCTION tenantRead()
     OPENFILE (tenant.txt) IN READ MODE AS fTenant
         tenantList = READ fTenant LINE-BY-LINE
         FOR record IN tenantList
-            PRINT(record RIGHTSTRIP(",") RIGHTSTRIP("\n"))
+            PRINT(record RIGHTSTRIP(",") RIGHTSTRIP("NEWLINE"))
         ENDFOR
     CLOSEFILE
 ENDFUNCTION
@@ -62,15 +62,14 @@ FUNCTION tenantEntryForm(tenantlist,n)
     PRINT("Number of new tenants: ")
     GET n
     for i in range(n)
-        newForm=[]
         name = CALL FUNCTION getname()
         gender = CALLFUNCTION getgender()
         pNum = CALLFUNCTION getpNum()
         nationality = CALLFUNCTION getnationality()
         startDate = CALLFUNCTION getstartDate()
         income = CALLFUNCTION getincome()
-        rental = CALLFUNCTION getrental()
-        APPEND [name,gender,pNum,nationality,startDate,income,rental] TO tenantList
+        status = CALLFUNCTION getstatus()
+        APPEND [name,gender,pNum,nationality,startDate,income,status] TO tenantList
     RETURN tenantList
 ENDFUNCTION
 
@@ -97,7 +96,7 @@ ENDFUNCTION
 
 FUNCTION getname()
     WHILE TRUE
-        PRINT("Enter tenant name: Firstname Familyname Lastname"\n)
+        PRINT("Enter tenant name: Firstname Familyname Lastname"NEWLINE)
         GET name
         nameCheck = name
         SPLIT nameCheck INTO LIST WITH ","
@@ -114,7 +113,7 @@ FUNCTION getname()
 ENDFUNCTION
 
 FUNCTION getgender()
-    PRINT("Enter tenant gender: (m/f):\n")
+    PRINT("Enter tenant gender: (m/f):NEWLINE")
     GET gender
     genderCheck = gender
     IF genderCheck LENGTH == 1 THEN
@@ -130,7 +129,7 @@ FUNCTION getgender()
 ENDFUNCTION
 
 FUNCTION getpNum():
-    PRINT("Enter tenant phone number: (############):\n")
+    PRINT("Enter tenant phone number: (############):NEWLINE")
     GET pNum
     pNumCheck=pNum
     FOR digit IN pNum
@@ -145,7 +144,7 @@ FUNCTION getpNum():
 ENDFUNCTION
 
 FUNCTION getnationality():
-    PRINT("Enter tenant nationality: (M: Malaysian/N: non-Malaysian):\n")
+    PRINT("Enter tenant nationality: (M: Malaysian/N: non-Malaysian):NEWLINE")
     GET nationality
     nationality = nationalityCheck
     IF nationalityCheck LENGTH = 1 THEN
@@ -156,45 +155,46 @@ FUNCTION getnationality():
 ENDFUNCTION
 
 FUNCTION getstartDate():
-    PRINT("Enter Rental start date: (YYYY,MM,DD):\n")
+    PRINT("Enter Rental start date: (YYYY,MM,DD):NEWLINE")
     GET startDate
     RETURN startDate
 ENDFUNCTION
 
 FUNCTION getincome():
-    PRINT("Enter tenant income range(RM):\n")
+    PRINT("Enter tenant income range(RM):NEWLINE")
     GET income
     RETURN income
 ENDFUNCTION
 
-FUNCTION getrental():
+FUNCTION getstatus():
 ENDFUNCTION
 
 FUNCTION appendFile(list, listCode)
     IF listCode == "t" THEN
         OPEN "tenant.txt" IN APPEND AS TAppend
-            for record from list
-                for item in record
+            FOR record FROM list
+                FOR item IN record
                     WRITE item TO TAppend
-                    WRITE "\n" TO TAppend
-                WRITE "\n" TO TAppend
+                    WRITE "NEWLINE" TO TAppend
+                WRITE "NEWLINE" TO TAppend
         CLOSEFILE
     ELSEIF listCode == "a" THEN
         OPEN "apartment.txt" IN APPEND AS AAppend
             for record from list
                 for item in record
                     WRITE item TO AAppend
-                    WRITE "\n" TO AAppend
-                WRITE "\n" TO AAppend
+                    WRITE "NEWLINE" TO AAppend
+                WRITE "NEWLINE" TO AAppend
         CLOSEFILE
     ELSE THEN
         OPEN "transaction.txt" IN APPEND AS PAppend
             for record from list
                 for item in record
                     WRITE item TO PAppend
-                    WRITE "\n" TO PAppend
-                WRITE "\n" TO PAppend
+                    WRITE "NEWLINE" TO PAppend
+                WRITE "NEWLINE" TO PAppend
 ENDFUNCTION
+
 FUNCTION readFile(listCode):
     IF listCode == t:
         OPEN "tenant.txt" IN READ AS Thandler:
@@ -206,6 +206,7 @@ FUNCTION readFile(listCode):
             FOR record FROM Ahandler:
                 PRINT(record RIGHTSTRIP() RIGHTSTRIP(","))
 ENDFUNCTION
+
 FUNCTION message(code)
     IF code == 0 THEN
         PRINT("Incorrect input")
@@ -254,7 +255,7 @@ FUNCTION adminApartment():
                 for element in data:
                     WRITE element TO Ahandler
                 WRITE ", " TO Ahandler
-            WRITE "\n" TO Ahandler
+            WRITE "NEWLINE" TO Ahandler
     CLOSE apartment.txt
 
     OPEN "Apartment.txt" IN READ AS Ahandler
@@ -266,6 +267,7 @@ FUNCTION adminApartment():
 ENDFUNCTION
 
 FUNCTION modifyData(listCode):
+    
     DECLARE list AS ARRAY
     DECLARE dataInput AS INTEGER
     WHILE TRUE:
@@ -296,7 +298,7 @@ FUNCTION modifyData(listCode):
             PRINT("NEWLINE Delete Data NEWLINE")
             IF listCode == "a" THEN
                 CALLFUNCTION apartmentDeleteData()
-            ELSEIF listcode == "t" THEN
+            ELSEIF listCode == "t" THEN
                 CALLFUNCTION tenantDelete()
             ELSE THEN
                 CALLFUNCTION transactionDelete()
@@ -311,7 +313,7 @@ FUNCTION modifyData(listCode):
         ENDIF
 ENDFUNCTION
 
-FUNCTION apartmentAddData():
+FUNCTION apartmentAddData()
     
     WHILE TRUE:
     DECLARE adddatanum,newapartmentnumberofrooms,adddataconfirmation,rewritedataconfirmation AS INTEGER
@@ -364,83 +366,149 @@ FUNCTION apartmentAddData():
         ENDIF
 ENDFUNCTION
 
-FUNCTIONapartmentEditData():
+FUNCTION apartmentEditData()
+    DECLARE deletedataconfirmationpt1,deletedataconfirmationpt2 AS INTEGER
+    OPEN "Apartment.txt" IN READ AS Ahandler
+        for item in Ahandler:
+            PRINT(item,RIGHTSTRIP() RIGHTSTRIP(","))
+    PRINT("NEWLINE Dear admin, please noted that the selected data from record will permanently delete the selected record")
+    PRINT("NEWLINE Insert 'Y' to continue the progress, and 'N' to exit: ")
+    GET editdataconfirmationpt1
+
+    IF editdataconfirmationpt1 == 'Y' THEN
+        WHILE TRUE
+        PRINT("NEWLINE Now, NEWLINE First, please select the record that you decide to delete from above: ")
+        GET editdatainformation
+        FOR record FROM Ahandler
+            PRINT(record)
+        PRINT("Next, please select the data that you want to edit from the record: ")
+        GET olddata
+        
+        GET 
+
+    CLOSE apartment.txt
+    
+    ELSE IF deletedataconfirmationpt1 == 'N' THEN   *Not so sure yet*
+        PRINT("NEWLINE Are you sure? Enter 'Yes' to continue, And enter any key to return back: ")
+        GET deletedataconfirmationpt2
+        IF deletedataconfirmationpt2 == 'Yes'
+            CALLFUNCTION adminApartment()
+        ELSE
+            CALLFUNCTION apartmentDeleteData()
+    
+    ENDIF
 ENDFUNCTION
 
-FUNCTIONapartmentDeleteData():
+FUNCTION apartmentDeleteData()
+    
+    DECLARE deletedataconfirmationpt1,deletedataconfirmationpt2 AS INTEGER
+    OPEN "Apartment.txt" IN READ AS Ahandler
+        for item in Ahandler:
+            PRINT(item,RIGHTSTRIP() RIGHTSTRIP(","))
+    PRINT("NEWLINE Dear admin, please noted that the selected data from record will permanently delete the selected record")
+    PRINT("NEWLINE Insert 'Y' to continue the progress, and 'N' to exit: ")
+    GET deletedataconfirmationpt1
+
 ENDFUNCTION
 
-FUNCTION searchbox():
-
+FUNCTION searchbox()
+    DECLARE option,num,code AS INTEGER
+    DECLARE opt,list AS STRING
+    DECLARE returnList AS ARRAY
+    PRINT("NEWLINE Welcome to search box!")
     WHILE TRUE
-        DECLARE option AS INTEGER
-        DECLARE opt AS STRING
-        PRINT("NEWLINE Welcome to search box!")
-        PRINT("NEWLINE 1. Search room specific details.NEWLINE 2. Search specific tenant details NEWLINE 4. Exit NEWLINE")
-        PRINT("Please type the keyword search based on the listing above: ")
+        PRINT("NEWLINE 1. Search room specific details NEWLINE 2. Search transaction details 3. Search specific tenant details NEWLINE 4. Exit NEWLINE")
+        PRINT("Please type the search number search based on the listing above: ")
         GET option
-
-        IF option=='1' THEN
-
-            PRINT("NEWLINE Room(r), Pricing(p)\nPlease type the keyword search based on the listing above: ")
+        PRINT("NEWLINE Please type the search criteria based on the keywords below:")
+        IF option == 1 THEN
+            listCode = "a"
+            PRINT("NEWLINE [A]-Apartment code, [P]-Pricing")
             GET opt
 
-            IF opt=='r' THEN
-            PRINT("NEWLINE SR1,SR2,SR3,SR4,DR1,DR2,DR3,DR4,CPS,MPS,MPT,MP1,MP2,ESS3,ESS2,EST2.... NEWLINE Please enter the apartment code to begin the search: ")
-            num=1
-            CALLFUNCTION searchinformation(num)
+            IF opt IN ["A","a"] THEN
+                PRINT("NEWLINE SR1,SR2,SR3,SR4,DR1,DR2,DR3,DR4,CPS,MPS,MPT,MP1,MP2,ESS3,ESS2,EST2.... NEWLINE Please enter the apartment code to begin the search: ")
+                num = 1
 
-            ELSEIF opt=='p' THEN
-            PRINT("NEWLINE RM350,RM450,RM550,RM650,RM690,RM700,RM750,RM800,RM840,RM890,RM900,RM940,RM950,RM1040,RM1050.... NEWLINE Please enter the pricing to begin the search: ")
-            num=3
-            CALLFUNCTION searchinformation(num)
-
-            ELSE:
-            PRINT("Invalid input or no records")
-            PRINT("Continue? Enter 'C' NEWLINE Exit? Enter 'X' ")
-
-            ENDIF
-
-        ELSEIF option=='2' THEN
-
-            PRINT("NEWLINE Name(N),Apartment Details(A) NEWLINE Please type the keyword search based on the listing above: ")
-            GET options
-
-            IF opt IN ["N","n"] THEN
-                PRINT()
-
-            ELSEIF opt IN ["A","a"] THEN
-                PRINT()
-
+            ELSEIF opt IN ["P","p"] THEN
+                PRINT("NEWLINE RM350,RM450,RM550,RM650,RM690,RM700,RM750,RM800,RM840,RM890,RM900,RM940,RM950,RM1040,RM1050.... NEWLINE Please enter the pricing to begin the search: ")
+                num = 3
+            
             ELSE:
                 code = 0
-                CALLFUNCTION message(code
+                CALLFUNCTION message(code)
             ENDIF
-
+        ENDIF
+        ELSEIF option == 2 THEN
+            listCode = "p"
+            PRINT("NEWLINE [R]-Reference number,[D]-Transaction date,[T]-TenantID,[A]-Apartment code,[S]-Amount")
+            GET opt
+            IF opt IN ["R","r"] THEN
+                num = 0
+            IF opt IN ["D","d"] THEN
+                num = 1
+            IF opt IN ["T","t"] THEN
+                num = 2
+            IF opt IN ["A","a"] THEN
+                PRINT("NEWLINE SR1,SR2,SR3,SR4,DR1,DR2,DR3,DR4,CPS,MPS,MPT,MP1,MP2,ESS3,ESS2,EST2.... NEWLINE Please enter the apartment code to begin the search: ")
+                num = 3
+            IF opt IN ["S","s"] THEN
+                num = 4
+            ELSE THEN
+                code = 0
+                CALLFUNCTION message(code)
+            ENDIF
+        ENDIF
+        ELSEIF option == 3 THEN
+            listCode = "t"
+            PRINT("NEWLINE [N]-Name,[G]-Gender,[P]-Phone number,[R]-Nationality,[D]-Rental start date,[I]-Income,[S]-Tenant status)
+            GET opt 
+            IF opt IN ["N","n"] THEN
+                num = 0
+            ELSEIF opt IN ["G","g"] THEN
+                num = 1
+            ELSEIF opt IN ["P","p"] THEN
+                num = 2
+            ELSEIF opt IN ["R","r"] THEN
+                num = 3
+            ELSEIF opt IN ["D","d"] THEN
+                num = 4
+            ELSEIF opt IN ["I","i"] THEN
+                num = 5
+            ELSEIF opt IN ["S","g"] THEN
+                num = 6
+            ELSE:
+                code = 0
+                CALLFUNCTION message(code)
+            ENDIF
+        ENDIF
         ELSEIF opt IN ["X","x"] THEN
 
             PRINT(" NEWLINE Return to main menu NEWLINE NEWLINE --------------------------- ")
             RETURN FALSE
 
         ELSE:
-
             code = 0
             CALLFUNCTION message(code)
-
+        ENDIF
+        returnList = CALLFUNCTION searchinformation(listCode,num)
+        IF returnList THEN
+            PRINT(returnList)
+        ELSE THEN
+            PRINT("Record does not exist")
         ENDIF
 ENDFUNCTION
 
-FUNCTION searchinformation(num)
-
+FUNCTION searchinformation(listCode,num)
+    DECLARE searchInformation AS INTEGER
     PRINT("Select and enter text to begin search: ")
-    GET searchinformation
-    PRINT()
-    OPEN "Apartment.txt" IN READ AS Xhandler
+    GET searchInformation
+    OPEN listCode IN READ AS Xhandler
         FOR record FROM Xhandler:
             strippeditem = record RIGHTSTRIP(",") RIGHTSTRIP("NEWLINE")
-            data = SPLIT strippeditem INTO string(",")
-            IF searchinformation IN data[num]:
-                PRINT("Results: NEWLINE",record)
+            data = SPLIT strippeditem INTO LIST(",")
+            IF searchInformation IN data[num]:
+                PRINT("NEWLINE Results: NEWLINE",record)
 ENDFUNCTION
 
 FUNCTION menu(masterKey)
