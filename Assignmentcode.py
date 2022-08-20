@@ -175,8 +175,14 @@ def adminApartment():                        #Define apartment function
          Ahandler.write("\n")
        
    with open("Apartment.txt","r") as Ahandler:
-      for item in Ahandler:
-         print(item.rstrip().rstrip(","))
+      for item in record:
+         for data in item:
+            for element in data:
+               Ahandler.write(element)
+            Ahandler.write(", ")
+         Ahandler.write("\n")
+         for item in Ahandler:
+            print(item.rstrip().rstrip(","))
 
    modifyData()
 
@@ -213,18 +219,18 @@ def apartmentAddData(record):
       newapartmentcode=input("Code: ")
       newapartmentdimension=input("Dimension (Range): ")
       newapartmentpricing=input("Pricing in RM: ")
-      newapartmentnumberofrooms=int(input("Number of rooms: "))
+      newapartmentnumberofrooms=str(input("Number of rooms: "))
       newapartmentID=input("Apartment ID: ")
       adddata.append(newapartment)
-      adddata.append(newapartmentcode)
-      adddata.append(newapartmentdimension)
-      adddata.append(newapartmentpricing)
-      adddata.append(newapartmentnumberofrooms)
-      adddata.append(newapartmentID)
+      adddata.append("Code: ",newapartmentcode)
+      adddata.append("Dimensions: "+newapartmentdimension+"sqft")
+      adddata.append("Pricing: "+"RM"+newapartmentpricing)
+      adddata.append("Number of Rooms: ",newapartmentnumberofrooms)
+      adddata.append("Apartment ID: ",newapartmentID)
       print("\n",adddata,"\n")
       record.extend(adddata)
 
-def apartmentEditData():
+def apartmenteditdata():
    editdatanum=int(input('How many records that you decide to edit? '))
 
 def apartmentDeleteData():
@@ -321,6 +327,7 @@ def searchBox():                             #Define search function
 
       else:
          print("\nError! Please try again")
+         searchBox() 
 
 def searchInformation(num):                  #Define searchinformation function
    
@@ -343,13 +350,15 @@ def searchInformation(num):                  #Define searchinformation function
 def menu(masterKey):                      #Define menu function
    print("\n- Welcome back, you are now entering Tenant Management System -")
    while True:
-      if masterKey == False:
-         print("\n[S]-Search box\nReview all information about:\n[A]-Apartment\n[P]-Transaction\n[T]-my Tenant details\n\n[D]-Print my House and Tenant Details\n[E]-Exit\n")
-      else:
-         print("\n[S]-Search box\nReview all information about:\n[A]-Apartment\n[P]-Transaction\n[T]-Tenant\n\n[D]-Print Specific House and Tenant Details\n[I]-Inquiry of Past Tenant Details\n[L]-Login History\n[E]-Exit\n")
-      opt=input("\nPlease select which operation that you want to do: ")
+      print("\n- Welcome back admin, you are now entering Tenant Management System -")
+      print("\n1. Apartment\n2. Tenant\n3. Print Specific House & Tenant Details\n4. Search box\n5. Inquiry of Past Tenant Details\n6. Transaction History\n7. Login History\n8. Exit\n9. Register new tenant\n")
 
-      if opt in ["S","s"]:       #Check for searchBox funtiom
+      opt=int(input("\nPlease select which operation that you want to do: "))
+
+      if opt==1:
+         adminApartment()
+
+      elif opt==4:
          searchBox()
       #Check for basic Functions
       elif opt in ["A","a"]:
