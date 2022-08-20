@@ -101,36 +101,42 @@ def adminApartment():
          Ahandler.write("\n")
        
    with open("Apartment.txt","r") as Ahandler:
-      for item in Ahandler:
-         print(item.rstrip().rstrip(","))
+      for item in record:
+         for data in item:
+            for element in data:
+               Ahandler.write(element)
+            Ahandler.write(", ")
+         Ahandler.write("\n")
+         for item in Ahandler:
+            print(item.rstrip().rstrip(","))
 
    modifydata()
 
 def modifydata():
+   while True:
+      print("\n1. Add data\n2. Edit Data\n3. Delete Data\n4. Exit\n")
+      dataInput=int(input('Please select which operation: '))
 
-   print("\n1. Add data\n2. Edit Data\n3. Delete Data\n4. Exit\n")
-   datainput=int(input('Please select which operation: '))
+      if dataInput==1:
+         print("\nAdd Data\n")
+         apartmentAddData()
 
-   if datainput==1:
-      print("\nAdd Data\n")
-      apartmentadddata()
+      elif dataInput==2:
+         print("\nEdit Data\n")
+         apartmentEditData()
 
-   elif datainput==2:
-      print("\nEdit Data\n")
-      apartmenteditdata()
+      elif dataInput==3:
+         print("\nDelete Data\n")
+         apartmentDeleteData()
 
-   elif datainput==3:
-      print("\nDelete Data\n")
-      apartmentdeletedata()
+      elif dataInput==4:
+         print("Exit")
+         return False
 
-   elif datainput==4:
-      print()
+      else:
+         print("Error!")
 
-   else:
-      print("Error!")
-      modifydata()
-
-def apartmentadddata():
+def apartmentAddData():
    adddatanum=int(input('How many records that you decide to add? '))
    adddata=[]
    print("\nNow, you are required to enter the new data\n")
@@ -148,13 +154,12 @@ def apartmentadddata():
       adddata.append("Number of Rooms: ",newapartmentnumberofrooms)
       adddata.append("Apartment ID: ",newapartmentID)
       print("\n",adddata,"\n")
-   
 
 def apartmenteditdata():
-   print()
+   editdatanum=int(input('How many records that you decide to edit? '))
 
-def apartmentdeletedata():
-   deletedatanum=int(input('How many records that you decide to delete? '))
+def apartmentDeleteData():
+   deletedatanum=int(input('How many records that you decide to add? '))
 
 def apartmentexitprogram():
    exitoption=str(input("We are about to exit to the program. \nAre you sure that you want to exit? Enter 'C to continue, Enter''X' to exit: "))
@@ -207,14 +212,6 @@ def tenantApartment():
    record.append(list15)
    record.append(list16)
    
-   with open("Apartment.txt","w") as Ahandler:
-      for item in record:
-         for data in item:
-            for element in data:
-               Ahandler.write(element)
-            Ahandler.write(", ")
-         Ahandler.write("\n")
-       
    with open("Apartment.txt","r") as Ahandler:
       for item in Ahandler:
          print(item.rstrip().rstrip(","))
@@ -296,13 +293,13 @@ def adminMenu():
 
       else:
          print("\nError! Please try again\n")
-         adminMenu()
+         adminMenu() 
 
 #define menu function:
 def tenantMenu():
    while True:
       print("- Tenant page -")
-      print("\n1. Review all apartment information\n2. Search box\n3. Transaction Details\n4. Print Specific House and Tenant Details\n5. Exit\n6. Register new tenant")
+      print("\n[R]-Review all apartment information\n[S]-Search box\n[T]-Transaction Details\n4.[P]-Print Specific House and Tenant Details\n[E]-Exit")
 
       opt=int(input("\nPlease select which operation that you want to do: "))
 

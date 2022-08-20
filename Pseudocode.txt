@@ -17,13 +17,13 @@ FUNCTION login()
                         ELSE THEN
                             CALLFUNCTION tenantMenu()
                         chance = 0
-                        BREAK LOOP
+                        BREAKLOOP
                         ENDIF
                     ENDIF
                 ELSE THEN
                     chance -= 1
                     PRINT("Error, incorrect username or password."\n ,chance,"chances remaining"\n)
-                    BREAK LOOP
+                    BREAKLOOP
                 ENDIF
             ENDFOR
         CLOSEFILE
@@ -35,14 +35,14 @@ FUNCTION add()
         PRINT("[T]-Tenant  NEWLINE [A]-Apartment  NEWLINE [P]-Transaction  NEWLINE [L]-Leave NEWLINE Choose a category:)
         GET category
         IF category IS IN  ("T","t") THEN
-            
+            tenantEntryForm()
         ELSE IF category IS IN  ("A","a") THEN
-
+            apartment()
         ELSE IF category IS IN  ("P","p") THEN
 
         ELSE IF category IS IN  ("L","l") THEN
             RETURN FALSE
-        ELSE:
+        ELSE THEN
             code = 0
             CALLFUNCTION message(code)
         ENDIF
@@ -51,19 +51,20 @@ ENDFUNCTION
 
 FUNCTION display()
     WHILE TRUE
-        PRINT("NEWLINE [T]-Tenant NEWLINE [A]-Apartment NEWLINE [P]-Transaction NEWLINE Choose a Category: ")
+        PRINT("[T]-Tenant NEWLINE [A]-Apartment NEWLINE [P]-Transaction NEWLINE [L]-Leave NEWLINE Choose a Category: ")
         GET category
-        IF category == "T" OR "t":
-            CALLFUNCTION tenant()
-        ELSE IF category == "A" OR "a":
+        IF category IS IN  ("T","t") THEN
+            CALLFUNCTION tenantRead()
+        ELSE IF category IS IN  ("A","a") THEN
             CALLFUNCTION apartment()
-        ELSE IF category == "P" OR "p":
+        ELSE IF category IS IN  ("P","p") THEN
             CALLFUNCTION transaction()
-        ELSE:
+        ELSE IF category IS IN  ("L","l") THEN
+            RETURN FALSE
+        ELSE THEN
             code = 0
             CALLFUNCTION message(code)
         ENDIF
-    
     ENDWHILE
 ENDFUNCTION
 
@@ -112,7 +113,7 @@ FUNCTION search()
         IF category IS IN  ("T","t") THEN
             
         ELSE IF category IS IN  ("A","a") THEN
-
+            searchinformation(num)
         ELSE IF category IS IN  ("P","p") THEN
 
         ELSE IF category IS IN  ("L","l") THEN
@@ -130,19 +131,14 @@ ENDFUNCTION
 FUNCTION log()
 ENDFUNCTION
 
-FUNCTION tenant():
+FUNCTION tenantRead()
     OPENFILE (tenant.txt) IN READ MODE AS fTenant
         tenantList = READ fTenant LINE-BY-LINE
-        FOR record IN tenantList:
+        FOR record IN tenantList
             PRINT(record RIGHTSTRIP(",") RIGHTSTRIP("\n"))
         ENDFOR
     CLOSEFILE
 ENDFUNCTION
-
-FUNCTION appendData(contentsList)
-    list = []
-    list.extend(contentsList)
-    return list
 
 FUNCTION tenantEntryForm(tenantlist,n)
     for i in range(n)
@@ -164,16 +160,16 @@ FUNCTION tenantEntryForm(tenantlist,n)
     RETURN tenantList
 ENDFUNCTION
 
-FUNCTION getname():
+FUNCTION getname()
     WHILE TRUE
         PRINT("Enter tenant name: Firstname Familyname Lastname"\n)
         GET name
         nameCheck = name
         SPLIT nameCheck INTO LIST WITH ","
-        FOR words IN nameCheck:
-            IF characters IN words LOCATION 0 IS UPPERCASE:
-                BREAK LOOP
-            ELSE:
+        FOR words IN nameCheck
+            IF characters IN words LOCATION 0 IS UPPERCASE THEN
+                BREAKLOOP
+            ELSE THEN
                 code = 2
                 CALLFUNCTION message(code)
             ENDIF
@@ -182,13 +178,13 @@ FUNCTION getname():
     RETURN name
 ENDFUNCTION
 
-FUNCTION getgender():
+FUNCTION getgender()
     PRINT("Enter tenant gender: (m/f):\n")
     GET gender
     genderCheck = gender
     IF genderCheck LENGTH == 1 THEN
-        IF genderCheck IS NOT A NUMBER:
-            BREAK LOOP
+        IF genderCheck IS NOT A NUMBER THEN
+            BREAKLOOP
         ELSE THEN
             code = 1
             CALLFUNCTION message(code)
@@ -202,16 +198,25 @@ FUNCTION getpNum():
     PRINT("Enter tenant phone number: (############):\n")
     GET pNum
     pNumCheck=pNum
-        FOR digit IN pNum:
-            IF digit IS NOT INTEGER:
-                CALLFUNCTION Pseudocode.txt
-
+    FOR digit IN pNum
+        IF digit IS INTEGER THEN
+            BREAKLOOP
+        ELSE THEN
+            code = 1
+            CALLFUNCTION message(code)
+        ENDIF
+    ENDFOR
     RETURN pNum
 ENDFUNCTION
 
 FUNCTION getnationality():
-    PRINT("Enter tenant nationality: (m: Malaysian/n: non-Malaysian):\n")
-        GET nationality
+    PRINT("Enter tenant nationality: (M: Malaysian/N: non-Malaysian):\n")
+    GET nationality
+    nationality = nationalityCheck
+    IF nationalityCheck LENGTH = 1 THEN
+        BREAKLOOP
+    ELSE THEN 
+
     RETURN nationality
 ENDFUNCTION
 
@@ -235,19 +240,22 @@ FUNCTION deleteTenant(recordName, recordNum)
         OPEN "tenant.txt" IN READ MODE AS Thandler
             READ Thandler
             Thandler STRIP (",") 
-            FOR record from list:
-                FOR item in record:
+            FOR record from list
+                FOR item in record
                 
 FUNCTION searchTenant(details):
     OPEN "tenant.txt" IN READ MODE AS TSearch
         READ TSearch
         TSearch STRIP (",")
         list = JOIN TSearch INTO string(",")
-        for record in flight:
-            if record.startswith(details):
-                print("found record", record RIGHTSTRIP(",") RIGHTSTRIP(""))
+        FOR record IN list
+            IF record STARTS WITH details THEN
+                PRINT("Found record", record RIGHTSTRIP(",") RIGHTSTRIP(""))
+            ENDIF
+        ENDFOR
+    CLOSEFILE
 
-FUNCTION appendFile(list, listBool):
+FUNCTION appendFile(list, listBool)
     IF listBool == TRUE:
         OPEN "tenant.txt" IN APPEND AS Thandler
             for record from list:
@@ -341,23 +349,23 @@ FUNCTION modifydata():
     PRINT("Please select which operation: ")
     GET dataInput
 
-    IF dataInput==1 THEN:
+    IF dataInput==1 THEN
         PRINT("NEWLINE Add Data NEWLINE")
-        CALLFUNCTIONapartmentadddata()
+        CALLFUNCTION apartmentAddData()
 
-    ELIF dataInput==2 THEN:
+    IF dataInput==2 THEN:
         PRINT("NEWLINE Add Data NEWLINE")
         CALLFUNCTIONapartmenteditdata()
 
-    ELIF dataInput==3 THEN:
+    IF dataInput==3 THEN:
         PRINT("NEWLINE Add Data NEWLINE")
         CALLFUNCTIONapartmentdeletedata()
 
-    ELIF dataInput==4 THEN:
+    IF dataInput==4 THEN:
         PRINT("Exit")
         CALLFUNCTIONadminMenu()
 
-    ELSE:
+    ELSE THEN
         PRINT("Error!")
         CALLFUNCTIONmodifydata()
 
@@ -367,9 +375,9 @@ ENDFUNCTION
 
 FUNCTION apartmentadddata():
     
-    DECLARE adddatanum,newapartmentnumberofrooms,adddataconfirmation,rewritedataconfirmation AS INTEGER
-    DEFINE adddata AS ARRAY
-
+    DECLARE adddatanum,newapartmentnumberofrooms AS INTEGER
+    DECLARE newapartment AS STRING
+    adddata=[]
     PRINT("NEWLINE Now, you are required to enter the new data NEWLINE")
 
     FOR i FROM 0 to adddatanum
@@ -428,14 +436,13 @@ FUNCTION apartmentdeletedata():
         CALLFUNCTIONapartmentexitprogram()
 
 FUNCTION searchbox():
-
-WHILE True
-    DECLARE option AS INTEGER
-    DECLARE opt AS STRING
-    PRINT("NEWLINE Welcome to search box!")
-    PRINT("NEWLINE 1. Search room specific details.NEWLINE 2. Search specific tenant details NEWLINE 4. Exit NEWLINE")
-    PRINT("Please type the keyword search based on the listing above: ")
-    GET option
+    WHILE True
+        DECLARE option AS INTEGER
+        DECLARE opt AS STRING
+        PRINT("NEWLINE Welcome to search box!")
+        PRINT("NEWLINE 1. Search room specific details.NEWLINE 2. Search specific tenant details NEWLINE 4. Exit NEWLINE")
+        PRINT("Please type the keyword search based on the listing above: ")
+        GET option
 
     IF option=='1' THEN
         PRINT("NEWLINE Room(r), Pricing(p)\nPlease type the keyword search based on the listing above: ")
@@ -480,8 +487,6 @@ WHILE True
         PRINT(" NEWLINE Error! Please try again")
         CALLFUNCTION searchBox()
 
-    ENDIF
-
 ENDFUNCTION
 
 FUNCTION searchinformation(num)
@@ -498,13 +503,13 @@ FUNCTION searchinformation(num)
 
 ENDFUNCTION
 
-FUNCTION adminMenu():
+FUNCTION adminMenu()
     WHILE TRUE
         PRINT("\nTenant Management System")
         PRINT("\n1.Review information\n2. Search box\n3.Register new tenant \n4. Exit")
         PRINT("\nPlease select which operation that you want to do: ")
         GET opt
-        IF opt == 1:
+        IF opt == 1
             CALLFUNCTION display()
 
         ELSEIF opt == 2:
