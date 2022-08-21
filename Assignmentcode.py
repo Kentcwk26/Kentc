@@ -163,7 +163,10 @@ def message(code):
    print("Please try again.")
 
 def checkSpecialCharacter():
-   special=[{}<>!@#$%^&*()?:;'"+=-_"]
+   specials= "},<,>,!,@,#,$,%,^,&,*,(,),?,:,;,',+,=,-,_,],[,{"
+   list= specials.split(",")
+   list.append('"')
+   print (list)
 
 def apartment(masterKey):                        #Define apartment function
    
@@ -249,7 +252,7 @@ def modifyData():
 def newApartmenttype(code):
    while True:
       Newapartmentinfo=input("New apartment Info:")
-      for b in range(o,len(Newapartmentinfo)):
+      for b in range(0,len(Newapartmentinfo)):
          if type(Newapartmentinfo)!= str:
             nonumeric=0
             nospecialcharacter=0
@@ -309,7 +312,7 @@ def apartmentAddData(record,code):
       print("\nNow, you are required to enter new data\n")
       for i in range(0,adddatanum):
          while adddatanum == 1 or adddatanum >= 1:
-            newapartment=input("Apartment: "))
+            newapartment=input("Apartment: ")
             newapartmentcode=ApartmentCode()
             newapartmentdimension=int(input("Dimension (Range): "))
             newapartmentpricing=int(input("Pricing in RM: "))
