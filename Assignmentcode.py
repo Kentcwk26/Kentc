@@ -13,24 +13,18 @@ def login():                                   #define the login function
             if username == listRecord[0]:
                if password == listRecord[1]:
                   print("\n- Login successful -\n")
-                  #check for admin credentialsjohn
+                  #check for admin credentials
                   if (username == "john" and password == "1234u-78") or (username == "david" and password == "55467913"):
                      masterKey = True        #activate masterKey
                      UID = None
-                     code=6
-                     message(code)
                   else:
                      masterKey = False       #deactivate masterKey
                      UID = listRecord[2]
-                  menu(masterKey,UID,code)   #redirect to menu
+                  menu(masterKey,UID)            #redirect to menu
                   chance=0                   #empty login chances
-                  code=5
-                  message(code)
                   break                      #break loop to avoid running error message
          else:
             chance-=1                        #decrease chances by 1
-            code=0
-            message(code)
             print("\nError, incorrect username or password.\n",chance,"chances remaining.\n")
 
 def listIdentifier(listCode):
@@ -66,9 +60,9 @@ def tenant(masterKey,UID):
       num = 0
       searchInformation(listCode,num,UID)
    else:
-      print("\nCurrent Tenant Data:")
+      print("Current Tenant Data:")
       readFile(listCode)
-      opt = input("\n[R]-Register new tenant, [M]-Modify Tenant Data\nSelect which operation that you would like to operate: ")
+      opt = input("[R]-Register new tenant, [M]-Modify Tenant Data")
       if opt in ["R","r"]:
          n = input("Number of new tenants: ")
          tenantList=[]
@@ -157,21 +151,24 @@ def getrental():
 
 def message(code):
    if code == 0:
-      print("Incorrect input.\nPlease try again.")
+      print("Incorrect input.")
    elif code == 1:
-      print("Incorrect data type present.\nPlease try again.")
+      print("Incorrect data type present.")
    elif code == 2:
-      print("Format error.\nPlease try again.")
+      print("Format error.")
    elif code == 3:
-      print("Length error.\nPlease try again.")
+      print("Length error.")
    elif code == 4:
-      print("Data not found.\nPlease try again.")
-   elif code == 5:
-      print("Login unsuccessful.\nPlease try again.")
-   elif code == 6:
-      print("Login successful.")
+      print("Data not found.")
+   print("Please try again.")
 
-def apartment(masterKey,code):                        #Define apartment function
+def checkSpecialCharacter():
+   specials= "},<,>,!,@,#,$,%,^,&,*,(,),?,:,;,',+,=,-,_,],[,{"
+   list= specials.split(",")
+   list.append('"')
+   print (list)
+
+def apartment(masterKey):                        #Define apartment function
    
    print("\nApartment info:\n")
    record=[]
@@ -222,84 +219,71 @@ def apartment(masterKey,code):                        #Define apartment function
          Ahandler.write("\n")
 
    if masterKey==True:
-      modifyData(record,code)
+      modifyData()
 
    elif masterKey==False:
       menu()
 
-def modifyData(record,code):
+def modifyData():
   while True:
       print("\n1. Add data\n2. Edit Data\n3. Delete Data\n4. Exit\n")
       dataInput=int(input('Please select which operation: '))
 
       if dataInput==1:
          print("\nAdd Data\n")
-         apartmentAddData(record,code)
+         apartmentAddData()
 
       elif dataInput==2:
          print("\nEdit Data\n")
-         apartmentEditData(record,code)
+         apartmentEditData()
 
       elif dataInput==3:
          print("\nDelete Data\n")
-         apartmentDeleteData(record,code)
+         apartmentDeleteData()
 
       elif dataInput==4:
          print("Exit")
          return False
 
       else:
-         code=0
-         message(code)
+         print("Error!")
          return True
 
-def newApartmenttype(specialcharacter,code):
+def newApartmenttype(code):
    while True:
-      specialcharacter=['~','`','!','@','#','$','%','^','&','*','(',')','-','_','+','=','{','}','[',']',':',';',',','.','<','>','?','/']
       Newapartmentinfo=input("New apartment Info:")
       for b in range(0,len(Newapartmentinfo)):
-         if type(Newapartmentinfo)!= int:
+         if type(Newapartmentinfo)!= str:
             nonumeric=0
-         else:
-            code=1
-            message(code)
-         if specialcharacter not in Newapartmentinfo: 
             nospecialcharacter=0
-         else:
-            code=0
-            message(code)
-            print('Contains special character(s).')
          if nonumeric == 0 and nospecialcharacter == 0:
             continue
          else:
             code=1
             message(code)
-            return True
 
 def ApartmentCode(code):
    while True:
       Apartmentcode=input("Code: ")
       for x in range(0,len(Apartmentcode)):
          if Apartmentcode[0].isupper() and Apartmentcode.isalnum():
-            numuppercase += 1
+            uppercase += 1
             number += 1
-         elif numuppercase < 0 and number < 0:
+         elif uppercase < 0 and number < 0:
             code=2
             message(code)
-            print("\n- Apartment code must contain both uppercases and numbers in order to differentiate -")
+            print("NEWLINE - Apartment Code must contain uppercase and number in order to differentiate -")
             return True
          else:
             continue
 
-def ApartmentID(code,specialcharacter):
+def ApartmentID(code):
    while True:
-      specialcharacter=['~','`','!','@','#','$','%','^','&','*','(',')','-','_','+','=','{','}','[',']',':',';',',','.','<','>','?','/']
-      print("\nApartment ID format: A01-L01-R01 to A02-L10-R41, A stands for Apartment Block, L stands for Level, and R stands for Room (The length must have at least 26 characters long, including the dash -)")
-      ApartmentID=input("\nApartment ID: ")
+      ApartmentID=input("Apartment ID: ")
       if len(ApartmentID)>26:
          code=2
          message(code)
-         print("\nPlease follow the format as: A01-L10-R40, A stands for Apartment Block, L stands for Level, and R stands for Room (The length must have at least 26 characters long, including the dash -)")
+         print("\nPlease follow the format as: A01-L10-R40, A stands for Apartment Block, L stands for Level, and R stands for Room (The length must have 11 characters long, including the dash -)")
       else:
          lenAparID = 1
       if ApartmentID[0,4,7].islower():
@@ -308,8 +292,8 @@ def ApartmentID(code,specialcharacter):
          print("\nMust contain uppercase, not lower case")
       else:
          notlowercase = 3
-      if ApartmentID[3,5] == '-' in specialcharacter:
-         AparIDdash=2
+      if ApartmentID[3,5] == '-':
+         AparIDdash = 2
       else:
          code=2
          message(code)
@@ -319,8 +303,7 @@ def ApartmentID(code,specialcharacter):
       else:
          code=2
          message(code)
-         print("\nPlease follow the format")
-         return True
+         print("Please follow the format")
 
 def apartmentAddData(record,code):
    while True:
@@ -330,18 +313,13 @@ def apartmentAddData(record,code):
       for i in range(0,adddatanum):
          while adddatanum == 1 or adddatanum >= 1:
             newapartment=input("Apartment: ")
-            newapartmentcode=ApartmentCode(code)
+            newapartmentcode=ApartmentCode()
             newapartmentdimension=int(input("Dimension (Range): "))
             newapartmentpricing=int(input("Pricing in RM: "))
             newapartmentnumberofrooms=int(input("Number of rooms: "))
-            newapartmentID=ApartmentID(code)
-            adddata.append("Room info: ",newapartment)
-            adddata.append("Room Code: ",newapartmentcode)
-            adddata.append("Dimension (in range): ",newapartmentdimension,"+ sqft")
-            adddata.append("Pricing in RM: ","RM",newapartmentpricing)
-            adddata.append("Number of rooms: ", newapartmentnumberofrooms)
-            adddata.append("Apartment ID: ",newapartmentID)
-            print("\nNew Data: ",adddata)
+            newapartmentID=ApartmentID()
+            adddata.append(newapartment,newapartmentcode,newapartmentdimension,newapartmentpricing,newapartmentnumberofrooms,newapartmentID)
+            print("\nNew data: ,",adddata)
 
          while adddatanum == 0:
             code=0
@@ -374,19 +352,19 @@ def apartmentAddData(record,code):
             if rewriteDataConfirmation == 'W':
                return True
             else:
-               apartmentExitProgram()
+               print("Return to main menu")
                return False
          else:
             code=0
             message(code)
 
-def apartmentEditData(record,code):
+def apartmentEditData():
    editdatanum=int(input('How many records that you decide to edit? '))
 
-def apartmentDeleteData(record,code):
+def apartmentDeleteData():
    deletedatanum=int(input('How many records that you decide to add? '))
 
-def apartmentExitProgram(code):
+def apartmentExitProgram():
   while True:
       exitoption=str(input("We are about to exit to the program. \nAre you sure that you want to exit? Enter 'C to continue, Enter''X' to exit: "))
       if exitoption=='C':
@@ -395,9 +373,7 @@ def apartmentExitProgram(code):
          print("\nExit program, return to main menu\n")
          return False
       else:
-         code=1
-         message(code)
-         return True
+         print("\nInvalid input\n")
 
 def apartmentSearch(num):
    displayList=[]
@@ -408,7 +384,7 @@ def apartmentSearch(num):
          displayList.append(listRec[num])
       print(displayList)
 
-def searchBox(code):                             #Define search function
+def searchBox():                             #Define search function
    print("\nWelcome to search box!")
    while True:
       print("\n1. Search room specific details.\n2. Search transaction details.\n3. Search specific tenant details.\n4. Exit search box.\n")
@@ -472,7 +448,6 @@ def searchBox(code):                             #Define search function
       else:
          code = 0
          message(code)
-      
       details = None
       searchInformation(listCode,num,details)
 
@@ -506,13 +481,13 @@ def searchInformation(listCode,num,details):                  #Define searchinfo
       else:
          return False
 
-def menu(masterKey,UID,code):                                  #Define menu function
+def menu(masterKey,UID):                                  #Define menu function
    print("\nWelcome, you are now entering Tenant Management System")
    while True:
       print("\n[S]-Search box\n\nReview information about:\n")
 
       if masterKey == False:
-         print("[A]-Apartment\n[P]-Transaction\n[T]-My Tenant details\n[D]-Print my House and Tenant Details\n[E]-Exit\n")
+         print("[A]-Apartment\n[P]-Transaction\n[T]-My Tenant details\n\n[D]-Print my House and Tenant Details\n[E]-Exit\n")
       else:
          print("[A]-Apartment\n[P]-Transaction\n[T]-Tenant\n[D]-Print Specific House & Tenant Details\n[I]-Inquiry of Past Tenant Details\n[L]-Login History\n[E]- Exit\n")
 
@@ -522,7 +497,7 @@ def menu(masterKey,UID,code):                                  #Define menu func
          searchBox()
       #Check for basic Functions
       elif opt in ["A","a"]:
-         apartment(masterKey,code)
+         apartment()
       
       elif opt in ["P","p"]:
          print("transaction(masterKey)")
