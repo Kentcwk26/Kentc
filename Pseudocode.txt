@@ -37,18 +37,24 @@ ENDFUNCTION
 FUNCTION tenant(masterKey,UID)
     listCode = "t"
     IF masterKey == FALSE THEN
+        num = 0
         CALLFUNCTION searchInformation(listCode,num,UID)
     ELSE THEN
         PRINT("Current Tenant Data:")
-        tenantRead()
-        PRINT("[R]-inspect specific tenant NEWLINE [M]-Modify tenant data")
-        GET opt
-        IF opt IN ["R","r"] THEN
-            CALLFUNCTION tenantSearch(details)
-        ELSEIF opt IN ["M","m"] THEN
-            modifyData(listCode)
-        ENDIF
+        CALLFUNCTION readFile(listCode)
+        CALLFUNCTION modifyData(listCode)
     ENDWHILE
+ENDFUNCTION
+
+listIdentifier(listCode)
+    IF listCode == "t" THEN
+        l = "tenant.txt"
+    ELSEIF listcode == "a" THEN
+        l = "Apartment.txt"
+    ELSE THEN
+        l = "transaction.txt"
+    ENDIF
+    RETURN l
 ENDFUNCTION
 
 FUNCTION transactionEntryForm()
@@ -156,50 +162,26 @@ FUNCTION getstatus():
 ENDFUNCTION
 
 FUNCTION appendFile(list, listCode)
-    IF listCode == "t" THEN
-        OPEN "tenant.txt" IN APPEND AS TAppend
-            FOR record FROM list
-                FOR item IN record
-                    WRITE item TO TAppend
-                    WRITE "NEWLINE" TO TAppend
+    l = CALLFUNCTION listIdentifier(listCode)
+    OPEN l IN APPEND AS TAppend
+        FOR record IN list
+            FOR item IN record
+                WRITE item TO TAppend
                 WRITE "NEWLINE" TO TAppend
-        CLOSEFILE
-    ELSEIF listCode == "a" THEN
-        OPEN "Apartment.txt" IN APPEND AS AAppend
-            for record from list
-                for item in record
-                    WRITE item TO AAppend
-                    WRITE "NEWLINE" TO AAppend
-                WRITE "NEWLINE" TO AAppend
-        CLOSEFILE
-    ELSE THEN
-        OPEN "transaction.txt" IN APPEND AS PAppend
-            for record from list
-                for item in record
-                    WRITE item TO PAppend
-                    WRITE "NEWLINE" TO PAppend
-                WRITE "NEWLINE" TO PAppend
+            ENDFOR
+            WRITE "NEWLINE" TO TAppend
+        ENDFOR
+    CLOSEFILE
 ENDFUNCTION
 
 FUNCTION readFile(listCode):
-    IF listCode == t:
-        OPEN "tenant.txt" IN READ AS Thandler:
-            FOR record FROM Ahandler:
-                PRINT(record RIGHTSTRIP() RIGHTSTRIP(","))
-    
-    ELSEIF listcode == t
-
-    ELSE:
-        OPEN "Apartment.txt" IN READ AS Ahandler:
-            FOR record FROM Ahandler:
-                PRINT(record RIGHTSTRIP() RIGHTSTRIP(","))
-ENDFUNCTION
-
-FUNCTION tenantRead()
-    OPEN (tenant.txt) IN READ AS fTenant
-        tenantList = READ fTenant LINE-BY-LINE
-        FOR record IN tenantList
-            PRINT(record RIGHTSTRIP(",") RIGHTSTRIP("NEWLINE"))
+    l = CALLFUNCTION listIdentifier(listCode)
+    OPEN l IN READ AS fRead
+        string = READ fRead line-by-line
+        FOR record IN string
+            stripped = record RIGHTSTRIP("NEWLINE") RIGHTSTRIP(",")
+            splitRecord = SPLIT stripped INTO LIST(",")
+            PRINT(splitRecord)
         ENDFOR
     CLOSEFILE
 ENDFUNCTION
@@ -319,7 +301,7 @@ FUNCTION apartmentAddData():
         DECLARE addDataNum,newapartmentnumberofrooms,addDataConfirmation,rewriteDataConfirmation,addDataConfirmation2 AS INTEGER
         DEFINE adddata AS ARRAY
 
-        PRINT("NEWLINE Dear admin, how many data(s) are you gonna insert today?")
+        PRINT("NEWLINE Dear admin, how many record(s) that you decide to add??")
         GET adddatanum
         PRINT("NEWLINE Now, you are required to enter the new data NEWLINE")
 
@@ -341,6 +323,8 @@ FUNCTION apartmentAddData():
 
         WHILE (adddatanum == 0) THEN
             PRINT("Error, cannot insert zero records")
+            code=0
+            CALLFUNCTION message(code)
             RETURN TRUE
 
         ENDFOR
@@ -396,82 +380,78 @@ ENDFUNCTION
 
 FUNCTION apartmentEditData():
 
-    DECLARE deletedataconfirmation,deletedataconfirmationpt1,deletedataconfirmationpt2,deletedataconfirmationpt3 AS INTEGER
+    DECLARE editdataconfirmation,editdataconfirmationpt1,editdataconfirmationpt2,editdataconfirmationpt3 AS INTEGER
         
-    PRINT("Dear admin, you are required to read this message below NEWLINE Please noted that the selected data from record will permanently delete the selected record NEWLINE")
-    PRINT("NEWLINE Insert 'Y' to continue the progress, and 'N' to exit: ")
-    GET editdataconfirmationpt1
-    
-    IF editdataconfirmationpt1 == 'Y' THEN
-        WHILE TRUE
-            PRINT("NEWLINE Now, NEWLINE First, please select the record that you decide to delete from above: ")
-            GET editdatainformation
-            OPEN "Apartment.txt" IN READ AS Ahandler
-            FOR record FROM Ahandler
-                PRINT(NEWLINE record)
-            CLOSE FILE
-            PRINT("NEWLINE [R]-Room Type, [C]-Apartment Code, [D]-Dimensions, [P]- Pricing, [N]- Number of rooms, [A]- Apartment ID")
-            PRINT("NEWLINE Next, please select the data type based on the above statement: ")
-            GET datatype
-            IF datatype == 'R' THEN
-                apartmentdatatype = 0
-            ELSE IF datatype == 'C' THEN
-                apartmentdatatype = 1
-            ELSE IF datatype == 'D' THEN
-                apartmentdatatype = 2
-            ELSE IF datatype == 'P' THEN
-                apartmentdatatype = 3
-            ELSE IF datatype == 'N' THEN
-                apartmentdatatype = 4
-            ELSE IF datatype == 'A' THEN
-                apartmentdatatype= 5
-            ELSE
-                code = 0
-                CALLFUNCTION message(code)
-            ENDIF
+    WHILE TRUE
+        PRINT("NEWLINE First, please select the record that you decide to edit from above (Copy and paste the record): ")
+        GET editdatainformation
+        OPEN "Apartment.txt" IN READ AS Ahandler
+        FOR record FROM Ahandler
+            PRINT(NEWLINE record)
+        CLOSE FILE
+        PRINT("NEWLINE [R]-Room Type, [C]-Apartment Code, [D]-Dimensions, [P]- Pricing, [N]- Number of rooms, [A]- Apartment ID")
+        PRINT("NEWLINE Next, please select the data type based on the above statement: ")
+        GET datatype
+        IF datatype == 'R' THEN
+            apartmentdatatype = 0
+        ELSE IF datatype == 'C' THEN
+            apartmentdatatype = 1
+        ELSE IF datatype == 'D' THEN
+            apartmentdatatype = 2
+        ELSE IF datatype == 'P' THEN
+            apartmentdatatype = 3
+        ELSE IF datatype == 'N' THEN
+            apartmentdatatype = 4
+        ELSE IF datatype == 'A' THEN
+            apartmentdatatype= 5
+        ELSE
+            code = 0
+            CALLFUNCTION message(code)
+        ENDIF
 
-            OPEN "Apartment.txt" IN READ AS Ahandler
-            FOR item IN Ahandler
-                PRINT(item,RIGHTSTRIP() RIGHTSTRIP(","))
-            ENDFOR
-            CLOSE FILE
+        OPEN "Apartment.txt" IN READ AS Ahandler
+        FOR item IN Ahandler
+            PRINT(item,RIGHTSTRIP() RIGHTSTRIP(","))
+        ENDFOR
+        CLOSE FILE
             
-            PRINT("Please insert the data that you want to edit: ")
-            GET olddata
+        PRINT("Please insert the data that you want to edit: ")
+        GET olddata
 
-            PRINT("NEWLINE The last step, please insert the new data: ")
-            GET newdata
-            PRINT("NEWLINE Are you sure with the data that you inserted just now? Yes/No")
-            GET deletedataconfirmation
+        PRINT("NEWLINE The last step, please insert the new data: ")
+        GET newdata
+        PRINT("NEWLINE Are you sure with the data that you inserted just now? Yes/No")
+        GET editdataconfirmation
 
-            IF confirmation == 'Yes' THEN
-                OPEN "Apartment.txt" IN WRITE AS Ahandler
-                    FOR record FROM Ahandler:
-                        itemstripped = record RIGHTSTRIP(",") RIGHTSTRIP("NEWLINE")
-                        datasplited = SPLIT strippeditem INTO LIST(",")
-                        IF datatype IN datasplited[num] THEN
-                            REPLACE olddata TO newdata INTO record
-                        PRINT("NEWLINE Results: NEWLINE",record NEWLINE Data Saved)
-                    ENDFOR
-                CLOSEFILE
+        IF editdataconfirmation == 'Yes' THEN
+            OPEN "Apartment.txt" IN WRITE AS Ahandler
+                FOR record FROM Ahandler:
+                    itemstripped = record RIGHTSTRIP(",") RIGHTSTRIP("NEWLINE")
+                    datasplited = SPLIT strippeditem INTO LIST(",")
+                    IF datatype IN datasplited[num] THEN
+                        REPLACE olddata TO newdata INTO record
+                    PRINT("NEWLINE Results: NEWLINE",record NEWLINE Data Updated)
+                ENDFOR
+            CLOSEFILE
                 PRINT("Enter any key to exit, Enter 'C' again to edit more data: ")
                 GET deletedataconfirmationpt3
-                    IF deletedataconfirmationpt3 == 'C' THEN
-                        RETURN TRUE
-                    ELSE
-                        PRINT("Return to main menu")
-                        RETURN FALSE
-                    ENDIF
+                IF deletedataconfirmationpt3 == 'C' THEN
+                    RETURN TRUE
+                ELSE
+                    PRINT("Return to main menu")
+                    RETURN FALSE
+                ENDIF
 
-            ELSE IF confirmation == 'No' THEN
-                RETURN TRUE
+        ELSE IF editdataconfirmation == 'No' THEN
+            PRINT("NEWLINE Data not saved")
+            RETURN TRUE
                 
-            ELSE THEN
-                code = 0
-                CALLFUNCTION message(code)
-                RETURN FALSE
+        ELSE THEN
+            code = 0
+            CALLFUNCTION message(code)
+            RETURN FALSE
 
-            ENDIF
+        ENDIF
 
     ELSE IF editdataconfirmationpt1 == 'N' THEN
         RETURN FALSE
@@ -484,15 +464,107 @@ FUNCTION apartmentEditData():
 ENDFUNCTION
 
 FUNCTION apartmentDeleteData()
+    WHILE TRUE
     DECLARE deletedataconfirmationpt1,deletedataconfirmationpt2 AS INTEGER
     OPEN "Apartment.txt" IN READ AS Ahandler
         for item in Ahandler:
             PRINT(item,RIGHTSTRIP() RIGHTSTRIP(","))
         ENDFOR
     CLOSEFILE
+
     PRINT("NEWLINE Dear admin, please noted that the selected data from record will permanently delete the selected record")
     PRINT("NEWLINE Insert 'Y' to continue the progress, and 'N' to exit: ")
     GET deletedataconfirmationpt1
+        PRINT("NEWLINE First and foremost, please select the record that you decide to delete from above (Copy and paste the whole record): ")
+        GET editdatainformation
+        OPEN "Apartment.txt" IN READ AS Ahandler
+        FOR record FROM Ahandler
+            PRINT(NEWLINE record)
+        CLOSE FILE
+        PRINT("NEWLINE [R]-Room Type, [C]-Apartment Code, [D]-Dimensions, [P]- Pricing, [N]- Number of rooms, [A]- Apartment ID")
+        PRINT("NEWLINE Next, please select the data type based on the above statement: ")
+        GET deletedatatype
+        IF datatype == 'R' THEN
+            apartmentdeletedatatype = 0
+        ELSE IF datatype == 'C' THEN
+            apartmentdeletedatatype = 1
+        ELSE IF datatype == 'D' THEN
+            apartmentdeletedatatype = 2
+        ELSE IF datatype == 'P' THEN
+            apartmentdeletedatatype = 3
+        ELSE IF datatype == 'N' THEN
+            apartmentdeletedatatype = 4
+        ELSE IF datatype == 'A' THEN
+            apartmentdeletedatatype = 5
+        ELSE
+            code = 0
+            CALLFUNCTION message(code)
+            RETURN TRUE
+        ENDIF
+
+        OPEN "Apartment.txt" IN READ AS Ahandler
+        FOR item IN Ahandler
+            PRINT(item,RIGHTSTRIP() RIGHTSTRIP(","))
+        ENDFOR
+        CLOSE FILE
+            
+        PRINT("Please insert the data that you want to edit: ")
+        GET olddata
+
+        PRINT("NEWLINE The last step, please insert the new data: ")
+        GET newdata
+        PRINT("NEWLINE Are you sure with the data that you inserted just now? Yes/No")
+        GET editdataconfirmation
+
+        IF editdataconfirmation == 'Yes' THEN
+            OPEN "Apartment.txt" IN WRITE AS Ahandler
+                FOR record FROM Ahandler:
+                    itemstripped = record RIGHTSTRIP(",") RIGHTSTRIP("NEWLINE")
+                    datasplited = SPLIT strippeditem INTO LIST(",")
+                    IF datatype IN datasplited[num] THEN
+                        REPLACE olddata TO newdata INTO record
+                    PRINT("NEWLINE Results: NEWLINE",record NEWLINE Data Updated)
+                ENDFOR
+            CLOSEFILE
+                PRINT("Enter any key to exit, Enter 'C' again to delete more data: ")
+                GET deletedataconfirmationpt3
+                IF deletedataconfirmationpt3 == 'C' THEN
+                    RETURN TRUE
+                ELSE
+                    PRINT("Return to main menu")
+                    RETURN FALSE
+                ENDIF
+
+        ELSE IF editdataconfirmation == 'No' THEN
+            PRINT("NEWLINE Data not saved")
+            RETURN TRUE
+                
+        ELSE THEN
+            code = 0
+            CALLFUNCTION message(code)
+            RETURN FALSE
+
+        ENDIF
+
+    ELSE IF editdataconfirmationpt1 == 'N' THEN
+        RETURN FALSE
+
+    ELSE
+        code = 0
+        CALLFUNCTION message(code)
+        RETURN FALSE
+    ENDIF
+ENDFUNCTION
+
+FUNCTION apartmentSearch(num):
+    displaylist=[]
+    OPEN "Apartment.txt" IN READ AS tRead:
+    aCheck = tRead.readlines()
+    FOR record IN aCheck:
+        listRec = SPLIT record IN LIST(",")
+        displayList.append(listRec[num])
+    ENDFOR
+    PRINT(displayList)
 ENDFUNCTION
 
 FUNCTION searchbox():
@@ -502,13 +574,13 @@ FUNCTION searchbox():
     DECLARE returnList AS ARRAY
     PRINT("NEWLINE Welcome to search box!")
     WHILE TRUE
-        PRINT("NEWLINE 1. Search room specific details NEWLINE 2. Search transaction details NEWLINE 3. Search specific tenant details NEWLINE NEWLINE 4. Exit search box NEWLINE")
-        PRINT("NEWLINE Please type the search criteria based on the keywords above:")
+        PRINT("NEWLINE 1. Search room specific details. NEWLINE 2. Search transaction details. NEWLINE 3. Search specific tenant details. NEWLINE NEWLINE 4. Exit search box. NEWLINE")
+        PRINT("NEWLINE Please type the search criteria based on the keywords above: NEWLINE")
         GET option
         
         IF option == 1 THEN
             listCode = "a"
-            PRINT("NEWLINE [A]-Apartment code, [P]-Pricing")
+            PRINT("NEWLINE [A]-Apartment code, [P]-Pricing NEWLINE")
             GET opt
 
             IF opt IN ["A","a"] THEN
@@ -580,7 +652,7 @@ FUNCTION searchbox():
         CALLFUNCTION searchinformation(listCode,num,details)
 ENDFUNCTION
 
-FUNCTION searchinformation(listCode,num,details)
+FUNCTION searchInformation(listCode,num,details)
     DECLARE searchInformation AS INTEGER
         IF listCode == "p" THEN
         l="transaction.txt"
@@ -595,14 +667,20 @@ FUNCTION searchinformation(listCode,num,details)
             PRINT("Select and enter text to begin search: ")
             GET searchInformation        
         OPEN l IN READ AS Xhandler
+            PRINT("NEWLINE Results: NEWLINE")
             FOR record FROM Xhandler
                 strippeditem = record RIGHTSTRIP(",") RIGHTSTRIP("NEWLINE")
                 data = SPLIT strippeditem INTO LIST(",")
-                IF searchInformation IN data[num]:
-                    PRINT("NEWLINE Results: NEWLINE",record)
+                IF searchInformation IN data LOCATION num THEN
+                    printRun = TRUE
+                    PRINT(record)
                 ELSE THEN
-                    code = 4
-                    CALLFUNCTION message(code)
+                    CONTINUELOOP
+            IF printRun == TRUE
+                PRINT("Matching Records ends here.")
+            ELSE THEN
+                code = 4
+                CALLFUNCTION message(code)
                 ENDIF
             ENDFOR
         CLOSEFILE
@@ -650,8 +728,10 @@ FUNCTION menu(masterKey,UID)
             CALLFUNCTION tenantAndApartment()
         
         ELSEIF opt in ["I","i"] AND masterKey == TRUE THEN
+            listCode = "t"
+            num = 6
             details = "past"
-            CALLFUNCTION tenantSearch(details)
+            CALLFUNCTION searchInformation(listCode,num,details)
 
         ELSEIF opt in ["L","l"] AND masterKey == TRUE THEN
             CALLFUNCTION loginHistory()
