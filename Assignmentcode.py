@@ -230,7 +230,7 @@ def apartmentAddData(record):
       print("\n",adddata,"\n")
       record.extend(adddata)
 
-def apartmenteditdata():
+def apartmentEditData():
    editdatanum=int(input('How many records that you decide to edit? '))
 
 def apartmentDeleteData():
@@ -377,7 +377,7 @@ def searchInformation(listCode,num):                  #Define searchinformation 
                print("\nResults:\n",record)
 
       exitSearch=input("Exit program? Enter any key to exit, Enter 'C' to continue.")
-      if exitSearch == "C":
+      if exitSearch in ["C","c"]:
          continue
       else:
          return False
