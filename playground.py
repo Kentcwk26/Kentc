@@ -28,6 +28,19 @@
 #else:
 #    print("record doesnt exist")
 
+#FUNCTION tenantSearch(details):
+#    OPEN "tenant.txt" IN READ AS TSearch
+#        READ TSearch
+#        TSearch STRIP (",")
+#        list = JOIN TSearch INTO string(",")
+#        FOR record IN list
+#            IF record STARTS WITH details THEN
+#                PRINT("Found record", record RIGHTSTRIP(",") RIGHTSTRIP(""))
+#            ENDIF
+#        ENDFOR
+#    CLOSEFILE
+#ENDFUNCTION
+
 searchInformation = input("Select and enter text to begin search: ")
 num=0
 listCode="p"

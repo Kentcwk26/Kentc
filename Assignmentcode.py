@@ -12,7 +12,7 @@ def login():                                 #define the login function
             listRecord = record.split(",")
             if username == listRecord[0]:
                if password == listRecord[1]:
-                  print("\nLogin successful\n")
+                  print("\n- Login successful -\n")
                   #check for admin credentials
                   if (username == "john" and password == "1234u-78") or (username == "david" and password == "55467913"):
                      masterKey = True        #activate masterKey
@@ -117,13 +117,15 @@ def getrental():
 
 def message(code):
    if code == 0:
-      print("Incorrect input")
+      print("Incorrect input.")
    elif code == 1:
-      print("Incorrect data type present")
+      print("Incorrect data type present.")
    elif code == 2:
-      print("Format error")
+      print("Format error.")
    elif code == 3:
-      print("Length error")
+      print("Length error.")
+   elif code == 4:
+      print("Data not found.")
    print("Please try again.")
 
 def adminApartment():                        #Define apartment function
@@ -230,7 +232,7 @@ def apartmentAddData(record):
       print("\n",adddata,"\n")
       record.extend(adddata)
 
-def apartmenteditdata():
+def apartmentEditData():
    editdatanum=int(input('How many records that you decide to edit? '))
 
 def apartmentDeleteData():
@@ -296,16 +298,15 @@ def searchBox():                             #Define search function
    print("\nWelcome to search box!")
    while True:
       print("\n1. Search room specific details.\n2. Search transaction details\n3. Search specific tenant details\n\n4. Exit search box\n")
-      option=int(input("Please type the search number based on the listing above:"))
-      print("\n Please type the search criteria based on the keywords below:")
+      option=int(input("Please type the search criteria based on the listing above:"))
       if option == 1:
          listCode= "a"
          opt = input("\n[A]-Apartment code, [P]-Pricing\n")     
          if opt in ["A","a"]:
-            print("\nSR1,SR2,SR3,SR4,DR1,DR2,DR3,DR4,CPS,MPS,MPT,MP1,MP2,ESS3,ESS2,EST2")
+            print("\nSR1,SR2,SR3,SR4,DR1,DR2,DR3,DR4,CPS,MPS,MPT,MP1,MP2,ESS3,ESS2,EST2....\nPlease enter the apartment code to begin the search: ")
             num = 1
          elif opt in ["P","p"]:
-            print("\nRM350,RM450,RM550,RM650,RM690,RM700,RM750,RM800,RM840,RM890,RM900,RM940,RM950,RM1040,RM1050")
+            print("\nRM350,RM450,RM550,RM650,RM690,RM700,RM750,RM800,RM840,RM890,RM900,RM940,RM950,RM1040,RM1050....\nPlease enter the pricing in RM to begin the search: ")
             num = 3
          else:
             code = 0
@@ -313,7 +314,7 @@ def searchBox():                             #Define search function
       
       elif option == 2:
          listCode = "p"
-         opt = input("NEWLINE [R]-Reference number,[D]-Transaction date,[T]-TenantID,[A]-Apartment code,[S]-Amount")
+         opt = input("\n[R]-Reference number,[D]-Transaction date,[T]-TenantID,[A]-Apartment code,[S]-Amount")
          if opt in ["R","r"]:
             num = 0
          elif opt in ["D","d"]:
@@ -321,7 +322,7 @@ def searchBox():                             #Define search function
          elif opt in ["T","t"]:
             num = 2
          elif opt in ["A","a"]:
-            print("NEWLINE SR1,SR2,SR3,SR4,DR1,DR2,DR3,DR4,CPS,MPS,MPT,MP1,MP2,ESS3,ESS2,EST2.... NEWLINE Please enter the apartment code to begin the search: ")
+            print("\nSR1,SR2,SR3,SR4,DR1,DR2,DR3,DR4,CPS,MPS,MPT,MP1,MP2,ESS3,ESS2,EST2....\nPlease enter the apartment code to begin the search: ")
             num = 3
          elif opt in ["S","s"]:
             num = 4
@@ -331,7 +332,7 @@ def searchBox():                             #Define search function
       
       elif option =='3':
          listCode = "t"
-         opt = input("NEWLINE [N]-Name,[G]-Gender,[P]-Phone number,[R]-Nationality,[D]-Rental start date,[I]-Income,[S]-Tenant status")
+         opt = input("\n[N]-Name,[G]-Gender,[P]-Phone number,[R]-Nationality,[D]-Rental start date,[I]-Income,[S]-Tenant status")
          if opt in ["N","n"]:
             num = 0
          elif opt in ["G","g"]:
@@ -367,7 +368,7 @@ def searchInformation(listCode,num):                  #Define searchinformation 
    else:
       l="tenant.txt"   
    while True:
-      searchinformation=input("Select and enter text to begin search: ")
+      searchinformation=input("\nSelect and enter text to begin search: ")
 
       with open(l,"r") as Xhandler:
          for record in Xhandler:
@@ -375,24 +376,27 @@ def searchInformation(listCode,num):                  #Define searchinformation 
             data=strippeditem.split(", ")
             if searchinformation in data[num]:
                print("\nResults:\n",record)
+            else:
+               code = 4
+               message(code)
 
-      exitSearch=input("Exit program? Enter any key to exit, Enter 'C' to continue.")
-      if exitSearch == "C":
+      exitSearch=input("\nExit program? Enter any key to exit, Enter 'C' to continue.")
+      if exitSearch in ["C","c"]:
          continue
       else:
          return False
 
 def menu(masterKey):                                  #Define menu function
-   print("\n- Welcome, you are now entering Tenant Management System -")
+   print("\nWelcome, you are now entering Tenant Management System")
    while True:
-      print("\n[S]-Search box\nReview information about:\n")
+      print("\n[S]-Search box\n\nReview information about:\n")
 
       if masterKey == False:
          print("[A]-Apartment\n[P]-Transaction\n[T]-My Tenant details\n\n[D]-Print my House and Tenant Details\n[E]-Exit\n")
       else:
-         print("[A]-Apartment\n[P]-Transaction\n[T]-Tenant\n\n[D]-Print Specific House & Tenant Details\n[I]-Inquiry of Past Tenant Details\n[L]-Login History\n[E]- Exit\n")
+         print("[A]-Apartment\n[P]-Transaction\n[T]-Tenant\n[D]-Print Specific House & Tenant Details\n[I]-Inquiry of Past Tenant Details\n[L]-Login History\n[E]- Exit\n")
 
-      opt=input("\nPlease select which operation that you want to do: ")
+      opt=input("Please select which operation that you want to do: ")
 
       if opt in ["S","s"]:
          searchBox()
@@ -420,7 +424,7 @@ def menu(masterKey):                                  #Define menu function
          print("loginHistory()")
 
       elif opt in ["E","e"]:
-         print("\nThank you for using, have a nice day~\n")
+         print("\nThank you for using us, have a nice day~\n")
          return False
 
       else:
