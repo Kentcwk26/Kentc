@@ -383,7 +383,7 @@ def searchInformation(listCode,num):                  #Define searchinformation 
          return False
 
 def menu(masterKey):                                  #Define menu function
-   print("\n- Welcome back, you are now entering Tenant Management System -")
+   print("\n- Welcome, you are now entering Tenant Management System -")
    while True:
       print("\n[S]-Search box\nReview information about:\n")
 

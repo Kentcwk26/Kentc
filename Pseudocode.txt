@@ -323,9 +323,11 @@ ENDFUNCTION
 FUNCTION apartmentAddData():
     
     WHILE TRUE:
-        DECLARE addDataNum,newapartmentnumberofrooms,addDataConfirmation,rewriteDataConfirmation AS INTEGER
+        DECLARE addDataNum,newapartmentnumberofrooms,addDataConfirmation,rewriteDataConfirmation,addDataConfirmation2 AS INTEGER
         DEFINE adddata AS ARRAY
 
+        PRINT("NEWLINE Dear admin, how many data are you gonna insert today?")
+        GET adddatanum
         PRINT("NEWLINE Now, you are required to enter the new data NEWLINE")
 
         FOR i FROM 0 TO addDataNum
@@ -352,8 +354,29 @@ FUNCTION apartmentAddData():
 
         IF addDataConfirmation == 1 THEN
 
+            OPEN "Apartment.txt" IN WRITE AS Ahandler
+                FOR item FROM adddata:
+                    FOR data FROM item:
+                        FOR information FROM data:
+                            WRITE information TO Ahandler
+                        WRITE ", " TO Ahandler
+                    WRITE "NEWLINE" TO Ahandler
+            CLOSE FILE
             PRINT("NEWLINE Data Saved NEWLINE ")
-            RETURN FALSE
+            PRINT("Are you going to add more data? Yes/No")
+            GET addDataConfirmation2
+            IF addDataConfirmation2 == 'Yes' THEN
+                PRINT("NEWLINE Return to main menu")
+                RETURN FALSE
+
+            ELSE IF addDataConfirmation2 == 'No' THEN
+                RETURN TRUE
+
+            ELSE
+                code = 0
+                CALLFUNCTION message(code)
+
+            ENDIF
 
         ELSEIF addDataConfirmation == 0 THEN
 
@@ -386,8 +409,10 @@ FUNCTION apartmentEditData():
         WHILE TRUE
             PRINT("NEWLINE Now, NEWLINE First, please select the record that you decide to delete from above: ")
             GET editdatainformation
+            OPEN "Apartment.txt" IN READ AS Ahandler
             FOR record FROM Ahandler
                 PRINT(NEWLINE record)
+            CLOSE FILE
             PRINT("NEWLINE [R]-Room Type, [C]-Apartment Code, [D]-Dimensions, [P]- Pricing, [N]- Number of rooms, [A]- Apartment ID")
             PRINT("NEWLINE Next, please select the data type based on the above statement: ")
             GET datatype
@@ -406,10 +431,13 @@ FUNCTION apartmentEditData():
             ELSE
                 code = 0
                 CALLFUNCTION message(code)
-            
+            ENDIF
+
             OPEN "Apartment.txt" IN READ AS Ahandler
             FOR item IN Ahandler
                 PRINT(item,RIGHTSTRIP() RIGHTSTRIP(","))
+            ENDFOR
+            CLOSE FILE
             
             PRINT("Please insert the data that you want to edit: ")
             GET olddata
