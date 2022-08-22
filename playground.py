@@ -97,46 +97,51 @@
 #         print("\nExiting\n")
 #         return False
 
-def getname():
-    validity = True
-    code = None
-    while validity == True:
-        name = input("Enter tenant name: Firstname Familyname Lastname \n")
-        nameList = name.split(" ")
-        print("Splitted into",nameList)
-        for words in nameList:
-            print("Checking",words)
-            if words[0].isupper():
-                code = None
-                continue
+def getname(code):
+    while True:
+        code = None
+        name = input("Format: Name Name.....\nEnter tenant fullname:\n")
+        if type(name) != int:
+            nameList = name.split(" ")
+            if len(nameList) >= 2:
+                for words in nameList:
+                    print("Checking",words)
+                    if words[0].islower():
+                        code = 2
+                        message(code)
+                        break
+                    else:
+                        continue
             else:
-                code = 2
+                code = 3
                 message(code)
-        if code:
-            print("code has been assigned")
-            continue
         else:
-            retry = input("\n[R]-Retry,[E]-Exit:\n")
-            if retry in ["R","r"]:
-                continue
-            else:
-                validity = False
-    return name
-
-
-def getgender():
-    gender = input("Enter tenant gender: (m/f):\n")
-    genderCheck = gender
-    if len(genderCheck)== 1:
-        if type(genderCheck) != str:
             code = 1
             message(code)
-    else: 
-        code = 3
-        message(code)
-    return gender
+        if code:
+            print("Error was detected.\n")
+        else:
+            print("No errors detected.\n")
+        retry = input("[R]-Retry,[Any other key]-Exit using "+name+"\n")
+        if retry in ["R","r"]:
+            continue
+        else:
+            return name
 
-def getpNum():
+def getgender(code):
+    while True:
+        gender = input("Enter tenant gender: (m/f):\n")
+        genderCheck = gender
+        if len(genderCheck) == 1:
+            if type(genderCheck) == int:
+                code = 1
+                message(code)
+                return gender
+        else: 
+            code = 3
+            message(code)
+
+def getpNum(code):
     pNum = input("Enter tenant phone number: (############):\n")
     pNumCheck = pNum
     for digit in pNumCheck:
@@ -147,7 +152,7 @@ def getpNum():
             message(code)
     return pNum
 
-def getnationality():
+def getnationality(code):
     while True:
         nationality = input("Enter tenant nationality: (M: Malaysian/N: non-Malaysian):\n")
         nationalityCheck = nationality
@@ -162,92 +167,53 @@ def getnationality():
             message(code)
     return nationality
 
-def getstartDate():
+def getstartDate(code):
    startDate = input("Enter Rental start date: (YYYY,MM,DD):\n")
 
    return startDate
 
-def getincome():
+def getincome(code):
    income = input("Enter tenant income range(RM):\n")
 
    return income
 
-def getrental():
+def getrental(code):
    rental = input("Enter tenant rental status(current/past)\n")
    return rental
 
 def message(code):
-   if code == 0:
-      print("Incorrect input.")
-   elif code == 1:
-      print("Incorrect data type present.")
-   elif code == 2:
-      print("Format error.")
-   elif code == 3:
-      print("Length error.")
-   elif code == 4:
-      print("Data not found.")
-   print("Please try again.")
+    x = "Error,"
+    y = "incorrect"
+    if code == 0:
+        print(x+y+" input.")
+    elif code == 1:
+        print(x+y+" data type.")
+    elif code == 2:
+        print(x+y+" format.")
+    elif code == 3:
+        print(x+y+" length.")
+    elif code == 4:
+        print(x+"data not found.")
+    print("Please try again.")
 
 def tenantEntryForm(tenantList,n):           #Define tenantEntryForm function
+    code = None
     for i in range(n):
         #Get input for tenant data
-        name = getname()
-        gender = getgender()
-        pNum = getpNum()
-        nationality = getnationality()
-        startDate = getstartDate()
-        income = getincome()
-        rental = getrental()
+        name = getname(code)
+        gender = getgender(code)
+        pNum = getpNum(code)
+        nationality = getnationality(code)
+        startDate = getstartDate(code)
+        income = getincome(code)
+        rental = getrental(code)
         #Apply data to end of list 
         tenantList.append([name,gender,pNum,nationality,startDate,income,rental])
     #Return the list
     return tenantList
 
-#import datetime as dt
-#list = []
-#n=2
-#tenantEntryForm(list,n)
-#print(list)
-
-
-def checkSpecialCharacter():
-    specials= ["{","}","<",">","!","@","#","$","%","^","&","*","(",")","?",":",";","'","+","=","-","_","]","["]
-    specials.append('"')
-    print(specials[20])
-    return specials
-
-def ApartmentID(code,specials):
-   while True:
-      lenAparID = None ; notlowercase = None ; AparIDdash = None
-      ApartmentID = input("Apartment ID: ")
-      if len(ApartmentID)>26:
-         code = 2
-         message(code)
-         print("\nPlease follow the format as: A01-L10-R40 to A02-L01-R09,\nA stands for Apartment Block, L stands for Level, and R stands for Room (The length must have 11 characters long, including the dash -)")
-         continue
-      else:
-         lenAparID = 1
-      if ApartmentID[0:4:8].islower():
-         code=2
-         message(code)
-         print("\nMust contain uppercase, not lower case")
-         continue
-      else:
-         notlowercase = 3
-      if (ApartmentID[3] and ApartmentID[7] and ApartmentID[18] and ApartmentID[22]) == specials[20]:
-         AparIDdash = 4 
-      else:
-         code=2
-         message(code)
-         print("\nPlease include the dash inside the apartment ID")
-         continue
-      if lenAparID == 1 and notlowercase == 3 and AparIDdash == 4:
-         return ApartmentID
-      else:
-         continue
-
-code=None
-specials=checkSpecialCharacter()
-v = ApartmentID(code,specials)
-print(v)
+import datetime as dt
+list = []
+n=2
+tenantEntryForm(list,n)
+print(list)
