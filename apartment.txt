@@ -14,3 +14,4 @@ Medium Premium with attached bath / toilet (Single),Code: MP2,Dimensions: 160+ s
 En-Suite Single (Super Premium - Triple),Code: ESS3,Dimensions: 160+ sqft,Pricing: RM700,Number of Rooms: 20,Apartment ID: A02-L04-R01 to A02-L04-R41,
 En-Suite Single (Super Premium - Twin),Code: ESS2,Dimensions: 140+ sqft,Pricing: RM800,Number of Rooms: 20,Apartment ID: A02-L04-R01 to A02-L04-R41,
 En-Suite Twin (Super Premium),Code: EST2,Dimensions: 200+ sqft,Pricing: RM900,Number of Rooms: 20,Apartment ID: A02-L05-R01 to A02-L05-R41,
+New Room Info: Standard Room (Single),New Room Code: SR6,New Room Dimension in range (sqft): 900+ sqft,New Room Pricing: RM900,Number for the new room: 10,New room Apartment ID: A01-L06-R01 to A06-L06-R41,
