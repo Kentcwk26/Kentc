@@ -2,17 +2,17 @@ FUNCTION login()
     print("NEWLINE Welcome to Tenant Management System Login page. NEWLINE Please enter username and password to proceed.NEWLINE")
     chance=3
     WHILE chance>0
-        PRINT("Enter username:")
+        PRINT("Username:")
         GET username
-        PRINT("Enter password:")
+        PRINT("Password:")
         GET password
         OPEN "username.txt" IN READ AS userInfo
             userCheck = READ userInfo LINE-BY-LINE()
             FOR record in userCheck
-                listRecord = SPLIT record INTO LIST SEPARATED BY ","
+                listRecord = SPLIT record INTO LIST(",")
                 IF username == listRecord LOCATION 0 THEN
                     IF password == listRecord LOCATION 1 THEN
-                        print("NEWLINE Login successful NEWLINE")
+                        PRINT("NEWLINE Login successful NEWLINE")
                         IF (username == "john" AND password == "1234u-78") OR (username == "david" AND password == "55467913"):
                             masterKey = TRUE
                             UID = NONE
@@ -654,12 +654,7 @@ ENDFUNCTION
 
 FUNCTION searchInformation(listCode,num,details)
     DECLARE searchInformation AS INTEGER
-        IF listCode == "p" THEN
-        l="transaction.txt"
-    ELSEIF listCode=="a" THEN
-        l="Apartment.txt"
-    ELSE THEN
-        l="transaction.txt"
+    l = CALLFUNCTION listIdentifier(listCode)
     WHILE TRUE
         IF details THEN
             searchInformation == details

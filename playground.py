@@ -28,7 +28,7 @@
 #else:
 #    print("record doesnt exist")
 
-#FUNCTION tenantSearch(details):
+#FUNCTION tenantSearch(details):  REPLACED BY UPDATED searchInformation FUNCTION
 #    OPEN "tenant.txt" IN READ AS TSearch
 #        READ TSearch
 #        TSearch STRIP (",")
@@ -40,7 +40,7 @@
 #        ENDFOR
 #    CLOSEFILE
 #ENDFUNCTION
-#FUNCTION tenantRead()
+#FUNCTION tenantRead()  REPLACED BY UPDATED readFile FUNCTION
 #    OPEN (tenant.txt) IN READ AS fTenant
 #        tenantList = READ fTenant LINE-BY-LINE
 #        FOR record IN tenantList
@@ -51,7 +51,7 @@
 
 
 
-# searchInformation = input("Select and enter text to begin search: ")
+# searchInformation = input("Select and enter text to begin search: ") REPLACED BY UPDATED searchInformation FUNCTION
 # num=0
 # listCode="p"
 # if listCode == "p":
@@ -67,7 +67,7 @@
 #         if searchInformation in data[num:
 #             print("\n Results: \n",record)
 
-#def apartmentSearch(num):
+#def apartmentSearch(num):      REPLACED BY UPDATED searchInformation FUNCTION
 #    displaylist=[]
 #    with open ("Apartment.txt", "r") as Tread:
 #        acheck = Tread.readlines()
@@ -84,19 +84,45 @@
 #list= a.split(",")
 #print(list)
 
+#def apartmentExitProgram(code): SCRAPPED BECAUSE UNUSABLE
+#   if code:
+#      return True
+#   else:
+#      print("We are about to exit the program.\n[C]-Continue\nOther keys to exit")
+#      exit=input("Do you want to exit?\n")
+#      if exit in ["C","c"]:
+#         print("\Rerunning\n")
+#         return True
+#      else:
+#         print("\nExiting\n")
+#         return False
+
 def getname():
-    while True:
+    validity = True
+    code = None
+    while validity == True:
         name = input("Enter tenant name: Firstname Familyname Lastname \n")
-        nameCheck = name
-        nameCheck.split(" ")
-        for words in nameCheck:
+        nameList = name.split(" ")
+        print("Splitted into",nameList)
+        for words in nameList:
+            print("Checking",words)
             if words[0].isupper():
-                break
+                code = None
+                continue
+            else:
+                code = 2
+                message(code)
+        if code:
+            print("code has been assigned")
+            continue
         else:
-            code = 2
-            message(code)
-        return name
-        return False
+            retry = input("\n[R]-Retry,[E]-Exit:\n")
+            if retry in ["R","r"]:
+                continue
+            else:
+                validity = False
+    return name
+
 
 def getgender():
     gender = input("Enter tenant gender: (m/f):\n")
@@ -184,5 +210,41 @@ def tenantEntryForm(tenantList,n):           #Define tenantEntryForm function
 #tenantEntryForm(list,n)
 #print(list)
 
-v=getname()
+
+def checkSpecialCharacter():
+    specials= ["{","}","<",">","!","@","#","$","%","^","&","*","(",")","?",":",";","'","+","=","-","_","]","["]
+    specials.append('"')
+    print (specials.index("-"))
+    return specials
+
+def ApartmentID(code,specials):
+    while True:
+        lenAparID = None ; notlowercase = None ; AparIDdash = None
+        ApartmentID = input("Apartment ID: ")
+        if len(ApartmentID)>26:
+            code = 2
+            message(code)
+            print("\nPlease follow the format as: A01-L10-R40 to A02-L01-R09, A stands for Apartment Block, L stands for Level, and R stands for Room (The length must have 11 characters long, including the dash -)")
+            return False
+        else:
+            lenAparID = 1
+        if ApartmentID[0:4:8].islower():
+            code=2
+            message(code)
+            print("\nMust contain uppercase, not lower case")
+            return False
+        else:
+            notlowercase = 3
+        if ApartmentID[3:7] == specials[20]:
+            AparIDdash = 2
+            return False
+        print(lenAparID,notlowercase,AparIDdash)
+        if lenAparID == 1 and notlowercase == 3 and AparIDdash == 2:
+            return ApartmentID
+        else:
+            return False
+
+code=None
+specials=checkSpecialCharacter()
+v = ApartmentID(code,specials)
 print(v)
