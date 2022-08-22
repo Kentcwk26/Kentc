@@ -98,9 +98,8 @@
 #         return False
 
 def getname():
-    validity = True
     code = None
-    while validity == True:
+    while True:
         name = input("Enter tenant name: Firstname Familyname Lastname \n")
         nameList = name.split(" ")
         print("Splitted into",nameList)
@@ -113,16 +112,13 @@ def getname():
                 code = 2
                 message(code)
         if code:
-            print("code has been assigned")
-            continue
-        else:
-            retry = input("\n[R]-Retry,[E]-Exit:\n")
+            retry = input("Error was detected.\n[R]-Retry,[E]-Exit:\n")
             if retry in ["R","r"]:
                 continue
             else:
-                validity = False
-    return name
-
+                return name
+        else:
+            return name
 
 def getgender():
     gender = input("Enter tenant gender: (m/f):\n")
@@ -160,7 +156,7 @@ def getnationality():
         else: 
             code = 3
             message(code)
-    return nationality
+        return nationality
 
 def getstartDate():
    startDate = input("Enter Rental start date: (YYYY,MM,DD):\n")
@@ -204,50 +200,8 @@ def tenantEntryForm(tenantList,n):           #Define tenantEntryForm function
     #Return the list
     return tenantList
 
-#import datetime as dt
-#list = []
-#n=2
-#tenantEntryForm(list,n)
-#print(list)
-
-
-def checkSpecialCharacter():
-    specials= ["{","}","<",">","!","@","#","$","%","^","&","*","(",")","?",":",";","'","+","=","-","_","]","["]
-    specials.append('"')
-    print(specials[20])
-    return specials
-
-def ApartmentID(code,specials):
-   while True:
-      lenAparID = None ; notlowercase = None ; AparIDdash = None
-      ApartmentID = input("Apartment ID: ")
-      if len(ApartmentID)>26:
-         code = 2
-         message(code)
-         print("\nPlease follow the format as: A01-L10-R40 to A02-L01-R09,\nA stands for Apartment Block, L stands for Level, and R stands for Room (The length must have 11 characters long, including the dash -)")
-         continue
-      else:
-         lenAparID = 1
-      if ApartmentID[0:4:8].islower():
-         code=2
-         message(code)
-         print("\nMust contain uppercase, not lower case")
-         continue
-      else:
-         notlowercase = 3
-      if (ApartmentID[3] and ApartmentID[7] and ApartmentID[18] and ApartmentID[22]) == specials[20]:
-         AparIDdash = 4 
-      else:
-         code=2
-         message(code)
-         print("\nPlease include the dash inside the apartment ID")
-         continue
-      if lenAparID == 1 and notlowercase == 3 and AparIDdash == 4:
-         return ApartmentID
-      else:
-         continue
-
-code=None
-specials=checkSpecialCharacter()
-v = ApartmentID(code,specials)
-print(v)
+import datetime as dt
+list = []
+n=2
+tenantEntryForm(list,n)
+print(list)
