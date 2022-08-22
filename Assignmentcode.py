@@ -81,30 +81,35 @@ def tenantEntryForm(listCode):          #Define tenantEntryForm function
       appendFile(tenantList,listCode)
 
 def getname():
-   validity = True
-   code = None
-   while validity == True:
-      name = input("Enter tenant name: Firstname Familyname Lastname \n")
-      nameList = name.split(" ")
-      print("Splitted into",nameList)
-      for words in nameList:
-         print("Checking",words)
-         if words[0].isupper():
-            code = None
-            continue
+   while True:
+      code = None
+      name = input("Format: Name Name.....\nEnter tenant fullname:\n")
+      if type(name) != int:
+         nameList = name.split(" ")
+         if len(nameList) >= 2:
+               for words in nameList:
+                  print("Checking",words)
+                  if words[0].islower():
+                     code = 2
+                     message(code)
+                     break
+                  else:
+                     continue
          else:
-            code = 2
-            message(code)
+               code = 3
+               message(code)
+      else:
+         code = 1
+         message(code)
       if code:
-         print("code has been assigned")
+         print("Error was detected.\n")
+      else:
+         print("No errors detected.\n")
+      retry = input("[R]-Retry,[Any other key]-Exit using "+name+"\n")
+      if retry in ["R","r"]:
          continue
       else:
-         retry = input("\n[R]-Retry,[E]-Exit:\n")
-         if retry in ["R","r"]:
-            continue
-         else:
-            validity = False
-   return name
+         return name
 
 def getgender():
    gender = input("Enter tenant gender: (m/f):\n")

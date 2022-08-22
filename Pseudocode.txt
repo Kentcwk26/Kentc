@@ -88,21 +88,36 @@ ENDFUNCTION
 
 FUNCTION getname()
     WHILE TRUE
-        PRINT("Enter tenant name: Firstname Familyname Lastname"NEWLINE)
+        code = NONE
+        PRINT("Format: Name Name..... NEWLINE Enter tenant fullname: NEWLINE")
         GET name
-        nameCheck = name
-        SPLIT nameCheck INTO LIST WITH ","
-        FOR words IN nameCheck
-            IF words LOCATION 0 IS UPPERCASE THEN
-                BREAKLOOP
+        IF DATATYPE(name) != INTEGER THEN
+            nameList = name.split(" ")
+            IF LENGTH(nameList) >= 2 THEN
+                FOR words IN nameList
+                    PRINT("Checking",words)
+                    IF words LOCATION 0 ISLOWERCASE THEN
+                        code = 2
+                        CALLFUNCTION message(code)
+                        BREAKLOOP
+                    ELSE THEN
+                        CONTINUELOOP
             ELSE THEN
-                code = 2
+                code = 3
                 CALLFUNCTION message(code)
-            ENDIF
-        ENDFOR
-    ENDWHILE
-    RETURN name
-ENDFUNCTION
+        ELSE THEN
+            code = 1
+            CALLFUNCTION message(code)
+        IF code THEN
+            PRINT("Error was detected. NEWLINE")
+        ELSE THEN
+            PRINT("No errors detected. NEWLINE")
+        PRINT("[R]-Retry,[Any other key]-Exit using "+name+" NEWLINE")
+        GET retry
+        IF retry IN ["R","r"] THEN
+            CONTINUELOOP
+        ELSE THEN
+            RETURN name
 
 FUNCTION getgender()
     PRINT("Enter tenant gender: (m/f):NEWLINE")
