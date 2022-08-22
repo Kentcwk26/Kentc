@@ -214,35 +214,38 @@ def tenantEntryForm(tenantList,n):           #Define tenantEntryForm function
 def checkSpecialCharacter():
     specials= ["{","}","<",">","!","@","#","$","%","^","&","*","(",")","?",":",";","'","+","=","-","_","]","["]
     specials.append('"')
-    print (specials.index("-"))
+    print(specials[20])
     return specials
 
 def ApartmentID(code,specials):
-    while True:
-        lenAparID = None ; notlowercase = None ; AparIDdash = None
-        ApartmentID = input("Apartment ID: ")
-        if len(ApartmentID)>26:
-            code = 2
-            message(code)
-            print("\nPlease follow the format as: A01-L10-R40 to A02-L01-R09, A stands for Apartment Block, L stands for Level, and R stands for Room (The length must have 11 characters long, including the dash -)")
-            return False
-        else:
-            lenAparID = 1
-        if ApartmentID[0:4:8].islower():
-            code=2
-            message(code)
-            print("\nMust contain uppercase, not lower case")
-            return False
-        else:
-            notlowercase = 3
-        if ApartmentID[3:7] == specials[20]:
-            AparIDdash = 2
-            return False
-        print(lenAparID,notlowercase,AparIDdash)
-        if lenAparID == 1 and notlowercase == 3 and AparIDdash == 2:
-            return ApartmentID
-        else:
-            return False
+   while True:
+      lenAparID = None ; notlowercase = None ; AparIDdash = None
+      ApartmentID = input("Apartment ID: ")
+      if len(ApartmentID)>26:
+         code = 2
+         message(code)
+         print("\nPlease follow the format as: A01-L10-R40 to A02-L01-R09,\nA stands for Apartment Block, L stands for Level, and R stands for Room (The length must have 11 characters long, including the dash -)")
+         continue
+      else:
+         lenAparID = 1
+      if ApartmentID[0:4:8].islower():
+         code=2
+         message(code)
+         print("\nMust contain uppercase, not lower case")
+         continue
+      else:
+         notlowercase = 3
+      if (ApartmentID[3] and ApartmentID[7] and ApartmentID[18] and ApartmentID[22]) == specials[20]:
+         AparIDdash = 4 
+      else:
+         code=2
+         message(code)
+         print("\nPlease include the dash inside the apartment ID")
+         continue
+      if lenAparID == 1 and notlowercase == 3 and AparIDdash == 4:
+         return ApartmentID
+      else:
+         continue
 
 code=None
 specials=checkSpecialCharacter()
