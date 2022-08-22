@@ -12,7 +12,7 @@ def login():                                   #define the login function
             listRecord = record.split(",")
             if username == listRecord[0]:
                if password == listRecord[1]:
-                  print("\n- Login successful -\n")
+                  print("\n- Login successful -")
                   #check for admin credentials
                   if (username == "john" and password == "1234u-78") or (username == "david" and password == "55467913"):
                      masterKey = True        #activate masterKey
@@ -81,35 +81,30 @@ def tenantEntryForm(listCode):          #Define tenantEntryForm function
       appendFile(tenantList,listCode)
 
 def getname():
-   while True:
-      code = None
-      name = input("Format: Name Name.....\nEnter tenant fullname:\n")
-      if type(name) != int:
-         nameList = name.split(" ")
-         if len(nameList) >= 2:
-               for words in nameList:
-                  print("Checking",words)
-                  if words[0].islower():
-                     code = 2
-                     message(code)
-                     break
-                  else:
-                     continue
+   validity = True
+   code = None
+   while validity == True:
+      name = input("Enter tenant name: Firstname Familyname Lastname \n")
+      nameList = name.split(" ")
+      print("Splitted into",nameList)
+      for words in nameList:
+         print("Checking",words)
+         if words[0].isupper():
+            code = None
+            continue
          else:
-               code = 3
-               message(code)
-      else:
-         code = 1
-         message(code)
+            code = 2
+            message(code)
       if code:
-         print("Error was detected.\n")
-      else:
-         print("No errors detected.\n")
-      retry = input("[R]-Retry,[Any other key]-Exit using "+name+"\n")
-      if retry in ["R","r"]:
+         print("code has been assigned")
          continue
       else:
-         return name
+         retry = input("\n[R]-Retry,[E]-Exit:\n")
+         if retry in ["R","r"]:
+            continue
+         else:
+            validity = False
+   return name
 
 def getgender():
    gender = input("Enter tenant gender: (m/f):\n")
@@ -165,15 +160,15 @@ def getrental():
 
 def message(code):
    if code == 0:
-      print("Incorrect input.")
+      print("\nIncorrect input.")
    elif code == 1:
-      print("Incorrect data type present.")
+      print("\nIncorrect data type present.")
    elif code == 2:
-      print("Format error.")
+      print("\nFormat error.")
    elif code == 3:
-      print("Length error.")
+      print("\nLength error.")
    elif code == 4:
-      print("Data not found.")
+      print("\nData not found.")
    print("Please try again.")
 
 def checkSpecialCharacter():
@@ -244,24 +239,25 @@ def modifyData(code):
       dataInput=int(input('Please select which operation: '))
 
       if dataInput==1:
-         print("\nAdd Data\n")
+         print("\nAdd Data")
          apartmentAddData(code)
 
       elif dataInput==2:
-         print("\nEdit Data\n")
+         print("\nEdit Data")
          apartmentEditData()
 
       elif dataInput==3:
-         print("\nDelete Data\n")
+         print("\nDelete Data")
          apartmentDeleteData()
 
       elif dataInput==4:
-         print("Exit")
+         print("\nExit")
          return False
 
       else:
          code=2
          message(code)
+         print("\n-Apartment-")
          return True
 
 def newApartmenttype(code):
@@ -402,7 +398,7 @@ def searchBox():                             #Define search function
 
       elif option == 2:
          listCode = "p"
-         opt = input("\n[R]-Reference number,[D]-Transaction date,[T]-TenantID,[A]-Apartment code,[S]-Amount:\n ")
+         opt = input("\n[R]-Reference number,[D]-Transaction date,[T]-TenantID,[A]-Apartment code,[S]-Amount: ")
          if opt in ["R","r"]:
             num = 0
          elif opt in ["D","d"]:
@@ -419,7 +415,7 @@ def searchBox():                             #Define search function
       
       elif option == 3 :
          listCode = "t"
-         opt = input("\n[N]-Name,[G]-Gender,[P]-Phone number,[R]-Nationality,[D]-Rental start date,[I]-Income,[S]-Tenant status")
+         opt = input("\n[N]-Name,[G]-Gender,[P]-Phone number,[R]-Nationality,[D]-Rental start date,[I]-Income,[S]-Tenant status: ")
          if opt in ["N","n"]:
             num = 0
          elif opt in ["G","g"]:
@@ -481,12 +477,12 @@ def searchInformation(listCode,num,details):                  #Define searchinfo
 def menu(masterKey,UID):                                  #Define menu function
    print("\nWelcome, you are now entering Tenant Management System")
    while True:
-      print("\n[S]-Search box\n\nReview information about:\n")
+      print("\n[S] - Search box\n\nReview information about:\n")
 
       if masterKey == False:
-         print("[A]-Apartment\n[P]-Transaction\n[T]-My Tenant details\n\n[D]-Print my House and Tenant Details\n[E]-Exit\n")
+         print("[A] - Apartment\n[P] - Transaction\n[T] - My Tenant details\n\n[D] - Print my House and Tenant Details\n[E] - Exit\n")
       else:
-         print("[A]-Apartment\n[P]-Transaction\n[T]-Tenant\n[D]-Print Specific House & Tenant Details\n[I]-Inquiry of Past Tenant Details\n[L]-Login History\n[E]- Exit\n")
+         print("[A] - Apartment\n[P] - Transaction\n[T] - Tenant\n[D] - Print Specific House & Tenant Details\n[I] - Inquiry of Past Tenant Details\n[L] - Login History\n[E] - Exit\n")
 
       opt=input("Please select which operation that you want to do: ")
 
@@ -520,8 +516,9 @@ def menu(masterKey,UID):                                  #Define menu function
          return False
 
       else:
-         code = 3
+         code = 0
          message(code)
+         print("\n--------------------------------------------------\n\nWelcome back to Tenant Management System")
 
 
 login()
