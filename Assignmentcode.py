@@ -80,7 +80,7 @@ def tenantEntryForm(listCode):          #Define tenantEntryForm function
       #Return the list
       appendFile(tenantList,listCode)
 
-def getname(code):
+def getname():
    while True:
       code = None
       name = input("Format: Name Name.....\nEnter tenant fullname:\n")

@@ -97,7 +97,7 @@
 #         print("\nExiting\n")
 #         return False
 
-def getname(code):
+def getname():
     while True:
         code = None
         name = input("Format: Name Name.....\nEnter tenant fullname:\n")
@@ -200,7 +200,7 @@ def tenantEntryForm(tenantList,n):           #Define tenantEntryForm function
     code = None
     for i in range(n):
         #Get input for tenant data
-        name = getname(code)
+        name = getname()
         gender = getgender(code)
         pNum = getpNum(code)
         nationality = getnationality(code)
