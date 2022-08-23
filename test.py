@@ -172,7 +172,7 @@ def message(code):
    print("Please try again.")
 
 def checkSpecialCharacter():
-    specials= ["{","}","<",">","!","@","#","$","%","^","&","*","(",")","?",":",";","'","+","=","-","_","]","["]
+    specials = ["{","}","<",">","!","@","#","$","%","^","&","*","(",")","?",":",";","'","+","=","-","_","]","["]
     specials.append('"')
     return specials
 
@@ -262,13 +262,13 @@ def modifyData(code):
 def newApartmenttype(code,specials):
    nonumeric=0 ; nospecialcharacter=0 ; apartmentinfoemptymessage = 0
    while True:
-      Newapartmentinfo=input("New apartment Info: ")
-      for a in range(0,len(Newapartmentinfo)):
-         if len(Newapartmentinfo) <= 0:
+      newApartmentInfo=input("New apartment Info: ")
+      for a in range(0,len(newApartmentInfo)):
+         if len(newApartmentInfo) <= 0:
             apartmentinfoemptymessage = 1
-         if Newapartmentinfo.isalpha():
+         if newApartmentInfo.isalpha():
             nonumeric = 1
-         if Newapartmentinfo != specials:
+         if newApartmentInfo != specials:
             nospecialcharacter = 1
          if nonumeric != 1 and nospecialcharacter != 1 and apartmentinfoemptymessage != 1:
             code=1
@@ -277,30 +277,30 @@ def newApartmenttype(code,specials):
             return True
          else:
             continue
-      return False
+      return newApartmentInfo
 
 def newApartmentCode(code):
    uppercase = 0 ; number = 0
    while True:
-      newApartmentcode = input("New Room Code: ")
-      for x in range(0,len(newApartmentcode)):
-         if newApartmentcode[0].isupper() and newApartmentcode.isalnum() and len(newApartmentcode)!=0:
+      newApartmentCode = input("New Room Code: ")
+      for x in range(0,len(newApartmentCode)):
+         if newApartmentCode[0].isupper() and newApartmentCode.isalnum() and len(newApartmentCode)!=0:
             uppercase = 1
             number = 1
-         if uppercase != 1 and number != 1 and len(newApartmentcode)==0:
+         if uppercase != 1 and number != 1 and len(newApartmentCode)==0:
             code = 2
             message(code)
             print("- Please fill in the new Apartment Code. Apartment Code must contain uppercase and number only in order to differentiate -")
             return True
          else:
             continue
-      return False
+      return newApartmentCode
 
 def newApartmentDimension(code):
    validApartmentDimension = 0
    while True:
-      newapartmentDimension=input("New Room Dimension (Range): ")
-      if len(newapartmentDimension) >= 3 and newapartmentDimension.isdigit():
+      newApartmentDimension=input("New Room Dimension (Range): ")
+      if len(newApartmentDimension) >= 3 and newApartmentDimension.isdigit():
          validApartmentDimension = 1
       if validApartmentDimension != 1:
          code=0
@@ -308,7 +308,7 @@ def newApartmentDimension(code):
          print("- Room dimension must consist number and must have at least 100 or more sqft -\n")
          return True
       else:
-         return False
+         return newApartmentDimension
 
 def newApartmentID(code,specials):
    while True:
@@ -338,7 +338,7 @@ def newApartmentID(code,specials):
       if lennewAparID == 1 and notlowercase == 3 and newAparIDdash == 4:
          return False
       else:
-         return True
+         return newApartmentID
 
 def apartmentAddData(code):
    specials = checkSpecialCharacter()
@@ -358,7 +358,7 @@ def apartmentAddData(code):
             newapartmentdimension=newApartmentDimension(code)
             newapartmentpricing=int(input("New Room Pricing in RM: "))
             newapartmentnumberofrooms=int(input("Number of new rooms: "))
-            newapartmentID=newApartmentID(code,specials)
+            newApartmentID=newApartmentID(code,specials)
             adddata.append("New Room Info: " + str(newapartment))
             adddata.append("New Room Code: " + str(newapartmentcode))
             adddata.append("New Room Dimension in range (sqft): " + str(newapartmentdimension) + '+ sqft')
