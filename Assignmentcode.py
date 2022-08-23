@@ -81,30 +81,35 @@ def tenantEntryForm(listCode):          #Define tenantEntryForm function
       appendFile(tenantList,listCode)
 
 def getname():
-   validity = True
-   code = None
-   while validity == True:
-      name = input("Enter tenant name: Firstname Familyname Lastname \n")
-      nameList = name.split(" ")
-      print("Splitted into",nameList)
-      for words in nameList:
-         print("Checking",words)
-         if words[0].isupper():
-            code = None
-            continue
+   while True:
+      code = None
+      name = input("Format: Name Name.....\nEnter tenant fullname:\n")
+      if type(name) != int:
+         nameList = name.split(" ")
+         if len(nameList) >= 2:
+               for words in nameList:
+                  print("Checking",words)
+                  if words[0].islower():
+                     code = 2
+                     message(code)
+                     break
+                  else:
+                     continue
          else:
-            code = 2
+            code = 3
             message(code)
+      else:
+         code = 1
+         message(code)
       if code:
-         print("code has been assigned")
+         print("Error was detected.\n")
+      else:
+         print("No errors detected.\n")
+      retry = input("[R]-Retry,[Any other key]-Exit using "+name+"\n")
+      if retry in ["R","r"]:
          continue
       else:
-         retry = input("\n[R]-Retry,[E]-Exit:\n")
-         if retry in ["R","r"]:
-            continue
-         else:
-            validity = False
-   return name
+         return name
 
 def getgender():
    gender = input("Enter tenant gender: (m/f):\n")
@@ -172,9 +177,9 @@ def message(code):
    print("Please try again.")
 
 def checkSpecialCharacter():
-    specials= ["{","}","<",">","!","@","#","$","%","^","&","*","(",")","?",":",";","'","+","=","-","_","]","["]
-    specials.append('"')
-    return specials
+   specials= ["{","}","<",">","!","@","#","$","%","^","&","*","?",":",";","'","+","=","-","_","]","["]
+   specials.append('"')
+   return specials
 
 def apartment(masterKey,code):                        #Define apartment function
    
@@ -236,22 +241,22 @@ def apartment(masterKey,code):                        #Define apartment function
 def modifyData(code):
   while True:
       print("\n1. Add data\n2. Edit Data\n3. Delete Data\n4. Exit\n")
-      dataInput=int(input('Please select which operation: '))
+      dataInput=int(input('Please select which operation to perform task (1-4): '))
 
       if dataInput==1:
-         print("\nAdd Data")
+         print("\n- Add Data -")
          apartmentAddData(code)
 
       elif dataInput==2:
-         print("\nEdit Data")
+         print("\n- Edit Data -")
          apartmentEditData()
 
       elif dataInput==3:
-         print("\nDelete Data")
+         print("\n- Delete Data -")
          apartmentDeleteData()
 
       elif dataInput==4:
-         print("\nExit")
+         print("\n- Exit -")
          return False
 
       else:
@@ -260,84 +265,106 @@ def modifyData(code):
          print("\n-Apartment-")
          return True
 
-def newApartmenttype(code):
+def newApartmenttype(code,specials):
+   nonumeric=0 ; nospecialcharacter=0 ; apartmentinfoemptymessage = 0
    while True:
-      Newapartmentinfo=input("New apartment Info:")
-      for i in range(0,len(Newapartmentinfo)):
-         if type(Newapartmentinfo)!= str:
-            nonumeric = 0
-            nospecialcharacter = 0
-         if nonumeric == 0 and nospecialcharacter == 0:
-            continue
-         else:
+      newApartmentInfo=input("New apartment Info: ")
+      for a in range(0,len(newApartmentInfo)):
+         if len(newApartmentInfo) <= 0:
+            apartmentinfoemptymessage = 1
+         if newApartmentInfo.isalpha():
+            nonumeric = 1
+         if newApartmentInfo != specials:
+            nospecialcharacter = 1
+         if nonumeric != 1 and nospecialcharacter != 1 and apartmentinfoemptymessage != 1:
             code=1
             message(code)
-
-def ApartmentCode(code):
-   uppercase = 0 ; number = 0
-   while True:
-      Apartmentcode = input("Code: ")
-      for x in range(0,len(Apartmentcode)):
-         if Apartmentcode[0].isupper() and Apartmentcode.isalnum():
-            uppercase += 1
-            number += 1
-         elif uppercase < 0 and number < 0:
-            code = 2
-            message(code)
-            print("\n- Apartment Code must contain uppercase and number in order to differentiate -")
+            print("- Apartment info does not contain numbers and special characters. -")
+            return True
          else:
             continue
-      return Apartmentcode
+      return newApartmentInfo
 
-def ApartmentID(code,specials):
+def newApartmentCode(code):
+   uppercase = 0 ; number = 0
    while True:
-      lenAparID = None ; notlowercase = None ; AparIDdash = None
-      ApartmentID = input("Apartment ID: ")
-      if len(ApartmentID)>26:
+      newApartmentCode = input("New Room Code: ")
+      for x in range(0,len(newApartmentCode)):
+         if newApartmentCode[0].isupper() and newApartmentCode.isalnum() and len(newApartmentCode)!=0:
+            uppercase = 1
+            number = 1
+         if uppercase != 1 and number != 1 and len(newApartmentCode)==0:
+            code = 2
+            message(code)
+            print("- Please fill in the new Apartment Code. Apartment Code must contain uppercase and number only in order to differentiate -")
+            return True
+         else:
+            continue
+      return newApartmentCode
+
+def newApartmentDimension(code):
+   validApartmentDimension = 0
+   while True:
+      newApartmentDimension=input("New Room Dimension (Range): ")
+      if len(newApartmentDimension) >= 3 and newApartmentDimension.isdigit():
+         validApartmentDimension = 1
+      if validApartmentDimension != 1:
+         code=0
+         message(code)
+         print("- Room dimension must consist number and must have at least 100 or more sqft -\n")
+         return True
+      else:
+         return newApartmentDimension
+
+def newApartmentID(code,specials):
+   while True:
+      lennewAparID = 0 ; notlowercase = 0 ; newAparIDdash = 0
+      newApartmentID = input("New Room Apartment ID: ")
+      if len(newApartmentID)>26 or len(newApartmentID)<1:
          code = 2
          message(code)
-         print("\nPlease follow the format as: A01-L10-R40 to A02-L01-R09,\nA stands for Apartment Block, L stands for Level, and R stands for Room (The length must have 11 characters long, including the dash -)")
-         continue
+         print("- Please follow the format as: A01-L10-R40 to A02-L01-R09 -\n - A stands for Apartment Block, L stands for Level, and R stands for Room (The length must have 11 characters long, including the dash -) -")
+         return True
       else:
-         lenAparID = 1
-      if ApartmentID[0:4:8].islower():
+         lennewAparID = 1
+      if newApartmentID[0:4:8].islower():
          code=2
          message(code)
-         print("\nMust contain uppercase, not lower case")
-         continue
+         print("- Must contain uppercase, not lower case -")
+         return True
       else:
          notlowercase = 3
-      if (ApartmentID[3] and ApartmentID[7] and ApartmentID[18] and ApartmentID[22]) == specials[20]:
-         AparIDdash = 4 
+      if (newApartmentID[3] and newApartmentID[7] and newApartmentID[18] and newApartmentID[22]) == specials[20]:
+         newAparIDdash = 4 
       else:
          code=2
          message(code)
          print("\nPlease include the dash inside the apartment ID")
-         continue
-      if lenAparID == 1 and notlowercase == 3 and AparIDdash == 4:
-         return ApartmentID
+         return True
+      if lennewAparID == 1 and notlowercase == 3 and newAparIDdash == 4:
+         return False
       else:
-         continue
+         return newApartmentID
 
 def apartmentAddData(code):
    specials = checkSpecialCharacter()
    while True:
-      adddatanum = int(input('Dear admin, how many records(s) that you decide to add? '))
-      if adddatanum < 1:
+      adddatanum = int(input('\nDear admin, how many records that you decide to add? '))
+      if adddatanum == 0:
          code=0
          message(code)
-         print("Error, cannot insert zero records")
+         print("- Error, cannot insert zero records -")
          return True
       else:
          adddata=[]
          print("\nNow, you are required to enter new data\n")
          for adddatanum in range(0,adddatanum):
-            newapartment=input("Apartment: ")
-            newapartmentcode=ApartmentCode(code)
+            newapartment=newApartmenttype(code,specials)
+            newapartmentcode=newApartmentCode(code,specials)
             newapartmentdimension=int(input("Dimension (Range): "))
             newapartmentpricing=int(input("Pricing in RM: "))
             newapartmentnumberofrooms=int(input("Number of rooms: "))
-            newapartmentID=ApartmentID(code,specials)
+            newapartmentID=newApartmentID(code,specials)
             adddata.append("New Room Info: "+newapartment)
             adddata.append("New Room Code: "+newapartmentcode)
             adddata.append("New Room Dimension in range (sqft): "+str(newapartmentdimension)+'+ sqft')

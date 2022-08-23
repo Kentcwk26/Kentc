@@ -98,25 +98,33 @@
 #         return False
 
 def getname():
-    code = None
     while True:
-        name = input("Enter tenant name: Firstname Familyname Lastname \n")
-        nameList = name.split(" ")
-        print("Splitted into",nameList)
-        for words in nameList:
-            print("Checking",words)
-            if words[0].isupper():
-                code = None
-                continue
+        code = None
+        name = input("Format: Name Name.....\nEnter tenant fullname:\n")
+        if type(name) != int:
+            nameList = name.split(" ")
+            if len(nameList) >= 2:
+                for words in nameList:
+                    print("Checking",words)
+                    if words[0].islower():
+                        code = 2
+                        message(code)
+                        break
+                    else:
+                        continue
             else:
-                code = 2
+                code = 3
                 message(code)
+        else:
+            code = 1
+            message(code)
         if code:
-            retry = input("Error was detected.\n[R]-Retry,[E]-Exit:\n")
-            if retry in ["R","r"]:
-                continue
-            else:
-                return name
+            print("Error was detected.\n")
+        else:
+            print("No errors detected.\n")
+        retry = input("[R]-Retry,[Any other key]-Exit using "+name+"\n")
+        if retry in ["R","r"]:
+            continue
         else:
             return name
 
