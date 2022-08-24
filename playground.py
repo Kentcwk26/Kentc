@@ -96,10 +96,20 @@
 #      else:
 #         print("\nExiting\n")
 #         return False
+def gettenantID(masterKey):
+   if masterKey == False:
+    #fetch existing UID
+      with open("user.txt","r") as uRead:
+         userRecord = uRead.read().split(",")
+         return userRecord[2]
+   else:
+    # generate new UID
+      UID = dt.datetime.now().strftime("%d%m%Y%H%M%S%f")
+      return UID
 
-def getname():
+def getname(code):                  #define getname()
+    specials = specialCharacterList()
     while True:
-        code = None
         name = input("Format: Name Name.....\nEnter tenant fullname:\n")
         if type(name) != int:
             nameList = name.split(" ")
@@ -111,7 +121,14 @@ def getname():
                         message(code)
                         break
                     else:
-                        continue
+                        if any(specials):
+                            code = 2
+                            message(code)
+                            print(specials)
+                            break
+                        else:
+                            code = None
+                            continue 
             else:
                 code = 3
                 message(code)
@@ -128,27 +145,42 @@ def getname():
         else:
             return name
 
-def getgender():
-    gender = input("Enter tenant gender: (m/f):\n")
-    genderCheck = gender
-    if len(genderCheck)== 1:
-        if type(genderCheck) != str:
-            code = 1
+def getgender(code):
+    while True:
+        gender = input("Format: M/F\nEnter tenant gender:\n")
+        genderCheck = gender
+        if len(genderCheck)== 1:
+            if genderCheck.isdigit():
+                code = 1
+                message(code)
+            else:
+                code = None
+        else: 
+            code = 3
             message(code)
-    else: 
-        code = 3
-        message(code)
-    return gender
-
-def getpNum():
-    pNum = input("Enter tenant phone number: (############):\n")
-    pNumCheck = pNum
-    for digit in pNumCheck:
-        if type(digit) == int:
+        if code:
+            print("Error was detected.\n")
+        else:
+            print("No errors detected.\n")
+        retry = input("[R]-Retry,[Any other key]-Exit using "+gender+"\n")
+        if retry in ["R","r"]:
             continue
         else:
-            code = 1
-            message(code)
+            return gender.isupper()
+
+def getpNum(code):
+    pNum = input("Format: ############\nEnter tenant phone number:\n")
+    pNumCheck = pNum
+    if 6 > len(pNumCheck) > 16:
+        for digit in pNumCheck:
+            if digit.isdigit():
+                continue
+            else:
+                code = 1
+                message(code)
+    else:
+        code = 3
+        message(code)
     return pNum
 
 def getnationality():
@@ -156,15 +188,14 @@ def getnationality():
         nationality = input("Enter tenant nationality: (M: Malaysian/N: non-Malaysian):\n")
         nationalityCheck = nationality
         if len(nationalityCheck) == 1:
-            if type(nationalityCheck) == str:
-                return False
+            if nationalityCheck.isdigit():
+                return nationality.upper()
             else:
                 code = 1
                 message(code)
         else: 
             code = 3
             message(code)
-        return nationality
 
 def getstartDate():
    startDate = input("Enter Rental start date: (YYYY,MM,DD):\n")
@@ -181,35 +212,44 @@ def getrental():
    return rental
 
 def message(code):
+   x,y,z = "Error,","Incorrect ","Please try again."
    if code == 0:
-      print("Incorrect input.")
+      print(x+y+"input."+z)
    elif code == 1:
-      print("Incorrect data type present.")
+      print(x+y+"data type present.")
    elif code == 2:
-      print("Format error.")
+      print(x+y+"Format.")
    elif code == 3:
-      print("Length error.")
+      print(x+y+"Length.")
    elif code == 4:
-      print("Data not found.")
-   print("Please try again.")
+      print(x+"data not found.")
+   elif code == 5:
+      print(x+"zero input")
+
+def specialCharacterList():
+   return['"',"{","}","<",">","!","@","#","$","%","^","&","*","?",":",";","'","+","=","-","_","]","["]
 
 def tenantEntryForm(tenantList,n):           #Define tenantEntryForm function
-    for i in range(n):
+    errorCode = None
+    for tenantList in range(n):
         #Get input for tenant data
-        name = getname()
-        gender = getgender()
+        UID  = gettenantID(masterKey)
+        name = getname(errorCode)
+        gender = getgender(errorCode)
         pNum = getpNum()
         nationality = getnationality()
         startDate = getstartDate()
         income = getincome()
         rental = getrental()
         #Apply data to end of list 
-        tenantList.append([name,gender,pNum,nationality,startDate,income,rental])
+        tenantList = [name,gender,pNum,nationality,startDate,income,rental]
     #Return the list
     return tenantList
 
 import datetime as dt
-list = []
-n=2
-tenantEntryForm(list,n)
-print(list)
+masterKey=True
+code=None
+#n=2
+#tenantEntryForm(list,n)
+#print(list)
+#getname(code)

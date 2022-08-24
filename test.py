@@ -40,14 +40,14 @@ def appendFile(list,listCode):
    with open (listIdentifier(listCode), "a") as fAppend:
       for item in list:
          fAppend.write(item)
-         fAppend.write(",")
+         fAppend.write(", ")
       fAppend.write("\n")
 
 def readFile(listCode):
    with open (listIdentifier(listCode),"r") as fRead:
       string = fRead.readlines()
       for record in string:
-            stripped = record.rstrip("\n").rstrip(",")
+            stripped = record.rstrip("\n").rstrip(", ")
             splitRecord = stripped.split(",")
             print(splitRecord)
 
@@ -169,12 +169,14 @@ def message(code):
       print("\nLength error.")
    elif code == 4:
       print("\nData not found.")
+   elif code == 5:
+      print("\nZero input")
    print("Please try again.")
 
 def checkSpecialCharacter():
-    specials = ["{","}","<",">","!","@","#","$","%","^","&","*","(",")","?",":",";","'","+","=","-","_","]","["]
-    specials.append('"')
-    return specials
+   specials = ["{","}","<",">","!","@","#","$","%","^","&","*","?",":",";","'","'","+","=","-","_","]","[","~","`"]
+   specials.append('"')
+   return specials
 
 def apartment(masterKey,code):                        #Define apartment function
    
@@ -223,8 +225,8 @@ def apartment(masterKey,code):                        #Define apartment function
    with open("Apartment.txt","w") as Ahandler:
       for item in record:
          for data in item:
-               Ahandler.write(data)
-               Ahandler.write(",")
+            Ahandler.write(data)
+            Ahandler.write(",")
          Ahandler.write("\n")
 
    if masterKey==True:
@@ -260,41 +262,60 @@ def modifyData(code):
          return True
 
 def newApartmenttype(code,specials):
-   nonumeric=0 ; nospecialcharacter=0 ; apartmentinfoemptymessage = 0
+   nonumeric=0 ; nospecialcharacter=0 ; emptymessage = 0
    while True:
-      newApartmentInfo=input("New apartment Info: ")
-      for a in range(0,len(newApartmentInfo)):
-         if len(newApartmentInfo) <= 0:
-            apartmentinfoemptymessage = 1
-         if newApartmentInfo.isalpha():
-            nonumeric = 1
-         if newApartmentInfo != specials:
-            nospecialcharacter = 1
-         if nonumeric != 1 and nospecialcharacter != 1 and apartmentinfoemptymessage != 1:
-            code=1
-            message(code)
-            print("- Apartment info does not contain numbers and special characters. -")
-            return True
-         else:
-            continue
-      return newApartmentInfo
+      newApartmentInfo=input("New room Info: ")
+      if len(newApartmentInfo) == 0:
+         code=5
+         message(code)
+         print("- Please fill in the new room info -\n")
+         return True
+      else:
+         emptymessage = 0
+      if len(newApartmentInfo) <= 1:
+         code=3
+         message(code)
+         print("- Apartment info does not short information name -\n")
+         return True
+      if any(location.isdigit() for location in newApartmentInfo):
+         code=0
+         message(code)
+         print("- New apartment info does not contain number(s) -\n")
+         return True
+      else:
+         nonumeric = 1
+      for location in newApartmentInfo:
+         for character in specials:
+            if location == character:
+               nospecialcharacter = 0
+               code = 0
+               message(code)
+               print("- New apartment info does not have special character(s) -\n")
+               return True
+            else:
+               nospecialcharacter = 1
+      if nonumeric == 1 and nospecialcharacter == 1 and emptymessage == 0:
+         return newApartmentInfo
+      else:
+         code=1
+         message(code)
+         print("- Apartment info does not contain numbers and special characters -")
+         return True
 
 def newApartmentCode(code):
-   uppercase = 0 ; number = 0
    while True:
+      uppercase = 0 ; number = 0
       newApartmentCode = input("New Room Code: ")
-      for x in range(0,len(newApartmentCode)):
-         if newApartmentCode[0].isupper() and newApartmentCode.isalnum() and len(newApartmentCode)!=0:
-            uppercase = 1
-            number = 1
-         if uppercase != 1 and number != 1 and len(newApartmentCode)==0:
-            code = 2
-            message(code)
-            print("- Please fill in the new Apartment Code. Apartment Code must contain uppercase and number only in order to differentiate -")
-            return True
-         else:
-            continue
-      return newApartmentCode
+      if newApartmentCode[0].isupper() and newApartmentCode.isalnum() and len(newApartmentCode)!=0:
+         uppercase = 1
+         number = 1
+      if uppercase != 1 and number != 1 and len(newApartmentCode)==0:
+         code = 2
+         message(code)
+         print("- Please fill in the new Apartment Code. Apartment Code must contain uppercase and number only in order to differentiate -")
+         return True
+      else:
+         return newApartmentCode
 
 def newApartmentDimension(code):
    validApartmentDimension = 0
@@ -336,9 +357,9 @@ def newApartmentID(code,specials):
          print("\nPlease include the dash inside the apartment ID")
          return True
       if lennewAparID == 1 and notlowercase == 3 and newAparIDdash == 4:
-         return False
-      else:
          return newApartmentID
+      else:
+         return False
 
 def apartmentAddData(code):
    specials = checkSpecialCharacter()
@@ -358,7 +379,7 @@ def apartmentAddData(code):
             newapartmentdimension=newApartmentDimension(code)
             newapartmentpricing=int(input("New Room Pricing in RM: "))
             newapartmentnumberofrooms=int(input("Number of new rooms: "))
-            newApartmentID=newApartmentID(code,specials)
+            newapartmentID=newApartmentID(code,specials)
             adddata.append("New Room Info: " + str(newapartment))
             adddata.append("New Room Code: " + str(newapartmentcode))
             adddata.append("New Room Dimension in range (sqft): " + str(newapartmentdimension) + '+ sqft')
@@ -381,7 +402,7 @@ def apartmentadddataconfirmation(adddata):
       if addDataconfirmation2 in ['Yes','yes']:
          return True
       elif addDataconfirmation2 in ['No','no']:
-         print("\n-Apartment-")
+         print("\n- Apartment -")
          return False
       else:
          code=0
