@@ -121,14 +121,20 @@ def getname(code):                  #define getname()
                         message(code)
                         break
                     else:
-                        if any(specials):
-                            code = 2
-                            message(code)
-                            print(specials)
-                            break
-                        else:
-                            code = None
-                            continue 
+                        for characters in words:
+                            print("checking      ",characters)
+                            for index in (specials[:16]+specials[17:19]+specials[20:]):
+                                print("Referencing",index)
+                                if characters == index:
+                                    code = 2
+                                    message(code)
+                                    print("specials error")
+                                    break
+                            if code :
+                                break
+                            else:
+                                code = None
+                                continue
             else:
                 code = 3
                 message(code)
@@ -166,7 +172,7 @@ def getgender(code):
         if retry in ["R","r"]:
             continue
         else:
-            return gender.isupper()
+            return gender.upper()
 
 def getpNum(code):
     pNum = input("Format: ############\nEnter tenant phone number:\n")
@@ -252,4 +258,4 @@ code=None
 #n=2
 #tenantEntryForm(list,n)
 #print(list)
-#getname(code)
+getname(code)

@@ -27,7 +27,7 @@ def login():                                   #define the login function
                   break                      #break loop to avoid running error message
          else:
             chance-=1                        #decrease chances by 1
-            print("\nError, incorrect username or password.\n"+chance+"chances remaining.\n")
+            print("\nError, incorrect username or password.\n",chance,"chances remaining.\n")
 
 def listIdentifier(listCode):
    if listCode == "t":
@@ -197,7 +197,16 @@ def message(code):
       print("\n"+x+"zero input"+z)
 
 def specialCharacterList():
-   return['"',"{","}","<",">","!","@","#","$","%","^","&","*","?",":",";","'","+","=","-","_","]","[","/"]
+   # if specialcharacterlist == "SCL1":
+   #    speccharlist = ["\',",\'","{","}","<",">","!","@","#","$","%","^","&","*","?",":",";","'","+","=","-","_","]","[","/","(",")"]
+   # elif specialcharacterlist == "SCL2":
+   #    speccharlist = ["\',",\'","{","}","<",">","!","@","#","$","%","^","&","*","?",":",";","'","+","=","_","]","["]
+   # elif specialcharacterlist == "SCL3":
+   #    speccharlist = ["\',",\'","{","}","<",">","!","#","$","%","^","&","*","?",":",";","'","+","=","-","_","]","["]
+   # elif specialcharacterlist == "SCL4":
+   #    speccharlist = ["\',",\'","{","}","<",">","!","#","$","%","^","&","*","?",":",";","'","+","=","-","_","]","[","/","(",")"]
+   # return speccharlist
+   return ["\'","\''","{","}","<",">","!","@","#","$","%","^","&","*","?",":",";","'","+","=","-","_","]","[","/","(",")"]
 
 def apartment(masterKey,listCode,code):                        #Define apartment function
    
@@ -324,8 +333,7 @@ def apartmentAddData(listCode,code):
       return True
    else:
       adddatalist=[]
-      print("\n- Dear admin, we need your Attention! -\n\nFor your information, all the new data will be only stored if Admin insert the information with the correct format for each new data entry provided.\n\nNew room info: only contains alphabets, no numbers and special characters [Except these: ( ) / - ]\nExample: Dual Key Premium Rooms - Single Room\n\nNew room code: only contains alphanumeric (A combination of Uppercased alphabet and number), and no special characters\nExample: DKPRS1\n\nNew Room Dimension (in range sqft): only contains numbers, no special characters (The unit will be provided at the back)\nExample: 300(+sqft)\n\nNew Room Pricing (in RM): only contain numbers, no special characters (The unit will be provided at the front)\nExample: (RM)500\n\nNumber of new rooms: only contains numbers and no special characters\nExample: 10 (Accepted range: 1-99)\n\nNew Apartment ID: A(01)-L(01)-R(01)x(to)xA(99)-L(99)-R(99)\nPlease follow this format as written above (A stands for Apartment Block, L stands for Room Level, R stands for Room Number, x means space)")
-      print("\nNow, you are required to enter new data after reading the message.\n")
+      print("\n- Dear admin, we need your ATTENTION ! -\n\nFor your information, all the new data will be only stored if Admin insert the information with the correct format for each new data entry provided.\n\nNew room info: only contains alphabets, no numbers and special characters [Except these special characters: '(' ')' '/' '-' ]\nExample: Dual Key Premium Rooms - Single Room\n\nNew room code: only contains alphanumeric (A combination of Uppercased alphabet and number), and no special characters\nExample: DKPRS1\n\nNew Room Dimension (in range sqft): only contains numbers, no special characters (The unit will be provided at the back)\nExample: 300(+sqft)\n\nNew Room Pricing (in RM): only contain numbers, no special characters (The unit will be provided at the front)\nExample: (RM)500\n\nNumber of new rooms: only contains numbers and no special characters\nExample: 10 (Accepted range: 1-99)\n\nNew Apartment ID: A(01)-L(01)-R(01)x(to)xA(99)-L(99)-R(99)\nPlease follow this format as written above (A stands for Apartment Block, L stands for Room Level, R stands for Room Number, x means space)\n\nNew Room Date of Acquisition: dd/mm/yyyy\nNo special characters included, except '/'\n\nNew Room Rental History: (Accepted input: 'dd/mm/yyyy' or 'Empty')\nNo special characters included, except '/'\n\nNew Room Status: (Accepted Input: 'Available' or 'Not Available')\nNo numbers and special characters included\n- Now, you are required to enter new data. -\n")
       for adddatanum in [0,adddatanum]:
          newroom=newRoom(code,specials)
          newroomcode=newRoomCode(code,specials)
@@ -351,6 +359,7 @@ def apartmentAddData(listCode,code):
 
 def newRoom(code,specials):
    while True:
+      newdata = 'a'
       nonumber=0 ; nospecialcharacter=0 ; emptymessage = 0 ; acceptableinput = 0
       newRoom=input("New room Info: ")
       if len(newRoom) == 0:
@@ -598,25 +607,15 @@ def newRoomID(code,specials):
 
 def newRoomDateofAcquisition(code,specials):
    while True:
-      nospecialcharacter = 1 ; correctmessage = 0 ; number = 1 ; symbol = 0
+      nospecialcharacter = 1 ; correctmessage = 0 ; number = 1 ; symbol = 0  ; date = 0
       newRoomDateOfAcquisition = input("New Room Date of Acquisition: ")
-      if 0 < len(newRoomDateOfAcquisition) < 9 or len(newRoomDateOfAcquisition) >=11:
+      if 1 < len(newRoomDateOfAcquisition) < 9 or len(newRoomDateOfAcquisition) >=11:
          code = 3
          message(code)
-         print("- Please reenter the acquisiition date for the new room and follow the correct format (29/12/9999), consists 10 characters long -\n")
+         print("- Please reenter the acquisition date for the new room and follow the correct format (29/12/9999), consists 10 characters long -\n")
          continue
       else:
          correctmessage = 1
-      for location in newRoomDateOfAcquisition:
-         for character in specials:
-            if location == character:
-               nospecialcharacter = 0
-               code = 0
-               message(code)
-               print("- New room acquisiition date does not contain special character(s) except this symbol: / -\n")
-               continue
-            else:
-               nospecialcharacter = 1
       if ((newRoomDateOfAcquisition[2] and newRoomDateOfAcquisition[5]) == specials[23]) and any(location.isdigit() for location in newRoomDateOfAcquisition):
          number = 1 ; symbol = 1
       else:
@@ -624,7 +623,7 @@ def newRoomDateofAcquisition(code,specials):
          message(code)
          print("- New room acquisiition date does not contain number(s) -\n")
          continue
-      if nospecialcharacter == 1  and correctmessage == 1 and number == 1 and symbol == 1:
+      if nospecialcharacter == 1  and correctmessage == 1 and number == 1 and symbol == 1 and date == 1:
          return newRoomDateOfAcquisition
       else:
          code = 2
@@ -653,13 +652,6 @@ def newRoomRentalHistory(code,specials):
                continue
             else:
                nospecialcharacter = 1
-      if ((newRoomRentalHistory[2] and newRoomRentalHistory[5]) == specials[23]) and any(location.isdigit() for location in newRoomRentalHistory):
-         number = 1 ; symbol = 1
-      else:
-         code=0
-         message(code)
-         print("- New room rental history must contain number(s) -\n")
-         continue
       if nospecialcharacter == 1  and correctmessage == 1 and number == 1 and symbol == 1:
          return newRoomRentalHistory
       else:
@@ -710,7 +702,7 @@ def newRoomStatus(code,specials):
          message(code)
          print("Please insert the correct format for new room status. Refer to the top description to let its details and format -\n")
          continue
-
+      
 def apartmentadddataconfirmation(adddata,listCode):
    listCode = "a"
    while True:
@@ -738,6 +730,31 @@ def Apartmentadddatarewrite():
    else:
       print("Return to main menu")
       return False
+
+def newDataIdentifer(newDatacode):
+   newDatacode
+
+def emptyorinvalidinput(newDatacode,code):
+   while True:
+      newDatacode = 'a'
+      if len()==0 or len()>max:
+         code=5
+         message(code)
+         print("- Please fill in the empty space -\n")
+
+def specialcharactercheck(code,specials):
+   while True:
+      for location in :
+         for character in specials:
+            if location == character:
+               nospecialcharacter = 0
+               code = 0
+               message(code)
+               print("- Special character(s) exist -\n")
+               return True
+            else:
+               nospecialcharacter = 1
+
 
 def apartmentEditData():
    editdatanum=int(input('How many records that you decide to edit? '))
