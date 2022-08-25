@@ -194,19 +194,15 @@ def message(code):
    elif code == 4:
       print("\n"+x+"data not found."+z)
    elif code == 5:
-      print("\n"+x+"zero input"+z)
+      print("\n"+x+"zero input."+z)
 
-def specialCharacterList():
-   # if specialcharacterlist == "SCL1":
-   #    speccharlist = ["\',",\'","{","}","<",">","!","@","#","$","%","^","&","*","?",":",";","'","+","=","-","_","]","[","/","(",")"]
-   # elif specialcharacterlist == "SCL2":
-   #    speccharlist = ["\',",\'","{","}","<",">","!","@","#","$","%","^","&","*","?",":",";","'","+","=","_","]","["]
-   # elif specialcharacterlist == "SCL3":
-   #    speccharlist = ["\',",\'","{","}","<",">","!","#","$","%","^","&","*","?",":",";","'","+","=","-","_","]","["]
-   # elif specialcharacterlist == "SCL4":
-   #    speccharlist = ["\',",\'","{","}","<",">","!","#","$","%","^","&","*","?",":",";","'","+","=","-","_","]","[","/","(",")"]
-   # return speccharlist
-   return ["\'","\''","{","}","<",">","!","@","#","$","%","^","&","*","?",":",";","'","+","=","-","_","]","[","/","(",")"]
+def specialCharacterList(SCL):
+    if SCL == None:
+        return ["~","`","!","@","#","$","%","^","&","*","(",")","-","_","=","+","{","}","[","]","|",",","\'","/","<",">","?",";",":","'",'"'] #0-30
+    elif SCL == "SCL1":
+        return ['~','`','!','@','#','$','%','^','&','*','(',')','-','_','=','+','{','}','[',']','|',',','\\','\'','\"','.','/','<','>','?',';',':'] #0-31
+    elif SCL == "SCL2":
+        return ['~','`','!','@','#','$','%','^','&','*','_','=','+','{','}','[',']','|','\\','\'','\"',',','.','/','<','>','?',':',';'] #0-28
 
 def apartment(masterKey,listCode,code):                        #Define apartment function
    
@@ -214,10 +210,10 @@ def apartment(masterKey,listCode,code):                        #Define apartment
    record=[]
    
    #Put sample data
-   list1=["Tyoe: Standard Room (Triple)","Code: SR1","Dimensions: 140+ sqft","Pricing: RM350","Number of Rooms: 20","Apartment ID: A01-L01-R01 to A01-L01-R21, Date of Acquisition: 03/01/2015, Rental History: 27/02/2015 rent, Status: Available"]
-   list2=["Tyoe: Standard Room (Twin)","Code: SR2","Dimensions: 120+ sqft","Pricing: RM450","Number of Rooms: 20","Apartment ID: A01-L01-R22 to A01-L01-R41, Date of Acquisition: 10/02/2015, Rental History: 28/03/2015 rent, Status: Available"]
-   list3=["Tyoe: Standard Room A/C (Triple)","Code: SR3","Dimensions: 150+ sqft","Pricing: RM550","Number of Rooms: 20","Apartment ID: A01-L02-R01 to A01-L02-R21, Date of Acquisition: 21/03/2016, Rental History: 24/04/2016 rent, Status: Available"]
-   list4=["Tyoe: Standard Room A/C (Twin)","Code: SR4","Dimensions: 130+ sqft","Pricing: RM650","Number of Rooms: 20","Apartment ID: A01-L02-R22 to A01-L02-R41, Date of Acquisition: 02/04/2016, Rental History: 20/05/2016 rent, Status: Available"]
+   list1=["Type: Standard Room (Triple)","Code: SR1","Dimensions: 140+ sqft","Pricing: RM350","Number of Rooms: 20","Apartment ID: A01-L01-R01 to A01-L01-R21, Date of Acquisition: 03/01/2015, Rental History: 27/02/2015 rent, Status: Available"]
+   list2=["Type: Standard Room (Twin)","Code: SR2","Dimensions: 120+ sqft","Pricing: RM450","Number of Rooms: 20","Apartment ID: A01-L01-R22 to A01-L01-R41, Date of Acquisition: 10/02/2015, Rental History: 28/03/2015 rent, Status: Available"]
+   list3=["Type: Standard Room A/C (Triple)","Code: SR3","Dimensions: 150+ sqft","Pricing: RM550","Number of Rooms: 20","Apartment ID: A01-L02-R01 to A01-L02-R21, Date of Acquisition: 21/03/2016, Rental History: 24/04/2016 rent, Status: Available"]
+   list4=["Type: Standard Room A/C (Twin)","Code: SR4","Dimensions: 130+ sqft","Pricing: RM650","Number of Rooms: 20","Apartment ID: A01-L02-R22 to A01-L02-R41, Date of Acquisition: 02/04/2016, Rental History: 20/05/2016 rent, Status: Available"]
    list5=["Type: Deluxe Room (Triple)","Code: DR1","Dimensions: 170+ sqft","Pricing: RM750","Number of Rooms: 20","Apartment ID: A01-L04-R01 to A01-L04-R21, Date of Acquisition: 11/05/2017, Rental History: 21/06/2017 rent, Status: Available"]
    list6=["Type: Deluxe Room (Twin)","Code: DR2","Dimensions: 160+ sqft","Pricing: RM840","Number of Rooms: 20","Apartment ID: A01-L04-R22 to A01-L04-R41, Date of Acquisition: 22/06/2017, Rental History: 22/07/2017 rent, Status: Available"]
    list7=["Type: Deluxe Room A/C with shared attached bath / toilet (Triple)","Code: DR3","Dimensions: 180+ sqft","Pricing: RM950","Number of Rooms: 20","Apartment ID: A01-L03-R1 to A01-L03-R21, Date of Acquisition: 30/07/2018, Rental History: 25/08/2018 rent, Status: Available"]
@@ -256,12 +252,11 @@ def apartment(masterKey,listCode,code):                        #Define apartment
       for item in record:
          for data in item:
                Ahandler.write(data)
-               Ahandler.write(",")
+               Ahandler.write(", ")
          Ahandler.write("\n")
 
    if masterKey == True:
       modifyData(masterKey,listCode,code)
-
    else:
       return False
 
@@ -297,7 +292,8 @@ def modifyData(masterKey,listCode,code):
          print("\n---------------------------------------------------------------------------------------------------\n\n- Tenant Management System -")
          return True
 
-def apartmentAddDataNum(code,specials):
+def apartmentAddDataNum():
+   code = None ; SCL = None ; specials = specialCharacterList(SCL)
    while True:
       nospecialcharacter=0
       adddata = input('\nDear admin, how many records that you decide to add? ')
@@ -309,175 +305,137 @@ def apartmentAddDataNum(code,specials):
                   code = 0
                   message(code)
                   print("- Special character(s) exist -\n")
-                  return True
+                  continue
                else:
-                  nospecialcharacter = 0
+                  code = True
          if adddata.isdigit() and nospecialcharacter == 0:
             return adddata
          else:
             code=1
             message(code)
-            print("- Please enter a number -\n")
-            return True
+            print("- Input must be in anumeric form -\n")
+            continue
       else:
          code=0
          message(code)
+         print("- 1 to 9 records to be added are available for now -\n")
 
 def apartmentAddData(listCode,code):
-   specials = specialCharacterList()
-   adddatanum = apartmentAddDataNum(code,specials)
-   if adddatanum == 0:
-      code=0
-      message(code)
-      print("- Error, cannot insert zero records -")
-      return True
-   else:
-      adddatalist=[]
-      print("\n- Dear admin, we need your ATTENTION ! -\n\nFor your information, all the new data will be only stored if Admin insert the information with the correct format for each new data entry provided.\n\nNew room info: only contains alphabets, no numbers and special characters [Except these special characters: '(' ')' '/' '-' ]\nExample: Dual Key Premium Rooms - Single Room\n\nNew room code: only contains alphanumeric (A combination of Uppercased alphabet and number), and no special characters\nExample: DKPRS1\n\nNew Room Dimension (in range sqft): only contains numbers, no special characters (The unit will be provided at the back)\nExample: 300(+sqft)\n\nNew Room Pricing (in RM): only contain numbers, no special characters (The unit will be provided at the front)\nExample: (RM)500\n\nNumber of new rooms: only contains numbers and no special characters\nExample: 10 (Accepted range: 1-99)\n\nNew Apartment ID: A(01)-L(01)-R(01)x(to)xA(99)-L(99)-R(99)\nPlease follow this format as written above (A stands for Apartment Block, L stands for Room Level, R stands for Room Number, x means space)\n\nNew Room Date of Acquisition: dd/mm/yyyy\nNo special characters included, except '/'\n\nNew Room Rental History: (Accepted input: 'dd/mm/yyyy' or 'Empty')\nNo special characters included, except '/'\n\nNew Room Status: (Accepted Input: 'Available' or 'Not Available')\nNo numbers and special characters included\n- Now, you are required to enter new data. -\n")
-      for adddatanum in [0,adddatanum]:
-         newroom=newRoom(code,specials)
-         newroomcode=newRoomCode(code,specials)
-         newroomdimension=newRoomDimension(code,specials)
-         newroompricing=newRoompricing(code,specials)
-         newnumberofRooms=newNumberofRooms(code)
-         newroomID=newRoomID(code,specials)
-         newroomdateofacquisition=newRoomDateofAcquisition(code,specials)
-         newroomrentalhistory=newRoomRentalHistory(code,specials)
-         newroomstatus=newRoomStatus(code,specials)
-         adddatalist.append("New Room Info: "+str(newroom))
-         adddatalist.append("New Room Code: "+str(newroomcode))
-         adddatalist.append("New Room Dimension in range (sqft): "+str(newroomdimension)+'+ sqft')
-         adddatalist.append("New Room Pricing: RM"+str(newroompricing))
-         adddatalist.append("Number for the new room: "+str(newnumberofRooms))
-         adddatalist.append("New room Apartment ID: "+str(newroomID))
-         adddatalist.append("New room Acquisition Date: "+str(newroomdateofacquisition))
-         adddatalist.append("New room Rental History: "+str(newroomrentalhistory)+" rent")
-         adddatalist.append("New room Status: "+str(newroomstatus))
-         print("\nNew Data:",adddatalist)
-         apartmentadddataconfirmation(adddatalist,listCode)
-      return False
-
-def newRoom(code,specials):
    while True:
-      newdata = 'a'
-      nonumber=0 ; nospecialcharacter=0 ; emptymessage = 0 ; acceptableinput = 0
-      newRoom=input("New room Info: ")
-      if len(newRoom) == 0:
-         code=5
-         message(code)
-         print("- Please fill in the new room info -\n")
-         continue
-      else:
-         emptymessage = 0
-             
-      if len(newRoom) <= 5:
-         code=3
-         message(code)
-         print("- New room info does not have a short information name -\n")
-         continue
-      else:
-         acceptableinput=1
-
-      if any(location.isdigit() for location in newRoom):
+      adddatanum = apartmentAddDataNum()
+      if adddatanum == 0:
          code=0
          message(code)
-         print("- New room info does not contain number(s) -\n")
-         continue
+         print("- Error, cannot insert zero records -")
+         return True
       else:
-         nonumber = 1
+         adddatalist=[]
+         print("\n- Dear admin, we need your ATTENTION ! -\n\nFor your information, all the new data will be only stored if Admin insert the information with the correct format for each new data entry provided.\n\nNew room info: only contains alphabets, no numbers and special characters [Except these special characters: '(' ')' '/' '-' ]\nExample: Dual Key Premium Rooms - Single Room\n\nNew room code: only contains alphanumeric (A combination of Uppercased alphabet and number), and no special characters\nExample: DKPRS1\n\nNew Room Dimension (in range sqft): only contains numbers, no special characters (The unit will be provided at the back)\nExample: 300(+sqft)\n\nNew Room Pricing (in RM): only contain numbers, no special characters (The unit will be provided at the front)\nExample: (RM)500\n\nNumber of new rooms: only contains numbers and no special characters\nExample: 10 (Accepted range: 1-99)\n\nNew Apartment ID: A(01)-L(01)-R(01)x(to)xA(99)-L(99)-R(99)\nPlease follow this format as written above (A stands for Apartment Block, L stands for Room Level, R stands for Room Number, x means space)\n\nNew Room Date of Acquisition: dd/mm/yyyy\nNo special characters included, except '/'\n\nNew Room Rental History: (Accepted input: 'dd/mm/yyyy' or 'Empty')\nNo special characters included, except '/'\n\nNew Room Status: (Accepted Input: 'Available' or 'Not Available')\nNo numbers and special characters included\n\n- Now, you are required to enter new data. -\n")
+         for adddatanum in [0,adddatanum]:
+            newroom=newRoom()
+            newroomcode=newRoomCode()
+            newroomdimension=newRoomDimension()
+            newroompricing=newRoompricing()
+            newnumberofRooms=newNumberofRooms()
+            newroomfirstID=newRoomIDFirst()
+            newroomlastID=newRoomIDLast()
+            newroomdateofacquisition=newRoomDateofAcquisition()
+            newroomrentalhistory=newRoomRentalHistory()
+            newroomstatus=newRoomStatus()
+            adddatalist.append("New Room Info: "+str(newroom))
+            adddatalist.append("New Room Code: "+str(newroomcode))
+            adddatalist.append("New Room Dimension in range (sqft): "+str(newroomdimension)+'+ sqft')
+            adddatalist.append("New Room Pricing: RM"+str(newroompricing))
+            adddatalist.append("Number for the new room: "+str(newnumberofRooms))
+            adddatalist.append("New room ID: "+str(newroomfirstID+' to '+newroomlastID))
+            adddatalist.append("New room Acquisition Date: "+str(newroomdateofacquisition))
+            adddatalist.append("New room Rental History: "+str(newroomrentalhistory)+" rent")
+            adddatalist.append("New room Status: "+str(newroomstatus))
+            print("\nNew Data:",adddatalist)
+            apartmentadddataconfirmation(adddatalist)
+         return False
 
-      for location in newRoom:
-         for character in specials:
-            if location == character:
-               nospecialcharacter = 0
-               code = 0
-               message(code)
-               print("- New room info does not have special character(s) -\n")
-               return True
-            else:
-               nospecialcharacter = 1
+def newRoom():
+    while True:
+         code = None
+         SCL = 'SCL2'
+         specials = specialCharacterList(SCL)
+         newRoom=input("New room Info: ")
+         if [character for character in newRoom if (character in specials)]:
+            code = 2
+            message(code)
+            print("- New room info does not contain special character(s) -\n")
+            continue
+         else:
+            code = None
+         if 0 <= len(newRoom) < 6:
+            code = 2
+            message(code)
+            print("-  Refer to the New Room Info to look for its details and format -\n")
+            continue
+         else:
+            code = None
+         if newRoom.isdigit() and any(location.isdigit() for location in newRoom):
+            code = 1
+            message(code)
+            print("- New room info does not contain number(s) -\n")
+            continue
+         else:
+            code = None
+         if code == None:
+            newRoom.title()
+            return newRoom
+         else:
+            code = 2
+            message(code)
+            print("- Please fill in the correct format for new Room info. Refer to the New Room Info to look for its details and format -\n")
+            continue
 
-      if nonumber == 1 and nospecialcharacter == 1 and emptymessage == 0 and acceptableinput == 1:
-         return newRoom
-      else:
-         code=2
-         message(code)
-         print("- Please insert the correct format for the new room information. Refer to the description above to know its format and details. -\n")
-         continue
-
-def newRoomCode(code,specials):
+def newRoomCode():
    while True:
-      uppercased = 0 ; alnum = 0 ; nospecialcharacter = 0 ; nospecialcharacter = 0 ; emptymessage = 1
+      code = None
       newRoomCode = input("New Room Code: ")
-
-      if len(newRoomCode) <= 1 :
+      if 0 < len(newRoomCode) < 1 :
          code=2
          message(code)
          print("- New Room Code must contain at least 2 or more alphanumeric long -\n")
          continue
       else:
-         emptymessage=0
-
-      if newRoomCode[0:1].isupper() and newRoomCode.isalnum():
-         uppercased = 1
-         alnum = 1
+         code = None 
+      if newRoomCode.isalnum():
+         code = None
       else:
          code=2
          message(code)
-         print("- Please noted that new room code is only acceptable when it contains alphanumeric with uppercased alphabet(s) and number(s) -\n")
+         print("- Please noted that new room code is only acceptable when it contains alphanumeric -\n")
          continue
-
-      for location in newRoomCode:
-         for character in specials:
-            if location == character:
-               nospecialcharacter = 0
-               code = 0
-               message(code)
-               print("- New apartment code only contains alphanumeric and does not have special character(s) -\n")
-               continue
-            else:
-               nospecialcharacter = 1
-
-      if uppercased == 1 and alnum == 1 and nospecialcharacter == 1  and emptymessage == 0:
+      if code == None:
          return newRoomCode
       else:
          code = 2
          message(code)
-         print("- Please fill in the correct format for new Apartment code. Refer to the New Room Pricing to look for its details and format --")
+         print("- Please fill in the correct format for new Apartment code. Refer to the New Room Pricing to look for its details and format -")
          continue
 
-def newRoomDimension(code,specials):
+def newRoomDimension():
    while True:
-      emptymessage=1 ; nospecialcharacter=0 ; correctmessage=0
+      code = None
       newRoomDimension=input("New Room Dimension in range (sqft): ")
-      if len(newRoomDimension) == 0:
-         code=5
+      if len(newRoomDimension)==0:
+         code = 5
          message(code)
-         print("- Please fill in the new room dimension -\n")
+         print("- Please fill in the new room dimension, and room dimension must have at least 100 or more sqft -\n")
          continue
       else:
-         emptymessage=0
-
-      if len(newRoomDimension) <= 2:
-         code=3
-         message(code)
-         print("- Room dimension must have at least 100 or more sqft -\n")
-         continue
+         code = None
+      if newRoomDimension.isdigit():
+         code = None
       else:
-         correctmessage=1
-
-      for location in newRoomDimension:
-         for character in specials:
-            if location == character:
-               nospecialcharacter = 1
-               code = 0
-               message(code)
-               print("- New apartment info does not have special character(s) -\n")
-               continue
-            else:
-               nospecialcharacter = 0
-
-      if newRoomDimension.isdigit() and emptymessage == 0 and nospecialcharacter == 0 and correctmessage == 1:
+         code = 2 
+         message(code)
+         print("- New room dimension must consist of number(s) -")
+         continue
+      if code == None:
          return newRoomDimension
       else:
          code=2
@@ -485,276 +443,284 @@ def newRoomDimension(code,specials):
          print("- Please fill in the correct format for new room dimension. Refer to the top description for its details and format -\n")
          continue
 
-def newRoompricing(code,specials):
+def newRoompricing():
    while True:
-      emptymessage = 1 ; nospecialcharacter = 0 ; correctmessage = 0
+      code = None
       newRoompricing=input("New Room Pricing (in RM): ")
-      if len(newRoompricing) == 0:
-         code = 5
-         message(code)
-         print("- Please fill in the new room pricing -\n")
-         continue
+      if newRoompricing.isdigit():
+         nRp=int(newRoompricing)
+         if nRp >= 350:
+            code = None
       else:
-         emptymessage = 0
-
-      if len(newRoompricing) <= 2 and newRoompricing.isdigit():
-         code = 3
+         code = 2
          message(code)
-         print("- Room pricing must be in numeric and the starting price starts from RM100 -\n")
+         print("- Please fill in the room pricing, it must be in numeric and the minimum starting price starts from RM350 and above -\n")
          continue
-      else:
-         correctmessage = 1
-
-      for location in newRoompricing:
-         for character in specials:
-            if location == character:
-               nospecialcharacter = 1
-               code = 0
-               message(code)
-               print("- New apartment info does not have special character(s) -\n")
-               continue
-            else:
-               nospecialcharacter = 0
-
-      if newRoompricing.isdigit() and emptymessage == 0 and nospecialcharacter == 0 and correctmessage == 1:
+      if code == None:
          return newRoompricing
       else:
-         code=2
+         code = 2
          message(code)
-         print("- Please fill in the correct format for new room pricing. Refer to the description above to look for its details and format -\n")
+         print("- Please follow the correct format for new room pricing. Refer to the desccrition above to know its details and format -\n")
          continue
 
-def newNumberofRooms(code):
+def newNumberofRooms():
    while True:
-      emptymessage = 1 ; correctmessage = 0 ; number = 0
+      code = None
       newNumberofRooms=input("Number of new rooms: ")
-      if len(newNumberofRooms) == 0:
-         code = 5
-         message(code)
-         print("- Please fill in the number of new rooms -\n")
-         continue
+      if len(newNumberofRooms) == 0 or (newNumberofRooms == "0" and newNumberofRooms == "1"):
+        code = 5
+        message(code)
+        print("- Please fill in the number of new rooms -\n")
+        continue
       else:
-         emptymessage = 0
-
-      if len(newNumberofRooms) >= 3 and newNumberofRooms.isdigit():
-         code = 3
-         message(code)
-         print("- Number of new rooms must be in numeric -\n")
-         continue
-      else:
-         correctmessage = 1
+        code = None
 
       if newNumberofRooms.isdigit():
-         number = 1
+        code = None
       else:
-         code=0
-         message(code)
-         print("- Number of new rooms contain number(s) -\n")
-         continue
+        code = 3
+        message(code)
+        print("- Number of new rooms must be in numeric -\n")
+        continue
 
-      if emptymessage == 0 and correctmessage == 1 and number == 1:
-         return newNumberofRooms
+      if code == None :
+        return newNumberofRooms
       else:
-         code=2
-         message(code)
-         print("- Please fill in the correct format for the number of new rooms. Refer to the description above to look for its details and format -\n")
-         continue
+        code=2
+        message(code)
+        print("- Please fill in the correct format for the number of new rooms. Refer to the description above to look for its details and format -\n")
+        continue
 
-def newRoomID(code,specials):
+def newRoomIDFirst():
    while True:
-      lennewAparID = 0 ; notlowercase = 0 ; newAparIDdash = 0 ; emptymessage = 1
-      newRoomID = input("New Room Apartment ID: ")
+      code = None
+      SCL='SCL2'
+      specials=specialCharacterList(SCL)
+      newRoomIDfirst = input("New Room Apartment ID (First): ")
 
-      if len(newRoomID) == 0:
+      if len(newRoomIDfirst) == 0:
          code = 5
          message(code)
          print("- Please fill in the new Apartment ID -\n")
          continue
       else:
-         emptymessage = 0
+         code = None
 
-      if len(newRoomID)>26 or len(newRoomID)<1:
+      if 0 < len(newRoomIDfirst) < 10:
          code = 2
          message(code)
-         print("- Please follow the format as: A01-L10-R40 to A02-L01-R09 -\n - A stands for Apartment Block, L stands for Level, and R stands for Room (The length must have 11 characters long, including the dash -) -\n")
+         print("- Please follow the format as: A01-L10-R40 ( A stands for Apartment Block, L stands for Level, and R stands for Room (The length must have 11 characters long, including the dash -) -\n")
          continue
       else:
-         lennewAparID = 1
+         code = None
 
-      if newRoomID[0:4:8].islower():
-         code=2
-         message(code)
-         print("- Must contain uppercase, not lower case -\n")
-         continue
-      else:
-         notlowercase = 3
-
-      if (newRoomID[3] and newRoomID[7] and newRoomID[18] and newRoomID[22]) == specials[19]:
-         newAparIDdash = 4 
+      if (newRoomIDfirst[0] == 'A' and newRoomIDfirst[3] == '-' and newRoomIDfirst[4] == 'L' and newRoomIDfirst[7] == '-' and newRoomIDfirst[8] == 'R') and any(location.isdigit() for location in newRoomIDfirst):
+         if [character for character in newRoomIDfirst[:] if (character in specials)]:
+            code = None
       else:
          code=2
          message(code)
-         print("- Please include the dash inside the apartment ID -\n")
+         print("- Please follow the format as: A01-L10-R40, it (A,L,R) must contain uppercases and numbers. -\n")
          continue
-         
-      if lennewAparID == 1 and notlowercase == 3 and newAparIDdash == 4 and emptymessage == 0 :
-         return newRoomID
+            
+      if code == None:
+         return newRoomIDfirst
       else:
          code=3
          message(code)
          print("- Please fill in the correct format for new room Apartment ID. Refer to the description above to look for its details and format -")
-         continue         
+         continue
 
-def newRoomDateofAcquisition(code,specials):
+def newRoomIDLast():
    while True:
-      nospecialcharacter = 1 ; correctmessage = 0 ; number = 1 ; symbol = 0  ; date = 0
-      newRoomDateOfAcquisition = input("New Room Date of Acquisition: ")
-      if 1 < len(newRoomDateOfAcquisition) < 9 or len(newRoomDateOfAcquisition) >=11:
-         code = 3
+      code = None
+      newRoomIDlast = input("New Room Apartment ID (Last): ")
+
+      if len(newRoomIDlast) == 0:
+         code = 5
          message(code)
-         print("- Please reenter the acquisition date for the new room and follow the correct format (29/12/9999), consists 10 characters long -\n")
+         print("- Please fill in the new Apartment ID -\n")
          continue
       else:
-         correctmessage = 1
-      if ((newRoomDateOfAcquisition[2] and newRoomDateOfAcquisition[5]) == specials[23]) and any(location.isdigit() for location in newRoomDateOfAcquisition):
-         number = 1 ; symbol = 1
-      else:
-         code=0
-         message(code)
-         print("- New room acquisiition date does not contain number(s) -\n")
-         continue
-      if nospecialcharacter == 1  and correctmessage == 1 and number == 1 and symbol == 1 and date == 1:
-         return newRoomDateOfAcquisition
-      else:
+         code = None
+
+      if 0 < len(newRoomIDlast) < 10:
          code = 2
          message(code)
-         print("Please insert the correct format for new room acquisition date. Refer to the top description to let its details and format -\n")
+         print("- Please follow the format as: A01-L10-R40 ( A stands for Apartment Block, L stands for Level, and R stands for Room (The length must have 11 characters long, including the dash -) -\n")
          continue
+      else:
+         code = None
 
-def newRoomRentalHistory(code,specials):
-   while True:
-      nospecialcharacter = 1 ; correctmessage = 0 ; number = 1 ; symbol = 0
-      newRoomRentalHistory = input("New Room Rental History: ")
-      if 0 < len(newRoomRentalHistory) < 9 or len(newRoomRentalHistory) >=11:
-         code = 3
-         message(code)
-         print("- Please reenter the new room rental history and follow the correct format (29/12/9999), consists 10 characters long -\n")
-         continue
+      if (newRoomIDlast[0] == 'A' and newRoomIDlast[3] == '-' and newRoomIDlast[4] == 'L' and newRoomIDlast[7] == '-' and newRoomIDlast[8] == 'R') and ((newRoomIDlast[1:2] and newRoomIDlast[5:6] and newRoomIDlast[9:10]) == ('0'or'1'or'2'or'3'or'4'or'5'or'6'or'7'or'8'or'9')):
+         code = None
       else:
-         correctmessage = 1
-      for location in newRoomRentalHistory:
-         for character in specials:
-            if location == character:
-               nospecialcharacter = 0
-               code = 0
-               message(code)
-               print("- New room rental history does not contain special character(s) except this symbol: / -\n")
-               continue
-            else:
-               nospecialcharacter = 1
-      if nospecialcharacter == 1  and correctmessage == 1 and number == 1 and symbol == 1:
-         return newRoomRentalHistory
-      else:
-         code = 2
+         code=2
          message(code)
-         print("Please insert the correct format for new room rental history. Refer to the top description to let its details and format -\n")
+         print("- Please follow the format as: A01-L10-R40, it (A,L,R) must contain uppercases and numbers. -\n")
          continue
-
-def newRoomStatus(code,specials):
-   while True:
-      message = 0 ; nospecialcharacter = 0 ; number = 1 ; phrase = 0
-      newRoomStatus = input("New Room Status: ")
-      if len(newRoomStatus) == 0 or len(newRoomStatus) >= 3:
-         code = 3
-         message(code)
-         print("- Please reenter the new room rental history and follow the correct format (29/12/9999), consists 10 characters long -\n")
-         continue
+            
+      if code == None:
+         return newRoomIDlast
       else:
-         message = 1
-      if any(location.isdigit() for location in newRoomStatus):
          code=3
          message(code)
-         print("- New Room Status does not contain number -\n")
+         print("- Please fill in the correct format for new room Apartment ID. Refer to the description above to look for its details and format -")
          continue
-      else:
-         number = 0
-      for location in newRoomStatus:
-         for character in specials:
-            if location == character:
-               nospecialcharacter = 0
-               code = 0
-               message(code)
-               print("- New room rental history does not contain special character(s) except this symbol: / -\n")
-               continue
+
+def newRoomDateofAcquisition():
+    while True:
+        import datetime
+        code = None
+        newRoomDateOfAcquisition = input("New Room Date of Acquisition (dd/mm/yyyy): ")
+        if any(location.isdigit() for location in newRoomDateOfAcquisition) and len(newRoomDateOfAcquisition) == 10:
+            day,month,year = newRoomDateOfAcquisition.split('/')
+            ValidDate = True
+            try:
+                datetime.datetime(int(year),int(month),int(day))
+                ValidDate = True
+            except ValueError:
+                ValidDate = False
+            if ValidDate == True :
+               code = None
+               return newRoomDateOfAcquisition
             else:
-               nospecialcharacter = 1
-      if newRoomStatus in ["Available","Not Available"]:
-         phrase=1
-      else:
-         code=0
+               code = 2
+               message(code)
+               print("- New room acquisition date is not valid -\n")
+               continue
+        else:
+            code = 2
+            message(code)
+            print("- Wrong Date Format (dd/mm/yyyy) -\n")
+            continue
+
+def newRoomRentalHistory():
+   while True:
+        import datetime
+        code = None
+        newRoomRentalHistory = input("New Room Rental History (dd/mm/yyyy): ")
+        if any(location.isdigit() for location in newRoomRentalHistory) and len(newRoomRentalHistory) == 10:
+            day,month,year = newRoomRentalHistory.split('/')
+            ValidDate = True
+            try:
+               datetime.datetime(int(year),int(month),int(day))
+               ValidDate = True
+            except ValueError:
+               ValidDate = False
+            if ValidDate == True :
+               code = None
+               return newRoomRentalHistory
+            else:
+               code = 2
+               message(code)
+               print("- New rental history date is not valid -\n")
+               continue
+        else:
+            code = 2
+            message(code)
+            print("- Wrong Date Format (dd/mm/yyyy) -\n")
+            continue
+
+def newRoomStatus():
+   while True:
+      code = None
+      SCL = None
+      specials = specialCharacterList(SCL)
+      newRoomStatus = input("New Room Status ( Available / Not Available ): ")
+    
+      if (0 <= len(newRoomStatus) <= 7) or (len(newRoomStatus) >= 14) :
+         code = 5
          message(code)
-         print("- Room Status can only b eaccepted either the input is 'Available' or 'Not Available'. -\n")
+         print("- Please fill again the new room status and follow the correct format ( Accepted input: Available / Not Available ) -\n")
          continue
-      if message == 1 and number == 0 and nospecialcharacter == 1 and phrase == 1:
+      else:
+         code = None
+
+      if any(location.isdigit() for location in newRoomStatus) and newRoomStatus.isdigit(): 
+         code = 2
+         message(code)
+         print("- New room status does not contain number(s) -\n")
+         continue
+      else:
+         code = None
+
+      if [character for character in newRoomStatus if (character in specials)]:
+         code = 2
+         message(code)
+         print("- New room status does not have special character(s) -\n")
+         continue
+      else:
+         code = None
+
+      if (0 <= len(newRoomStatus) <= 7 or len(newRoomStatus) >= 14) and (any(location.isdigit() for location in newRoomStatus)):
+         code = 2
+         message(code)
+         print("- New room status does not consists of number(s) -\n")
+         continue
+      else:
+         code = None
+
+      if ([character for character in newRoomStatus if (character in specials)] and any(location.isdigit() for location in newRoomStatus) and [character for character in newRoomStatus if (character in specials)]):
+         code = 3
+         message(code)
+         print("- New room rental history does not contain number(s) and special character(s) -\n")
+         continue
+      else:
+         code = None
+
+      if (0 < len(newRoomStatus) <= 7 or len(newRoomStatus) >= 14) and (any(location.isdigit() for location in newRoomStatus)) and ([character for character in newRoomStatus if (character in specials)]):
+         code=3
+         message(code)
+         print("- Input too short oe long, and also number(s) and special character(s) exist, please follow the correct format ( Accepted input: Available / Not Available ) -\n")
+         continue
+      else:
+         code = None
+
+      if newRoomStatus in ["Available","Not Available"] and (len(newRoomStatus) == 9 or len(newRoomStatus) == 13):
+         code = None
+      else:
+         code = 2
+         message(code)
+         print("- Room Status can only be accepted either the input is 'Available' or 'Not Available'. -\n")
+         continue
+
+      if code == None:
          return newRoomStatus
       else:
          code = 3
          message(code)
          print("Please insert the correct format for new room status. Refer to the top description to let its details and format -\n")
          continue
-      
-def apartmentadddataconfirmation(adddata,listCode):
+
+def apartmentadddataconfirmation(masterKey,adddata):
    listCode = "a"
    while True:
       addDataconfirmation=int(input("\nAre you sure with the records you inserted just now? Enter '1' to save record, Enter '0' to unsave record: "))
       if addDataconfirmation == 1:
          appendFile(adddata,listCode)
          print("\n- Data Saved -")
-
-      addDataconfirmation2=input("\nAre you going to add more data? Yes/No: ")
-      if addDataconfirmation2 == 'Yes':
-         print("\n- Continue to add more data -\n")
-         return True
-      elif addDataconfirmation2 == 'No':
-         print("\n- Modification of Records (Apartment) -")
-         return False
+         addDataconfirmation2=input("\nAre you going to add more data? Yes/No: ")
+         if addDataconfirmation2 == 'Yes':
+            print("\n- Continue to add more data -")
+            return False
+         elif addDataconfirmation2 == 'No':
+            print("\n- Modification of Records (Apartment) -")
+            modifyData(masterKey,listCode,code)
       else:
          code=0
          message(code)
          return True
 
 def Apartmentadddatarewrite():
-   rewriteDataConfirmation=input("\nEnter 'W' to rewrite the data again, Enter any key to exit: ")
-   if rewriteDataConfirmation == 'W':
-      return True
-   else:
-      print("Return to main menu")
-      return False
-
-def newDataIdentifer(newDatacode):
-   newDatacode
-
-def emptyorinvalidinput(newDatacode,code):
    while True:
-      newDatacode = 'a'
-      if len()==0 or len()>max:
-         code=5
-         message(code)
-         print("- Please fill in the empty space -\n")
-
-def specialcharactercheck(code,specials):
-   while True:
-      for location in :
-         for character in specials:
-            if location == character:
-               nospecialcharacter = 0
-               code = 0
-               message(code)
-               print("- Special character(s) exist -\n")
-               return True
-            else:
-               nospecialcharacter = 1
-
+      rewriteDataConfirmation=input("\nEnter 'W' to rewrite the data again, Enter any key to exit: ")
+      if rewriteDataConfirmation == 'W':
+         return True
+      else:
+         print("Return to main menu")
+         return False
 
 def apartmentEditData():
    editdatanum=int(input('How many records that you decide to edit? '))
@@ -762,15 +728,16 @@ def apartmentEditData():
 def apartmentDeleteData():
    deletedatanum=int(input('How many records that you decide to delete? '))
 
-def searchBox():                             #Define search function
-   print("\nWelcome to search box!")
-   while True:
+def searchBox():
+   while True:                             #Define search function
+      print("\n----------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\nWelcome to search box!")
+      num = None
       print("\n1. Search room specific details.\n2. Search transaction details.\n3. Search specific tenant details.\n4. Exit search box.\n")
       option=int(input("Please type the search criteria based on the listing above: "))
       if option == 1:
          listCode= "a"
-         opt = input("\n[C]-Room code, [P]-Pricing, [N]-Number of Rooms, [A]- Apartment ID, [D]-Date of Acquisition, [R]-Rental \n")     
-         if opt in ["A","a"]:
+         opt = input("\n[C]-Room code, [P]-Pricing, [N]-Number of Rooms, [A]- Apartment ID, [D]-Date of Acquisition, [R]-Rental \nSearch?  ")     
+         if opt in ["C","c"]:
             num = 1
          elif opt in ["P","p"]:
             num = 3
@@ -786,6 +753,7 @@ def searchBox():                             #Define search function
          else:
             code = 0
             message(code)
+            continue
 
       elif option == 2:
          listCode = "p"
@@ -826,7 +794,7 @@ def searchBox():                             #Define search function
             message(code)
 
       elif option == 4:
-         print("\nReturn to main menu\n\n--------------------------------")
+         print("\n- Return to main menu -\n\n----------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\n- Welcome back ! -")
          return False                                 #return to menu function
       
       else:
@@ -849,17 +817,18 @@ def searchInformation(listCode,num,details):                  #Define searchinfo
             data=strippedItem.split(",")
             if searchInformation in data[num]:
                print(record.rstrip(",").rstrip("\n"))
+               print("\n")
                recordExist = True
             else:
                continue
          if recordExist == True:
             code = 0
-            print("\n- Matching records ends here -")
+            print("- Matching records ends here -\n\n----------------------------------------------------------------------------------------------------------------------------------------------------------------------------")
          else:
             code = 4
             message(code)
 
-      exitSearch=input("\nExit program?\n[C]-Continue Program.\n[Any other key]-Exit: ")
+      exitSearch=input("\nExit program?\n\n[C] - Continue Program.\n[Any other key] - Exit: ")
       if exitSearch in ["C","c"]:
          continue
       else:
