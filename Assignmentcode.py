@@ -752,23 +752,17 @@ def replaceOldData(listCode):
       else:
          editDatatype = category(listCode)
          apartmentSearch(editDatatype)
-      selecteddata = input("\nPlease insert the data that you want to edit: ")
+      selecteddata = input("\nPlease enter the exact data that you want to edit: ")
       newdata = input("Last step, please insert the new data with the correct format: ")
       editdataconfirmation = input("\nAre you sure with your records just now? (Yes/No): ")
       if editdataconfirmation == 'Yes':
          with open(listIdentifier(listCode),"r") as Xhandler:
-            dataread = Xhandler.readlines()
-            for record in Xhandler:
-               strippeditem = record.rstrip()
-               list = strippeditem.split(",")
-               for record in dataread[editDatatype]:
-                  if selecteddata == list[editDatatype] :
-                     record.replace(selecteddata,newdata)
-                  Xhandler.append(record)
-            with open(listIdentifier(listCode),"w") as Xhandler:
-               for record in Xhandler:
-                  Xhandler.write(record)
-                  Xhandler.write("\n")
+            dataRead = Xhandler.readlines()
+            for record in dataRead[editDatatype]:
+               strippeditem = record.rstrip(" ").split(",")
+               if selecteddata == strippeditem[editDatatype] :
+                  record.replace(selecteddata,newdata)
+               Xhandler.append(record)
 
 def apartmentEditData(listCode):
    dataInfo = True

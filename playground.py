@@ -98,3 +98,26 @@
 #         return False
 
 
+
+#selecteddata = input("\nPlease enter the exact data that you want to edit: ")
+#newdata = input("Last step, please insert the new data with the correct format: ")
+
+#with open(listIdentifier(listCode),"r") as Xhandler:
+#    dataRead = Xhandler.readlines()
+    # for record in dataRead[editDatatype]:
+    #     strippeditem = record.rstrip(" ").split(",")
+    #     if selecteddata == strippeditem[editDatatype] :
+    #         record.replace(selecteddata,newdata)
+    #     Xhandler.append(record)
+display=[]
+with open("currentUser.txt","r") as f:
+    bulkData = f.readlines()
+    print("raw data: ",bulkData)
+    for line in bulkData:
+        strippedLine = line.strip(", \n")
+        list = strippedLine.split(", ")
+        print(list)
+        number = input("choose location")#editDatatype = ApartmentDataInfo()
+        display.append(list[int(number)])
+        print(display)#apartmentSearch(editDatatype)
+        
