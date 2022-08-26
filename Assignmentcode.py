@@ -297,6 +297,58 @@ def getrental(masterKey):
             else:    
                 return rental
 
+def getreferenceNumber(code):
+   while True:
+      referenceNumber = input("Enter the reference number for the relevant bank transaction:\n")
+      if len(referenceNumber) > 5:
+         if (location.isalnum() for location in referenceNumber):
+            code = None
+         else:
+            code = 1
+      else:
+         code = 3
+      if code:
+         message(code)
+         print("ATTENTION||Error detected.||ATTENTION\n")
+      else:
+         print("No errors detected.\n")
+      retry = input("[R]-Retry,[Any other key]-Exit using "+referenceNumber+"\n")
+      if retry in ["R","r"]:
+         continue
+      else:    
+         return referenceNumber
+
+def getdecimal(code):
+   specials = specialCharacterList(None)
+   while True:
+      decimal = input("Format: ########.##\nEnter the transaction amount in Ringgit Malaysia:\n")
+      if specials[23] in decimal:
+         money = decimal.split(".")
+         for numbers in money:
+            try:
+               numbers[1] in money[1]
+               if (digits.isnumeric() for digits in numbers):
+                  code = None
+                  continue
+               else:
+                  code = 1
+                  break
+            except IndexError:
+               code = 2
+      else:
+         code = 2
+         print(specials[23])
+      if code:
+         message(code)
+         print("ATTENTION||Error detected.||ATTENTION\n")
+      else:
+         print("No errors detected.\n")
+      retry = input("[R]-Retry,[Any other key]-Exit using "+decimal+"\n")
+      if retry in ["R","r"]:
+         continue
+      else:    
+         return decimal
+  
 def tenantOrTransactionEntryForm(masterKey,listCode,code):          #Define tenantEntryForm function
    while True:
       if masterKey == True:
@@ -304,7 +356,6 @@ def tenantOrTransactionEntryForm(masterKey,listCode,code):          #Define tena
          if n.isdecimal():
             code = None
          else:
-            print(type(n))
             code = 0
             message(code)
             continue
@@ -331,7 +382,8 @@ def tenantOrTransactionEntryForm(masterKey,listCode,code):          #Define tena
             transactionDate = getDate(code,"start")
             UserID  = gettenantID(masterKey,listCode)
             apartmendCode = newRoomCode()
-            amount = getpricing()
+            amount = getdecimal(code)
+            list = [referenceNumber,transactionDate,UserID,apartmendCode,amount]
          appendFile(list,listCode)
       break
 
@@ -462,17 +514,17 @@ def modifyData(masterKey,listCode,code,modifyType):
 def apartmentAddData():
    adddatalist = []
    print("\nDear admin, we need your ATTENTION !\n\nFor your information, all the new data will only be stored if you insert each information with the correct format provided.\n\nOnce you finish each entry,a confirmation message will appear. Please ensure that the data is typed correctly before saving.\n- Now, you are required to enter new data. -\n\n--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------")
-   newroom=newRoom()
-   newroomcode=newRoomCode()
-   newroomdimension=newRoomDimension()
-   newroompricing=newRoompricing()
-   newnumberofRooms=newNumberofRooms()
-   newroomfirstID=newRoomIDFirst()
-   newroomlastID=newRoomIDLast()
-   newroomdateofacquisition=newRoomDateofAcquisition()
-   newroomrentalhistory=newRoomRentalHistory()
-   newroomstatus=newRoomStatus()
-   adddatalist=["New Room Info: "+str(newroom),"New Room Code: "+str(newroomcode),"New Room Dimension in range (sqft): "+str(newroomdimension)+'+ sqft',"New Room Pricing: RM"+str(newroompricing),"Number for the new room: "+str(newnumberofRooms),"New room ID: "+str(newroomfirstID+' to '+newroomlastID),"New room Acquisition Date: "+str(newroomdateofacquisition),"New room Rental History: "+str(newroomrentalhistory)+" rent","New room Status: "+str(newroomstatus)]
+   newroom = newRoom()
+   newroomcode = newRoomCode()
+   newroomdimension = newRoomDimension()
+   newroompricing = newRoompricing()
+   newnumberofRooms = newNumberofRooms()
+   newroomfirstID = newRoomIDFirst()
+   newroomlastID = newRoomIDLast()
+   newroomdateofacquisition = newRoomDateofAcquisition()
+   newroomrentalhistory = newRoomRentalHistory()
+   newroomstatus = newRoomStatus()
+   adddatalist = ["New Room Info: "+str(newroom),"New Room Code: "+str(newroomcode),"New Room Dimension in range (sqft): "+str(newroomdimension)+'+ sqft',"New Room Pricing: RM"+str(newroompricing),"Number for the new room: "+str(newnumberofRooms),"New room ID: "+str(newroomfirstID+' to '+newroomlastID),"New room Acquisition Date: "+str(newroomdateofacquisition),"New room Rental History: "+str(newroomrentalhistory)+" rent","New room Status: "+str(newroomstatus)]
    print("\nNew Data:",adddatalist)
    apartmentadddataconfirmation(adddatalist)
 
@@ -481,7 +533,7 @@ def newRoom():
       code = None
       SCL = 'SCL2'
       specials = specialCharacterList(SCL)
-      newRoom=input("\nRoom info only contains alphabets, no numbers and special characters [Except these special characters: '(' ')' '/' '-' ]\nExample: Dual Key Premium Rooms - Single Room\n\nRoom Info: ")
+      newRoom = input("\nRoom info only contains alphabets, no numbers and special characters [Except these special characters: '(' ')' '/' '-' ]\nExample: Dual Key Premium Rooms - Single Room\n\nRoom Info: ")
       if [character for character in newRoom if (character in specials)]:
          code = 2
          message(code)
@@ -505,7 +557,7 @@ def newRoom():
          code = None
       if code == None:
          newRoom.title()
-         decisionkey=input("Are you sure with your records? (Yes/No): ")
+         decisionkey = input("Are you sure with your records? (Yes/No): ")
          if decisionkey in ["Yes","yes"]:
             return newRoom
          elif decisionkey in ["No","no"]:
@@ -1035,7 +1087,7 @@ def menu(masterKey,UID):                                  #Define menu function
       opt=input("\nPlease enter which operation that you want to do: ")
       if opt in ["S","s"]:
          searchBox()                                        #redirect to searchbox function
-                              #Check for basic Functions
+#Check for basic Functions
       elif opt in ["A","a"]:
          listCode = "a"
          apartment(masterKey,listCode,code)
@@ -1045,14 +1097,14 @@ def menu(masterKey,UID):                                  #Define menu function
       elif opt in ["T","t"]:
          listCode = "t"
          tenantOrTransaction(masterKey,UID,listCode,code)
-                              #Check for quick functions
+#Check for quick functions
       elif opt in ["D","d"]:
          print("tenantAndApartment()")
       elif opt in ["I","i"] and masterKey == True:
          searchInformation(listCode,8,"past")
       elif opt in ["L","l"] and masterKey == True:
          print("loginHistory()")
-      elif opt in ["E","e"]:                             #get confirmation to exit
+      elif opt in ["E","e"]:                                #get confirmation to exit
          exitconfirmationkey=input("\n----------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\nYou're about to leave Tenant Management System. Are you sure? [Enter]-Continue, [x]-Return to main menu): ")
          if exitconfirmationkey in ["X","x"]:
             continue
