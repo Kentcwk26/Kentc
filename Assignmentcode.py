@@ -1,3 +1,6 @@
+from operator import truediv
+
+
 def login():                                                         #define the login function
    print("\nWelcome to Tenant Management System Login page.\nPlease enter username and password to proceed.\n") 
    chance = 3                                  #Specify login chances
@@ -357,10 +360,10 @@ def apartmentAddData():
    newroomdimension = newRoomDimension()
    newroompricing = newRoompricing()
    newnumberofRooms = newNumberofRooms()
-   newroomfirstID = newRoomIDFirst()
-   newroomlastID = newRoomIDLast()
-   newroomdateofacquisition = newRoomDateofAcquisition()
-   newroomrentalhistory = newRoomRentalHistory()
+   newroomfirstID = newRoomID("New Room First ID: ")
+   newroomlastID = newRoomID("New Room Last ID: ")
+   newroomdateofacquisition = newRoomDate("New Room Acquisition Date: ")
+   newroomrentalhistory = newRoomDate("New Room Rental History Date: ")
    newroomstatus = newRoomStatus()
    adddatalist = ["New Room Info: "+str(newroom),"New Room Code: "+str(newroomcode),"New Room Dimension in range (sqft): "+str(newroomdimension)+'+ sqft',"New Room Pricing: RM"+str(newroompricing),"Number for the new room: "+str(newnumberofRooms),"New room ID: "+str(newroomfirstID+' to '+newroomlastID),"New room Acquisition Date: "+str(newroomdateofacquisition),"New room Rental History: "+str(newroomrentalhistory)+" rent","New room Status: "+str(newroomstatus)]
    print("\nNew Data:",adddatalist)
@@ -506,28 +509,32 @@ def newNumberofRooms():
         print("- Please fill in the correct format for the number of new rooms. Refer to the description above for its details and format -\n")
         continue
 
-def newRoomIDFirst():
+def newRoomID(order):
    while True:
       code = None
       SCL='SCL2'
       specials=specialCharacterList(SCL)
-      newRoomIDfirst = input("\nApartment ID: A(01)-L(01)-R(01)x(to)xA(99)-L(99)-R(99)\nPlease follow this format as written above (A stands for Apartment Block, L stands for Room Level, R stands for Room Number, x means space)\n\nRoom Apartment ID (First): ")
-      if len(newRoomIDfirst) == 0:
+      print("\nApartment ID: A(01)-L(01)-R(01)x(to)xA(99)-L(99)-R(99)\nPlease follow this format as written above (A stands for Apartment Block, L stands for Room Level, R stands for Room Number, x means space)\n")
+      if order == "first":
+         newRoomID = input("\nRoom Apartment ID (First): ")
+      else:
+         newRoomID = input("\nRoom Apartment ID (Last): ")
+      if len(newRoomID) == 0:
          code = 5
          message(code)
          print("- Please fill in the Apartment ID -\n")
          continue
       else:
          code = None
-      if 0 < len(newRoomIDfirst) < 10:
+      if 0 < len(newRoomID) < 10:
          code = 2
          message(code)
          print("- Please follow the format as: A01-L10-R40 ( A stands for Apartment Block, L stands for Level, and R stands for Room (The length must have 11 characters long, including the dash -) -\n")
          continue
       else:
          code = None
-      if (newRoomIDfirst[0] == 'A' and newRoomIDfirst[3] == '-' and newRoomIDfirst[4] == 'L' and newRoomIDfirst[7] == '-' and newRoomIDfirst[8] == 'R') and any(location.isdigit() for location in newRoomIDfirst):
-         if [character for character in newRoomIDfirst[:] if (character in specials)]:
+      if (newRoomID[0] == 'A' and newRoomID[3] == '-' and newRoomID[4] == 'L' and newRoomID[7] == '-' and newRoomID[8] == 'R') and any(location.isdigit() for location in newRoomID):
+         if [character for character in newRoomID[:] if (character in specials)]:
             code = None
       else:
          code=2
@@ -535,55 +542,22 @@ def newRoomIDFirst():
          print("- Please follow the format as: A01-L10-R40, it must contain uppercase alphabets (A,L,R) and numbers. -\n")
          continue            
       if code == None:
-         return newRoomIDfirst
+         return newRoomID
       else:
          code=3
          message(code)
          print("- Please fill in the correct format for room Apartment ID. Refer to the description above for its details and format -")
          continue
 
-def newRoomIDLast():
-   while True:
-      code = None
-      SCL = 'SCL2'
-      specials=specialCharacterList(SCL)
-      newRoomIDlast = input("\nRoom Apartment ID (Last): ")
-      if len(newRoomIDlast) == 0:
-         code = 5
-         message(code)
-         print("- Please fill in the Apartment ID -\n")
-         continue
-      else:
-         code = None
-      if 0 < len(newRoomIDlast) < 10:
-         code = 2
-         message(code)
-         print("- Please follow the format as: A01-L10-R40 ( A stands for Apartment Block, L stands for Level, and R stands for Room (The length must have 11 characters long, including the dash -) -\n")
-         continue
-      else:
-         code = None
-      if (newRoomIDlast[0] == 'A' and newRoomIDlast[3] == '-' and newRoomIDlast[4] == 'L' and newRoomIDlast[7] == '-' and newRoomIDlast[8] == 'R') and (location.isdigit() for location in newRoomIDlast):
-         if [character for character in newRoomIDlast[:] if (character in specials)]:
-            code = None
-      else:
-         code=2
-         message(code)
-         print("- Please follow the format as: A01-L10-R40, it must contain uppercases alphabets (A,L,R) and numbers. -\n")
-         continue          
-      if code == None:
-         return newRoomIDlast
-      else:
-         code=3
-         message(code)
-         print("- Please fill in the correct format for room Apartment ID. Refer to the description above for its details and format -")
-         continue
-
-def newRoomDateofAcquisition():
+def newRoomDate(dateType):
     while True:
         code = None
-        newRoomDateOfAcquisition = input("\nRoom Date of Acquisition: dd/mm/yyyy\nNo special characters included, except '/'\n\nRoom Acquisition Date: ")
-        if any(location.isdigit() for location in newRoomDateOfAcquisition) and len(newRoomDateOfAcquisition) == 10:
-            day,month,year = newRoomDateOfAcquisition.split('/')
+        if dateType == "Acquisition":
+         roomDate = input("\nRoom Date of Acquisition: dd/mm/yyyy\nNo special characters included, except '/'\n\nRoom Acquisition Date: ")
+        else:
+         roomDate = input("\nRoom Rental History: (Accepted input: 'dd/mm/yyyy' or 'Empty')\nNo special characters included, except '/'\n\nRoom Rental History: ")
+        if any(location.isdigit() for location in roomDate) and len(roomDate) == 10:
+            day,month,year = roomDate.split('/')
             ValidDate = True
             try:
                dt.datetime(int(year),int(month),int(day))
@@ -592,33 +566,7 @@ def newRoomDateofAcquisition():
                 ValidDate = False
             if ValidDate == True :
                code = None
-               return newRoomDateOfAcquisition
-            else:
-               code = 2
-               message(code)
-               print("- The given date is not valid -\n")
-               continue
-        else:
-            code = 2
-            message(code)
-            print("- Wrong Date Format (dd/mm/yyyy) -\n")
-            continue
-
-def newRoomRentalHistory():
-   while True:
-        code = None
-        newRoomRentalHistory = input("\nRoom Rental History: (Accepted input: 'dd/mm/yyyy' or 'Empty')\nNo special characters included, except '/'\n\nRoom Rental History: ")
-        if any(location.isdigit() for location in newRoomRentalHistory) and len(newRoomRentalHistory) == 10:
-            day,month,year = newRoomRentalHistory.split('/')
-            ValidDate = True
-            try:
-               dt.datetime(int(year),int(month),int(day))
-               ValidDate = True
-            except ValueError:
-               ValidDate = False
-            if ValidDate == True :
-               code = None
-               return newRoomRentalHistory
+               return roomDate
             else:
                code = 2
                message(code)
@@ -693,19 +641,6 @@ def newRoomStatus():
          print("Please insert the correct format for room status. Refer to the description above for its details and format -\n")
          continue
 
-def decision():
-   code = None
-   while True:
-      decisionkey=input("\n----------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\nAre you sure?\nInsert 'Y' to continue, 'X'to return. PLease think before action: ")
-      if decisionkey in ["Y","y"]:
-         return False
-      elif decisionkey in ["N","n"]:
-         return 
-      else:
-         code = 0
-         message(code)
-         continue
-
 def apartmentadddataconfirmation(adddatalist):
    modify = True
    listCode = "a"
@@ -720,46 +655,132 @@ def apartmentadddataconfirmation(adddatalist):
          message(code)
          break
 
-def ApartmentDataInfo():
+def ApartmentDataInfo(): #editdata #deletedata used
    data = True
    while data == True:
       opt = input("\n[R] - Room Info [C] - Room code, [D] - Dimensions, [P] - Pricing, [N] - Number of Rooms, [A] - Apartment ID, [D] - Date of Acquisition, [H] - Rental History, [S] - Status \nAnswer: ")
       if opt in ["R","r"]:
-         num = 0
+         return 0
       elif opt in ["C","c"]:
-         num = 1
+         return 1
       elif opt in ["D","d"]:
-         num = 2
+         return 2
       elif opt in ["P","p"]:
-         num = 3
+         return 3
       elif opt in ["N","n"]:
-         num = 4
+         return 4
       elif opt in ["A","a"]:
-         num = 5
+         return 5
       elif opt in ["D","d"]:
-         num = 6
+         return 6
       elif opt in ["H","h"]:
-         num = 7
+         return 7
       elif opt in ["S","s"]:
-         num = 8
+         return 8
       else:
          code = 0
          message(code)
          continue
 
-def apartmentEditData():
+def category(listCode):
+   while True:
+      if listCode == "p":
+         opt = input("\n[R]-Reference number,[D]-Transaction date,[T]-TenantID,[A]-Apartment code,[S]-Amount: ")
+         if opt in ["R","r"]:
+            return 0
+         elif opt in ["D","d"]:
+            return 1
+         elif opt in ["T","t"]:
+            return 2
+         elif opt in ["A","a"]:
+            return 3
+         elif opt in ["S","s"]:
+            return 4
+         else:
+            message(0)
+            continue
+      else:
+         opt = input("\n[N]-Name,[G]-Gender,[P]-Phone number,[R]-Nationality,[D]-Rental start date,[I]-Income,[S]-Tenant status: ")
+         if opt in ["N","n"]:
+            return 0
+         elif opt in ["G","g"]:
+            return 1
+         elif opt in ["P","p"]:
+            return 2
+         elif opt in ["R","r"]:
+            return 3
+         elif opt in ["D","d"]:
+            return 4
+         elif opt in ["I","i"]:
+            return 5
+         elif opt in ["S","s"]:
+            return 6
+         else:
+            message(0)
+            continue
+
+def searchInformation(listCode,num,details):                   #Define searchinformation function
+   while True:
+      if details:
+         searchInformation = details
+      else:
+         searchInformation=input("\nPlease enter text to begin the search: ")
+      recordExist = False
+      with open(listIdentifier(listCode),"r") as Xhandler:
+         print("\n----------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\nResults:\n")
+         for record in Xhandler:
+            strippedItem = record.rstrip()
+            data=strippedItem.split(",")
+            if searchInformation in data[num]:
+               print(record.rstrip(",").rstrip("\n"))
+               recordExist = True
+            else:
+               continue
+         if recordExist == True:
+            code = 0
+            print("\n- Matching records ends here -")
+         else:
+            code = 4
+            message(code)
+         break
+
+def replaceOldData(listCode):
+   modify = None
+   while True:
+      if listCode == "a":
+         editDatatype = ApartmentDataInfo()
+      else:
+         editDatatype = category(listCode)
+         apartmentSearch(editDatatype)
+      selecteddata = input("\nPlease insert the data that you want to edit: ")
+      newdata = input("Last step, please insert the new data with the correct format: ")
+      editdataconfirmation = input("\nAre you sure with your records just now? (Yes/No): ")
+      if editdataconfirmation == 'Yes':
+         with open(listIdentifier(listCode),"r") as Xhandler:
+            dataread = Xhandler.readlines()
+            for record in Xhandler:
+               strippeditem = record.rstrip()
+               list = strippeditem.split(",")
+               for record in dataread[editDatatype]:
+                  if selecteddata == list[editDatatype] :
+                     record.replace(selecteddata,newdata)
+                  Xhandler.append(record)
+            with open(listIdentifier(listCode),"w") as Xhandler:
+               for record in Xhandler:
+                  Xhandler.write(record)
+                  Xhandler.write("\n")
+
+def apartmentEditData(listCode):
    dataInfo = True
    while dataInfo == True:
-      editdatainfo = input("\nSearch, Edit, Replace, and Update\nInsert 'C' to continue, any key to exit. ")
-      if editdatainfo == "C" or 'C':
-         replaceOldApartmentData()
+      editdatainfo = input("\Enter old data, input new data, replace old data with new data, and update record\nInsert 'C' to continue, any key to exit. ")
+      if editdatainfo in ["C","c"]:
+         replaceOldData(listCode)
       else:
-         dataInfo = None
-         return False
+         dataInfo = False
 
 def apartmentSearch(num):
    while True:
-      sourceFunction = None
       listCode = "a"
       displaylist=[]
       with open (listIdentifier(listCode), "r") as Tread:
@@ -768,49 +789,17 @@ def apartmentSearch(num):
             listRecord = record.split(",")
             displaylist.append(listRecord[num])
          print("\n",displaylist)
-      if sourceFunction != None:
-         replaceOldApartmentData()
-      else:
-         continue
-
-def replaceOldApartmentData():
-   num = None
-   modify = None
-   listCode = 'a'
-   while True:
-      readFile(listCode)
-      selecteddata = input("\nPlease insert the data that you want to edit: ")
-      newdata = input("Last step, please insert the new data with the correct format: ")
-      editdataconfirmation = input("\nAre you sure with your records just now? (Yes/No): ")
-      if editdataconfirmation == 'Yes':
-         editdata = []
-         with open(listIdentifier(listCode),"r") as Xhandler:
-            dataread = Xhandler.readlines()
-            for record in dataread:
-               if selecteddata in record:
-                  record.replace(selecteddata,newdata)
-               editdata.append(record)
-         with open(listIdentifier(listCode),"w") as Xhandler:
-            for record in editdata:
-               Xhandler.write(record)
-               Xhandler.write("\n")
-      quitconfirmation = input("\nContinue or exit? ( Enter 'C' to continue, any key to exit ): ")
-      if quitconfirmation == 'C':
-         continue
-      else:
-        return modify
+         break
       
 def apartmentDeleteData():
-   sourcefunction = None
    num = None
-   sourcefunction = True
    modify = True
    while True:
       print("\n- Delete Data -")
       deletedata = input("\n1. Remove specified items\n2. Delete specified records\n3. Delete all records\n4. Exit\n\nPlease select and enter which operator that you want to proceed: ")
       if deletedata == '1':
          print("\n- 1. Remove specified items -")
-         apartmentSearch(num,sourcefunction)
+         apartmentSearch(num)
       elif deletedata == '2':
          print("\n- 2. Delete specified records -")
       elif deletedata == '4':
@@ -825,7 +814,7 @@ def apartmentDeleteData():
       else:
          continue
 
-def tenantOrTransactionEntryForm(masterKey,listCode,code):          #Define tenantOrTransactionEntryForm function
+def tenantOrTransactionEntryForm(masterKey,listCode,code):           #Define tenantOrTransactionEntryForm function
    while True:
       if masterKey == True:
          n = input("Number of new Records: ")
@@ -874,13 +863,11 @@ def modifyData(masterKey,listCode,code,modifyType):
       if dataInput == "1":
          if listCode == "a":
             apartmentAddData()
-         elif listCode == "t":
-            tenantOrTransactionEntryForm(masterKey,listCode,code)
          else:
             tenantOrTransactionEntryForm(masterKey,listCode,code)
 
       elif dataInput == "2":
-         apartmentEditData()
+         apartmentEditData(listCode)
 
       elif dataInput == "3":
          apartmentDeleteData()
@@ -889,11 +876,10 @@ def modifyData(masterKey,listCode,code,modifyType):
          modify = False
 
       else:
-         code = 2
-         message(code)
+         message(2)
          continue
 
-def tenantOrTransaction(masterKey,UID,listCode,code):               #Define tenantOrTransaction function
+def tenantOrTransaction(masterKey,UID,listCode,code):                #Define tenantOrTransaction function
    while True:
       if masterKey == False:
          searchInformation(listCode,0,UID)
@@ -909,8 +895,7 @@ def tenantOrTransaction(masterKey,UID,listCode,code):               #Define tena
          elif opt in ["E","e"]:
             break
          else:
-            code = 0
-            message(code)
+            message(0)
             continue
          break
       else:
@@ -923,8 +908,7 @@ def tenantOrTransaction(masterKey,UID,listCode,code):               #Define tena
          elif opt in ["E","e"]:
             break
          else:
-            code = 0
-            message(code)
+            message(0)
             continue
          break
 
@@ -969,8 +953,8 @@ def apartment(masterKey,listCode,code):                              #Define apa
    else:
       return False
 
-def searchBox():
-   while True:                             #Define search function
+def searchBox(masterKey,UID):                                                     #Define search function
+   while True:
       print("\n----------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\nWelcome to search box!")
       num = None
       print("\n1. Search room specific details.\n2. Search transaction details.\n3. Search specific tenant details.\n4. Exit search box.\n")
@@ -996,82 +980,25 @@ def searchBox():
             message(code)
             continue
          apartmentSearch(num)
-
       elif option == 2:
          listCode = "p"
-         opt = input("\n[R]-Reference number,[D]-Transaction date,[T]-TenantID,[A]-Apartment code,[S]-Amount: ")
-         if opt in ["R","r"]:
-            num = 0
-         elif opt in ["D","d"]:
-            num = 1
-         elif opt in ["T","t"]:
-            num = 2
-         elif opt in ["A","a"]:
-            num = 3
-         elif opt in ["S","s"]:
-            num = 4
-         else:
-            code = 0
-            message(code)     
-      
+         num = category(listCode)
       elif option == 3 :
          listCode = "t"
-         opt = input("\n[N]-Name,[G]-Gender,[P]-Phone number,[R]-Nationality,[D]-Rental start date,[I]-Income,[S]-Tenant status: ")
-         if opt in ["N","n"]:
-            num = 0
-         elif opt in ["G","g"]:
-            num = 1
-         elif opt in ["P","p"]:
-            num = 2
-         elif opt in ["R","r"]:
-            num = 3
-         elif opt in ["D","d"]:
-            num = 4
-         elif opt in ["I","i"]:
-            num = 5
-         elif opt in ["S","s"]:
-            num = 6
-         else:
-            code = 0
-            message(code)
-
+         num = category(listCode)
       elif option == 4:
          print("\n- Return to main menu -\n\n----------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\n- Welcome back ! -")
-         return False                                 #return to menu function
-      
+         return False                                          #return to menu function
       else:
          code = 0
          message(code)
-
-      details = None
+      if masterKey == False:
+         details = UID
+      else:
+         details = None
       searchInformation(listCode,num,details)
 
-def searchInformation(listCode,num,details):                  #Define searchinformation function
-   while True:
-      if details:
-         searchInformation = details
-      else:
-         searchInformation=input("\nPlease enter text to begin the search: ")
-      recordExist = False
-      with open(listIdentifier(listCode),"r") as Xhandler:
-         print("\n----------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\nResults:\n")
-         for record in Xhandler:
-            strippedItem = record.rstrip()
-            data=strippedItem.split(",")
-            if searchInformation in data[num]:
-               print(record.rstrip(",").rstrip("\n"))
-               recordExist = True
-            else:
-               continue
-         if recordExist == True:
-            code = 0
-            print("\n- Matching records ends here -")
-         else:
-            code = 4
-            message(code)
-         return False
-
-def menu(masterKey,UID):                                  #Define menu function
+def menu(masterKey,UID):                                       #Define menu function
    mainMenu = True
    while mainMenu == True:
       code = None
@@ -1081,7 +1008,7 @@ def menu(masterKey,UID):                                  #Define menu function
          print("\nMain menu\n\n[S] - Search box\n\nReview information about:\n[A] - Apartment\n[T] - Tenant\n[P] - Transaction\n\nQuick functions:\n[D] - Print Specific House & Tenant Details\n[I] - Inquiry of Past Tenant Details\n[L] - Login History\n[E] - Exit")
       opt=input("\nPlease enter which operation that you want to do: ")
       if opt in ["S","s"]:
-         searchBox()                                        #redirect to searchbox function
+         searchBox(masterKey,UID)                                        #redirect to searchbox function
 #Check for basic Functions
       elif opt in ["A","a"]:
          listCode = "a"
