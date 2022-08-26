@@ -88,144 +88,160 @@ def gettenantID(masterKey):
       return UID
 
 def getname(code,nameType):                            #define getname()
-    specials = specialCharacterList(None)
-    while True:
-        print("Format: Name Name... or Name-Name Name or Na'me Name")
-        if nameType == "tenant":
-            name = input("Enter tenant's fullname:\n")
-        elif nameType == "employer":
-            name = input("Enter tenant's current employer:\n")
-        else:
-            name = input("Enter tenant's city of birth\n")
-        nameList = name.split(" ")
-        if len(nameList) >= 2:
-            for words in nameList:
-                print("Checking",words)
-                if words.isalpha() or [character for character in words if(character in specials[12]) or (character in specials[22])]:
-                    if words[0].isupper():
-                        code = None
-                        continue
-                    else:
-                        code = 2
-                        message(code)
-                        break
-                else:
-                    code = 1
-                    message(code)
-                    break
-        else:
-            code = 3
-            message(code)
-        if code:
-            print("ATTENTION||Error detected.||ATTENTION")
-        else:
-            print("No errors detected.")
-        retry = input("[R]-Retry,[Any other key]-Exit using "+name+"\n")
-        if retry in ["R","r"]:
-            continue
-        else:
-            return name
-
-def getgender(code):
-    while True:
-        gender = input("[M]-Male\n[F]-Female\nEnter tenant gender:\n")
-        if len(gender)== 1:
-            if gender.isalpha():
-                code = None
+   specials = specialCharacterList(None)
+   while True:
+      print("Format: Name Name or Name-Name Name or Na'me Name")
+      if nameType == "tenant":
+         name = input("Enter tenant's fullname:\n")
+      elif nameType == "employer":
+         name = input("Enter tenant's current employer:\n")
+      else:
+         name = input("Enter tenant's city of birth\n")
+      nameList = name.split(" ")
+      if len(nameList) >= 2:
+         for words in nameList:
+            print("Checking",words)
+            if words.isalpha() or [character for character in words if(character in specials[12]) or (character in specials[22])]:
+               if words[0].isupper():
+                  code = None
+                  continue
+               else:
+                  code = 2
+                  break
             else:
-                code = 1
-                message(code)
-        else: 
-            code = 3
-            message(code)
-        if code:
-            print("ATTENTION||Error detected.||ATTENTION")
-        else:
-            print("No errors detected.")
-        retry = input("[R]-Retry,[Any other key]-Exit using "+gender.upper()+"\n")
-        if retry in ["R","r"]:
-            continue
-        else:
-            return gender.upper()
+               code = 1
+               break
+      else:
+         code = 3
+      if code:
+         message(code)
+         print("ATTENTION||Error detected.||ATTENTION")
+      else:
+         print("No errors detected.")
+      retry = input("[R]-Retry,[Any other key]-Exit using "+name+"\n")
+      if retry in ["R","r"]:
+         continue
+      else:
+         return name
+
+def getabbreviation(code,abbreviationType):
+   while True:
+      if abbreviationType == "gender":
+         abbreviation = input("[M]-Male\n[F]-Female\nEnter tenant gender:\n")
+      else:
+         abbreviation = input("[M]-Malaysian\n[N]-non-Malaysian\nEnter tenant nationality: \n")
+      if len(abbreviation)== 1:
+         if abbreviation.isalpha():
+            if abbreviationType == "gender":
+               if abbreviation in ["M","m"]:
+                  code = None
+                  abbreviation = "Male"
+               elif abbreviation in ["F","f"]:
+                  code = None
+                  abbreviation = "Female"
+               else: 
+                  code = 0
+            else:
+               if abbreviation in ["M","m"]:
+                  code = None
+                  abbreviation = "Malaysian"
+               elif abbreviation in ["N","n"]:
+                  code = None
+                  abbreviation = "non-Malaysian"
+               else: 
+                  code = 0
+         else:
+            code = 1
+      else: 
+         code = 3
+      if code or code == 0:
+         message(code)
+         print("ATTENTION||Error detected.||ATTENTION")
+      else:
+         print("No errors detected.")
+      retry = input("[R]-Retry,[Any other key]-Exit using "+abbreviation+"\n")
+      if retry in ["R","r"]:
+         continue
+      else:
+         return abbreviation
 
 def getpNum(code):
-    while True:
-        pNum = input("Format: ############\nEnter tenant phone number:\n")
-        if 6 < len(pNum) < 16:
-            for digit in pNum:
-                if digit.isdigit():
-                    code = None
-                    continue
-                else:
-                    code = 1
-                    message(code)
-                    break
-        else:
-            code = 3
-            message(code)
-        if code:
-            print("ATTENTION||Error detected.||ATTENTION")
-        else:
-            print("No errors detected.")
-        retry = input("[R]-Retry,[Any other key]-Exit using "+pNum+"\n")
-        if retry in ["R","r"]:
-            continue
-        else:
-            return pNum
+   while True:
+      pNum = input("Format: ############\nEnter tenant phone number:\n")
+      if 6 < len(pNum) < 16:
+         for digit in pNum:
+            if digit.isdigit():
+               code = None
+               continue
+            else:
+               code = 1
+               break
+      else:
+         code = 3
+      if code:
+         message(code)
+         print("ATTENTION||Error detected.||ATTENTION")
+      else:
+         print("No errors detected.")
+      retry = input("[R]-Retry,[Any other key]-Exit using "+pNum+"\n")
+      if retry in ["R","r"]:
+         continue
+      else:
+         return pNum
 
 def getnationality(code):
-    while True:
-        nationality = input("[M]-Malaysian\n[N]-non-Malaysian\nEnter tenant nationality: \n")
-        if nationality in ["M","m"]:
-            code = None
-        elif nationality in ["N","n"]:
-            code = None
-        else: 
-            code = 0
-            message(code)
-            continue
-        retry = input("[R]-Retry,[Any other key]-Exit using "+nationality.upper()+"\n")
-        if retry in ["R","r"]:
-            continue
-        else:
-            return nationality.upper()
+   while True:
+      nationality = input("[M]-Malaysian\n[N]-non-Malaysian\nEnter tenant nationality: \n")
+      if nationality in ["M","m"]:
+         code = None
+         nationality = "Malaysian"
+      elif nationality in ["N","n"]:
+         code = None
+         nationality = "non-Malaysian"
+      else: 
+         code = 0
+         message(code)
+         continue
+      retry = input("[R]-Retry,[Any other key]-Exit using "+nationality+"\n")
+      if retry in ["R","r"]:
+         continue
+      else:
+         return nationality
 
 def getDate(code,dateType):
-    specials = specialCharacterList(None)
-    while True:
-        if dateType == "start":
-            path = input("Use current date as rental start date?\n[Y]-Yes\n[Any Other Key]-No\n")
-            if path in ["Y","y"]:
-                date = dt.date.today().strftime("%Y/%m/%d")
-                print("Current date:",date)
-            else:
-                date = input("Format: YYYY/MM/DD\nEnter Rental start date:\n")
-        else:
-            date = input("Format: YYYY/MM/DD\nEnter tenant birth date:\n")
-        if len(date) == 10:
-            if date[4] == date[7] == specials[24]:
-                year,month,day = date.split("/")
-                try:
-                    dt.datetime(int(year),int(month),int(day))
-                    code = None
-                except ValueError:
-                    code = 1
-                    message(code)
-            else:
-                code = 2
-                message(code)
-        else:
-            code = 3
-            message(code)
-        if code:
-            print("ATTENTION||Error detected.||ATTENTION\n")
-        else:
-            print("No errors detected.\n")
-        retry = input("[R]-Retry,[Any other key]-Exit using "+date+"\n")
-        if retry in ["R","r"]:
-            continue
-        else:    
-            return date
+   specials = specialCharacterList(None)
+   while True:
+      if dateType == "start":
+         path = input("Use current date as rental start date?\n[Y]-Yes\n[Any Other Key]-No\n")
+         if path in ["Y","y"]:
+            date = dt.date.today().strftime("%Y/%m/%d")
+            print("Current date:",date)
+         else:
+            date = input("Format: YYYY/MM/DD\nEnter Rental start date:\n")
+      else:
+         date = input("Format: YYYY/MM/DD\nEnter tenant birth date:\n")
+      if len(date) == 10:
+         if date[4] == date[7] == specials[24]:
+            year,month,day = date.split("/")
+            try:
+               dt.datetime(int(year),int(month),int(day))
+               code = None
+            except ValueError:
+               code = 1
+         else:
+            code = 2
+      else:
+         code = 3 
+      if code:
+         message(code)
+         print("ATTENTION||Error detected.||ATTENTION\n")
+      else:
+         print("No errors detected.\n")
+      retry = input("[R]-Retry,[Any other key]-Exit using "+date+"\n")
+      if retry in ["R","r"]:
+         continue
+      else:    
+         return date
 
 def getincome(code):
     while True:
@@ -283,34 +299,34 @@ def getrental(masterKey):
 
 def tenantEntryForm(masterKey,listCode,code):          #Define tenantEntryForm function
    while True:
-       if masterKey == True:
-          n = input("Number of new tenants: ")
-          if n.isdecimal():
-              code = None
-          else:
-              print(type(n))
-              code = 0
-              message(code)
-              continue
-       else:
-          n = 1
-       for tenantList in range(0,int(n)):
-          #Get input for tenant data
-          UserID  = gettenantID(masterKey)
-          name = getname(code,"tenant")
-          gender = getgender(code)
-          pNum = getpNum(code)
-          nationality = getnationality(code)
-          startDate = getDate(code,"start")
-          employer = getname(code,"employer")
-          income = getincome(code)
-          rental = getrental(masterKey)
-          birthDate = getDate(code,"birth")
-          birthCity = getname(code,"city")
-          #Apply data to end of list 
-          tenantList = [UserID,name,gender,pNum,nationality,startDate,employer,income,rental,birthDate,birthCity]
-          appendFile(tenantList,listCode)
-       break
+      if masterKey == True:
+         n = input("Number of new tenants: ")
+         if n.isdecimal():
+            code = None
+         else:
+            print(type(n))
+            code = 0
+            message(code)
+            continue
+      else:
+         n = 1
+      for tenantList in range(0,int(n)):
+         #Get input for tenant data
+         UserID  = gettenantID(masterKey)
+         name = getname(code,"tenant")
+         gender = getabbreviation(code,"gender")
+         pNum = getpNum(code)
+         nationality = getabbreviation(code,"nationality")
+         startDate = getDate(code,"start")
+         employer = getname(code,"employer")
+         income = getincome(code)
+         rental = getrental(masterKey)
+         birthDate = getDate(code,"birth")
+         birthCity = getname(code,"city")
+         #Apply data to end of list 
+         tenantList = [UserID,name,gender,pNum,nationality,startDate,employer,income,rental,birthDate,birthCity]
+         appendFile(tenantList,listCode)
+      break
 
 def tenantOrTransaction(masterKey,UID,listCode,code):
    while True:
@@ -364,50 +380,34 @@ def apartment(masterKey,listCode,code):                        #Define apartment
    
    listCode = "a"
    print("\n- Apartment info: -\n")
-   ApartmentList=[]
    
    #Put sample data
-   list1=["Room Info: Standard Room (Triple)","Code: SR1","Dimensions: 140+ sqft","Pricing: RM350","Number of Rooms: 20","Apartment ID: A01-L01-R01 to A01-L01-R21, Date of Acquisition: 03/01/2015, Rental History: 27/02/2015 rent, Status: Available"]
-   list2=["Room Info: Standard Room (Twin)","Code: SR2","Dimensions: 120+ sqft","Pricing: RM450","Number of Rooms: 20","Apartment ID: A01-L01-R22 to A01-L01-R41, Date of Acquisition: 10/02/2015, Rental History: 28/03/2015 rent, Status: Available"]
-   list3=["Room Info: Standard Room A/C (Triple)","Code: SR3","Dimensions: 150+ sqft","Pricing: RM550","Number of Rooms: 20","Apartment ID: A01-L02-R01 to A01-L02-R21, Date of Acquisition: 21/03/2016, Rental History: 24/04/2016 rent, Status: Available"]
-   list4=["Room Info: Standard Room A/C (Twin)","Code: SR4","Dimensions: 130+ sqft","Pricing: RM650","Number of Rooms: 20","Apartment ID: A01-L02-R22 to A01-L02-R41, Date of Acquisition: 02/04/2016, Rental History: 20/05/2016 rent, Status: Available"]
-   list5=["Room Info: Deluxe Room (Triple)","Code: DR1","Dimensions: 170+ sqft","Pricing: RM750","Number of Rooms: 20","Apartment ID: A01-L04-R01 to A01-L04-R21, Date of Acquisition: 11/05/2017, Rental History: 21/06/2017 rent, Status: Available"]
-   list6=["Room Info: Deluxe Room (Twin)","Code: DR2","Dimensions: 160+ sqft","Pricing: RM840","Number of Rooms: 20","Apartment ID: A01-L04-R22 to A01-L04-R41, Date of Acquisition: 22/06/2017, Rental History: 22/07/2017 rent, Status: Available"]
-   list7=["Room Info: Deluxe Room A/C with shared attached bath / toilet (Triple)","Code: DR3","Dimensions: 180+ sqft","Pricing: RM950","Number of Rooms: 20","Apartment ID: A01-L03-R1 to A01-L03-R21, Date of Acquisition: 30/07/2018, Rental History: 25/08/2018 rent, Status: Available"]
-   list8=["Room Info: Deluxe Room A/C with shared attached bath / toilet","Code: DR4","Dimensions: 170+ sqft","Pricing: RM1040","Number of Rooms: 20","Apartment ID: A01-L03-R22 to A01-L03-R41, Date of Acquisition: 16/08/2018,, Rental History: 18/09/2018 rent, Status: Available"]
-   list9=["Room Info: Compact Premium Single","Code: CPS1","Dimensions: 130+ sqft","Pricing: RM690","Number of Rooms: 20","Apartment ID: A01-L05-R01 to A01-L05-R41, Date of Acquisition: 02/09/2019, Rental History: 29/10/2019 rent, Status: Available"]
-   list10=["Room Info: Medium Premium Single","Code: MPS1","Dimensions: 150+ sqft","Pricing: RM750","Number of Rooms: 20","Apartment ID: A02-L01-R01 to A02-L01-R21, Date of Acquisition: 15/10/2019, Rental History: 31/11/2019 rent, Status: Available"]
-   list11=["Room Info: Medium Premium Twin","Code: MPT1","Dimensions: 180+ sqft","Pricing: RM890","Number of Rooms: 20","Apartment ID: A02-L02-R01 to A02-L02-R21, Date of Acquisition: 25/11/2020, Rental History: 31/12/2020 rent, Status: Available"]
-   list12=["Room Info: Medium Premium with attached bath / toilet (Twin)","Code: MP1","Dimensions: 180+ sqft","Pricing: RM940","Number of Rooms: 20","Apartment ID: A02-L03-R01 to A02-L03-R21, Date of Acquisition: 30/12/2020, Rental History: 31/01/2020 rent, Status: Available"]
-   list13=["Room Info: Medium Premium with attached bath / toilet (Single)","Code: MP2","Dimensions: 160+ sqft","Pricing: RM1050","Number of Rooms: 20","Apartment ID: A02-L03-R22 to A02-L03-R41, Date of Acquisition: 16/01/2021, Rental History: 28/02/2021 rent, Status: Available"]
-   list14=["Room Info: En-Suite Single (Super Premium - Triple)","Code: ESS3","Dimensions: 160+ sqft","Pricing: RM700","Number of Rooms: 20","Apartment ID: A02-L04-R01 to A02-L04-R41, Date of Acquisition: 25/02/2021, Rental History: 31/03/2021 rent, Status: Available"]
-   list15=["Room Info: En-Suite Single (Super Premium - Twin)","Code: ESS2","Dimensions: 140+ sqft","Pricing: RM800","Number of Rooms: 20","Apartment ID: A02-L04-R01 to A02-L04-R41, Date of Acquisition: 31/05/2022, Rental History: Empty, Status: Not Available"]
-   list16=["Room Info: En-Suite Twin (Super Premium)","Code: EST2","Dimensions: 200+ sqft","Pricing: RM900","Number of Rooms: 20","Apartment ID: A02-L05-R01 to A02-L05-R41, Date of Acquisition: 26/06/2022, Rental History: Empty, Status: Not Available"]
+   list1 = ["Room Info: Standard Room (Triple)","Code: SR1","Dimensions: 140+ sqft","Pricing: RM350","Number of Rooms: 20","Apartment ID: A01-L01-R01 to A01-L01-R21, Date of Acquisition: 03/01/2015, Rental History: 27/02/2015 rent, Status: Available"]
+   list2 = ["Room Info: Standard Room (Twin)","Code: SR2","Dimensions: 120+ sqft","Pricing: RM450","Number of Rooms: 20","Apartment ID: A01-L01-R22 to A01-L01-R41, Date of Acquisition: 10/02/2015, Rental History: 28/03/2015 rent, Status: Available"]
+   list3 = ["Room Info: Standard Room A/C (Triple)","Code: SR3","Dimensions: 150+ sqft","Pricing: RM550","Number of Rooms: 20","Apartment ID: A01-L02-R01 to A01-L02-R21, Date of Acquisition: 21/03/2016, Rental History: 24/04/2016 rent, Status: Available"]
+   list4 = ["Room Info: Standard Room A/C (Twin)","Code: SR4","Dimensions: 130+ sqft","Pricing: RM650","Number of Rooms: 20","Apartment ID: A01-L02-R22 to A01-L02-R41, Date of Acquisition: 02/04/2016, Rental History: 20/05/2016 rent, Status: Available"]
+   list5 = ["Room Info: Deluxe Room (Triple)","Code: DR1","Dimensions: 170+ sqft","Pricing: RM750","Number of Rooms: 20","Apartment ID: A01-L04-R01 to A01-L04-R21, Date of Acquisition: 11/05/2017, Rental History: 21/06/2017 rent, Status: Available"]
+   list6 = ["Room Info: Deluxe Room (Twin)","Code: DR2","Dimensions: 160+ sqft","Pricing: RM840","Number of Rooms: 20","Apartment ID: A01-L04-R22 to A01-L04-R41, Date of Acquisition: 22/06/2017, Rental History: 22/07/2017 rent, Status: Available"]
+   list7 = ["Room Info: Deluxe Room A/C with shared attached bath / toilet (Triple)","Code: DR3","Dimensions: 180+ sqft","Pricing: RM950","Number of Rooms: 20","Apartment ID: A01-L03-R1 to A01-L03-R21, Date of Acquisition: 30/07/2018, Rental History: 25/08/2018 rent, Status: Available"]
+   list8 = ["Room Info: Deluxe Room A/C with shared attached bath / toilet","Code: DR4","Dimensions: 170+ sqft","Pricing: RM1040","Number of Rooms: 20","Apartment ID: A01-L03-R22 to A01-L03-R41, Date of Acquisition: 16/08/2018,, Rental History: 18/09/2018 rent, Status: Available"]
+   list9 = ["Room Info: Compact Premium Single","Code: CPS1","Dimensions: 130+ sqft","Pricing: RM690","Number of Rooms: 20","Apartment ID: A01-L05-R01 to A01-L05-R41, Date of Acquisition: 02/09/2019, Rental History: 29/10/2019 rent, Status: Available"]
+   list10 = ["Room Info: Medium Premium Single","Code: MPS1","Dimensions: 150+ sqft","Pricing: RM750","Number of Rooms: 20","Apartment ID: A02-L01-R01 to A02-L01-R21, Date of Acquisition: 15/10/2019, Rental History: 31/11/2019 rent, Status: Available"]
+   list11 = ["Room Info: Medium Premium Twin","Code: MPT1","Dimensions: 180+ sqft","Pricing: RM890","Number of Rooms: 20","Apartment ID: A02-L02-R01 to A02-L02-R21, Date of Acquisition: 25/11/2020, Rental History: 31/12/2020 rent, Status: Available"]
+   list12 = ["Room Info: Medium Premium with attached bath / toilet (Twin)","Code: MP1","Dimensions: 180+ sqft","Pricing: RM940","Number of Rooms: 20","Apartment ID: A02-L03-R01 to A02-L03-R21, Date of Acquisition: 30/12/2020, Rental History: 31/01/2020 rent, Status: Available"]
+   list13 = ["Room Info: Medium Premium with attached bath / toilet (Single)","Code: MP2","Dimensions: 160+ sqft","Pricing: RM1050","Number of Rooms: 20","Apartment ID: A02-L03-R22 to A02-L03-R41, Date of Acquisition: 16/01/2021, Rental History: 28/02/2021 rent, Status: Available"]
+   list14 = ["Room Info: En-Suite Single (Super Premium - Triple)","Code: ESS3","Dimensions: 160+ sqft","Pricing: RM700","Number of Rooms: 20","Apartment ID: A02-L04-R01 to A02-L04-R41, Date of Acquisition: 25/02/2021, Rental History: 31/03/2021 rent, Status: Available"]
+   list15 = ["Room Info: En-Suite Single (Super Premium - Twin)","Code: ESS2","Dimensions: 140+ sqft","Pricing: RM800","Number of Rooms: 20","Apartment ID: A02-L04-R01 to A02-L04-R41, Date of Acquisition: 31/05/2022, Rental History: Empty, Status: Not Available"]
+   list16 = ["Room Info: En-Suite Twin (Super Premium)","Code: EST2","Dimensions: 200+ sqft","Pricing: RM900","Number of Rooms: 20","Apartment ID: A02-L05-R01 to A02-L05-R41, Date of Acquisition: 26/06/2022, Rental History: Empty, Status: Not Available"]
 
    #Apply data at the list
-   ApartmentList.append(list1)
-   ApartmentList.append(list2)
-   ApartmentList.append(list3)
-   ApartmentList.append(list4)
-   ApartmentList.append(list5)
-   ApartmentList.append(list6)
-   ApartmentList.append(list7)
-   ApartmentList.append(list8)
-   ApartmentList.append(list9)
-   ApartmentList.append(list10)
-   ApartmentList.append(list11)
-   ApartmentList.append(list12)
-   ApartmentList.append(list13)
-   ApartmentList.append(list14)
-   ApartmentList.append(list15)
-   ApartmentList.append(list16)
+   ApartmentList = [list1,list2,list3,list4,list5,list6,list7,list8,list9,list10,list11,list12,list13,list14,list15,list16]
 
-   with open(listIdentifier(listCode),"w") as Apartmenthandler:
+   with open(listIdentifier(listCode),"w") as apartmentHandler:
       for record in ApartmentList:
          for data in record:
-            Apartmenthandler.write(data)
-            Apartmenthandler.write(", ")
-         Apartmenthandler.write("\n")
+            apartmentHandler.write(data)
+            apartmentHandler.write(", ")
+         apartmentHandler.write("\n")
    
    for item in ApartmentList:
       print(item)
@@ -1022,44 +1022,35 @@ def menu(masterKey,UID):                                  #Define menu function
    while mainMenu == True:
       code = None
       if masterKey == False:
-         print("\nWelcome to main menu\n\n[S] - Search box\n\nReview information about:\n[A] - Available Apartments\n[T] - My Tenant details\n[P] - My Transactions\n\nQuick functions:\n[D] - Print my House & Tenant Details\n\n[E] - Exit")
+         print("\nMain menu\n\n[S] - Search box\n\nReview information about:\n[A] - Available Apartments\n[T] - My Tenant details\n[P] - My Transactions\n\nQuick functions:\n[D] - Print my House & Tenant Details\n\n[E] - Exit")
       else:
-         print("\nWelcome to main menu\n\n[S] - Search box\n\nReview information about:\n[A] - Apartment\n[T] - Tenant\n[P] - Transaction\n\nQuick functions:\n[D] - Print Specific House & Tenant Details\n[I] - Inquiry of Past Tenant Details\n[L] - Login History\n[E] - Exit")
-
+         print("\nMain menu\n\n[S] - Search box\n\nReview information about:\n[A] - Apartment\n[T] - Tenant\n[P] - Transaction\n\nQuick functions:\n[D] - Print Specific House & Tenant Details\n[I] - Inquiry of Past Tenant Details\n[L] - Login History\n[E] - Exit")
       opt=input("\nPlease enter which operation that you want to do: ")
-
-      #Check for basic Functions
       if opt in ["S","s"]:
-         searchBox()
-
+         searchBox()                                        #redirect to searchbox function
+                              #Check for basic Functions
       elif opt in ["A","a"]:
          listCode = "a"
          apartment(masterKey,listCode,code)
-      
       elif opt in ["P","p"]:
          listCode = "p"
          tenantOrTransaction(masterKey,UID,listCode,code)
-      
       elif opt in ["T","t"]:
          listCode = "t"
          tenantOrTransaction(masterKey,UID,listCode,code)
-
-      #Check for quick functions
+                              #Check for quick functions
       elif opt in ["D","d"]:
          print("tenantAndApartment()")
-      
       elif opt in ["I","i"] and masterKey == True:
          searchInformation(listCode,8,"past")
-
       elif opt in ["L","l"] and masterKey == True:
          print("loginHistory()")
-
-      elif opt in ["E","e"]:
-         exitconfirmationkey=input("\n----------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\nYou're about to leave Tenant Management System soon. Are you sure about that? (Enter to continue, X to return main menu): ")
+      elif opt in ["E","e"]:                             #get confirmation to exit
+         exitconfirmationkey=input("\n----------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\nYou're about to leave Tenant Management System. Are you sure? [Enter]-Continue, [x]-Return to main menu): ")
          if exitconfirmationkey in ["X","x"]:
             continue
          else:
-            print("\n----------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\nExit successfully\nThank you for using us, have a nice day~\n")
+            print("\n----------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\nExit successful, have a nice day~\n")
             return False
 
       else:
