@@ -79,7 +79,7 @@ def readFile(listCode):
 def gettenantID(masterKey):
    if masterKey == False:
     #fetch existing UID
-      with open("user.txt","r") as uRead:
+      with open("currentUser.txt","r") as uRead:
          userRecord = uRead.read().split(",")
          return userRecord[2]
    else:
@@ -413,8 +413,7 @@ def apartment(masterKey,listCode,code):                        #Define apartment
       print(item)
 
    if masterKey == True:
-      modifyType = None
-      modifyData(masterKey,listCode,code,modifyType)
+      modifyData(masterKey,listCode,code,None)
    else:
       return False
 
@@ -1023,11 +1022,11 @@ def menu(masterKey,UID):                                  #Define menu function
    while mainMenu == True:
       code = None
       if masterKey == False:
-         print("\nWelcome! A great day to you.\nYou are now entering Tenant Management System.\n\nReview information about:\n\n[A] - Available Apartments\n[T] - My Tenant details\n[D] - Print my House & Tenant Details\n{P] - My Transaction-\n[S] - Search box\n[E] - Exit")
+         print("\nWelcome to main menu\n\n[S] - Search box\n\nReview information about:\n[A] - Available Apartments\n[T] - My Tenant details\n[P] - My Transactions\n\nQuick functions:\n[D] - Print my House & Tenant Details\n\n[E] - Exit")
       else:
-         print("\nWelcome! A great day to you.\nYou are now entering Tenant Management System.\n\nReview information about:\n\n[A] - Apartment\n[T] - Tenant\n[D] - Print Specific House & Tenant Details\n[P] - Transaction\n[I] - Inquiry of Past Tenant Details\n[L] - Login History\n[S] - Search box\n[E] - Exit")
+         print("\nWelcome to main menu\n\n[S] - Search box\n\nReview information about:\n[A] - Apartment\n[T] - Tenant\n[P] - Transaction\n\nQuick functions:\n[D] - Print Specific House & Tenant Details\n[I] - Inquiry of Past Tenant Details\n[L] - Login History\n[E] - Exit")
 
-      opt=input("\nPlease select which operation that you want to do: ")
+      opt=input("\nPlease enter which operation that you want to do: ")
 
       #Check for basic Functions
       if opt in ["S","s"]:
