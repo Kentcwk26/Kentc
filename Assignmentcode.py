@@ -360,10 +360,10 @@ def apartmentAddData():
    newroomdimension = newRoomDimension()
    newroompricing = newRoompricing()
    newnumberofRooms = newNumberofRooms()
-   newroomfirstID = newRoomID("New Room First ID: ")
-   newroomlastID = newRoomID("New Room Last ID: ")
-   newroomdateofacquisition = newRoomDate("New Room Acquisition Date: ")
-   newroomrentalhistory = newRoomDate("New Room Rental History Date: ")
+   newroomfirstID = newRoomID("first")
+   newroomlastID = newRoomID("last")
+   newroomdateofacquisition = newRoomDate("acquisition")
+   newroomrentalhistory = newRoomDate("history")
    newroomstatus = newRoomStatus()
    adddatalist = ["New Room Info: "+str(newroom),"New Room Code: "+str(newroomcode),"New Room Dimension in range (sqft): "+str(newroomdimension)+'+ sqft',"New Room Pricing: RM"+str(newroompricing),"Number for the new room: "+str(newnumberofRooms),"New room ID: "+str(newroomfirstID+' to '+newroomlastID),"New room Acquisition Date: "+str(newroomdateofacquisition),"New room Rental History: "+str(newroomrentalhistory)+" rent","New room Status: "+str(newroomstatus)]
    print("\nNew Data:",adddatalist)
@@ -552,7 +552,7 @@ def newRoomID(order):
 def newRoomDate(dateType):
     while True:
         code = None
-        if dateType == "Acquisition":
+        if dateType == "acquisition":
          roomDate = input("\nRoom Date of Acquisition: dd/mm/yyyy\nNo special characters included, except '/'\n\nRoom Acquisition Date: ")
         else:
          roomDate = input("\nRoom Rental History: (Accepted input: 'dd/mm/yyyy' or 'Empty')\nNo special characters included, except '/'\n\nRoom Rental History: ")
@@ -653,7 +653,62 @@ def apartmentadddataconfirmation(adddatalist):
       else:
          code=0
          message(code)
-         break
+         continue
+
+def inputidentifier(masterKey,listCode,editDataType,code):
+    if listCode == "a":
+        if editDataType == 0:
+            return newRoom()
+        elif editDataType == 1:
+            return newRoomCode()
+        elif editDataType == 2:
+            return newRoomDimension()
+        elif editDataType == 3:
+            return newRoompricing()
+        elif editDataType == 4:
+            return newNumberofRooms()
+        elif editDataType == 5:
+            return newRoomID("first")
+        elif editDataType == 6:
+            return newRoomDate("acquisition")
+        elif editDataType == 7:
+            return newRoomDate("history")
+        else:
+            return newRoomStatus()
+    elif listCode == "t":
+        if editDataType == 0:
+            return gettenantID(masterKey)
+        elif editDataType == 1:
+            return getname(code,"tenant")
+        elif editDataType == 2:
+            return getabbreviation(code,"gender")
+        elif editDataType == 3:
+            return getpNum(code)
+        elif editDataType == 4:
+            return getabbreviation(code,"nationality")
+        elif editDataType == 5:
+            return getDate(code,"start")
+        elif editDataType == 6:
+            return getname(code,"employer")
+        elif editDataType == 7:
+            return getincome(code)
+        elif editDataType == 8:
+            return getrental(masterKey)
+        elif editDataType == 9:
+            return getDate(code,"birth")
+        else:
+            return getname(code,"city")
+    else:
+        if editDataType == 0:
+            return gettenantID(masterKey)
+        elif editDataType == 1:
+            return getname(code,"tenant")
+        elif editDataType == 2:
+            return getabbreviation(code,"gender")
+        elif editDataType == 3:
+            return getpNum(code)
+        else:
+            return getabbreviation(code,"nationality")
 
 def ApartmentDataInfo(): #editdata #deletedata used
    data = True
@@ -744,45 +799,48 @@ def searchInformation(listCode,num,details):                   #Define searchinf
             message(code)
          break
 
-def replaceOldData(listCode):
+def replaceOldData(masterKey,listCode,code):
    modify = None
    while True:
       if listCode == "a":
-         editDatatype = ApartmentDataInfo()
+         editDataType = ApartmentDataInfo()
       else:
-         editDatatype = category(listCode)
-         apartmentSearch(editDatatype)
-      selecteddata = input("\nPlease enter the exact data that you want to edit: ")
+         editDataType = category(listCode)
+         apartmentSearch(editDataType)
+      selecteddata = inputidentifier(masterKey,listCode,editDataType,code)
       newdata = input("Last step, please insert the new data with the correct format: ")
       editdataconfirmation = input("\nAre you sure with your records just now? (Yes/No): ")
       if editdataconfirmation == 'Yes':
          with open(listIdentifier(listCode),"r") as Xhandler:
             dataRead = Xhandler.readlines()
-            for record in dataRead[editDatatype]:
+            for record in dataRead[editDataType]:
                strippeditem = record.rstrip(" ").split(",")
-               if selecteddata == strippeditem[editDatatype] :
+               if selecteddata == strippeditem[editDataType] :
                   record.replace(selecteddata,newdata)
                Xhandler.append(record)
 
-def apartmentEditData(listCode):
+def apartmentEditData(masterKey,listCode,code):
    dataInfo = True
    while dataInfo == True:
       editdatainfo = input("\Enter old data, input new data, replace old data with new data, and update record\nInsert 'C' to continue, any key to exit. ")
       if editdatainfo in ["C","c"]:
-         replaceOldData(listCode)
+         replaceOldData(masterKey,listCode,code)
       else:
          dataInfo = False
 
 def apartmentSearch(num):
    while True:
       listCode = "a"
-      displaylist=[]
+      displayList=[]
       with open (listIdentifier(listCode), "r") as Tread:
-         acheck = Tread.readlines()
-         for record in acheck:
-            listRecord = record.split(",")
-            displaylist.append(listRecord[num])
-         print("\n",displaylist)
+         bulkData = Tread.readlines()
+         for line in bulkData:
+            individualList = line.strip(", \n").split(", ")
+            if int(num) == 1:
+               displayList.append(individualList[int(num)])
+            else:
+               displayList.append("ID: "+str(individualList[int(1)])+";relevant data: "+str(individualList[int(num)]))
+         print("\n",displayList)
          break
       
 def apartmentDeleteData():
@@ -861,7 +919,7 @@ def modifyData(masterKey,listCode,code,modifyType):
             tenantOrTransactionEntryForm(masterKey,listCode,code)
 
       elif dataInput == "2":
-         apartmentEditData(listCode)
+         apartmentEditData(masterKey,listCode,code)
 
       elif dataInput == "3":
          apartmentDeleteData()
