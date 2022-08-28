@@ -1,0 +1,121 @@
+def message(code):                                                   #define message function
+   x,y,z="Error, ","Incorrect "," Please try again."
+   if code == 0:
+      print("\n"+x+y+"input."+z)
+   elif code == 1:
+      print("\n"+x+y+"data type present."+z)
+   elif code == 2:
+      print("\n"+x+y+"format."+z)
+   elif code == 3:
+      print("\n"+x+y+"length."+z)
+   elif code == 4:
+      print("\n"+x+"data not found."+z)
+   elif code == 5:
+      print("\n"+x+"zero input."+z)
+
+def apartmentDeleteData():
+   num = None
+   modify = None
+   while True:
+      print("\n- Delete Data -")
+      deletedata = input("\n1. Remove specified items\n2. Delete specified records\n3. Delete all records\n4. Exit\n\nPlease select and enter which operator that you want to proceed: ")
+      if deletedata == '1':
+         removeItems()
+      elif deletedata == '2':
+         deleteSpecRecord()
+      elif deletedata == '3':
+         deleteAllrecords()
+      elif deletedata == '4':
+         return modify
+      else:
+         code = 0
+         message(code)
+         continue
+      apartmentSearch(num)
+
+def ApartmentDataInfo(): #editdata #deletedata used
+   data = True
+   while data == True:
+      opt = input("\n[R] - Room Info [C] - Room code, [D] - Dimensions, [P] - Pricing, [N] - Number of Rooms, [A] - Apartment ID, [D] - Date of Acquisition, [H] - Rental History, [S] - Status \nAnswer: ")
+      if opt in ["R","r"]:
+         return 0
+      elif opt in ["C","c"]:
+         return 1
+      elif opt in ["D","d"]:
+         return 2
+      elif opt in ["P","p"]:
+         return 3
+      elif opt in ["N","n"]:
+         return 4
+      elif opt in ["A","a"]:
+         return 5
+      elif opt in ["D","d"]:
+         return 6
+      elif opt in ["H","h"]:
+         return 7
+      elif opt in ["S","s"]:
+         return 8
+      else:
+         code = 0
+         message(code)
+         continue
+
+def apartmentSearch(num):
+   search = None
+   while True:
+      displaylist=[]
+      with open ("Apartment.txt", "r") as Tread:
+         acheck = Tread.readlines()
+         for record in acheck:
+            listRecord = record.split(",")
+            displaylist.append(listRecord[num])
+         print("\n",displaylist)
+      return search
+         
+def removeItems():
+   modify = None
+   while modify == True:
+      print("\n- 1. Remove specified items -")
+      selectedrow = input("Which data row that you want to delete? ")
+      selecteddatacolumn = input("\nWhich data column that you want to delete? ")
+      ApartmentDataInfo()
+      ApartmentDeleteConfirmation()
+      with open ("Apartment.txt","r") as input:
+         record = input.readlines()[selectedrow-'1']
+         data = record.split(",")
+      with open ("Apartment.txt","w") as output:
+         for data in selecteddatacolumn:
+            if data == selecteddatacolumn:
+               output.remove(selecteddatacolumn,"")
+
+def deleteSpecRecord():
+   modify = None
+   while modify == True:
+      print("\n- 2. Delete specified row  -")
+      selecteddatarow = input("\nWhich data row that you want to delete? ")
+      ApartmentDeleteConfirmation()
+      with open ("Apartment.txt","r") as f:
+         record = f.readlines()[selecteddatarow-"1"]
+      with open ("Apartment.txt","w") as f:
+         removeddata = record.replace(selecteddatarow," ")
+         f.write(removeddata)
+      return modify
+
+def deleteAllrecords():
+   print("\n- 3. Delete all records -")
+   ApartmentDeleteConfirmation()
+   with open ("Apartment.txt","r+") as ADdhandler:
+      ADdhandler.seek(0)
+      ADdhandler.truncate()
+
+def ApartmentDeleteConfirmation():
+   while True:
+      modify = None
+      confirmation = input("\nAre you sure that you want to delete this(these) selected record(s)?\nIt will be not recovered once you hit the enter button. However, you still can discard this changes by hitting a 'X' if you change your mind: ")
+      if confirmation in ["X","x"]:
+         print("\n- Delete unsuccessful -")
+      else:
+         print("\n- Delete successful -")
+      return modify
+
+apartmentDeleteData()

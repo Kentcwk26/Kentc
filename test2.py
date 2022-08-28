@@ -1,4 +1,4 @@
-def message(code):
+def message(code):                                                   #define message function
    x,y,z="Error, ","Incorrect "," Please try again."
    if code == 0:
       print("\n"+x+y+"input."+z)
@@ -11,90 +11,33 @@ def message(code):
    elif code == 4:
       print("\n"+x+"data not found."+z)
    elif code == 5:
-      print("\n"+x+"zero input"+z)
+      print("\n"+x+"zero input."+z)
 
-def specialCharacterList(SCL):
-    if SCL == None:
-        return ["~","`","!","@","#","$","%","^","&","*","(",")","-","_","=","+","{","}","[","]","|",",","\'","/","<",">","?",";",":","'",'"'] #0-30
-    elif SCL == "SCL1":
-        return ['~','`','!','@','#','$','%','^','&','*','(',')','-','_','=','+','{','}','[',']','|',',','\\','\'','\"','.','/','<','>','?',';',':'] #0-31
-    elif SCL == "SCL2":
-        return ['~','`','!','@','#','$','%','^','&','*','_','=','+','{','}','[',']','|','\\','\'','\"',',','.','/','<','>','?',':',';'] #0-28
-    elif SCL == "SCL3":
-        return ["~","`","!","@","#","$","%","^","&","*","(",")","_","=","+","{","}","[","]","|",",","\'","/","<",">","?",";",":","'",'"'] #0-29
-
-def newRoomStatus():
+def apartmentSearch(num):
    while True:
-    code = None
-    SCL = None
-    specials = specialCharacterList(SCL)
-    newRoomStatus = input("New Room Status ( Available / Not Available ): ")
-    
-    if (0 <= len(newRoomStatus) <= 7) or (len(newRoomStatus) >= 14) :
-        code = 5
-        message(code)
-        print("- Please fill again the new room status and follow the correct format ( Accepted input: Available / Not Available ) -\n")
-        continue
-    else:
-        code = None
+      listCode = "a"
+      displaylist=[]
+      with open ("Apartment.txt", "r") as Tread:
+         acheck = Tread.readlines()
+         for record in acheck:
+            listRecord = record.split(",")
+            displaylist.append(listRecord[num])
+         print("\n",displaylist)
+         break
 
-    if any(location.isdigit() for location in newRoomStatus) and newRoomStatus.isdigit(): 
-        code = 2
-        message(code)
-        print("- New room status does not contain number(s) -\n")
-        continue
-    else:
-        code = None
 
-    if [character for character in newRoomStatus if (character in specials)]:
-        code = 2
-        message(code)
-        print("- New room status does not have special character(s) -\n")
-        continue
-    else:
-        code = None
+selectedrow = int(input("Which row you want to edit: "))
+selecteddata = input("\nPlease enter the exact data that you want to edit: ")
+newdata = input("Last step, please insert the new data with the correct format: ")
 
-    if (0 <= len(newRoomStatus) <= 7 or len(newRoomStatus) >= 14) and (any(location.isdigit() for location in newRoomStatus)):
-        code = 2
-        message(code)
-        print("- New room status does not consists of number(s) -\n")
-        continue
+with open("Apartment.txt","r") as f:
+    reads = f.readlines()[selectedrow-1]
+    print("\n",reads)
+    strippeditem = reads.rstrip().rstrip(",").split(",")
+    print(strippeditem)
+    if selecteddata in strippeditem:
+        strippeditem[0].replace(selecteddata,newdata)
     else:
-        code = None
-
-    if ([character for character in newRoomStatus if (character in specials)] and any(location.isdigit() for location in newRoomStatus) and [character for character in newRoomStatus if (character in specials)]):
-        code = 3
+        code = 4
         message(code)
-        print("- New room rental history does not contain number(s) and special character(s) -\n")
-        continue
-    else:
-        code = None
-
-    if (0 < len(newRoomStatus) <= 7 or len(newRoomStatus) >= 14) and (any(location.isdigit() for location in newRoomStatus)) and ([character for character in newRoomStatus if (character in specials)]):
-        code=3
-        message(code)
-        print("- Input too short oe long, and also number(s) and special character(s) exist, please follow the correct format ( Accepted input: Available / Not Available ) -\n")
-        continue
-    else:
-        code = None
-
-    if newRoomStatus in ["Available","Not Available"] and (len(newRoomStatus) == 9 or len(newRoomStatus) == 13):
-        code = None
-    else:
-        code = 2
-        message(code)
-        print("- Room Status can only be accepted either the input is 'Available' or 'Not Available'. -\n")
-        continue
-
-    if code == None:
-        return newRoomStatus
-    else:
-        code = 3
-        message(code)
-        print("Please insert the correct format for new room status. Refer to the top description to let its details and format -\n")
-        continue
-        
-print("\n",newRoomStatus())
-# SCL = None
-# specials = specialCharacterList(SCL)
-# print(specials.index('"'))
+        print("- The record(s) that you want to edit might not in the file. Please try again. -")
