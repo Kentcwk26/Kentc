@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 # Python Assignment (Tenant Management System)
 # Chiu Wai Kin TP065600 & Damon Ng Khai Weng TP064820
+=======
+from operator import truediv
+
+>>>>>>> 39e80b2a8c060e806c116668e6879009383fa755
 
 def login():                                                         #define the login function
    print("\nWelcome to Tenant Management System Login page.\nPlease enter username and password to proceed.\n") 
@@ -306,6 +311,7 @@ def getreferenceNumber(code):                                        #define get
       if len(referenceNumber) > 5:
          if (location.isalnum() for location in referenceNumber):
             code = None
+<<<<<<< HEAD
          else:
             code = 1
       else:
@@ -490,24 +496,85 @@ def modifyData(masterKey,listCode,code,modifyType):
 
       elif dataInput == "4":
          modify = False
-
+=======
+         else:
+            code = 1
       else:
-         message(2)
+         code = 3
+      if code:
+         message(code)
+         print("ATTENTION||Error detected.||ATTENTION\n")
+      else:
+         print("No errors detected.\n")
+      retry = input("[R]-Retry,[Any other key]-Exit using "+referenceNumber+"\n")
+      if retry in ["R","r"]:
          continue
+      else:    
+         return referenceNumber
+>>>>>>> 39e80b2a8c060e806c116668e6879009383fa755
+
+def getdecimal(code):                                                #define getdecimal function
+   specials = specialCharacterList(None)
+   while True:
+      decimal = input("Format: ########.##\nEnter the transaction amount in Ringgit Malaysia:\n")
+      if specials[23] in decimal:
+         money = decimal.split(".")
+         for numbers in money:
+            try:
+               numbers[1] in money[1]
+               if (digits.isnumeric() for digits in numbers):
+                  code = None
+                  continue
+               else:
+                  code = 1
+                  break
+            except IndexError:
+               code = 2
+      else:
+<<<<<<< HEAD
+         message(2)
+=======
+         code = 2
+         print(specials[23])
+      if code:
+         message(code)
+         print("ATTENTION||Error detected.||ATTENTION\n")
+      else:
+         print("No errors detected.\n")
+      retry = input("[R]-Retry,[Any other key]-Exit using "+decimal+"\n")
+      if retry in ["R","r"]:
+>>>>>>> 39e80b2a8c060e806c116668e6879009383fa755
+         continue
+      else:    
+         return decimal
 
 def apartmentAddData():
    adddatalist = []
+<<<<<<< HEAD
    print("\nDear admin, we need your ATTENTION !\n\nFor your information, all the new data will only be stored if you insert each information with the correct format provided.\n\nOnce you finish each entry, a confirmation message will appear. Please ensure that the data is typed correctly before saving.\nNow, you are required to enter new data.\n\n----------------------------------------------------------------------------------------------------------------------------------------------------------------------------")
+=======
+   print("\nDear admin, we need your ATTENTION !\n\nFor your information, all the new data will only be stored if you insert each information with the correct format provided.\n\nOnce you finish each entry,a confirmation message will appear. Please ensure that the data is typed correctly before saving.\n- Now, you are required to enter new data. -\n\n--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------")
+>>>>>>> 39e80b2a8c060e806c116668e6879009383fa755
    newroom = newRoom()
    newroomcode = newRoomCode()
    newroomdimension = newRoomDimension()
    newroompricing = newRoompricing()
+<<<<<<< HEAD
    newnumberofRooms = newRoomNumberandID()
    newroomID = newRoomNumberandID()
    newroomdateofacquisition = newRoomDate("New Room Acquisition Date: ")
    newroomrentalhistory = newRoomDate("New Room Rental History Date: ")
    newroomstatus = newRoomStatus()
    adddatalist = ["New Room Info: "+str(newroom),"New Room Code: "+str(newroomcode),"New Room Dimension in range (sqft): "+str(newroomdimension)+'+ sqft',"New Room Pricing: RM"+str(newroompricing),"Number for the new room: "+str(newnumberofRooms),"New room ID: "+str(newroomID),"New room Acquisition Date: "+str(newroomdateofacquisition),"New room Rental History: "+str(newroomrentalhistory)+" rent","New room Status: "+str(newroomstatus)]
+=======
+   newnumberofRooms = newNumberofRooms()
+   newroomfirstID = newRoomID("first")
+   newroomlastID = newRoomID("last")
+   newroomdateofacquisition = newRoomDate("acquisition")
+   newroomrentalhistory = newRoomDate("history")
+   newroomstatus = newRoomStatus()
+   adddatalist = ["New Room Info: "+str(newroom),"New Room Code: "+str(newroomcode),"New Room Dimension in range (sqft): "+str(newroomdimension)+'+ sqft',"New Room Pricing: RM"+str(newroompricing),"Number for the new room: "+str(newnumberofRooms),"New room ID: "+str(newroomfirstID+' to '+newroomlastID),"New room Acquisition Date: "+str(newroomdateofacquisition),"New room Rental History: "+str(newroomrentalhistory)+" rent","New room Status: "+str(newroomstatus)]
+>>>>>>> 39e80b2a8c060e806c116668e6879009383fa755
    print("\nNew Data:",adddatalist)
    apartmentadddataconfirmation(adddatalist)
 
@@ -540,8 +607,17 @@ def newRoom():
          code = None
       if code == None:
          newRoom.title()
+<<<<<<< HEAD
          insertNewApartmentrecordConfirmation()
          return newRoom
+=======
+         decisionkey = input("Are you sure with your records? (Yes/No): ")
+         if decisionkey in ["Yes","yes"]:
+            return newRoom
+         elif decisionkey in ["No","no"]:
+            print()
+            continue
+>>>>>>> 39e80b2a8c060e806c116668e6879009383fa755
       else:
          code = 2
          message(code)
@@ -578,7 +654,11 @@ def newRoomCode():
 def newRoomDimension():
    while True:
       code = None
+<<<<<<< HEAD
       newRoomDimension=input("\nRoom Dimension only contains numbers, no alphabets and special characters (The unit (in sqft) will be provided at the back)\nExample: 300(+sqft)\n\nRoom Dimension: ")
+=======
+      newRoomDimension=input("\nRoom Dimension   (in sqft)   only contains numbers, no special characters (The unit will be provided at the back)\nExample: 300(+sqft)\n\nRoom Dimension: ")
+>>>>>>> 39e80b2a8c060e806c116668e6879009383fa755
       if len(newRoomDimension)==0:
          code = 5
          message(code)
@@ -605,7 +685,11 @@ def newRoomDimension():
 def newRoompricing():
    while True:
       code = None
+<<<<<<< HEAD
       newRoompricing=input("\nRoom Pricing only contain numbers, no special characters (The unit (in RM) will be provided at the front)\nExample: (RM)500\n\nRoom Pricing: ")
+=======
+      newRoompricing=input("\nRoom Pricing   (in RM)   only contain numbers, no special characters (The unit will be provided at the front)\nExample: (RM)500\n\nRoom Pricing: ")
+>>>>>>> 39e80b2a8c060e806c116668e6879009383fa755
       if newRoompricing.isdigit():
          nRp=int(newRoompricing)
          if nRp >= 350:
@@ -627,6 +711,7 @@ def newRoompricing():
 def newRoomNumberandID():
     while True:
       code = None
+<<<<<<< HEAD
       validNumberofnewRooms = input('\nNumber of new rooms (2-20): ')
       validnewRoomID = input('\nThis is the correct format for RoomID: A(01)-L(01)-R(01)x(to)xA(99)-L(99)-R(99)\nPlease enter the new Room ID: ')
 
@@ -683,6 +768,75 @@ def newRoomDate(dateType):
     while True:
         code = None
         if dateType == "Acquisition":
+=======
+      newNumberofRooms=input("\nNumber of rooms only contains numbers and no special characters\nExample: 10 (Accepted range: 1-99)\n\nNumber of rooms: ")
+      if len(newNumberofRooms) == 0 or (newNumberofRooms == "0" and newNumberofRooms == "1"):
+        code = 5
+        message(code)
+        print("- Please fill in the number of rooms -\n")
+        continue
+      else:
+        code = None
+      if newNumberofRooms.isdigit():
+        code = None
+      else:
+        code = 3
+        message(code)
+        print("- Number of rooms must be in numeric -\n")
+        continue
+      if code == None :
+        return newNumberofRooms
+      else:
+        code=2
+        message(code)
+        print("- Please fill in the correct format for the number of new rooms. Refer to the description above for its details and format -\n")
+        continue
+
+def newRoomID(order):
+   while True:
+      code = None
+      SCL='SCL2'
+      specials=specialCharacterList(SCL)
+      print("\nApartment ID: A(01)-L(01)-R(01)x(to)xA(99)-L(99)-R(99)\nPlease follow this format as written above (A stands for Apartment Block, L stands for Room Level, R stands for Room Number, x means space)\n")
+      if order == "first":
+         newRoomID = input("\nRoom Apartment ID (First): ")
+      else:
+         newRoomID = input("\nRoom Apartment ID (Last): ")
+      if len(newRoomID) == 0:
+         code = 5
+         message(code)
+         print("- Please fill in the Apartment ID -\n")
+         continue
+      else:
+         code = None
+      if 0 < len(newRoomID) < 10:
+         code = 2
+         message(code)
+         print("- Please follow the format as: A01-L10-R40 ( A stands for Apartment Block, L stands for Level, and R stands for Room (The length must have 11 characters long, including the dash -) -\n")
+         continue
+      else:
+         code = None
+      if (newRoomID[0] == 'A' and newRoomID[3] == '-' and newRoomID[4] == 'L' and newRoomID[7] == '-' and newRoomID[8] == 'R') and any(location.isdigit() for location in newRoomID):
+         if [character for character in newRoomID[:] if (character in specials)]:
+            code = None
+      else:
+         code=2
+         message(code)
+         print("- Please follow the format as: A01-L10-R40, it must contain uppercase alphabets (A,L,R) and numbers. -\n")
+         continue            
+      if code == None:
+         return newRoomID
+      else:
+         code=3
+         message(code)
+         print("- Please fill in the correct format for room Apartment ID. Refer to the description above for its details and format -")
+         continue
+
+def newRoomDate(dateType):
+    while True:
+        code = None
+        if dateType == "acquisition":
+>>>>>>> 39e80b2a8c060e806c116668e6879009383fa755
          roomDate = input("\nRoom Date of Acquisition: dd/mm/yyyy\nNo special characters included, except '/'\n\nRoom Acquisition Date: ")
         else:
          roomDate = input("\nRoom Rental History: (Accepted input: 'dd/mm/yyyy' or 'Empty')\nNo special characters included, except '/'\n\nRoom Rental History: ")
@@ -696,7 +850,10 @@ def newRoomDate(dateType):
                 ValidDate = False
             if ValidDate == True :
                code = None
+<<<<<<< HEAD
                insertNewApartmentrecordConfirmation()
+=======
+>>>>>>> 39e80b2a8c060e806c116668e6879009383fa755
                return roomDate
             else:
                code = 2
@@ -794,8 +951,68 @@ def apartmentadddataconfirmation(adddatalist):
       else:
          code=0
          message(code)
+<<<<<<< HEAD
       return modify
 
+=======
+         continue
+
+def inputidentifier(masterKey,listCode,editDataType,code):
+    if listCode == "a":
+        if editDataType == 0:
+            return newRoom()
+        elif editDataType == 1:
+            return newRoomCode()
+        elif editDataType == 2:
+            return newRoomDimension()
+        elif editDataType == 3:
+            return newRoompricing()
+        elif editDataType == 4:
+            return newNumberofRooms()
+        elif editDataType == 5:
+            return newRoomID("first")
+        elif editDataType == 6:
+            return newRoomDate("acquisition")
+        elif editDataType == 7:
+            return newRoomDate("history")
+        else:
+            return newRoomStatus()
+    elif listCode == "t":
+        if editDataType == 0:
+            return gettenantID(masterKey)
+        elif editDataType == 1:
+            return getname(code,"tenant")
+        elif editDataType == 2:
+            return getabbreviation(code,"gender")
+        elif editDataType == 3:
+            return getpNum(code)
+        elif editDataType == 4:
+            return getabbreviation(code,"nationality")
+        elif editDataType == 5:
+            return getDate(code,"start")
+        elif editDataType == 6:
+            return getname(code,"employer")
+        elif editDataType == 7:
+            return getincome(code)
+        elif editDataType == 8:
+            return getrental(masterKey)
+        elif editDataType == 9:
+            return getDate(code,"birth")
+        else:
+            return getname(code,"city")
+    else:
+        if editDataType == 0:
+            return gettenantID(masterKey)
+        elif editDataType == 1:
+            return getname(code,"tenant")
+        elif editDataType == 2:
+            return getabbreviation(code,"gender")
+        elif editDataType == 3:
+            return getpNum(code)
+        else:
+            return getabbreviation(code,"nationality")
+
+>>>>>>> 39e80b2a8c060e806c116668e6879009383fa755
 def ApartmentDataInfo(): #editdata #deletedata used
    data = True
    while data == True:
@@ -885,6 +1102,7 @@ def searchInformation(listCode,num,details):                   #Define searchinf
             message(code)
          break
 
+<<<<<<< HEAD
 def apartmentEditData(listCode):
    dataInfo = True
    while dataInfo == True:
@@ -917,6 +1135,51 @@ def replaceOldData(listCode):
                code = 4
                message(code)
                print("- The record(s) that you want to edit might not in the file. Please try again. -")
+=======
+def replaceOldData(masterKey,listCode,code):
+   modify = None
+   while True:
+      if listCode == "a":
+         editDataType = ApartmentDataInfo()
+      else:
+         editDataType = category(listCode)
+         apartmentSearch(editDataType)
+      selecteddata = inputidentifier(masterKey,listCode,editDataType,code)
+      newdata = input("Last step, please insert the new data with the correct format: ")
+      editdataconfirmation = input("\nAre you sure with your records just now? (Yes/No): ")
+      if editdataconfirmation == 'Yes':
+         with open(listIdentifier(listCode),"r") as Xhandler:
+            dataRead = Xhandler.readlines()
+            for record in dataRead[editDataType]:
+               strippeditem = record.rstrip(" ").split(",")
+               if selecteddata == strippeditem[editDataType] :
+                  record.replace(selecteddata,newdata)
+               Xhandler.append(record)
+
+def apartmentEditData(masterKey,listCode,code):
+   dataInfo = True
+   while dataInfo == True:
+      editdatainfo = input("\Enter old data, input new data, replace old data with new data, and update record\nInsert 'C' to continue, any key to exit. ")
+      if editdatainfo in ["C","c"]:
+         replaceOldData(masterKey,listCode,code)
+      else:
+         dataInfo = False
+
+def apartmentSearch(num):
+   while True:
+      listCode = "a"
+      displayList=[]
+      with open (listIdentifier(listCode), "r") as Tread:
+         bulkData = Tread.readlines()
+         for line in bulkData:
+            individualList = line.strip(", \n").split(", ")
+            if int(num) == 1:
+               displayList.append(individualList[int(num)])
+            else:
+               displayList.append("ID: "+str(individualList[int(1)])+";relevant data: "+str(individualList[int(num)]))
+         print("\n",displayList)
+         break
+>>>>>>> 39e80b2a8c060e806c116668e6879009383fa755
       
 def apartmentDeleteData():
    num = None
@@ -929,8 +1192,11 @@ def apartmentDeleteData():
          apartmentSearch(num)
       elif deletedata == '2':
          print("\n- 2. Delete specified records -")
+<<<<<<< HEAD
       elif deletedata == '3':
          print("\n- 3. Delete all records -")
+=======
+>>>>>>> 39e80b2a8c060e806c116668e6879009383fa755
       elif deletedata == '4':
          return modify
       else:
@@ -943,6 +1209,7 @@ def apartmentDeleteData():
       else:
          continue
 
+<<<<<<< HEAD
 def removeItems():
    modify = None
    while modify == True:
@@ -1000,6 +1267,146 @@ def apartmentSearch(num):
             displaylist.append(listRecord[num])
          print("\n",displaylist)
          break
+=======
+def tenantOrTransactionEntryForm(masterKey,listCode,code):           #Define tenantOrTransactionEntryForm function
+   while True:
+      if masterKey == True:
+         n = input("Number of new Records: ")
+         if n.isdecimal():
+            code = None
+         else:
+            code = 0
+            message(code)
+            continue
+      else:
+         n = 1
+      for list in range(0,int(n)):
+         if listCode == "t":
+            #Get input for tenant data
+            UserID  = gettenantID(masterKey)
+            name = getname(code,"tenant")
+            gender = getabbreviation(code,"gender")
+            pNum = getpNum(code)
+            nationality = getabbreviation(code,"nationality")
+            startDate = getDate(code,"start")
+            employer = getname(code,"employer")
+            income = getincome(code)
+            rental = getrental(masterKey)
+            birthDate = getDate(code,"birth")
+            birthCity = getname(code,"city")
+            #Declare list containing relevant input data
+            list = [UserID,name,gender,pNum,nationality,startDate,employer,income,rental,birthDate,birthCity]
+         else:
+            referenceNumber = getreferenceNumber(code)
+            transactionDate = getDate(code,"start")
+            UserID  = gettenantID(masterKey,listCode)
+            apartmendCode = newRoomCode()
+            amount = getdecimal(code)
+            list = [referenceNumber,transactionDate,UserID,apartmendCode,amount]
+         appendFile(list,listCode)
+      break
+
+def modifyData(masterKey,listCode,code,modifyType):
+   modify = True
+   while modify == True:
+      if modifyType:
+         dataInput = modifyType
+      else:
+         dataInput = input('\n- Modification of records: -\n\n1. Add data\n2. Edit Data\n3. Delete Data\n4. Exit\n\nPlease select which operation to perform task (1-4): ')
+      print("\n----------------------------------------------------------------------------------------------------------------------------------------------------------------------------")
+      if dataInput == "1":
+         if listCode == "a":
+            apartmentAddData()
+         else:
+            tenantOrTransactionEntryForm(masterKey,listCode,code)
+
+      elif dataInput == "2":
+         apartmentEditData(masterKey,listCode,code)
+
+      elif dataInput == "3":
+         apartmentDeleteData()
+
+      elif dataInput == "4":
+         modify = False
+
+      else:
+         message(2)
+         continue
+
+def tenantOrTransaction(masterKey,UID,listCode,code):                #Define tenantOrTransaction function
+   while True:
+      if masterKey == False:
+         searchInformation(listCode,0,UID)
+         if listCode == "t": 
+            print("[C]-Change my tenant details")
+         else:
+            print("[A]-Add new transaction")
+         opt = input("\n[E]-Exit\nWhat would you like to do:")
+         if opt in ["C","c"]:
+            modifyData(masterKey,listCode,code,"2")
+         elif opt in ["A","a"]:
+            modifyData(masterKey,listCode,code,"1")
+         elif opt in ["E","e"]:
+            break
+         else:
+            message(0)
+            continue
+         break
+      else:
+         opt = input("[D]-Display existing Data, [M]-Modify Data\n[E]-Exit\nWhat would you like to do:")
+         if opt in ["D","d"]:      
+            print("Current Data:")
+            readFile(listCode)
+         elif opt in ["M","m"]:
+            modifyData(masterKey,listCode,code,None)
+         elif opt in ["E","e"]:
+            break
+         else:
+            message(0)
+            continue
+         break
+
+def apartment(masterKey,listCode,code):                              #Define apartment function
+   
+   listCode = "a"
+   print("\n- Apartment info: -\n")
+   
+   #Put sample data
+   list1 = ["Room Info: Standard Room (Triple)","Code: SR1","Dimensions: 140+ sqft","Pricing: RM350","Number of Rooms: 20","Apartment ID: A01-L01-R01 to A01-L01-R21, Date of Acquisition: 03/01/2015, Rental History: 27/02/2015 rent, Status: Available"]
+   list2 = ["Room Info: Standard Room (Twin)","Code: SR2","Dimensions: 120+ sqft","Pricing: RM450","Number of Rooms: 20","Apartment ID: A01-L01-R22 to A01-L01-R41, Date of Acquisition: 10/02/2015, Rental History: 28/03/2015 rent, Status: Available"]
+   list3 = ["Room Info: Standard Room A/C (Triple)","Code: SR3","Dimensions: 150+ sqft","Pricing: RM550","Number of Rooms: 20","Apartment ID: A01-L02-R01 to A01-L02-R21, Date of Acquisition: 21/03/2016, Rental History: 24/04/2016 rent, Status: Available"]
+   list4 = ["Room Info: Standard Room A/C (Twin)","Code: SR4","Dimensions: 130+ sqft","Pricing: RM650","Number of Rooms: 20","Apartment ID: A01-L02-R22 to A01-L02-R41, Date of Acquisition: 02/04/2016, Rental History: 20/05/2016 rent, Status: Available"]
+   list5 = ["Room Info: Deluxe Room (Triple)","Code: DR1","Dimensions: 170+ sqft","Pricing: RM750","Number of Rooms: 20","Apartment ID: A01-L04-R01 to A01-L04-R21, Date of Acquisition: 11/05/2017, Rental History: 21/06/2017 rent, Status: Available"]
+   list6 = ["Room Info: Deluxe Room (Twin)","Code: DR2","Dimensions: 160+ sqft","Pricing: RM840","Number of Rooms: 20","Apartment ID: A01-L04-R22 to A01-L04-R41, Date of Acquisition: 22/06/2017, Rental History: 22/07/2017 rent, Status: Available"]
+   list7 = ["Room Info: Deluxe Room A/C with shared attached bath / toilet (Triple)","Code: DR3","Dimensions: 180+ sqft","Pricing: RM950","Number of Rooms: 20","Apartment ID: A01-L03-R1 to A01-L03-R21, Date of Acquisition: 30/07/2018, Rental History: 25/08/2018 rent, Status: Available"]
+   list8 = ["Room Info: Deluxe Room A/C with shared attached bath / toilet","Code: DR4","Dimensions: 170+ sqft","Pricing: RM1040","Number of Rooms: 20","Apartment ID: A01-L03-R22 to A01-L03-R41, Date of Acquisition: 16/08/2018,, Rental History: 18/09/2018 rent, Status: Available"]
+   list9 = ["Room Info: Compact Premium Single","Code: CPS1","Dimensions: 130+ sqft","Pricing: RM690","Number of Rooms: 20","Apartment ID: A01-L05-R01 to A01-L05-R41, Date of Acquisition: 02/09/2019, Rental History: 29/10/2019 rent, Status: Available"]
+   list10 = ["Room Info: Medium Premium Single","Code: MPS1","Dimensions: 150+ sqft","Pricing: RM750","Number of Rooms: 20","Apartment ID: A02-L01-R01 to A02-L01-R21, Date of Acquisition: 15/10/2019, Rental History: 31/11/2019 rent, Status: Available"]
+   list11 = ["Room Info: Medium Premium Twin","Code: MPT1","Dimensions: 180+ sqft","Pricing: RM890","Number of Rooms: 20","Apartment ID: A02-L02-R01 to A02-L02-R21, Date of Acquisition: 25/11/2020, Rental History: 31/12/2020 rent, Status: Available"]
+   list12 = ["Room Info: Medium Premium with attached bath / toilet (Twin)","Code: MP1","Dimensions: 180+ sqft","Pricing: RM940","Number of Rooms: 20","Apartment ID: A02-L03-R01 to A02-L03-R21, Date of Acquisition: 30/12/2020, Rental History: 31/01/2020 rent, Status: Available"]
+   list13 = ["Room Info: Medium Premium with attached bath / toilet (Single)","Code: MP2","Dimensions: 160+ sqft","Pricing: RM1050","Number of Rooms: 20","Apartment ID: A02-L03-R22 to A02-L03-R41, Date of Acquisition: 16/01/2021, Rental History: 28/02/2021 rent, Status: Available"]
+   list14 = ["Room Info: En-Suite Single (Super Premium - Triple)","Code: ESS3","Dimensions: 160+ sqft","Pricing: RM700","Number of Rooms: 20","Apartment ID: A02-L04-R01 to A02-L04-R41, Date of Acquisition: 25/02/2021, Rental History: 31/03/2021 rent, Status: Available"]
+   list15 = ["Room Info: En-Suite Single (Super Premium - Twin)","Code: ESS2","Dimensions: 140+ sqft","Pricing: RM800","Number of Rooms: 20","Apartment ID: A02-L04-R01 to A02-L04-R41, Date of Acquisition: 31/05/2022, Rental History: Empty, Status: Not Available"]
+   list16 = ["Room Info: En-Suite Twin (Super Premium)","Code: EST2","Dimensions: 200+ sqft","Pricing: RM900","Number of Rooms: 20","Apartment ID: A02-L05-R01 to A02-L05-R41, Date of Acquisition: 26/06/2022, Rental History: Empty, Status: Not Available"]
+
+   #Apply data at the list
+   ApartmentList = [list1,list2,list3,list4,list5,list6,list7,list8,list9,list10,list11,list12,list13,list14,list15,list16]
+
+   with open(listIdentifier(listCode),"w") as apartmentHandler:
+      for record in ApartmentList:
+         for data in record:
+            apartmentHandler.write(data)
+            apartmentHandler.write(", ")
+         apartmentHandler.write("\n")
+   
+   for item in ApartmentList:
+      print(item)
+
+   if masterKey == True:
+      modifyData(masterKey,listCode,code,None)
+   else:
+      return False
+>>>>>>> 39e80b2a8c060e806c116668e6879009383fa755
 
 def searchBox(masterKey,UID):                                                     #Define search function
    while True:
@@ -1009,6 +1416,7 @@ def searchBox(masterKey,UID):                                                   
       option=int(input("Please type the search criteria based on the listing above: "))
       if option == 1:
          listCode= "a"
+<<<<<<< HEAD
          opt = input("\n[C]-Room code, [X]-Dimension, [P]-Pricing, [A]- Apartment ID, [D]-Date of Acquisition, [R]-Rental \nSearch?  ")     
          if opt in ["C","c"]:
             num = 1
@@ -1016,12 +1424,25 @@ def searchBox(masterKey,UID):                                                   
             num = 2
          elif opt in ["P","p"]:
             num = 3
+=======
+         opt = input("\n[C]-Room code, [P]-Pricing, [N]-Number of Rooms, [A]- Apartment ID, [D]-Date of Acquisition, [R]-Rental \nSearch?  ")     
+         if opt in ["C","c"]:
+            num = 1
+         elif opt in ["P","p"]:
+            num = 3
+         elif opt in ["N","n"]:
+            num = 4
+>>>>>>> 39e80b2a8c060e806c116668e6879009383fa755
          elif opt in ["A","a"]:
             num = 5
          elif opt in ["D","d"]:
             num = 6
          elif opt in ["R","r"]:
             num = 7
+<<<<<<< HEAD
+=======
+            num = 8
+>>>>>>> 39e80b2a8c060e806c116668e6879009383fa755
          else:
             code = 0
             message(code)
@@ -1050,7 +1471,11 @@ def menu(masterKey,UID):                                       #Define menu func
    while mainMenu == True:
       code = None
       if masterKey == False:
+<<<<<<< HEAD
          print("\nMain menu:\n\n[S] - Search box\n\nReview information about:\n[A] - Available Apartments\n[T] - My Tenant details\n[P] - My Transactions\n\nQuick functions:\n[D] - Print my House & Tenant Details\n\n[E] - Exit")
+=======
+         print("\nMain menu\n\n[S] - Search box\n\nReview information about:\n[A] - Available Apartments\n[T] - My Tenant details\n[P] - My Transactions\n\nQuick functions:\n[D] - Print my House & Tenant Details\n\n[E] - Exit")
+>>>>>>> 39e80b2a8c060e806c116668e6879009383fa755
       else:
          print("\nMain menu\n\n[S] - Search box\n\nReview information about:\n[A] - Apartment\n[T] - Tenant\n[P] - Transaction\n\nQuick functions:\n[D] - Print Specific House & Tenant Details\n[I] - Inquiry of Past Tenant Details\n[L] - Login History\n[E] - Exit")
       opt=input("\nPlease enter which operation that you want to do: ")

@@ -97,4 +97,39 @@
 #         print("\nExiting\n")
 #         return False
 
+number = input("choose location: ")#editDatatype = ApartmentDataInfo()
+display = []###apartmentSearch(editDatatype)
+with open("currentUser.txt","r") as f:  ###
+    bulkData = f.readlines() ###
+    print("raw data: ",bulkData) ###
+    for line in bulkData:###
+        individualList = line.rstrip(", \n").split(", ") ###
+        print(individualList)###
+        if int(number) == 0:###
+            display.append(individualList[int(number)]) ###
+        else:###
+            display.append("ID: "+str(individualList[int(0)])+";relevant data: "+str(individualList[int(number)])) ###
+oldDataFormat = False
+while oldDataFormat == False:
+    print(display) ###
+    selecteddata = input("please enter one of the options displayed above with exactly the same format.")
+    #selecteddata = inputidentifier(masterKey,listCode,editDataType,code)
+    if selecteddata in (item for item in display):
+        oldDataFormat = True
+    else:
+        continue
+newdata = input("Last step, please insert the new data with the correct format: ")
+#newdata = inputidentifier(masterKey,listCode,editDataType,code)
+with open("currentUser.txt","r") as Xhandler:
+     dataRead = Xhandler.readlines()
+     #['1, 2, 3, 4, 5, 6, 7,\n', 'a, b, c, d, e, f, g,\n', '8, 9, 10, 11, 12, 13, 14,\n', 'h, i, j, k, l, m, n, \n']
+     for record in dataRead:
+         print("Record: "+record)
+         strippeditem = record.rstrip(", \n").split(", ")
+         print("strippeditem:",strippeditem)
+         if selecteddata == strippeditem[int(number)] :
+             strippeditem[int(number)] = newdata
+             record = strippeditem
+             newRecord = record
+             print("New data: ",newRecord)
 
