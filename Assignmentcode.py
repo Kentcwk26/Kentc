@@ -427,7 +427,7 @@ def modifyData(masterKey,listCode,code,modifyType):
          dataInput = input('\n- Modification of records: -\n\n1. Add data\n2. Edit Data\n3. Delete Data\n4. Exit\n\nPlease select which operation to perform task (1-4): ')
       if dataInput == "1":
          if listCode == "a":
-            print("\n----------------------------------------------------------------------------------------------------------------------------------------------------------------------------")
+            print("\n------------------------------------------------------------------------------------------------------------------------------------------------------")
             apartmentAddData()
          elif listCode == "t":
             print("\n----------------------------------------------------------------------------------------------------------------------------------------------------------------------------")
@@ -811,6 +811,32 @@ def apartmentadddataconfirmation(adddatalist):
          message(code)
          break
 
+def apartmentEditData():
+   dataInfo = True
+   while dataInfo == True:
+      editdatainfo = input("\nSearch, Edit, Replace, and Update\nInsert 'C' to continue, any key to exit. ")
+      if editdatainfo == "C" or 'C':
+         replaceOldApartmentData()
+      else:
+         dataInfo = None
+         return False
+
+def apartmentSearch(num):
+   while True:
+      sourceFunction = None
+      listCode = "a"
+      displaylist=[]
+      with open (listIdentifier(listCode), "r") as Tread:
+         acheck = Tread.readlines()
+         for record in acheck:
+            listRecord = record.split(",")
+            displaylist.append(listRecord[num])
+         print("\n",displaylist)
+      if sourceFunction != None:
+         replaceOldApartmentData()
+      else:
+         continue
+
 def ApartmentDataInfo():
    data = True
    while data == True:
@@ -838,47 +864,23 @@ def ApartmentDataInfo():
          message(code)
          continue
 
-def apartmentEditData():
-   dataInfo = True
-   while dataInfo == True:
-      editdatainfo = input("\nSearch, Edit, Replace, and Update\nInsert 'C' to continue, any key to exit. ")
-      if editdatainfo == "C" or 'C':
-         replaceOldApartmentData()
-      else:
-         dataInfo = None
-         return False
-
-def apartmentSearch(num):
-   while True:
-      sourceFunction = None
-      listCode = "a"
-      displaylist=[]
-      with open (listIdentifier(listCode), "r") as Tread:
-         acheck = Tread.readlines()
-         for record in acheck:
-            listRecord = record.split(",")
-            displaylist.append(listRecord[num])
-         print("\n",displaylist)
-      if sourceFunction != None:
-         replaceOldApartmentData()
-      else:
-         continue
-
 def replaceOldApartmentData():
    num = None
    modify = None
    listCode = 'a'
    while True:
       readFile(listCode)
+      editdatatype = input("\n[R] - Room Info [C] - Room code, [D] - Dimensions, [P] - Pricing, [N] - Number of Rooms, [A] - Apartment ID, [D] - Date of Acquisition, [H] - Rental History, [S] - Status\nPlease tell us the datatype that you want to edit: ")
       selecteddata = input("\nPlease insert the data that you want to edit: ")
       newdata = input("Last step, please insert the new data with the correct format: ")
-      editdataconfirmation = input("\nAre you sure with your records just now? (Yes/No): ")
+      editdataconfirmation = input("Are you sure with your records just now? (Yes/No): ")
       if editdataconfirmation == 'Yes':
          editdata = []
          with open(listIdentifier(listCode),"r") as Xhandler:
-            dataread = Xhandler.readlines()
-            for record in dataread:
-               if selecteddata in record:
+            for record in Xhandler:
+               strippeditem=record.rstrip()
+               data = list(strippeditem.split(","))
+               if selecteddata == record:
                   record.replace(selecteddata,newdata)
                editdata.append(record)
          with open(listIdentifier(listCode),"w") as Xhandler:
@@ -901,7 +903,7 @@ def apartmentDeleteData():
       deletedata = input("\n1. Remove specified items\n2. Delete specified records\n3. Delete all records\n4. Exit\n\nPlease select and enter which operator that you want to proceed: ")
       if deletedata == '1':
          print("\n- 1. Remove specified items -")
-         apartmentSearch(num,sourcefunction)
+
       elif deletedata == '2':
          print("\n- 2. Delete specified records -")
       elif deletedata == '4':
