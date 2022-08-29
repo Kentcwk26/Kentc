@@ -1,2 +1,2 @@
-u001, Damon Ng Khai Weng, M, 01123882083, M, 2022/08/26, Fit'arch Healthware, RM 1500~1599, Current, 2003/01/16, Happy Garden-Kuala Lumpur-Malaysia, 
-26082022150704966269, Kent Chiu Wai Kin, M, 0199830889, M, 2022/08/26, Surfine Hi'Tech Sdn Bhd, RM 1800~1899, Current, 2003/06/04, Kuala Terengganu-Terengganu-Malaysia, 
+u001,Damon Ng Khai Weng,Male,01123882083,Malaysian,2022/08/30,Fit'arch Healthware,RM 1500~1599,Current,2003/01/16,Taman Garden-Kuala Lumpur-Malaysia,
+26082022150704966269,Kent Chiu Wai Kin,Male,0199830889,Malaysian,2022/08/26,Surfine Hi'Tech Sdn Bhd,RM 1800~1899,Current,2003/06/26,Kuala Terengganu-Terengganu-Malaysia,
