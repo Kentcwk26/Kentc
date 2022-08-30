@@ -56,8 +56,10 @@ def listIdentifier(listCode):                                        #define lis
       l = "tenant.txt"
    elif listCode == "a":
       l = "Apartment.txt"
-   else:
+   elif listCode == "p":
       l = "transaction.txt"
+   else:
+      l = "user.txt"
    return l
 
 def appendFile(list,listCode):                                       #define appendFile function
@@ -68,12 +70,15 @@ def appendFile(list,listCode):                                       #define app
       fAppend.write("\n")
 
 def readFile(listCode):                                              #define readFile function
+   returnList = []
    with open (listIdentifier(listCode),"r") as fRead:
-      string = fRead.readlines()
-      for record in string:
+      line = fRead.readlines()
+      for record in line:
          stripped = record.rstrip("\n").rstrip(",")
          splitRecord = stripped.split(",")
-         print(splitRecord)
+         returnList.append(str(splitRecord))
+         print(int(line.index(record))+1,splitRecord)
+   return returnList
 
 def gettenantID(UID):                                          #define gettenantID function
    if UID:
@@ -82,9 +87,29 @@ def gettenantID(UID):                                          #define gettenant
          userRecord = uRead.read().split(",")
          return userRecord[2]
    else:
-      # generate new UID
-      UID = dt.datetime.now().strftime("%d%m%Y%H%M%S%f")
-      return UID
+      while True:
+         path = input("[1]-Generate new ID; [2]-Choose existing ID")
+         if path.isdecimal():
+            number = int(path)
+            if number == 1:
+               return dt.datetime.now().strftime("%d%m%Y%H%M%S%f")
+            elif number == 2:
+               listCode = "u"
+               num = 0
+               num2 = 2
+               displayRecord = searchColumn(listCode,num,UID)
+               currentRecord = searchColumn(listCode,num2,UID)
+               index = input(displayRecord,"\n\nIDs are indexed from left to right starting from 1.\nChoose a user ID:")
+               if index.isdecimal():
+                  return currentRecord[int(index)-1]
+               else:
+                  code = 0
+            else:
+               code = 0
+         else:
+            code = 1   
+         message(code)
+
 
 def getname(code,nameType):                                          #define getname function
    specials = specialCharacterList(None)
@@ -402,6 +427,26 @@ def tenantOrTransactionEntryForm(UID,listCode,code):           #Define tenantOrT
          appendFile(list,listCode)
       break
 
+def tenantAndApartment():
+   listCode = "p"
+   reference1 = "t"
+   reference2 = "a"
+   primaryKeys = []
+   record = []
+   with open(listIdentifier(listCode),"r") as pRead:
+      file = pRead.readlines()
+      for record in file:
+         list = record.split(",")
+         if list[2] not in primaryKeys[0]:
+            primaryKeys.append(list[2]+","+list[3]+",\n")
+         else:
+            continue
+   print(primaryKeys)
+   #with open(listIdentifier(reference1),"r") as tRead:
+   #with open(listIdentifier(reference2),"r") as aRead:
+
+
+
 def tenantOrTransaction(UID,listCode,code):                #Define tenantOrTransaction function
    while True:
       if UID:
@@ -478,7 +523,7 @@ def apartment(UID,listCode,code):                              #Define apartment
 
 def modifyData(UID,listCode,code,modifyType):
    modify = True
-   while modify == True:
+   while True:
       if modifyType:
          dataInput = modifyType
       else:
@@ -490,18 +535,19 @@ def modifyData(UID,listCode,code,modifyType):
          else:
             tenantOrTransactionEntryForm(UID,listCode,code)
       elif dataInput == "2":
-         replaceOldData(UID,listCode,code)
-         modify = False
+         editData(UID,listCode,code)
       elif dataInput == "3":
-         apartmentDeleteData()
-         modify = False
+         deleteRecord(listCode,code)
       elif dataInput == "4":
-         modify = False
+         break
       else:
          code = 1
          message(code)
          continue
-      break
+      if UID == None:
+         continue
+      else:
+         break
    
 def apartmentAddData(modify,listCode):
    adddatalist = []
@@ -557,7 +603,7 @@ def newRoom():
          if decisionkey in ['N','n']:
             continue
          else:
-            return "New Room Info: "+newRoom
+            return "New Room Info: " + newRoom
       else:
          code = 2
          message(code)
@@ -587,7 +633,7 @@ def newRoomCode():
          if decisionkey in ['N','n']:
             continue
          else:
-            return "New Room Code: "+newRoomCode
+            return "New Room Code: " + newRoomCode
       else:
          code = 2
          message(code)
@@ -617,7 +663,7 @@ def newRoomDimension():
          if decisionkey in ["N","n"]:
             continue
          else:
-            return "Dimensions: "+newRoomDimension
+            return "Dimensions: " + newRoomDimension + "+ sqft"
       else:
          code=2
          message(code)
@@ -642,7 +688,7 @@ def newRoompricing():
          if decisionkey in ["N","n"]:
             continue
          else:
-            return "Pricing: RM"+newRoompricing
+            return "Pricing: RM" + newRoompricing
       else:
          code = 2
          message(code)
@@ -652,18 +698,18 @@ def newRoompricing():
 def newRoomID():
    while True:
       code = None
-      validnewRoomID = input('\nThis is the correct format for RoomID: A(01)-L(01)-R(01)x(to)xA(99)-L(99)-R(99), x means space\nPlease enter the new Room ID: ')
-      if 0 <= len(validnewRoomID) <= 25:
+      newRoomID = input('\nThis is the correct format for RoomID: A(01)-L(01)-R(01)x(to)xA(99)-L(99)-R(99), x means space\nPlease enter the new Room ID: ')
+      if 0 <= len(newRoomID) <= 25:
          print("\n- Please fill in the new room ID with the correct format -")
          continue
       else:
-         if (validnewRoomID[0] == 'A' and validnewRoomID[3] == '-' and validnewRoomID[4] == 'L' and validnewRoomID[7] == '-' and validnewRoomID[8] == 'R' and validnewRoomID[11] == ' ' and validnewRoomID[12] == 't' and validnewRoomID[13] == 'o' and validnewRoomID[14] == ' ' and validnewRoomID[15] == 'A' and validnewRoomID[18] == '-' and validnewRoomID[19] == 'L' and validnewRoomID[22] == '-' and validnewRoomID[23] == 'R'):
-            if ((validnewRoomID[1] and validnewRoomID[2] and validnewRoomID[5] and validnewRoomID[6] and validnewRoomID[9] and validnewRoomID[10] and validnewRoomID[16] and validnewRoomID[17] and validnewRoomID[20] and validnewRoomID[21] and validnewRoomID[24] and validnewRoomID[25]).isdigit):
+         if (newRoomID[0] == 'A' and newRoomID[3] == '-' and newRoomID[4] == 'L' and newRoomID[7] == '-' and newRoomID[8] == 'R' and newRoomID[11] == ' ' and newRoomID[12] == 't' and newRoomID[13] == 'o' and newRoomID[14] == ' ' and newRoomID[15] == 'A' and newRoomID[18] == '-' and newRoomID[19] == 'L' and newRoomID[22] == '-' and newRoomID[23] == 'R'):
+            if ((newRoomID[1] and newRoomID[2] and newRoomID[5] and newRoomID[6] and newRoomID[9] and newRoomID[10] and newRoomID[16] and newRoomID[17] and newRoomID[20] and newRoomID[21] and newRoomID[24] and newRoomID[25]).isdigit):
                decisionkey = input("Save data? (Enter to continue, 'N' to return back):")
                if decisionkey in ["N","n"]:
                   continue
                else:
-                  return "Apartment ID: "+validnewRoomID
+                  return "Apartment ID: " + newRoomID
             else:
                code = 1
                message(code)
@@ -831,7 +877,7 @@ def inputidentifier(UID,listCode,editDataType,code):
 def ApartmentDataInfo():
    data = True
    while data == True:
-      opt = input("\n[R] - Room Info [C] - Room code, [D] - Dimensions, [P] - Pricing, [N] - Number of Rooms, [A] - Apartment ID, [D] - Date of Acquisition, [H] - Rental History, [S] - Status \nAnswer: ")
+      opt = input("\n[R] - Room Info [C] - Room code, [D] - Dimensions, [P] - Pricing, [A] - Apartment ID, [D] - Date of Acquisition, [H] - Rental History, [S] - Status \nAnswer: ")
       if opt in ["R","r"]:
          return 0
       elif opt in ["C","c"]:
@@ -840,16 +886,14 @@ def ApartmentDataInfo():
          return 2
       elif opt in ["P","p"]:
          return 3
-      elif opt in ["N","n"]:
-         return 4
       elif opt in ["A","a"]:
-         return 5
+         return 4
       elif opt in ["D","d"]:
-         return 6
+         return 5
       elif opt in ["H","h"]:
-         return 7
+         return 6
       elif opt in ["S","s"]:
-         return 8
+         return 7
       else:
          code = 0
          message(code)
@@ -871,7 +915,7 @@ def category(listCode,code):
             return 4
          else:
             code = 0
-            message(0)
+            message(code)
             continue
       else:
          opt = input("\n[U]-User ID,[N]-Name,[G]-Gender,[P]-Phone number,[R]-Nationality,[D]-Rental start date,[W]-Work history,[E]-Employer,[I]-Income,[S]-Tenant status,[B]-Birthdate,[C]-Birth City\nChoose a category: ")
@@ -901,7 +945,7 @@ def category(listCode,code):
             return 11
          else:
             code = 0
-            message(0)
+            message(code)
             continue
 
 def searchInformation(listCode,num,details):                   #Define searchinformation function
@@ -929,7 +973,28 @@ def searchInformation(listCode,num,details):                   #Define searchinf
             message(code)
          break
 
-def replaceOldData(UID,listCode,code):
+def replaceOldData(listCode,recordindex,editDataType,newData):
+   with open(listIdentifier(listCode),"r") as Xhandler:
+      updatedData = []
+      newRecord = []
+      dataRead = Xhandler.readlines()
+      for record in dataRead:
+         strippedRecord = record.rstrip(",\n").split(",")
+         if dataRead.index(record) == int(recordindex):
+            if newData:
+               strippedRecord[int(editDataType)] = newData               #modify the record with new data
+               newRecord = ",".join(strippedRecord)                         #capture the new record
+               updatedData.append(newRecord+",\n")
+            else:
+               continue
+         else:
+            updatedData.append(record)
+   with open(listIdentifier(listCode),"w") as fUpdate:
+      for record in updatedData:
+         fUpdate.write(record)
+   return False
+
+def editData(UID,listCode,code):
    while True:
       if listCode == "a":
          editDataType = ApartmentDataInfo()
@@ -940,7 +1005,7 @@ def replaceOldData(UID,listCode,code):
       while oldDataFormat == False:
          print(display)
          if UID == None:
-            selectedData = input("Placement of items displayed above are labeled from left-to-right starting from 1\nPlease enter the number of the item to edit:")
+            selectedData = input("Placement of items displayed above are labeled from left to right starting from 1\nPlease enter the number of the item to edit:")
             if selectedData.isdecimal():
                recordindex = int(selectedData)-1
                oldDataFormat = True
@@ -955,27 +1020,11 @@ def replaceOldData(UID,listCode,code):
                   oldDataFormat = True
                else:
                   continue
-
       print("Last step, please insert the new data with the correct format: ")
-      newdata = inputidentifier(UID,listCode,editDataType,code)
+      newData = inputidentifier(UID,listCode,editDataType,code)
       editdataconfirmation = input("\nAre you sure with your records just now? ([Y]-Yes/[N]-No): ")
       if editdataconfirmation in ["Y","y"]:
-         with open(listIdentifier(listCode),"r") as Xhandler:
-            updatedData = []
-            newRecord = []
-            dataRead = Xhandler.readlines()
-            for record in dataRead:
-               strippedRecord = record.rstrip(",\n").split(",")
-               if dataRead.index(record) == int(recordindex):
-                  strippedRecord[int(editDataType)] = newdata               #modify the record with new data
-                  newRecord = ",".join(strippedRecord)                         #capture the new record
-                  updatedData.append(newRecord+",\n")
-               else:
-                  updatedData.append(record)
-         with open(listIdentifier(listCode),"w") as fUpdate:
-            for record in updatedData:
-               fUpdate.write(record)
-         return False
+         replaceOldData(listCode,recordindex,editDataType,newData)
       elif editdataconfirmation in ["N","n"]:
          return False
       else:
@@ -996,10 +1045,16 @@ def searchColumn(listCode,num,UID):
                displayList.append(str(individualList[int(1)])+";"+str(individualList[int(num)]))
          else:
             if UID == None:
-               if int(num) == 0:
-                  displayList.append(individualList[int(num)])
+               if listCode == "u":
+                  if int(num) == 0:
+                     displayList.append("ID: "+str(individualList[int(0)])+";relevant data: "+str(individualList[int(num)]))
+                  else:
+                     displayList.append(individualList[int(num)])
                else:
-                  displayList.append("ID: "+str(individualList[int(0)])+";relevant data: "+str(individualList[int(num)]))
+                  if int(num) == 0:
+                     displayList.append(individualList[int(num)])
+                  else:
+                     displayList.append("ID: "+str(individualList[int(0)])+";relevant data: "+str(individualList[int(num)]))
             else:
                if listCode == "t":
                   if int(num) == 0:
@@ -1017,37 +1072,33 @@ def searchColumn(listCode,num,UID):
    else:
       return displayList
       
-def apartmentDeleteData():
-   modify = True
+def deleteRecord(listCode,code):
    while True:
       print("\n- Delete Data -")
       deletedata = input("\n1. Delete specified records\n2. Delete all records\n\n[E] - Exit\n\nPlease select and enter which operator that you want to proceed: ")
       if deletedata == '1':
          print("\n- 1. Delete specified records -")
-         deleteSpecRecord()
+         deleteSpecRecord(listCode,code)
       elif deletedata == '2':
          print("\n- 2. Delete all records -")
-         deleteAllrecords()
+         deleteAllrecords(listCode,code)
       elif deletedata in ["E","e"]:
-         return modify
+         break
       else:
          code = 0
          message(code)
          continue
 
-def deleteSpecRecord():
-   code = None
+def deleteSpecRecord(listCode,code):
    modify = True
    while True:
-      listCode = 'a'
-      print("\n- 2. Delete specified row  -\n")
+      readFile(listCode)
       selecteddatarow = input("\nWhich data row that you want to delete? ")
       if selecteddatarow.isdigit():
-         with open (listIdentifier(listCode),"r") as readfile:
-            record = readfile.readlines()[selecteddatarow-"1"]
-         with open (listIdentifier(listCode),"w") as writefile:
-            removeddata = record.replace(selecteddatarow," ")
-            writefile.write(removeddata)
+         number = int(selecteddatarow)-1
+         editDataType = None
+         newData = None
+         replaceOldData(listCode,number,editDataType,newData)
       else:
          code = 0
          message(code)
@@ -1058,7 +1109,6 @@ def deleteAllrecords():
    modify = None
    while modify == True:
       listCode = 'a'
-      print("\n- 3. Delete all records -")
       confirmation = input("\nAre you sure that you want to delete all the record(s)?\nIt will be not recovered once you hit the enter button. However, you still can discard this changes by hitting a 'X' if you change your mind: ")
       if confirmation in ["X","x"]:
          print("\n- Delete unsuccessful -")
@@ -1104,7 +1154,7 @@ def searchBox(UID):                                                     #Define 
          num = category(listCode,code)
       elif option.isdigit() and option == "4":
          print("\n- Return to main menu -\n\n----------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\n- Welcome back ! -")
-         break                                          #return to menu function
+         break
       else:
          code = 0
          message(code)
@@ -1116,7 +1166,7 @@ def searchBox(UID):                                                     #Define 
             details = UID
       else:
          details = None
-      print(searchColumn(listCode,num))
+      print(searchColumn(listCode,num,UID))
       searchInformation(listCode,num,details)
 
 def menu(UID):                                       #Define menu function
@@ -1142,9 +1192,10 @@ def menu(UID):                                       #Define menu function
          tenantOrTransaction(UID,listCode,code)
 #Check for quick functions
       elif opt in ["D","d"]:
-         print("tenantAndApartment()")
+         tenantAndApartment()
       elif opt in ["I","i"] and UID == None:
-         searchInformation(listCode,9,"past")
+         listCode = "t"
+         searchInformation(listCode,9,"Past")
       elif opt in ["L","l"] and UID == None:
          print("loginHistory()")
       elif opt in ["E","e"]:                                #get confirmation to exit
