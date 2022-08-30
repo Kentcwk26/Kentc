@@ -15,7 +15,6 @@ def message(code):                                                   #define mes
 
 def apartmentSearch(num):
    while True:
-      listCode = "a"
       displaylist=[]
       with open ("Apartment.txt", "r") as Tread:
          acheck = Tread.readlines()
@@ -24,7 +23,6 @@ def apartmentSearch(num):
             displaylist.append(listRecord[num])
          print("\n",displaylist)
          break
-
 
 selectedrow = int(input("Which row you want to edit: "))
 selecteddata = input("\nPlease enter the exact data that you want to edit: ")

@@ -1099,7 +1099,6 @@ def searchBox(UID):                                                     #Define 
          details = None
       print(searchColumn(listCode,num))
       searchInformation(listCode,num,details)
-      
 def menu(UID):                                       #Define menu function
    mainMenu = True
    while mainMenu == True:
@@ -1138,6 +1137,5 @@ def menu(UID):                                       #Define menu function
       else:
          code = 0
          message(code)
-
 import datetime as dt
 login()
