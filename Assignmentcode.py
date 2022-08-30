@@ -45,13 +45,12 @@ def message(code):                                                   #define mes
       print("\n"+x+"zero input."+z)
 
 def specialCharacterList(SCL):                                       #define specialCharacterList function
-   if SCL == None:
-      return ["~","`","!","@","#","$","%","^","&","*","(",")","-","_","=","+","{","}","[","]","|",",","\'",".","/","<",">","?",";",":","'",'"'] #0-31
-   elif SCL == "SCL1":
-      return ['~','`','!','@','#','$','%','^','&','*','(',')','-','_','=','+','{','}','[',']','|',',','\\','\'','\"','.','/','<','>','?',';',':'] #0-31
-   elif SCL == "SCL2":
-      return ['~','`','!','@','#','$','%','^','&','*','_','=','+','{','}','[',']','|','\\','\'','\"',',','.','/','<','>','?',':',';'] #0-28
-
+    if SCL == None:
+        return ["~","`","!","@","#","$","%","^","&","*","(",")","-","_","=","+","{","}","[","]","|",",","\'",".","/","<",">","?",";",":","'",'"'] #0-31
+    elif SCL == "SCL1":
+        return ['~','`','!','@','#','$','%','^','&','*','(',')','-','_','=','+','{','}','[',']','|',',','\\','\'','\"','.','/','<','>','?',';',':'] #0-31
+    elif SCL == "SCL2":
+        return ['~','`','!','@','#','$','%','^','&','*','_','=','+','{','}','[',']','|','\\','\'','\"',',','.','/','<','>','?',':',';'] #0-28
 def listIdentifier(listCode):                                        #define listIdentifier function
    if listCode == "t":
       l = "tenant.txt"
@@ -83,7 +82,7 @@ def gettenantID(UID):                                          #define gettenant
          userRecord = uRead.read().split(",")
          return userRecord[2]
    else:
-    # generate new UID
+      # generate new UID
       UID = dt.datetime.now().strftime("%d%m%Y%H%M%S%f")
       return UID
 
@@ -308,7 +307,7 @@ def getrental(UID):                                            #define getrental
          retry = input("[R]-Retry,[Any other key]-Exit using "+rental+"\n")
          if retry in ["R","r"]:
             continue
-         else:    
+         else:
             return rental
 
 def getreferenceNumber(code):                                        #define getreferenceNumber function
@@ -503,7 +502,7 @@ def modifyData(UID,listCode,code,modifyType):
          message(code)
          continue
       break
-            
+   
 def apartmentAddData(modify,listCode):
    adddatalist = []
    print("\nDear admin, we need your ATTENTION !\n\nFor your information, all the new data will only be stored if you insert each information with the correct format provided.\n\nOnce you finish each entry,a confirmation message will appear. Please ensure that the data is typed correctly before saving.\n- Now, you are required to enter new data. -\n\n----------------------------------------------------------------------------------------------------------------------------------------------------------------------------")
@@ -872,7 +871,7 @@ def category(listCode,code):
             return 4
          else:
             code = 0
-            message(code)
+            message(0)
             continue
       else:
          opt = input("\n[U]-User ID,[N]-Name,[G]-Gender,[P]-Phone number,[R]-Nationality,[D]-Rental start date,[W]-Work history,[E]-Employer,[I]-Income,[S]-Tenant status,[B]-Birthdate,[C]-Birth City\nChoose a category: ")
@@ -902,7 +901,7 @@ def category(listCode,code):
             return 11
          else:
             code = 0
-            message(code)
+            message(0)
             continue
 
 def searchInformation(listCode,num,details):                   #Define searchinformation function
@@ -956,6 +955,7 @@ def replaceOldData(UID,listCode,code):
                   oldDataFormat = True
                else:
                   continue
+
       print("Last step, please insert the new data with the correct format: ")
       newdata = inputidentifier(UID,listCode,editDataType,code)
       editdataconfirmation = input("\nAre you sure with your records just now? ([Y]-Yes/[N]-No): ")
@@ -1144,7 +1144,7 @@ def menu(UID):                                       #Define menu function
       elif opt in ["D","d"]:
          print("tenantAndApartment()")
       elif opt in ["I","i"] and UID == None:
-         searchInformation(listCode,8,"past")
+         searchInformation(listCode,9,"past")
       elif opt in ["L","l"] and UID == None:
          print("loginHistory()")
       elif opt in ["E","e"]:                                #get confirmation to exit
