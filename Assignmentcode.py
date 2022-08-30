@@ -956,14 +956,22 @@ def replaceOldData(UID,listCode,code):
       oldDataFormat = False
       while oldDataFormat == False:
          print(display)
-         selecteddata = input("Placement of items displayed above are labeled from left-to-right starting from 1\nPlease enter the number of the item to edit:")
-         if selecteddata.isdecimal():
-            recordindex = int(selecteddata)-1
-            oldDataFormat = True
+         if UID == None:
+            selectedData = input("Placement of items displayed above are labeled from left-to-right starting from 1\nPlease enter the number of the item to edit:")
+            if selectedData.isdecimal():
+               recordindex = int(selectedData)-1
+               oldDataFormat = True
+            else:
+               code = 1
+               message(code)
+               continue
          else:
-            code = 1
-            message(code)
-            continue
+            for item in display:
+               if item != "":
+                  recordindex = display.index(item)
+                  oldDataFormat = True
+               else:
+                  continue
       print("Last step, please insert the new data with the correct format: ")
       newdata = inputidentifier(UID,listCode,editDataType,code)
       editdataconfirmation = input("\nAre you sure with your records just now? ([Y]-Yes/[N]-No): ")
