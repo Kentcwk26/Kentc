@@ -1,6 +1,5 @@
 # Python Assignment (Tenant Management System)
 # Chiu Wai Kin TP065600 & Damon Ng Khai Weng TP064820
-
 def login():                                                         #define the login function
    print("\nWelcome to Tenant Management System Login page.\nPlease enter username and password to proceed.\n") 
    chance = 3                                                        #Specify login chances
@@ -46,12 +45,12 @@ def message(code):                                                   #define mes
       print("\n"+x+"zero input."+z)
 
 def specialCharacterList(SCL):                                       #define specialCharacterList function
-   if SCL == None:
-      return ["~","`","!","@","#","$","%","^","&","*","(",")","-","_","=","+","{","}","[","]","|",",","\'",".","/","<",">","?",";",":","'",'"'] #0-31
-   elif SCL == "SCL1":
-      return ['~','`','!','@','#','$','%','^','&','*','(',')','-','_','=','+','{','}','[',']','|',',','\\','\'','\"','.','/','<','>','?',';',':'] #0-31
-   elif SCL == "SCL2":
-      return ['~','`','!','@','#','$','%','^','&','*','_','=','+','{','}','[',']','|','\\','\'','\"',',','.','/','<','>','?',':',';'] #0-28
+    if SCL == None:
+        return ["~","`","!","@","#","$","%","^","&","*","(",")","-","_","=","+","{","}","[","]","|",",","\'",".","/","<",">","?",";",":","'",'"'] #0-31
+    elif SCL == "SCL1":
+        return ['~','`','!','@','#','$','%','^','&','*','(',')','-','_','=','+','{','}','[',']','|',',','\\','\'','\"','.','/','<','>','?',';',':'] #0-31
+    elif SCL == "SCL2":
+        return ['~','`','!','@','#','$','%','^','&','*','_','=','+','{','}','[',']','|','\\','\'','\"',',','.','/','<','>','?',':',';'] #0-28
 
 def listIdentifier(listCode):                                        #define listIdentifier function
    if listCode == "t":
@@ -231,7 +230,7 @@ def getnumber(code,numberType):                                                 
     while True:
       if numberType == "workHistory":
          t = "Total work history is around "
-         number = input("[1]-"+t+"1 to 2 month\n[2]-"+t+"2 to 3 months\n[3]-"+t+"3 to 6 months\n[4]-"+t+"6 to 9 months\n[5]-"+t+"9 months to 1 year\n[6]-"+t+"1 to 2 years\n[7]-"+t+"2 to 3 years\n[8]-"+t+"3 to 4 years\n[9]-"+t+"4 to 5 years\n[0]-"+t+"5 years or more\nChoose how long you have been working: ")
+         number = input(t+"\n[1]-1 to 2 month\n[2]-2 to 3 months\n[3]-3 to 6 months\n[4]-6 to 9 months\n[5]-9 months to 1 year\n[6]-1 to 2 years\n[7]-2 to 3 years\n[8]-3 to 4 years\n[9]-4 to 5 years\n[0]-5 years or more\nChoose how long you have been working: ")
       else:
          number = input("[1]-RM 1500~1599\n[2]-RM 1600~1699\n[3]-RM 1700~1799\n[4]-RM 1800~1899\n[5]-RM 1900~1999\n[6]-RM 2000~2099\n[7]-RM 2100~2199\n[8]-RM 2200~2499\n[9]-RM 2500~3000\n[0]-RM > 3000\nChoose tenant income range in Ringgit Malaysia: ")
       if number.isdigit():
@@ -289,27 +288,28 @@ def getnumber(code,numberType):                                                 
       else:
          code = 0
          message(code)
+         continue
       retry = input("[R]-Retry,[Any other key]-Exit using "+number+"\n")
       if retry in ["R","r"]:
          continue
-      else:
+      else:    
          return number
 
 def getrental(UID):                                            #define getrental function
-    if UID:
-        return "Current"
-    else:
-        while True:
-            rental = input("[P]-Past\n[Any other key]-Current\nChoose tenant rental status(current/past)\n")
-            if rental in ["P","p"]:
-                rental = "Past"
-            else:
-                rental = "Current"
-            retry = input("[R]-Retry,[Any other key]-Exit using "+rental+"\n")
-            if retry in ["R","r"]:
-                continue
-            else:    
-                return rental
+   if UID:
+      return "Current"
+   else:
+      while True:
+         rental = input("[P]-Past\n[Any other key]-Current\nChoose tenant rental status(current/past)\n")
+         if rental in ["P","p"]:
+               rental = "Past"
+         else:
+               rental = "Current"
+         retry = input("[R]-Retry,[Any other key]-Exit using "+rental+"\n")
+         if retry in ["R","r"]:
+               continue
+         else:    
+               return rental
 
 def getreferenceNumber(code):                                        #define getreferenceNumber function
    while True:
@@ -349,6 +349,7 @@ def getdecimal(code):                                                #define get
                   break
             except IndexError:
                code = 2
+               break
       else:
          code = 2
          print(specials[23])
@@ -435,40 +436,7 @@ def tenantOrTransaction(UID,listCode,code):                #Define tenantOrTrans
             continue
          break
 
-def getdecimal(code):                                                #define getdecimal function
-   specials = specialCharacterList(None)
-   while True:
-      decimal = input("Format: ########.##\nEnter the transaction amount in Ringgit Malaysia:\n")
-      if specials[23] in decimal:
-         money = decimal.split(".")
-         for numbers in money:
-            try:
-               numbers[1] in money[1]
-               if (digits.isnumeric() for digits in numbers):
-                  code = None
-                  continue
-               else:
-                  code = 1
-                  break
-            except IndexError:
-               code = 2
-               break
-      else:
-         code = 2
-         print(specials[23])
-      if code:
-         message(code)
-         print("ATTENTION||Error detected.||ATTENTION\n")
-      else:
-         print("No errors detected.\n")
-      retry = input("[R]-Retry,[Any other key]-Exit using "+decimal+"\n")
-      if retry in ["R","r"]:
-         continue
-      else:    
-         return decimal
-
 # - Apartment - Chiu Wai Kin TP065600
-
 def apartment(UID,listCode,code):                              #Define apartment function
    
    listCode = "a"
@@ -492,10 +460,8 @@ def apartment(UID,listCode,code):                              #Define apartment
    list14 = ["Room Info: En-Suite Single (Super Premium - Triple)","Code: ESS3","Dimensions: 160+ sqft","Pricing: RM700","Apartment ID: A02-L04-R01 to A02-L04-R41","Date of Acquisition: 25/02/2021","Rental History: 31/03/2021 rent","Status: Available"]
    list15 = ["Room Info: En-Suite Single (Super Premium - Twin)","Code: ESS2","Dimensions: 140+ sqft","Pricing: RM800","Apartment ID: A02-L04-R01 to A02-L04-R41","Date of Acquisition: 31/05/2022","Rental History: Empty","Status: Not Available"]
    list16 = ["Room Info: En-Suite Twin (Super Premium)","Code: EST2","Dimensions: 200+ sqft","Pricing: RM900","Apartment ID: A02-L05-R01 to A02-L05-R41","Date of Acquisition: 26/06/2022","Rental History: Empty","Status: Not Available"]
-
    #Apply data at the list
    ApartmentList = [list1,list2,list3,list4,list5,list6,list7,list8,list9,list10,list11,list12,list13,list14,list15,list16]
-
    with open(listIdentifier(listCode),"w") as apartmentHandler:
       for record in ApartmentList:
          for data in record:
@@ -506,7 +472,6 @@ def apartment(UID,listCode,code):                              #Define apartment
    for item in ApartmentList:
       print(item,"\n")
    print("----------------------------------------------------------------------------------------------------------------------------------------------------------------------------")
-
    if UID == None:
       modifyData(UID,listCode,code,None)
    else:
@@ -535,11 +500,9 @@ def modifyData(UID,listCode,code,modifyType):
          modify = False
       else:
          code = 1
-         if code:
-            message(code)
-            print("ATTENTION||Error detected.||ATTENTION\n")
-         else:
-            print("No errors detected.\n")
+         message(code)
+         continue
+      break
 
 def apartmentAddData(modify,listCode):
    adddatalist = []
@@ -561,7 +524,6 @@ def apartmentAddData(modify,listCode):
       appendFile(adddatalist,listCode)
       print("\n- Data Saved -\n\n----------------------------------------------------------------------------------------------------------------------------------------------------------------------------")
       return modify
-
 def newRoom():
    while True:
       code = None
@@ -636,7 +598,7 @@ def newRoomDimension():
    while True:
       code = None
       newRoomDimension=input("\nRoom Dimension only contains numbers, no alphabets and special characters (The unit (in sqft) will be provided at the back)\nExample: 300(+sqft)\n\nRoom Dimension: ")
-      if len(newRoomDimension)==0:
+      if len(newRoomDimension) == 0:
          code = 5
          message(code)
          print("- Please fill in the room dimension, and room dimension must have at least 100 or more sqft -\n")
@@ -712,7 +674,7 @@ def newRoomID():
             continue
 
 def newRoomDate(dateType):
-    while True:
+   while True:
       code = None
       if dateType == "acquisition":
          roomDate = input("\nRoom Date of Acquisition: dd/mm/yyyy\nNo special characters included, except '/'\n\nRoom Acquisition Date: ")
@@ -812,59 +774,59 @@ def newRoomStatus():
          continue
 
 def inputidentifier(UID,listCode,editDataType,code):
-   if listCode == "a":
-      if editDataType == 0:
-         return newRoom()
-      elif editDataType == 1:
-         return newRoomCode()
-      elif editDataType == 2:
-         return newRoomDimension()
-      elif editDataType == 3:
-         return newRoompricing()
-      elif editDataType == 4:
-         return newRoomID()
-      elif editDataType == 5:
-         return newRoomDate("acquisition")
-      elif editDataType == 6:
-         return newRoomDate("history")
+      if listCode == "a":
+         if editDataType == 0:
+            return newRoom()
+         elif editDataType == 1:
+            return newRoomCode()
+         elif editDataType == 2:
+            return newRoomDimension()
+         elif editDataType == 3:
+            return newRoompricing()
+         elif editDataType == 4:
+            return newRoomID()
+         elif editDataType == 5:
+            return newRoomDate("acquisition")
+         elif editDataType == 6:
+            return newRoomDate("history")
+         else:
+            return newRoomStatus()
+      elif listCode == "t":
+         if editDataType == 0:
+            return gettenantID(UID)
+         elif editDataType == 1:
+            return getname(code,"tenant")
+         elif editDataType == 2:
+            return getabbreviation(code,"gender")
+         elif editDataType == 3:
+            return getpNum(code)
+         elif editDataType == 4:
+            return getabbreviation(code,"nationality")
+         elif editDataType == 5:
+            return getDate(code,"start")
+         elif editDataType == 6:
+            return getnumber(code,"workHistory")
+         elif editDataType == 7:
+            return getname(code,"employer")
+         elif editDataType == 8:
+            return getnumber(code,"income")
+         elif editDataType == 9:
+            return getrental(UID)
+         elif editDataType == 10:
+            return getDate(code,"birth")
+         else:
+            return getname(code,"city")
       else:
-         return newRoomStatus()
-   elif listCode == "t":
-      if editDataType == 0:
-         return gettenantID(UID)
-      elif editDataType == 1:
-         return getname(code,"tenant")
-      elif editDataType == 2:
-         return getabbreviation(code,"gender")
-      elif editDataType == 3:
-         return getpNum(code)
-      elif editDataType == 4:
-         return getabbreviation(code,"nationality")
-      elif editDataType == 5:
-         return getDate(code,"start")
-      elif editDataType == 6:
-         return getnumber(code,"workHistory")
-      elif editDataType == 7:
-         return getname(code,"employer")
-      elif editDataType == 8:
-         return getnumber(code,"income")
-      elif editDataType == 9:
-         return getrental(UID)
-      elif editDataType == 10:
-         return getDate(code,"birth")
-      else:
-         return getname(code,"city")
-   else:
-      if editDataType == 0:
-         return getreferenceNumber(code)
-      elif editDataType == 1:
-         return getDate(code,"transaction")
-      elif editDataType == 2:
-         return gettenantID(UID,listCode)
-      elif editDataType == 3:
-         return newRoomCode()
-      else:
-         return getdecimal(code)
+         if editDataType == 0:
+            return getreferenceNumber(code)
+         elif editDataType == 1:
+            return getDate(code,"transaction")
+         elif editDataType == 2:
+            return gettenantID(UID,listCode)
+         elif editDataType == 3:
+            return newRoomCode()
+         else:
+            return getdecimal(code)
 
 def ApartmentDataInfo():
    data = True
@@ -893,7 +855,7 @@ def ApartmentDataInfo():
          message(code)
          continue
 
-def category(listCode):
+def category(listCode,code):
    while True:
       if listCode == "p":
          opt = input("\n[R]-Reference number,[D]-Transaction date,[T]-TenantID,[A]-Apartment code,[S]-Amount\n Choose a category: ")
@@ -908,10 +870,11 @@ def category(listCode):
          elif opt in ["S","s"]:
             return 4
          else:
+            code = 0
             message(0)
             continue
       else:
-         opt = input("\n[U]-User ID,[N]-Name,[G]-Gender,[P]-Phone number,[R]-Nationality,[D]-Rental start date,[E]-Employer,[I]-Income,[S]-Tenant status,[B]-Birthdate,[C]-Birth City\nChoose a category: ")
+         opt = input("\n[U]-User ID,[N]-Name,[G]-Gender,[P]-Phone number,[R]-Nationality,[D]-Rental start date,[W]-Work history,[E]-Employer,[I]-Income,[S]-Tenant status,[B]-Birthdate,[C]-Birth City\nChoose a category: ")
          if opt in ["U","u"]:
             return 0
          elif opt in ["N","n"]:
@@ -924,17 +887,20 @@ def category(listCode):
             return 4
          elif opt in ["D","d"]:
             return 5
-         elif opt in ["E","e"]:
+         elif opt in ["W","w"]:
             return 6
-         elif opt in ["I","i"]:
+         elif opt in ["E","e"]:
             return 7
-         elif opt in ["S","s"]:
+         elif opt in ["I","i"]:
             return 8
-         elif opt in ["B","b"]:
+         elif opt in ["S","s"]:
             return 9
-         elif opt in ["C","c"]:
+         elif opt in ["B","b"]:
             return 10
+         elif opt in ["C","c"]:
+            return 11
          else:
+            code = 0
             message(0)
             continue
 
@@ -943,7 +909,7 @@ def searchInformation(listCode,num,details):                   #Define searchinf
       if details:
          searchInformation = details
       else:
-         searchInformation=input("\nPlease enter text to begin the search: ")
+         searchInformation = input("\nPlease enter text to begin the search: ")
       recordExist = False
       with open(listIdentifier(listCode),"r") as Xhandler:
          print("\n----------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\nResults:\n")
@@ -962,13 +928,12 @@ def searchInformation(listCode,num,details):                   #Define searchinf
             code = 4
             message(code)
          break
-
 def replaceOldData(UID,listCode,code):
    while True:
       if listCode == "a":
          editDataType = ApartmentDataInfo()
       else:
-         editDataType = category(listCode)
+         editDataType = category(listCode,code)
       display = searchColumn(listCode,editDataType,UID)
       oldDataFormat = False
       while oldDataFormat == False:
@@ -989,6 +954,7 @@ def replaceOldData(UID,listCode,code):
                   oldDataFormat = True
                else:
                   continue
+
       print("Last step, please insert the new data with the correct format: ")
       newdata = inputidentifier(UID,listCode,editDataType,code)
       editdataconfirmation = input("\nAre you sure with your records just now? ([Y]-Yes/[N]-No): ")
@@ -1009,14 +975,12 @@ def replaceOldData(UID,listCode,code):
             for record in updatedData:
                fUpdate.write(record)
          return False
-    
       elif editdataconfirmation in ["N","n"]:
          return False
-
       else:
          code = 0
          message(code)
-         return True
+         continue
 
 def searchColumn(listCode,num,UID):
    displayList=[]
@@ -1133,10 +1097,10 @@ def searchBox(UID):                                                     #Define 
             continue
       elif option.isdigit() and option == "2":
          listCode = "p"
-         num = category(listCode)
+         num = category(listCode,code)
       elif option.isdigit() and option == "3" :
          listCode = "t"
-         num = category(listCode)
+         num = category(listCode,code)
       elif option.isdigit() and option == "4":
          print("\n- Return to main menu -\n\n----------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\n- Welcome back ! -")
          break                                          #return to menu function
@@ -1179,7 +1143,7 @@ def menu(UID):                                       #Define menu function
       elif opt in ["D","d"]:
          print("tenantAndApartment()")
       elif opt in ["I","i"] and UID == None:
-         searchInformation(listCode,8,"past")
+         searchInformation(listCode,9,"past")
       elif opt in ["L","l"] and UID == None:
          print("loginHistory()")
       elif opt in ["E","e"]:                                #get confirmation to exit
@@ -1189,7 +1153,6 @@ def menu(UID):                                       #Define menu function
          else:
             print("\n----------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\nExit successful, have a nice day~\n")
             return False
-
       else:
          code = 0
          message(code)
