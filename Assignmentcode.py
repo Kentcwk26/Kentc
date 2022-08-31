@@ -79,6 +79,29 @@ def readFile(listCode):                                              #define rea
          print(int(line.index(record))+1,splitRecord)
    return returnList
 
+def chooseItem(UID,listCode,displayColumn,currentColumn):
+   displayRecord = searchColumn(listCode,displayColumn,UID)
+   currentRecord = searchColumn(listCode,currentColumn,UID)
+   listLength = len(displayRecord)
+   if listCode == "u":
+      startPoint = 2
+      changeIndex = +1
+   else:
+      startPoint = 0
+      changeIndex = -1
+   for item in range(startPoint,listLength,2):
+      try:
+         print(displayRecord[item],"   ",displayRecord[item+1])
+      except IndexError:
+         print(displayRecord[item])
+   
+   index = input("IDs are indexed from upper-left to lower-right starting from 1.\nChoose a user ID:")
+   if index.isdecimal():
+      return currentRecord[int(index)+changeIndex]
+   else:
+      code = 0
+      message(code)
+
 def gettenantID(UID):                                                #define gettenantID function
    if UID:
       with open("currentUser.txt","r") as uRead:                     #fetch existing UID
@@ -93,22 +116,14 @@ def gettenantID(UID):                                                #define get
                return dt.datetime.now().strftime("%d%m%Y%H%M%S%f")
             elif number == 2:
                listCode = "u"
-               num = 0
-               num2 = 2
-               displayRecord = searchColumn(listCode,num,UID)
-               currentRecord = searchColumn(listCode,num2,UID)
-               print(displayRecord)
-               index = input("IDs are indexed from left to right starting from 1.\nChoose a user ID:")
-               if index.isdecimal():
-                  return currentRecord[int(index)-1]
-               else:
-                  code = 0
+               displayColumn = 0
+               currentColumn = 2
+               return chooseItem(UID,listCode,displayColumn,currentColumn)
             else:
                code = 0
          else:
             code = 1   
          message(code)
-
 
 def getname(code,nameType):                                           #define getname function
    specials = specialCharacterList(None)
@@ -335,13 +350,21 @@ def getrental(UID):                                            #define getrental
             return rental
 
 def getreferenceNumber(code):                                        #define getreferenceNumber function
+   specials = specialCharacterList(None)
    while True:
       referenceNumber = input("Reference number comes from their relevant bank transaction. They cannot repeat.\nEnter the reference number :\n")
       if len(referenceNumber) > 5:
-         if (location.isalnum() for location in referenceNumber):
-            code = None
-         else:
-            code = 1
+         for location in referenceNumber:
+            if location not in specials:
+               if (location.isnumeric() or (location.isnumeric() and location.isupper())for location in referenceNumber):
+                  code = None
+                  continue
+               else:
+                  code = 1
+                  break
+            else:
+               code = 2
+               break
       else:
          code = 3
       if code:
@@ -418,7 +441,11 @@ def tenantOrTransactionEntryForm(UID,listCode,code):           #Define tenantOrT
             referenceNumber = getreferenceNumber(code)
             transactionDate = getDate(code,"transaction")
             UserID  = gettenantID(UID)
-            apartmendCode = newRoomCode()
+            #Declare arguments for choosing apartment code
+            chooseList = "a"
+            displayColumn = 0
+            currentColumn = 1
+            apartmendCode = chooseItem(UID,chooseList,displayColumn,currentColumn)
             amount = getdecimal(code)
             list = [referenceNumber,transactionDate,UserID,apartmendCode,amount]
          appendFile(list,listCode)
@@ -426,24 +453,37 @@ def tenantOrTransactionEntryForm(UID,listCode,code):           #Define tenantOrT
 
 def tenantAndApartment():                                   #define tennantAndApartment function
    listCode = "p"
-   #reference1 = "t"
-   #reference2 = "a"
+   reference1 = "t"
+   reference2 = "a"
    primaryKeys = [] #[[]]
-   keyList = []
+   TARecord = []
+   TAlist = []
    with open(listIdentifier(listCode),"r") as pRead:
       file = pRead.readlines()
       for record in file:
          list = record.split(",")
-         if list[2] not in primaryKeys[0]:
+         if str(list[2]+","+list[3]) not in primaryKeys:
             primaryKeys.append(list[2]+","+list[3])
-            keyList.append(primaryKeys)
          else:
             continue
-   print(keyList)
-   #with open(listIdentifier(listCode),"r") as pRead:
+   for item in primaryKeys:
+      tenantID,ApartmentCode = item.split(",")
+      print(tenantID+ApartmentCode)
+      with open(listIdentifier(reference1),"r") as tRead:
+         file = tRead.readlines()
+         for record in file:
+            list = record.split(",")
+            if tenantID == list[0]:
+               TARecord.append(str(list[0],",",list[1]))
+      with open(listIdentifier(reference2),"r") as aRead:
+         file = aRead.readlines()
+         for record in file:
+            list = record.split(",")
+            if ApartmentCode == list[1]:
+               TARecord.append(str(list[1],",",list[0],",",list[3]))
+      TAlist.append(str(TARecord))
+   print(TAlist)
       
-      
-
 def tenantOrTransaction(UID,listCode,code):                #Define tenantOrTransaction function
    while True:
       if UID:
@@ -594,7 +634,7 @@ def newRoom():                                                                  
          continue                                                                            # Jump back to the top of loop, rerun again
       else:
          code = None                                                                         # Error not detected, remain the same value 'None'
-      if code == None:                                                                 
+      if code == None:                                                                       # No error detected, correct input                                                                       # No error detected, correct input                                                                 
          newRoom.title()                                                                     # Return where the first character in each word is uppercase
          decisionkey = input("Save data? (Enter to continue, 'N' to return back):")          # Confirmation message and get input from admin whether to save the record or not
          if decisionkey in ['N','n']:
@@ -625,9 +665,9 @@ def newRoomCode():                                                              
          message(code)                                                                       # Print error message
          print("- Please note that room code is only acceptable when it contains alphanumeric only-\n")  # Error message explanation
          continue                                                                            # Jump back to the top of loop, rerun again
-      if code == None:                                                                   
-         decisionkey = input("Save data? (Enter to continue, 'N' to return back): ")         # Save data confirmation message + Get user input whether to save the record or not
-         if decisionkey in ['N','n']:
+      if code == None:                                                                       # No error detected, correct input                                                                   
+         decisionkey = input("Save data? (Enter to continue, 'N' to return back): ")         # Save Data Confirmation Message
+         if decisionkey in ['N','n']:                                                        # Get confirmation
             continue                                                                         # Jump back to the top of loop, rerun again
          else:
             return "New Room Code: " + newRoomCode                                           # End of loop and return newRoomCode
@@ -655,9 +695,9 @@ def newRoomDimension():                                                         
          message(code)                                                                       # Error message
          print("- Room dimension must consist of number(s) -")                               # Error message explanation
          continue                                                                            # Jump back to the top of loop, rerun again
-      if code == None:
-         decisionkey = input("Save data? (Enter to continue, 'N' to return back):")          # Save data confirmation message + Get user input whether to save the record or not
-         if decisionkey in ["N","n"]:
+      if code == None:                                                                       # No error detected, correct input
+         decisionkey = input("Save data? (Enter to continue, 'N' to return back):")          # Save Data Confirmation Message
+         if decisionkey in ["N","n"]:                                                        # Get confirmation
             continue                                                                         # Jump back to the top of loop, rerun again
          else:
             return "Dimensions: " + newRoomDimension + "+ sqft"                              # End of loop and return newRoomDimension
@@ -676,18 +716,18 @@ def newRoompricing():                                                           
          if nRp >= 350:
             code = None                                                                      # No error detected, correct input
          else:
-            code = 1                                                                         # No error detected 
-            message(code)
-            print("- Minimum starting price starts from RM350 and above -\n")
-            continue
+            code = 1                                                                         # Error detected, code change from 'None' to '1' 
+            message(code)                                                                    # Print error messaage
+            print("- Minimum starting price starts from RM350 and above -\n")                # Error message confirmation
+            continue                                                                         # Jump back to the top of loop, rerun again
       else:
          code = 2                                                                            # Error detected, code change from 'None' to '2'
          message(code)                                                                       # Print error message
          print("- Please fill in the room pricing, it must be in numeric and the minimum starting price starts from RM350 and above -\n")  # Error message explanation
-         continue
-      if code == None:                                                                       # No error detected, correct input
+         continue                                                                            # Jump back to the top of loop, rerun again
+      if code == None:                                                                       # No error detected, correct input                                                                       # No error detected, correct input
          decisionkey = input("Save data? (Enter to continue, 'N' to return back):")          # Confirmation message
-         if decisionkey in ["N","n"]:
+         if decisionkey in ["N","n"]:                                                        # Get confirmation 
             continue
          else:
             return "Pricing: RM" + newRoompricing
@@ -809,7 +849,7 @@ def newRoomStatus():
          message(code)
          print("- Room Status can only be accepted either the input is 'Available' or 'Not Available'. -\n")
          continue
-      if code == None:
+      if code == None:                                                                       # No error detected, correct input
          decisionkey = input("Save data? (Enter to continue, 'N' to return back):")
          if decisionkey in ["N","n"]:
             continue
@@ -872,7 +912,10 @@ def inputidentifier(UID,listCode,editDataType,code):
       elif editDataType == 2:
          return gettenantID(UID)
       elif editDataType == 3:
-         return newRoomCode()
+         chooseList = "a"
+         displayColumn = 0
+         currentColumn = 1
+         return chooseItem(UID,chooseList,displayColumn,currentColumn)
       else:
          return getdecimal(code)
 
@@ -1171,7 +1214,7 @@ def searchBox(UID):                                                     #Define 
       print(searchColumn(listCode,num,UID))
       searchInformation(listCode,num,details)
 
-def menu(UID):                                       #Define menu function
+def menu(UID):                                                # Define menu function
    mainMenu = True
    while mainMenu == True:
       code = None
@@ -1181,9 +1224,8 @@ def menu(UID):                                       #Define menu function
          print("\nMain menu:\n\n[S] - Search box\n\nReview information about:\n[A] - Apartment\n[T] - Tenant\n[P] - Transaction\n\nQuick functions:\n[D] - Print Specific House & Tenant Details\n[I] - Inquiry of Past Tenant Details\n[E] - Exit")
       opt=input("\nPlease enter which operation that you want to do: ")
       if opt in ["S","s"]:
-         searchBox(UID)                                        #redirect to searchbox function
-#Check for basic Functions
-      elif opt in ["A","a"]:
+         searchBox(UID)                                        # Redirect to searchbox function
+      elif opt in ["A","a"]:                                   # Check for basic Functions
          listCode = "a"
          apartment(UID,listCode,code)
       elif opt in ["P","p"]:
@@ -1192,15 +1234,14 @@ def menu(UID):                                       #Define menu function
       elif opt in ["T","t"]:
          listCode = "t"
          tenantOrTransaction(UID,listCode,code)
-#Check for quick functions
-      elif opt in ["D","d"]:
+      elif opt in ["D","d"]:                                   # Check for quick functions
          tenantAndApartment()
       elif opt in ["I","i"] and UID == None:
          listCode = "t"
          searchInformation(listCode,9,"Past")
       elif opt in ["L","l"] and UID == None:
          print("loginHistory()")
-      elif opt in ["E","e"]:                                #get confirmation to exit
+      elif opt in ["E","e"]:                                   # Get confirmation to exit
          exitconfirmationkey = input("\n-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\nYou're about to leave Tenant Management System. Are you sure? [Enter]-Continue, [x]-Return to main menu): ")
          if exitconfirmationkey in ["X","x"]:
             continue
