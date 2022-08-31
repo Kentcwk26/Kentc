@@ -1,34 +1,52 @@
 # Python Assignment (Tenant Management System)
 # Chiu Wai Kin TP065600 & Damon Ng Khai Weng TP064820
+def register(listCode,code):
+   username = input("Create your account's username\n")
+   password = input("Next, create your account's password: ")
+   userType = "new"
+   UID = None
+   UserID = gettenantID(UID,userType)
+   print("UserID is"+UserID,type(UserID))
+   with open (listIdentifier(listCode),"a") as useradd:
+      useradd.write(username+","+password+","+UserID+",\n")
+   listCode = "t"
+   tenantOrTransactionEntryForm(UserID,listCode,code)
 
-def login():                                                         #define the login function
+def login():                                                   # Define the login function
    print("\nWelcome to Tenant Management System Login page.\nPlease enter username and password to proceed.\n") 
-   chance = 3                                                        #Specify login chances
-   while chance > 0:                                                 #iterate when there are more than 0 chances remaining
-      username = input("Username: ")                                 #input login credentials
-      password = input("Password: ")
-      with open("user.txt",'r') as userInfo:                         #open file and match for correct login credentials
-         userCheck = userInfo.readlines()
-         for record in userCheck:
-            listRecord = record.split(",")
-            if username == listRecord[0]:
-               if password == listRecord[1]:
-                  print("\n- Login successful -\n\n----------------------------------------------------------------------------------------------------------------------------------------------------------------------------")
-                  if (username == "john" and password == "1234u-78") or (username == "david" and password == "55467913"):     #check for admin credentials
-                     UID = None                                      #activate admin access
-                  else:
-                     with open("currentUser.txt","w") as current:
-                        current.write(record)
-                     UID = listRecord[2]                             #deactivate admin access
-                  menu(UID)                                          #redirect to menu
-                  chance = 0                                         #empty login chances
-                  break                                              #break loop to avoid running error message
-         else:
-            chance -= 1                                              #decrease chances by 1
-            print("\nError, incorrect username or password.\n",chance,"chances remaining.\n")
+   listCode = "u"
+   code = None
+   while True:
+      new = input("[Y]-Yes I am.\n[Any Other Key]-No,I have an existing account\nAre you a new user: ")
+      if new in ["Y","y"]:
+         register(listCode,code)
+      else:
+         chance = 3                                                  # Specify login chances
+         while chance > 0:                                           # Iterate when there are more than 0 chances remaining
+            username = input("Username: ")                           # Input login credentials
+            password = input("Password: ")                           # Input login credentials
+            with open(listIdentifier(listCode),"r") as userInfo:                   # Open user.txt file in read mode as userInfo and match for correct login credentials
+               userCheck = userInfo.readlines()                      # Read each lines in userInfo  
+               for record in userCheck:
+                  listRecord = record.split(",")                     # Split the record using comma as a separator
+                  if username == listRecord[0]:
+                     if password == listRecord[1]:
+                        print("\n- Login successful -\n\n----------------------------------------------------------------------------------------------------------------------------------------------------------------------------")
+                        if (username == "john" and password == "1234u-78") or (username == "david" and password == "55467913"):     # Check for admin credentials
+                           UID = None                                # Activate admin access
+                        else:
+                           with open("currentUser.txt","w") as current:
+                              current.write(record)                  # Write record into current
+                           UID = listRecord[2]                       # Deactivate admin access
+                        menu(UID,code)                                    # Redirect to menu
+                        chance = 0                                   # Empty login chances
+                        break                                        # Break loop to avoid running error message
+               else:
+                  chance -= 1                                        # Decrease chances by 1
+                  print("\nError, incorrect username or password.\n",chance,"chances remaining.\n")
 
-def message(code):                                                   #define message function
-   x,y,z="Error, ","Incorrect "," Please try again."
+def message(code):                                             # Define message function
+   x,y,z="Error, ","Incorrect "," Please try again."           # Declare x as 'Error', y as 'Incorrect' and z is 'Please try again'
    if code == 0:
       print("\n"+x+y+"input."+z)
    elif code == 1:
@@ -42,7 +60,7 @@ def message(code):                                                   #define mes
    elif code == 5:
       print("\n"+x+"zero input."+z)
 
-def specialCharacterList(SCL):                                       #define specialCharacterList function
+def specialCharacterList(SCL):                                       # Define specialCharacterList function
     if SCL == None:
         return ["~","`","!","@","#","$","%","^","&","*","(",")","-","_","=","+","{","}","[","]","|",",","\'",".","/","<",">","?",";",":","'",'"'] 
     elif SCL == "SCL1":
@@ -50,42 +68,42 @@ def specialCharacterList(SCL):                                       #define spe
     elif SCL == "SCL2":
         return ['~','`','!','@','#','$','%','^','&','*','_','=','+','{','}','[',']','|','\\','\'','\"',',','.','/','<','>','?',':',';']
 
-def listIdentifier(listCode):                                        #define listIdentifier function
-   if listCode == "t":
-      l = "tenant.txt"
-   elif listCode == "a":
-      l = "Apartment.txt"
-   elif listCode == "p":
-      l = "transaction.txt"
-   elif listCode == "u":
-      l = "user.txt"
-   return l
+def listIdentifier(listCode):                                        # Define listIdentifier function
+   if listCode == "t":                                               # If listCode is equal to 't' Then:
+      l = "tenant.txt"                                               # l is "tenant.txt"
+   elif listCode == "a":                                             # If listCode is equal to 'a' Then:
+      l = "Apartment.txt"                                            # l is "Apartment.txt"
+   elif listCode == "p":                                             # If listCode is equal to 'p' Then:
+      l = "transaction.txt"                                          # l is "transaction.txt"
+   elif listCode == "u":                                             # If listCode is equal to 'u' Then:
+      l = "user.txt"                                                 # l is "user.txt"
+   return l                                                          # return value is l
 
-def appendFile(list,listCode):                                       #define appendFile function
-   with open (listIdentifier(listCode), "a") as fAppend:
-      for item in list:
-         fAppend.write(item)
-         fAppend.write(",")
-      fAppend.write("\n")
+def appendFile(list,listCode):                                       # Define appendFile function
+   with open (listIdentifier(listCode), "a") as fAppend:             # Open selected text file in Append Mode as fAppend
+      for item in list:                                              # For each item in a list: 
+         fAppend.write(item)                                         # Write item into fAppend
+         fAppend.write(",")                                          # Write a comma (,) into fAppend
+      fAppend.write("\n")                                            # Write a newline ("\n") into fAppend
 
-def readFile(listCode):                                              #define readFile function
-   returnList = []
-   with open (listIdentifier(listCode),"r") as fRead:
-      line = fRead.readlines()
-      for record in line:
-         stripped = record.rstrip("\n").rstrip(",")
-         splitRecord = stripped.split(",")
-         returnList.append(str(splitRecord))
-         print(int(line.index(record))+1,splitRecord)
-   return returnList
+def readFile(listCode):                                              # Define readFile function
+   returnList = []                                                   # Declare returnlist as array
+   with open (listIdentifier(listCode),"r") as fRead:                # Open selected text file in Read Mode as fRead
+      line = fRead.readlines()                                       # line = read each line in fRead
+      for record in line:                                            # For each records in a line:
+         stripped = record.rstrip("\n").rstrip(",")                  # stripped = Right stripped from the end of string (record) with the separators (all commas and newlines)
+         splitRecord = stripped.split(",")                           # splitRecord = Use comma as the separator to split from a string into a list
+         returnList.append(str(splitRecord))                         # Append returnlist to splitRecord in string type
+         print(int(line.index(record))+1,splitRecord)                # Print 
+   return returnList                                                 # Return value is returnlist
 
-def chooseItem(UID,listCode,displayColumn,currentColumn):
-   displayRecord = searchColumn(listCode,displayColumn,UID)
-   currentRecord = searchColumn(listCode,currentColumn,UID)
-   listLength = len(displayRecord)
-   if listCode == "u":
-      startPoint = 2
-      changeIndex = +1
+def chooseItem(UID,listCode,displayColumn,currentColumn):            # Define chooseItem function
+   displayRecord = searchColumn(listCode,displayColumn,UID)          # displayRecord = call function searchColumn(listCode,displayColumn,UID)
+   currentRecord = searchColumn(listCode,currentColumn,UID)          # currentRecord = call function searchColumn(listCode,currentColumn,UID)
+   listLength = len(displayRecord)                                   # listlength = return the number of items in displayRecord
+   if listCode == "u":                                               # If listCode is equal to 'u' Then:
+      startPoint = 2                                                 # Set startPoint equals to '2'
+      changeIndex = +1                                               # ChangeIndex add 1 (+1)
    else:
       startPoint = 0
       changeIndex = -1
@@ -102,28 +120,32 @@ def chooseItem(UID,listCode,displayColumn,currentColumn):
       code = 0
       message(code)
 
-def gettenantID(UID):                                                #define gettenantID function
+def gettenantID(UID,userType):                                                #define gettenantID function
    if UID:
       with open("currentUser.txt","r") as uRead:                     #fetch existing UID
          userRecord = uRead.read().split(",")
          return userRecord[2]
    else:
       while True:
-         path = input("[1]-Generate new ID or [2]-Choose existing ID:\n")
-         if path.isdecimal():
-            number = int(path)
-            if number == 1:
-               return dt.datetime.now().strftime("%d%m%Y%H%M%S%f")
-            elif number == 2:
-               listCode = "u"
-               displayColumn = 0
-               currentColumn = 2
-               return chooseItem(UID,listCode,displayColumn,currentColumn)
-            else:
-               code = 0
+         if userType == "new":
+            number = 1
          else:
-            code = 1   
-         message(code)
+            path = input("[1]-Generate new ID or [2]-Choose existing ID:\n")
+            if path.isdecimal():
+               number = int(path)
+            else:
+               code = 1
+               message(code)
+         if number == 1:
+            return dt.datetime.now().strftime("%d%m%Y%H%M%S%f")
+         elif number == 2:
+            listCode = "u"
+            displayColumn = 0
+            currentColumn = 2
+            return chooseItem(UID,listCode,displayColumn,currentColumn)
+         else:
+            code = 0 
+            message(code)
 
 def getname(code,nameType):                                           #define getname function
    specials = specialCharacterList(None)
@@ -424,7 +446,7 @@ def tenantOrTransactionEntryForm(UID,listCode,code):           #Define tenantOrT
          n = 1
       for list in range(0,int(n)):
          if listCode == "t":
-            UserID  = gettenantID(UID)                         #Get input for tenant data
+            UserID  = gettenantID(UID,"existing")                         #Get input for tenant data
             name = getname(code,"tenant")
             gender = getabbreviation(code,"gender")
             pNum = getpNum(code)
@@ -440,7 +462,7 @@ def tenantOrTransactionEntryForm(UID,listCode,code):           #Define tenantOrT
          else:
             referenceNumber = getreferenceNumber(code)
             transactionDate = getDate(code,"transaction")
-            UserID  = gettenantID(UID)
+            UserID  = gettenantID(UID,"existing")
             #Declare arguments for choosing apartment code
             chooseList = "a"
             displayColumn = 0
@@ -456,8 +478,7 @@ def tenantAndApartment():                                   #define tennantAndAp
    reference1 = "t"
    reference2 = "a"
    primaryKeys = [] #[[]]
-   TARecord = []
-   TAlist = []
+   TAList = []
    with open(listIdentifier(listCode),"r") as pRead:
       file = pRead.readlines()
       for record in file:
@@ -467,22 +488,29 @@ def tenantAndApartment():                                   #define tennantAndAp
          else:
             continue
    for item in primaryKeys:
+      TARecord = []
       tenantID,ApartmentCode = item.split(",")
-      print(tenantID+ApartmentCode)
       with open(listIdentifier(reference1),"r") as tRead:
          file = tRead.readlines()
          for record in file:
             list = record.split(",")
-            if tenantID == list[0]:
-               TARecord.append(str(list[0],",",list[1]))
+            if tenantID in list[0]:
+               TARecord.append(list[0]+","+list[1])
+               break
+            else:
+               continue
       with open(listIdentifier(reference2),"r") as aRead:
          file = aRead.readlines()
          for record in file:
             list = record.split(",")
-            if ApartmentCode == list[1]:
-               TARecord.append(str(list[1],",",list[0],",",list[3]))
-      TAlist.append(str(TARecord))
-   print(TAlist)
+            if ApartmentCode in list[1]:
+               TARecord.append(list[1]+","+list[0]+","+list[3])
+               break
+            else:
+               continue
+      TAList.append(str(TARecord).lstrip("[").rstrip("]")) 
+   for item in TAList:
+      print(item)
       
 def tenantOrTransaction(UID,listCode,code):                #Define tenantOrTransaction function
    while True:
@@ -881,7 +909,7 @@ def inputidentifier(UID,listCode,editDataType,code):
          return newRoomStatus()
    elif listCode == "t":
       if editDataType == 0:
-         return gettenantID(UID)
+         return gettenantID(UID,"existing")
       elif editDataType == 1:
          return getname(code,"tenant")
       elif editDataType == 2:
@@ -910,7 +938,7 @@ def inputidentifier(UID,listCode,editDataType,code):
       elif editDataType == 1:
          return getDate(code,"transaction")
       elif editDataType == 2:
-         return gettenantID(UID)
+         return gettenantID(UID,"existing")
       elif editDataType == 3:
          chooseList = "a"
          displayColumn = 0
@@ -1214,10 +1242,9 @@ def searchBox(UID):                                                     #Define 
       print(searchColumn(listCode,num,UID))
       searchInformation(listCode,num,details)
 
-def menu(UID):                                                # Define menu function
+def menu(UID,code):                                                # Define menu function
    mainMenu = True
    while mainMenu == True:
-      code = None
       if UID:
          print("\nMain menu:\n\n[S] - Search box\n\nReview information about:\n[A] - Available Apartments\n[T] - My Tenant details\n[P] - My Transactions\n\nQuick functions:\n[D] - Print my House & Tenant Details\n[E] - Exit")
       else:
