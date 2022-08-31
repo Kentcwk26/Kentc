@@ -101,3 +101,8 @@
 # 8,9,10,11,12,13,14,
 # h,i,j,k,l,m,n,
  
+with open("user.txt","r") as Tread:
+    bulkData = Tread.readlines()
+    for line in bulkData:
+        individualList = line.strip(",\n").split(",")
+        print(individualList)
