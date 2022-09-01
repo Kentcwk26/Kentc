@@ -3,7 +3,7 @@
 
 def register(listCode,code):                                               # Define register function
    username = input("\nCreate your account's username: ")                  # Input login credentials
-   password = input("\nNext, create your account's password: ")            # Input login credentials
+   password = input("Next, create your account's password: ")              # Input login credentials
    userType = "new"                                                        # Set userType to 'new'
    UID = None                                                              # Set UID to 'None'
    UserID = gettenantID(UID,userType)                                      # UserID = call function gettenantID(UID,userType)
@@ -12,19 +12,20 @@ def register(listCode,code):                                               # Def
       useradd.write(username+","+password+","+UserID+",\n")                # Write username, password, userID into useradd
    listCode = "t"                                                          # Set listCode as 't'
    tenantOrTransactionEntryForm(UserID,listCode,code)                      # Call function tenantOrTransactionEntryForm(UserID,listCode,code)
+   return username,password                                                # Exit a function and send the value back to the program
 
 def login():                                                               # Define login function
    print("\nWelcome to Tenant Management System Login page.\nPlease enter username and password to proceed.\n") 
    listCode = "u"                                                          # Set listCOde to 'u'
    code = None                                                             # Set code to 'None'
-   while True:                                                             # Run loop while the condition is 'True'
+   while True:                                                             
       new = input("[Y]-Yes I am.[Any Other Key]-No,I have an existing account\nAre you a new user: ")
       if new in ["Y","y"]:                                                 # If new in ["Y","y"] Then:
-         register(listCode,code)                                           # call function register(listCode,code) 
+         username,password = register(listCode,code)                       # call function register(listCode,code)
       else:      
          chance = 3                                                        # Specify login chances
          while chance > 0:                                                 # Iterate when there are more than 0 chances remaining
-            username = input("Username: ")                                 # Input login credentials
+            username = input("\nUsername: ")                               # Input login credentials
             password = input("Password: ")                                 # Input login credentials
             with open(listIdentifier(listCode),"r") as userInfo:           # Open selected text file in read mode as userInfo and match for correct login credentials
                userCheck = userInfo.readlines()                            # Read each lines in userInfo  
@@ -32,263 +33,301 @@ def login():                                                               # Def
                   listRecord = record.split(",")                           # Split the record with comma as a separator
                   if username == listRecord[0]:                            # If username equals to listRecord that is in index 0:
                      if password == listRecord[1]:                         # If password equals to listRecord that is in index 1:
-                        print("\n- Login successful -\n\n----------------------------------------------------------------------------------------------------------------------------------------------------------------------------")
+                        print("\n- Login successful -\n\n-----------------------------------------------------------------------------------------------------------------------------------------------------------------------")
                         if (username == "john" and password == "1234u-78") or (username == "david" and password == "55467913"):     # Check for admin credentials
                            UID = None                                      # UID set to 'None', activate admin access
-                        else:
+                        else:                                              # Other than that:
                            with open("currentUser.txt","w") as current:    # Open currentUser text file in Write Mode as current
                               current.write(record)                        # Write record into current
                            UID = listRecord[2]                             # UID = listrecord index 2, deactivate admin access
-                        menu(UID,code)                                     # Call function menu(UID,code) to redirect to menu
-                        chance = 0                                         # Chances equals to 0, empty login chances
-                        break                                              # Break loop
-               else:
+                        menu(UID,code)                                     # Call function menu(UID,code), redirect to menu
+                        chance = 0                                         # reassign login chances to 0
+                        break                                              # Break out of the function
+               else:                                                       # Other than that:
                   chance -= 1                                              # Decrease chances by 1
-                  print("\nError, incorrect username or password.\n",chance,"chances remaining.\n")
+                  print("\nError, incorrect username or password.\n",chance,"chances remaining.")
+      break                                                                # Break out of the function
 
-def message(code):                                                         # Define message function
-   x,y,z="Error, ","Incorrect "," Please try again."                       # Declare x as 'Error', y as 'Incorrect' and z as 'Please try again'
-   if code == 0:                                                           # If code equals 0 Then:
-      print("\n"+x+y+"input."+z)                                           # Print message
-   elif code == 1:                                                         # If code equals 1 Then:
-      print("\n"+x+y+"data type present."+z)                               # Print message
-   elif code == 2:                                                         # If code equals 2 Then:
-      print("\n"+x+y+"format."+z)                                          # Print message
-   elif code == 3:                                                         # If code equals 3 Then:
-      print("\n"+x+y+"length."+z)                                          # Print message
-   elif code == 4:                                                         # If code equals 4 Then:
-      print("\n"+x+"data not found."+z)                                    # Print message
-   elif code == 5:                                                         # If code equals 5 Then:
-      print("\n"+x+"zero input."+z)                                        # Print message
+def menu(UID,code):                                                        # Define menu function
+   mainMenu = True
+   while mainMenu == True:
+      if UID:
+         print("\nMain menu:\n\n[S] - Search box\n\nReview information about:\n[A] - Available Apartments\n[T] - My Tenant details\n[P] - My Transactions\n\nQuick functions:\n[D] - Print my House & Tenant Details\n[E] - Exit")
+      else:
+         print("\nMain menu:\n\n[S] - Search box\n\nReview information about:\n[A] - Apartment\n[T] - Tenant\n[P] - Transaction\n\nQuick functions:\n[D] - Print Specific House & Tenant Details\n[I] - Inquiry of Past Tenant Details\n[E] - Exit")
+      opt=input("\nPlease enter which operation that you want to do: ")
+      if opt in ["S","s"]:
+         searchBox(UID,code)                                                  # Redirect to searchbox function
+      elif opt in ["A","a"]:                                                  # Check for basic Functions
+         listCode = "a"
+         apartment(UID,listCode,code)
+      elif opt in ["P","p"]:
+         listCode = "p"
+         tenantOrTransaction(UID,listCode,code)
+      elif opt in ["T","t"]:
+         listCode = "t"
+         tenantOrTransaction(UID,listCode,code)
+      elif opt in ["D","d"]:                                                  # Check for quick functions
+         tenantAndApartment()
+      elif opt in ["I","i"] and UID == None:
+         listCode = "t"
+         searchInformation(listCode,9,"Past")
+      elif opt in ["L","l"] and UID == None:
+         print("loginHistory()")
+      elif opt in ["E","e"]:                                                  # Get confirmation to exit
+         exitconfirmationkey = input("\n-----------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\nYou're about to leave Tenant Management System. Are you sure? [Enter]-Continue, [x]-Return to main menu): ")
+         if exitconfirmationkey in ["X","x"]:
+            continue
+         else:
+            print("\n-----------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\nExit successful, have a nice day~\n")
+            return False
+      else:
+         code = 0
+         message(code)
 
-def specialCharacterList(SCL):                                             # Define specialCharacterList function
-    if SCL == None:                                                        # If SCL equals to 'None' Then:
+def message(code):                                                            # Define message function
+   x,y,z="Error, ","Incorrect "," Please try again."                          # Declare x as 'Error', y as 'Incorrect' and z as 'Please try again'
+   if code == 0:                                                              # If code equals 0 Then:
+      print("\n"+x+y+"input."+z)                                              # Print message
+   elif code == 1:                                                            # If code equals 1 Then:
+      print("\n"+x+y+"data type present."+z)                                  # Print message
+   elif code == 2:                                                            # If code equals 2 Then:
+      print("\n"+x+y+"format."+z)                                             # Print message
+   elif code == 3:                                                            # If code equals 3 Then:
+      print("\n"+x+y+"length."+z)                                             # Print message
+   elif code == 4:                                                            # If code equals 4 Then:
+      print("\n"+x+"data not found."+z)                                       # Print message
+   elif code == 5:                                                            # If code equals 5 Then:
+      print("\n"+x+"zero input."+z)                                           # Print message
+
+def specialCharacterList(SCL):                                                # Define specialCharacterList function
+    if SCL == None:                                                           # If SCL equals to 'None' Then:
         return ["~","`","!","@","#","$","%","^","&","*","(",")","-","_","=","+","{","}","[","]","|",",","\'",".","/","<",">","?",";",":","'",'"'] 
-    elif SCL == "SCL1":                                                    # If SCL equals to "SCL1" Then:
+    elif SCL == "SCL1":                                                       # If SCL equals to "SCL1" Then:
         return ['~','`','!','@','#','$','%','^','&','*','(',')','-','_','=','+','{','}','[',']','|',',','\\','\'','\"','.','/','<','>','?',';',':']
-    elif SCL == "SCL2":                                                    # If SCL equals to "SCL2" Then:
+    elif SCL == "SCL2":                                                       # If SCL equals to "SCL2" Then:
         return ['~','`','!','@','#','$','%','^','&','*','_','=','+','{','}','[',']','|','\\','\'','\"',',','.','/','<','>','?',':',';']
 
-def listIdentifier(listCode):                                              # Define listIdentifier function
-   if listCode == "t":                                                     # If listCode equals to "t" Then:
-      l = "tenant.txt"                                                     # l is "tenant.txt"
-   elif listCode == "a":                                                   # If listCode equals to "a" Then:
-      l = "Apartment.txt"                                                  # l is "Apartment.txt"
-   elif listCode == "p":                                                   # If listCode equals to "p" Then:
-      l = "transaction.txt"                                                # l is "transaction.txt"
-   elif listCode == "u":                                                   # If listCode equals to "u" Then:
-      l = "user.txt"                                                       # l is "user.txt"
-   return l                                                                # Exit a function and send the value back to the program
+def listIdentifier(listCode):                                                 # Define listIdentifier function
+   if listCode == "t":                                                        # If listCode equals to "t" Then:
+      l = "tenant.txt"                                                        # l is "tenant.txt"
+   elif listCode == "a":                                                      # If listCode equals to "a" Then:
+      l = "Apartment.txt"                                                     # l is "Apartment.txt"
+   elif listCode == "p":                                                      # If listCode equals to "p" Then:
+      l = "transaction.txt"                                                   # l is "transaction.txt"
+   elif listCode == "u":                                                      # If listCode equals to "u" Then:
+      l = "user.txt"                                                          # l is "user.txt"
+   return l                                                                   # Exit a function and send the value back to the program
 
-def appendFile(list,listCode):                                             # Define appendFile function
-   with open (listIdentifier(listCode), "a") as fAppend:                   # Open selected text file in Append Mode as fAppend
+def appendFile(list,listCode):                                                # Define appendFile function
+   with open (listIdentifier(listCode), "a") as fAppend:                      # Open selected text file in Append Mode as fAppend
       for item in list:
-         fAppend.write(item)                                               # Write item into fAppend
-         fAppend.write(",")                                                # Write a comma (,) into fAppend
-      fAppend.write("\n")                                                  # Write a newline ("\n") into fAppend
+         fAppend.write(item)                                                  # Write item into fAppend
+         fAppend.write(",")                                                   # Write a comma (,) into fAppend
+      fAppend.write("\n")                                                     # Write a newline ("\n") into fAppend
 
-def readFile(listCode):                                                    # Define readFile function
-   returnList = []                                                         # Declare returnlist as array
-   with open (listIdentifier(listCode),"r") as fRead:                      # Open selected text file in Read Mode as fRead
-      line = fRead.readlines()                                             # line = read each line in fRead
+def readFile(listCode):                                                       # Define readFile function
+   returnList = []                                                            # Declare returnlist as array
+   with open (listIdentifier(listCode),"r") as fRead:                         # Open selected text file in Read Mode as fRead
+      line = fRead.readlines()                                                # line = read each line in fRead
       for record in line:                                                  
-         stripped = record.rstrip("\n").rstrip(",")                        # stripped = Right stripped from the end of string (record) with the separators (all commas and newlines)
-         splitRecord = stripped.split(",")                                 # splitRecord = Use comma as the separator to split from a string into a list
-         returnList.append(str(splitRecord))                               # Append returnlist to splitRecord in string type
+         stripped = record.rstrip("\n").rstrip(",")                           # stripped = Right stripped from the end of string (record) with the separators (all commas and newlines)
+         splitRecord = stripped.split(",")                                    # splitRecord = Use comma as the separator to split from a string into a list
+         returnList.append(str(splitRecord))                                  # Append returnlist to splitRecord in string type
          print(int(line.index(record))+1,splitRecord)
-   return returnList                                                       # Exit a function and send the value back to the program
+   return returnList                                                          # Exit a function and send the value back to the program
 
-def chooseItem(UID,listCode,displayColumn,currentColumn):                  # Define chooseItem function
-   displayRecord = searchColumn(listCode,displayColumn,UID)                # displayRecord = call function searchColumn(listCode,displayColumn,UID)
-   currentRecord = searchColumn(listCode,currentColumn,UID)                # currentRecord = call function searchColumn(listCode,currentColumn,UID)
-   listLength = len(displayRecord)                                         # Return the number of items in displayRecord
-   if listCode == "u":                                                     # If listCode is equal to 'u' Then:
-      startPoint = 2                                                       # Set startPoint equals to '2'
-      changeIndex = +1                                                     # ChangeIndex add 1 (+1)
+def chooseItem(UID,listCode,displayColumn,currentColumn):                     # Define chooseItem function
+   displayRecord = searchColumn(listCode,displayColumn,UID)                   # displayRecord = call function searchColumn(listCode,displayColumn,UID)
+   currentRecord = searchColumn(listCode,currentColumn,UID)                   # currentRecord = call function searchColumn(listCode,currentColumn,UID)
+   listLength = len(displayRecord)                                            # Return the number of items in displayRecord
+   if listCode == "u":                                                        # If listCode is equal to 'u' Then:
+      startPoint = 2                                                          # startPoint equals to '2'
+      changeIndex = +1                                                        # changeIndex add 1 (+1)
    else:         
-      startPoint = 0                                                       # Set startPoint as 0
-      changeIndex = -1                                                     # ChangeIndex subtract 1 (-1)
-   for item in range(startPoint,listLength,2):                             # For item from startPoint to listLength, but incremented by 2
+      startPoint = 0                                                          # startPoint set as 0
+      changeIndex = -1                                                        # changeIndex subtract 1 (-1)
+   for item in range(startPoint,listLength,2):                                # For item from startPoint to listLength, but incremented by 2
       try:
          print(displayRecord[item],"   ",displayRecord[item+1])
       except IndexError:
          print(displayRecord[item])
    
    index = input("IDs are indexed from upper-left to lower-right starting from 1.\nChoose a user ID:")
-   if index.isdecimal():                                                   # Number check
-      return currentRecord[int(index)+changeIndex]                         # Exit a function and send the value back to the main program
+   if index.isdecimal():                                                      # Number check, if index is decimal then:
+      return currentRecord[int(index)+changeIndex]                            # Exit a function and send the value back to the main program
    else:         
-      code = 0                                                             # Error detected, code equals to '0'
-      message(code)                                                        # Print error message 
+      code = 0                                                                # Error detected, code equals to '0'
+      message(code)                                                           # Print error message 
 
-def gettenantID(UID,userType):                                             # Define gettenantID function
-   if UID:                                                                 # Fetch existing UID
-      with open("currentUser.txt","r") as uRead:                           # Open currentUser.txt file in Read Mode as uRead
-         userRecord = uRead.read().split(",")                              # Read and split the record with comma as a separator
-         return userRecord[2]                                              # Exit a function and send the value back to the program
+def gettenantID(UID,userType):                                                # Define gettenantID function
+   if UID:                                                                    # Fetch existing UID
+      with open("currentUser.txt","r") as uRead:                              # Open currentUser.txt file in Read Mode as uRead
+         userRecord = uRead.read().split(",")                                 # Read and split the record with comma as a separator
+         return userRecord[2]                                                 # Exit a function and send the value back to the program
    else:
       while True:
-         if userType == "new":
-            number = 1
+         if userType == "new":                                                # If userType equals to "new" Then:
+            number = 1                                                        # Number equals to 1
          else:   
             path = input("[1]-Generate new ID or [2]-Choose existing ID:\n")
-            if path.isdecimal():                                           # Check path contain numbers or not
-               number = int(path)                                          # Number = Path in integer type
+            if path.isdecimal():                                              # Check path contain numbers or not
+               number = int(path)                                             # Convert to integer
             else:
-               code = 1                                                    # Set code as 1
-               message(code)                                               # Print error message
+               code = 1                                                       # Code equals to 1
+               message(code)                                                  # Print error message
          if number == 1:
-            return dt.datetime.now().strftime("%d%m%Y%H%M%S%f")            # Exit a function and send the value back to the program
+            return dt.datetime.now().strftime("%d%m%Y%H%M%S%f")               # Exit a function and send the value back to the program
          elif number == 2:
-            listCode = "u"                                                 # Set listCode as 'u'
-            displayColumn = 0                                              # Set displayColumn as 0
-            currentColumn = 2                                              # Set currentColumn as 2
-            return chooseItem(UID,listCode,displayColumn,currentColumn)    # Exit a function and send the value back to the program
+            listCode = "u"                                                    # listCode equals to 'u'
+            displayColumn = 0                                                 # displayColumn equals to '0'
+            currentColumn = 2                                                 # currentColumn equals to '2'
+            return chooseItem(UID,listCode,displayColumn,currentColumn)       # Exit a function and send the value back to the program
          else:   
-            code = 0                                                       # Set code as 0
-            message(code)                                                  # Print error message
+            code = 0                                                          # code equals to '0'
+            message(code)                                                     # Print error message
 
-def getname(code,nameType):                                                # Define getname function
-   specials = specialCharacterList(None)                                   # specials = call function specialCharacterList(None)
+def getname(code,nameType):                                                   # Define getname function
+   specials = specialCharacterList(None)                                      # specials = call function specialCharacterList(None)
    while True:
       print("Format: Name Name or Name-Name Name or Na'me Name")
-      if nameType == "tenant":
-         name = input("Enter tenant's fullname:\n")
-      elif nameType == "employer":
-         name = input("Enter tenant's current employer:\n")
-      else:      
-         name = input("Enter tenant's place-city-country of birth\n")
-      nameList = name.split(" ")                                           # nameList = Right stripped from the end of string (record) with the separators (all commas and newlines)
-      if len(nameList) >= 2:                                               # if the length of namelist is equal or more than 2 Then:
+      if nameType == "tenant":                                                # If nameType equals to "tenant" Then:
+         name = input("Enter tenant's fullname:\n")                           # Print message and get name
+      elif nameType == "employer":                                            # If nameType equals to "employer" Then:
+         name = input("Enter tenant's current employer:\n")                   # Print message and get name
+      else:                                                                   # Other than that:
+         name = input("Enter tenant's place-city-country of birth\n")         # Print message and get name
+      nameList = name.split(" ")                                              # Right stripped from the end of string (record) with the separators (all commas and newlines)
+      if len(nameList) >= 2:                                                  # if the length of namelist is greater than or equal to 2 Then:
          for words in nameList:
             print("Checking ",words)                                     
             if words.isalpha() or [character for character in words if(character in specials[12]) or (character in specials[22])]:
-               if words[0].isupper():                                      # Checking words in index 0 is uppercased or not
-                  code = None                                              # Set code as 'None'
-                  continue                                                 # End loop and cntinue with the next iteration
-               else:    
-                  code = 2                                                 # Set code is '2'
-                  break                                                    # Break loop 
-            else:
-               code = 1                                                    # Set code is '1'
-               break                                                       # Break loop
-      else:
-         code = 3                                                          # Set code is '3'
-      if code:
-         message(code)                                                     # Print error message                             
-         print("ATTENTION||Error detected.||ATTENTION")
-      else:
-         print("No errors detected.")
-      retry = input("[R]-Retry,[Any other key]-Exit using "+name+"\n")     # Print message and get retry
-      if retry in ["R","r"]:
-         continue                                                          # End loop and cntinue with the next iteration
-      else:
-         return name                                                       # Return value is name
+               if words[0].isupper():                                         # Checking words in index 0 is uppercased or not
+                  code = None                                                 # Set code as 'None'
+                  continue                                                    # End loop and cntinue with the next iteration
+               else:                                                          # Other than that:
+                  code = 2                                                    # Set code as '2'
+                  break                                                       # Break out of the function
+            else:                                                             # Otehr than that:
+               code = 1                                                       # Set code as '1'
+               break                                                          # Break out of the function
+      else:                                                                   # Other than that:
+         code = 3                                                             # Set code as '3'
+      if code:                                                                # If code exists:
+         message(code)                                                        # Print error message                             
+         print("ATTENTION||Error detected.||ATTENTION")                       # Print message
+      else:                                                                   # Other than that:
+         print("No errors detected.")                                         # Print message
+      retry = input("[R]-Retry,[Any other key]-Exit using "+name+"\n")        # Print message and get retry
+      if retry in ["R","r"]:                                                  # If retry equal to ["R","r"] Then:
+         continue                                                             # End loop and cntinue with the next iteration
+      else:                                                                   # Other than that:
+         return name                                                          # Exit a function and send the value back to the program
 
-def getabbreviation(code,abbreviationType):                                # Define getabbreviation function
+def getabbreviation(code,abbreviationType):                                   # Define getabbreviation function
    while True:
-      if abbreviationType == "gender":
-         abbreviation = input("[M]-Male\n[F]-Female\nEnter tenant gender:\n")    # Print messsage and get abbreviation
+      if abbreviationType == "gender":                                        # If abbreviation equals to "gender" Then:
+         abbreviation = input("[M]-Male\n[F]-Female\nEnter tenant gender:\n") # Print messsage and get abbreviation
       else:
-         abbreviation = input("[M]-Malaysian\n[N]-non-Malaysian\nEnter tenant nationality: \n")    # Print messsage and get abbreviation
-      if len(abbreviation)== 1:                                            # If the length of abbreviation is equal to 1 Then:
-         if abbreviation.isalpha():                                        # Alphahabet checking
-            if abbreviationType == "gender":
-               if abbreviation in ["M","m"]:
-                  code = None
-                  abbreviation = "Male"
-               elif abbreviation in ["F","f"]:
-                  code = None
-                  abbreviation = "Female"
-               else: 
-                  code = 0
-            else:
-               if abbreviation in ["M","m"]:
-                  code = None
-                  abbreviation = "Malaysian"
-               elif abbreviation in ["N","n"]:
-                  code = None
-                  abbreviation = "non-Malaysian"
-               else:
-                  code = 0
-         else:
-            code = 1
-      else: 
-         code = 3
-      if code or code == 0:
-         message(code)
-         print("ATTENTION||Error detected.||ATTENTION")
-      else:
-         print("No errors detected.")
-      retry = input("[R]-Retry,[Any other key]-Exit using "+abbreviation+"\n")   # Print message and get retry
-      if retry in ["R","r"]:
-         continue                                                                # End loop and cntinue with the next iteration
-      else:
-         return abbreviation                                                     # Return value is abbreviation
+         abbreviation = input("[M]-Malaysian\n[N]-non-Malaysian\nEnter tenant nationality: \n") # Print messsage and get abbreviation
+      if len(abbreviation)== 1:                                               # If the length of abbreviation is equal to 1 Then:
+         if abbreviation.isalpha():                                           # Alphahabet checking
+            if abbreviationType == "gender":                                  # If abbreviation equals to "gender" Then:
+               if abbreviation in ["M","m"]:                                  # If abbreviation equals to ["M","m"] Then:
+                  code = None                                                 # code equals to None
+                  abbreviation = "Male"                                       # abbreviation equals to "Male"
+               elif abbreviation in ["F","f"]:                                # If abbreviation equals to ["F","f"] Then:
+                  code = None                                                 # code equals to None
+                  abbreviation = "Female"                                     # abbreviation equals to "Female"
+               else:                                                          # Other than that:
+                  code = 0                                                    # Set code to 0
+            else:                                                             # Other than that:
+               if abbreviation in ["M","m"]:                                  # If abbreviation equals to ["M","m"] Then:
+                  code = None                                                 # code equals to None
+                  abbreviation = "Malaysian"                                  # abbreviation equals to "Malaysian"
+               elif abbreviation in ["N","n"]:                                # If abbreviation equals to ["N","n"] Then:
+                  code = None                                                 # code equals to None
+                  abbreviation = "non-Malaysian"                              # abbreviation equals to "non-Malaysian"
+               else:                                                          # Other than that:
+                  code = 0                                                    # code equals to 0
+         else:                                                                # Other than that:
+            code = 1                                                          # code equals to 1
+      else:                                                                   # Other than that:
+         code = 3                                                             # code equals to 3
+      if code or code == 0:                                                   # If code exists or code equals to 0:
+         message(code)                                                        # Print error message
+         print("ATTENTION||Error detected.||ATTENTION")                       # Print message
+      else:                                                                   # Other than that:
+         print("No errors detected.")                                         # Print message
+      retry = input("[R]-Retry,[Any other key]-Exit using "+abbreviation+"\n") # Print message and get retry
+      if retry in ["R","r"]:                                                  # If abbreviation equals to ["M","m"] Then:
+         continue                                                             # End loop and cntinue with the next iteration
+      else:                                                                   # Other than that:
+         return abbreviation                                                  # Exit a function and send the value back to the program
 
-def getpNum(code):                                                               # Define getpNum function
+def getpNum(code):                                                            # Define getpNum function
    while True:
-      pNum = input("Format: ############\nEnter tenant phone number:\n")         # Print message and get pNum
-      if 6 < len(pNum) < 16:
+      pNum = input("Format: ############\nEnter tenant phone number:\n")      # Print message and get pNum
+      if 6 < len(pNum) < 16:                                                  # if the length of pNum is lesser than 6 and 16: 
          for digit in pNum:
-            if digit.isdigit():                                                  # Number check
-               code = None                                                       # Set code as None
-               continue                                                          # End loop and cntinue with the next iteration
-            else:
-               code = 1                                                          # Set code as 1
-               break                                                             # Break loop
-      else:
-         code = 3
-      if code:
-         message(code)
+            if digit.isdigit():                                               # Number check
+               code = None                                                    # Set code as None
+               continue                                                       # End loop and cntinue with the next iteration
+            else:                                                             # Other than that:
+               code = 1                                                       # Code equals to 1
+               break                                                          # Break out of the function
+      else:                                                                   # Other than that:
+         code = 3                                                             # Code equals to 3
+      if code:                                                                # If code exists:
+         message(code)                                                        # Print error message
          print("ATTENTION||Error detected.||ATTENTION")
+      else:                                                                   # Other than that:
+         print("No errors detected.")                                         # Print message
+      retry = input("[R]-Retry,[Any other key]-Exit using "+pNum+"\n")        # Print message and get retry
+      if retry in ["R","r"]:                                                  # If retry is equal to ["R","r"] Then:
+         continue                                                             # End loop and continue with the next iteration
       else:
-         print("No errors detected.")
-      retry = input("[R]-Retry,[Any other key]-Exit using "+pNum+"\n")           # Print message and get retry
-      if retry in ["R","r"]:
-         continue                                                                # End loop and cntinue with the next iteration
-      else:
-         return pNum                                                             # Return value is pNum
+         return pNum                                                          # Exit a function and send the value back to the program
 
-def getDate(code,dateType):                                                      # Define getDate function
-   specials = specialCharacterList(None)                                         # specials = call function specialCharacterList(None)
+def getDate(code,dateType):                                                   # Define getDate function
+   specials = specialCharacterList(None)                                      # specials = call function specialCharacterList(None)
    while True:
-      if dateType == "start":
-         path = input("Use current date as rental start date?\n[Y]-Yes\n[Any Other Key]-No\n")
-         if path in ["Y","y"]:
-            date = dt.date.today().strftime("%Y/%m/%d")
-            print("Current date:",date)
-         else:
-            date = input("Format: YYYY/MM/DD\nEnter Rental start date:\n")
-      elif dateType == "birth":
-         date = input("Format: YYYY/MM/DD\nEnter tenant birth date:\n")
-      else:
-         date = input("Format: YYYY/MM/DD\nEnter transaction date:\n")
-      if len(date) == 10:
-         if date[4] == date[7] == specials[24]:
-            year,month,day = date.split("/")
+      if dateType == "start":                                                 # If dateType equals to "start" Then:
+         path = input("Use current date as rental start date?\n[Y]-Yes\n[An   y Other Key]-No\n")
+         if path in ["Y","y"]:                                                # If path is equal to ["Y","y"] Then:
+            date = dt.date.today().strftime("%Y/%m/%d")                       # Return a numpy array of datetime.date objects
+            print("Current date:",date)                                       # Print message
+         else:                                                                # Other than that:
+            date = input("Format: YYYY/MM/DD\nEnter Rental start date:\n")    # Print message and get date
+      elif dateType == "birth":                                               # If dateType is equal to "birth" Then: 
+         date = input("Format: YYYY/MM/DD\nEnter tenant birth date:\n")       # Print message and get date
+      else:                                                                   # Other than that:
+         date = input("Format: YYYY/MM/DD\nEnter transaction date:\n")        # Print message and get date
+      if len(date) == 10:                                                     # If the date length is equal to 10:
+         if date[4] == date[7] == specials[24]:                               # If the date in location 7 and 14 is equal to specials in location 24 Then:
+            year,month,day = date.split("/")                                  # Split the date to year, month, day using the separator ("/") 
             try:
-               dt.datetime(int(year),int(month),int(day))
-               code = None
+               dt.datetime(int(year),int(month),int(day))                     # Insert the year, month, day in integer
+               code = None                                                    # code equals to 'None'
             except ValueError:
-               code = 1
-         else:
-            code = 2
-      else:
-         code = 3 
-      if code:
-         message(code)
-         print("ATTENTION||Error detected.||ATTENTION\n")
-      else:
-         print("No errors detected.\n")
-      retry = input("[R]-Retry,[Any other key]-Exit using "+date+"\n")
-      if retry in ["R","r"]:
-         continue
-      else:    
-         return date
+               code = 1                                                       # code equals to "1"
+         else:                                                                # Other than that:
+            code = 2                                                          # code equals to "2"
+      else:                                                                   # Other than that:
+         code = 3                                                             # code equals to "3"
+      if code:                                                                # If code exists:
+         message(code)                                                        # Print error message
+         print("ATTENTION||Error detected.||ATTENTION\n")                     # Print message
+      else:                                                                   # Other than that:
+         print("No errors detected.\n")                                       # Print message
+      retry = input("[R]-Retry,[Any other key]-Exit using "+date+"\n")        # Print message and get retry
+      if retry in ["R","r"]:                                                  # If retry is equal to ["R","r"] Then:
+         continue                                                             # End loop and continue with the next iteration
+      else:                                                                   # Other than that:
+         return date                                                          # Exit a function and send the value back to the program
 
-def getnumber(code,numberType):                                                 #define getincome function
-    while True:                                                                               # Run loop while the condition is 'True'
+def getnumber(code,numberType):                                               # Define getincome function
+    while True:                                                                               
       if numberType == "workHistory":
          t = "Total work history is around "
          number = input(t+"\n[1]-1 to 2 month\n[2]-2 to 3 months\n[3]-3 to 6 months\n[4]-6 to 9 months\n[5]-9 months to 1 year\n[6]-1 to 2 years\n[7]-2 to 3 years\n[8]-3 to 4 years\n[9]-4 to 5 years\n[0]-5 years or more\nChoose how long you have been working: ")
@@ -360,7 +399,7 @@ def getrental(UID):                                            #define getrental
    if UID:
       return "Current"
    else:
-      while True:                                                                               # Run loop while the condition is 'True'
+      while True:                                                                               
          rental = input("[P]-Past\n[Any other key]-Current\nChoose tenant rental status(current/past)\n")
          if rental in ["P","p"]:
             rental = "Past"
@@ -374,7 +413,7 @@ def getrental(UID):                                            #define getrental
 
 def getreferenceNumber(code):                                        #define getreferenceNumber function
    specials = specialCharacterList(None)
-   while True:                                                                               # Run loop while the condition is 'True'
+   while True:                                                                               
       referenceNumber = input("Reference number comes from their relevant bank transaction. They cannot repeat.\nEnter the reference number :\n")
       if len(referenceNumber) > 5:
          for location in referenceNumber:
@@ -403,7 +442,7 @@ def getreferenceNumber(code):                                        #define get
 
 def getdecimal(code):                                                #define getdecimal function
    specials = specialCharacterList(None)
-   while True:                                                                               # Run loop while the condition is 'True'
+   while True:                                                                               
       decimal = input("Format: ########.##\nEnter the transaction amount in Ringgit Malaysia:\n")
       if specials[23] in decimal:
          money = decimal.split(".")
@@ -434,7 +473,7 @@ def getdecimal(code):                                                #define get
          return decimal
 
 def tenantOrTransactionEntryForm(UID,listCode,code):           #Define tenantOrTransactionEntryForm function
-   while True:                                                                               # Run loop while the condition is 'True'
+   while True:                                                                               
       if UID == None:
          n = input("Number of new Records: ")
          if n.isdecimal():
@@ -514,7 +553,7 @@ def tenantAndApartment():                                   #define tennantAndAp
       print(item)
       
 def tenantOrTransaction(UID,listCode,code):                #Define tenantOrTransaction function
-   while True:                                                                               # Run loop while the condition is 'True'
+   while True:                                                                               
       if UID:
          searchInformation(listCode,0,UID)
          if listCode == "t": 
@@ -588,7 +627,7 @@ def apartment(UID,listCode,code):                              # Define apartmen
 
 def modifyData(UID,listCode,code,modifyType):                                                # Define modifyData function
    modify = True
-   while True:                                                                               # Run loop while the condition is 'True'                                                                               # Run loop while the condition is 'True'
+   while True:                                                                                                                                                              
       if modifyType:
          dataInput = modifyType
       else:
@@ -636,7 +675,7 @@ def apartmentAddData(modify,listCode):                                          
    return modify                                                                             # Return modify function
 
 def newRoom():                                                                               # Define newRoom function
-   while True:                                                                               # Run loop while the condition is 'True'                                                                               # Run loop with the condition is 'True'
+   while True:                                                                                                                                                              # Run loop with the condition is 'True'
       code = None                                                                            # Code set as 'None' 
       SCL = 'SCL2'                                                                           # Set specials as 'SCL2'
       specials = specialCharacterList(SCL)
@@ -677,7 +716,7 @@ def newRoom():                                                                  
          continue                                                                            # Jump back to the top of loop, rerun again 
 
 def newRoomCode():                                                                           # Define newRoomCode function
-   while True:                                                                               # Run loop while the condition is 'True'                                                                               # Run loop with the condition is 'True'
+   while True:                                                                                                                                                              # Run loop with the condition is 'True'
       code = None                                                                            # Code set as 'None' 
       newRoomCode = input("\nRoom code only contains alphanumeric (A combination of uppercased alphabet and number), and no special characters\nExample: DKPRS1\n\nRoom Code: ")    # Get input from admin
       if len(newRoomCode) <= 1 :                                                             # 1st Data Validation - Check empty input and length input
@@ -707,7 +746,7 @@ def newRoomCode():                                                              
          continue                                                                            # Jump back to the top of loop, rerun again
 
 def newRoomDimension():                                                                      # Define newRoomDimension function
-   while True:                                                                               # Run loop while the condition is 'True'                                                                               # Run loop with the condition is 'True'
+   while True:                                                                                                                                                              # Run loop with the condition is 'True'
       code = None                                                                            # Code set as 'None' 
       newRoomDimension=input("\nRoom Dimension only contains numbers, no alphabets and special characters (The unit (in sqft) will be provided at the back)\nExample: 300(+sqft)\n\nRoom Dimension: ")   # Get input from admin 
       if len(newRoomDimension) == 0:                                                         # 1st Data Validation - Check empty input exist or not
@@ -737,7 +776,7 @@ def newRoomDimension():                                                         
          continue                                                                            # Jump back to the top of loop, rerun again
 
 def newRoompricing():                                                                        # Define newRoompricing function
-   while True:                                                                               # Run loop while the condition is 'True'                                                                               # Run loop with the condition is 'True'
+   while True:                                                                                                                                                              # Run loop with the condition is 'True'
       code = None                                                                            # Code set as 'None' 
       newRoompricing=input("\nRoom Pricing only contain numbers, no special characters (The unit (in RM) will be provided at the front)\nExample: (RM)500\n\nRoom Pricing: ")    # Get input from admin
       if newRoompricing.isdigit():                                                           # Validation - Input check that only contain numbers 
@@ -767,7 +806,7 @@ def newRoompricing():                                                           
          continue
 
 def newRoomID():
-   while True:                                                                               # Run loop while the condition is 'True'
+   while True:                                                                               
       code = None
       newRoomID = input('\nThis is the correct format for RoomID: A(01)-L(01)-R(01)x(to)xA(99)-L(99)-R(99), x means space\nPlease enter the new Room ID: ')
       if 0 <= len(newRoomID) <= 25:
@@ -791,7 +830,7 @@ def newRoomID():
             continue
 
 def newRoomDate(dateType):
-   while True:                                                                               # Run loop while the condition is 'True'
+   while True:                                                                               
       code = None
       if dateType == "Acquisition":
          roomDate = input("\nRoom Date of Acquisition: dd/mm/yyyy\nNo special characters included, except '/'\n\nRoom Acquisition Date: ")
@@ -824,7 +863,7 @@ def newRoomDate(dateType):
          continue
 
 def newRoomStatus():
-   while True:                                                                               # Run loop while the condition is 'True'
+   while True:                                                                               
       code = None
       SCL = None
       specials = specialCharacterList(SCL)
@@ -953,40 +992,39 @@ def ApartmentDataInfo():
    while data == True:
       opt = input("\n[R] - Room Info [C] - Room code, [D] - Dimensions, [P] - Pricing, [A] - Apartment ID, [D] - Date of Acquisition, [H] - Rental History, [S] - Status \nAnswer: ")
       if opt in ["R","r"]:
-         return 0
+         num = 0
       elif opt in ["C","c"]:
-         return 1
+         num = 1
       elif opt in ["D","d"]:
-         return 2
+         num = 2
       elif opt in ["P","p"]:
-         return 3
+         num = 3
       elif opt in ["A","a"]:
-         return 4
+         num = 4
       elif opt in ["D","d"]:
-         return 5
+         num = 5
       elif opt in ["H","h"]:
-         return 6
+         num = 6
       elif opt in ["S","s"]:
-         return 7
+         num = 7
       else:
          code = 0
          message(code)
          continue
+      return num
 
 def category(listCode,code):
-   while True:                                                                               # Run loop while the condition is 'True'
+   while True:                                                                               
       if listCode == "p":
          opt = input("\n[R]-Reference number,[D]-Transaction date,[T]-TenantID,[A]-Apartment code,[S]-Amount\n Choose a category: ")
-         if opt in ["R","r"]:
-            return 0
-         elif opt in ["D","d"]:
-            return 1
+         if opt in ["D","d"]:
+            num = 1
          elif opt in ["T","t"]:
-            return 2
+            num = 2
          elif opt in ["A","a"]:
-            return 3
+            num = 3
          elif opt in ["S","s"]:
-            return 4
+            num = 4
          else:
             code = 0
             message(code)
@@ -994,58 +1032,34 @@ def category(listCode,code):
       else:
          opt = input("\n[U]-User ID,[N]-Name,[G]-Gender,[P]-Phone number,[R]-Nationality,[D]-Rental start date,[W]-Work history,[E]-Employer,[I]-Income,[S]-Tenant status,[B]-Birthdate,[C]-Birth City\nChoose a category: ")
          if opt in ["U","u"]:
-            return 0
+            num = 0
          elif opt in ["N","n"]:
-            return 1
+            num = 1
          elif opt in ["G","g"]:
-            return 2
+            num = 2
          elif opt in ["P","p"]:
-            return 3
+            num = 3
          elif opt in ["R","r"]:
-            return 4
+            num = 4
          elif opt in ["D","d"]:
-            return 5
+            num = 5
          elif opt in ["W","w"]:
-            return 6
+            num = 6
          elif opt in ["E","e"]:
-            return 7
+            num = 7
          elif opt in ["I","i"]:
-            return 8
+            num = 8
          elif opt in ["S","s"]:
-            return 9
+            num = 9
          elif opt in ["B","b"]:
-            return 10
+            num = 10
          elif opt in ["C","c"]:
-            return 11
+            num = 11
          else:
             code = 0
             message(code)
             continue
-
-def searchInformation(listCode,num,details):                   #Define searchinformation function
-   while True:                                                                               # Run loop while the condition is 'True'
-      if details:
-         searchInformation = details
-      else:
-         searchInformation = input("\nPlease enter text to begin the search: ")
-      recordExist = False
-      with open(listIdentifier(listCode),"r") as Xhandler:
-         print("\n----------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\nResults:\n")
-         for record in Xhandler:
-            strippedItem = record.rstrip()
-            data=strippedItem.split(",")
-            if searchInformation in data[num]:
-               print(record.rstrip(",").rstrip("\n"))
-               recordExist = True
-            else:
-               continue
-         if recordExist == True:
-            code = 0
-            print("\n- Matching records ends here -")
-         else:
-            code = 4
-            message(code)
-         break
+      return num
 
 def replaceOldData(listCode,recordindex,editDataType,newData):
    with open(listIdentifier(listCode),"r") as Xhandler:
@@ -1069,7 +1083,7 @@ def replaceOldData(listCode,recordindex,editDataType,newData):
    return False
 
 def editData(UID,listCode,code):
-   while True:                                                                               # Run loop while the condition is 'True'
+   while True:                                                                               
       if listCode == "a":
          editDataType = ApartmentDataInfo()
       else:
@@ -1077,8 +1091,8 @@ def editData(UID,listCode,code):
       display = searchColumn(listCode,editDataType,UID)
       oldDataFormat = False
       while oldDataFormat == False:
-         print(display)
          if UID == None:
+            print(display)
             selectedData = input("Placement of items displayed above are labeled from left to right starting from 1\nPlease enter the number of the item to edit:")
             if selectedData.isdecimal():
                recordindex = int(selectedData)-1
@@ -1089,9 +1103,10 @@ def editData(UID,listCode,code):
                continue
          else:
             for item in display:
-               if item != "":
+               if item == UID:
                   recordindex = display.index(item)
                   oldDataFormat = True
+                  break
                else:
                   continue
       print("Last step, please insert the new data with the correct format: ")
@@ -1099,55 +1114,16 @@ def editData(UID,listCode,code):
       editdataconfirmation = input("\nAre you sure with your records just now? ([Y]-Yes/[N]-No): ")
       if editdataconfirmation in ["Y","y"]:
          replaceOldData(listCode,recordindex,editDataType,newData)
+         break
       elif editdataconfirmation in ["N","n"]:
-         return False
+         break
       else:
          code = 0
          message(code)
          continue
-
-def searchColumn(listCode,num,UID):
-   displayList=[]
-   with open (listIdentifier(listCode), "r") as Tread:
-      bulkData = Tread.readlines()
-      for line in bulkData:
-         individualList = line.strip(",\n").split(",")
-         if listCode == "a":
-            if int(num) == 1:
-               displayList.append(individualList[int(num)])
-            else:
-               displayList.append(str(individualList[int(1)])+";"+str(individualList[int(num)]))
-         else:
-            if UID == None:
-               if listCode == "u":
-                  if int(num) == 0:
-                     displayList.append("ID: "+str(individualList[int(num)])+";relevant data: "+str(individualList[2]))
-                  else:
-                     displayList.append(individualList[int(num)])
-               else:
-                  if int(num) == 0:
-                     displayList.append(individualList[int(num)])
-                  else:
-                     displayList.append("ID: "+str(individualList[0])+";relevant data: "+str(individualList[int(num)]))
-            else:
-               if listCode == "t":
-                  if int(num) == 0:
-                     displayList.append(individualList(UID))
-                  else:
-                     if individualList[0] == UID:
-                        displayList.append("ID: "+str(individualList[int(0)])+";relevant data: "+str(individualList[int(num)]))
-                        break
-                     else:
-                        displayList.append("")
-                        continue
-   if displayList == []:
-      code = 5
-      message(code)
-   else:
-      return displayList
       
 def deleteRecord(listCode,code):
-   while True:                                                                               # Run loop while the condition is 'True'
+   while True:                                                                               
       print("\n- Delete Data -")
       deletedata = input("\n1. Delete specified records\n2. Delete all records\n\n[E] - Exit\n\nPlease select and enter which operator that you want to proceed: ")
       if deletedata == '1':
@@ -1165,7 +1141,7 @@ def deleteRecord(listCode,code):
 
 def deleteSpecRecord(listCode,code):
    modify = True
-   while True:                                                                               # Run loop while the condition is 'True'
+   while True:                                                                               
       readFile(listCode)
       selecteddatarow = input("\nWhich data row that you want to delete? ")
       if selecteddatarow.isdigit():
@@ -1193,39 +1169,83 @@ def deleteAllrecords():
             print("\n- Delete successful -")
       return modify
 
-def searchBox(UID):                                                     #Define search function
-   while True:                                                                               # Run loop while the condition is 'True'
-      print("\n----------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\nWelcome to search box!")
+def searchColumn(listCode,num,UID):
+   displayList=[]
+   with open (listIdentifier(listCode), "r") as Tread:
+      bulkData = Tread.readlines()
+      for line in bulkData:
+         individualList = line.strip(",\n").split(",")
+         if listCode == "a":
+            if int(num) == 1:
+               displayList.append(individualList[int(num)])
+            else:
+               displayList.append(str(individualList[int(1)])+";"+str(individualList[int(num)]))
+         else:
+            if UID == None:                                          #append information for admin
+               if listCode == "u":
+                  if int(num) == 0:
+                     displayList.append("ID: "+str(individualList[int(num)])+";relevant data: "+str(individualList[2]))
+                  else:
+                     displayList.append(individualList[int(num)])
+               else:
+                  if int(num) == 0:
+                     displayList.append(individualList[int(num)])
+                  else:
+                     displayList.append("ID: "+str(individualList[0])+";relevant data: "+str(individualList[int(num)]))
+            else:
+               if listCode == "t":
+                  if individualList[0] == UID:
+                     if int(num) == 0:
+                        displayList.append(individualList[int(num)])
+                     else:
+                        displayList.append("ID: "+str(individualList[int(0)])+";relevant data: "+str(individualList[int(num)]))
+                        break
+                  else:
+                     displayList.append("")
+   if displayList == []:
+      code = 5
+      message(code)
+   else:
+      return displayList
+
+def searchBox(UID,code):                                                                # Define search function
+   while True:                                                                               
+      print("\n-----------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\nWelcome to search box!")
       num = None
       print("\n1. Search room specific details.\n2. Search transaction details.\n3. Search specific tenant details.\n4. Exit search box.\n")
-      option=input("Please type the search criteria based on the listing above: ")
-      if option.isdigit and option == "1":
-         listCode= "a"
-         opt = input("\n[C]-Room code, [P]-Pricing, [N]-Number of Rooms, [A]- Apartment ID, [D]-Date of Acquisition, [R]-Rental \nSearch?  ")     
+      option=input("Please type the search criteria based on the listing above: ")      # Print message and get option
+      if option.isdigit and option == "1":                                              # If option is digit and option equals to '1' Then:
+         listCode= "a"                                                                  # listCode is "a"
+         opt = input("\n[C]-Room code, [D]- Dimension, [P]-Pricing, [A]- Apartment ID, [E]-Date of Acquisition, [R]-Rental History\nSearch?  ")   # Print message and get opt  
          if opt in ["C","c"]:
             num = 1
-         elif opt in ["X","x"]:
+         elif opt in ["D","d"]:
             num = 2
          elif opt in ["P","p"]:
             num = 3
-         elif opt in ["N","n"]:
-            num = 4
          elif opt in ["A","a"]:
+            num = 4
+         elif opt in ["E","e"]:
             num = 5
-         elif opt in ["D","d"]:
-            num = 6
          elif opt in ["R","r"]:
-            num = 7
+            num = 6
          else:
             code = 0
             message(code)
             continue
+         print(searchColumn(listCode,num,UID))
       elif option.isdigit() and option == "2":
          listCode = "p"
-         num = category(listCode,code)
+         if UID:
+            num = 2
+         else:
+            num = category(listCode,code)
       elif option.isdigit() and option == "3" :
          listCode = "t"
-         num = category(listCode,code)
+         if UID:
+            num = 0
+         else:
+            num = category(listCode,code)
       elif option.isdigit() and option == "4":
          print("\n- Return to main menu -\n\n----------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\n- Welcome back ! -")
          break
@@ -1240,45 +1260,35 @@ def searchBox(UID):                                                     #Define 
             details = UID
       else:
          details = None
-      print(searchColumn(listCode,num,UID))
       searchInformation(listCode,num,details)
 
-def menu(UID,code):                                                # Define menu function
-   mainMenu = True
-   while mainMenu == True:
-      if UID:
-         print("\nMain menu:\n\n[S] - Search box\n\nReview information about:\n[A] - Available Apartments\n[T] - My Tenant details\n[P] - My Transactions\n\nQuick functions:\n[D] - Print my House & Tenant Details\n[E] - Exit")
+def searchInformation(listCode,num,details):                   #Define searchinformation function
+   while True:                                                                               
+      if details:
+         searchInformation = details
       else:
-         print("\nMain menu:\n\n[S] - Search box\n\nReview information about:\n[A] - Apartment\n[T] - Tenant\n[P] - Transaction\n\nQuick functions:\n[D] - Print Specific House & Tenant Details\n[I] - Inquiry of Past Tenant Details\n[E] - Exit")
-      opt=input("\nPlease enter which operation that you want to do: ")
-      if opt in ["S","s"]:
-         searchBox(UID)                                        # Redirect to searchbox function
-      elif opt in ["A","a"]:                                   # Check for basic Functions
-         listCode = "a"
-         apartment(UID,listCode,code)
-      elif opt in ["P","p"]:
-         listCode = "p"
-         tenantOrTransaction(UID,listCode,code)
-      elif opt in ["T","t"]:
-         listCode = "t"
-         tenantOrTransaction(UID,listCode,code)
-      elif opt in ["D","d"]:                                   # Check for quick functions
-         tenantAndApartment()
-      elif opt in ["I","i"] and UID == None:
-         listCode = "t"
-         searchInformation(listCode,9,"Past")
-      elif opt in ["L","l"] and UID == None:
-         print("loginHistory()")
-      elif opt in ["E","e"]:                                   # Get confirmation to exit
-         exitconfirmationkey = input("\n-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\nYou're about to leave Tenant Management System. Are you sure? [Enter]-Continue, [x]-Return to main menu): ")
-         if exitconfirmationkey in ["X","x"]:
-            continue
+         searchInformation = input("\nPlease enter text to begin the search: ")
+      recordExist = False
+      with open(listIdentifier(listCode),"r") as Xhandler:
+         print("\n-----------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\nResults:\n")
+         for record in Xhandler:
+            strippedItem = record.rstrip()
+            data=strippedItem.split(",")
+            print(searchInformation+" in column "+data[num])
+            if searchInformation in data[num]:
+               print(record.rstrip(",").rstrip("\n"))
+               print()
+               recordExist = True
+            else:
+               continue
+         if recordExist == True:
+            code = 0
+            print("- Matching records ends here -")
          else:
-            print("\n-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\nExit successful, have a nice day~\n")
-            return False
-      else:
-         code = 0
-         message(code)
+            code = 4
+            message(code)
+         break
+
 
 import datetime as dt
 login()

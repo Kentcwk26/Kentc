@@ -1,4 +1,4 @@
-New Room Info: Dual Key Premium Rooms - Quintuple Rooms,Code: SR1,Dimensions: 140+ sqft,Pricing: RM350,Apartment ID: A01-L01-R01 to A01-L01-R21,Date of Acquisition: 03/01/2015,Rental History: 27/02/2015 rent,Status: Available,
+Room Info: Standard Room (Triple),Code: SR1,Dimensions: 140+ sqft,Pricing: RM350,Apartment ID: A01-L01-R01 to A01-L01-R21,Date of Acquisition: 03/01/2015,Rental History: 27/02/2015 rent,Status: Available,
 Room Info: Standard Room (Twin),Code: SR2,Dimensions: 120+ sqft,Pricing: RM450,Apartment ID: A01-L01-R22 to A01-L01-R41,Date of Acquisition: 10/02/2015,Rental History: 28/03/2015 rent,Status: Available,
 Room Info: Standard Room A/C (Triple),Code: SR3,Dimensions: 150+ sqft,Pricing: RM550,Apartment ID: A01-L02-R01 to A01-L02-R21,Date of Acquisition: 21/03/2016,Rental History: 24/04/2016 rent,Status: Available,
 Room Info: Standard Room A/C (Twin),Code: SR4,Dimensions: 130+ sqft,Pricing: RM650,Apartment ID: A01-L02-R22 to A01-L02-R41,Date of Acquisition: 02/04/2016,Rental History: 20/05/2016 rent,Status: Available,
