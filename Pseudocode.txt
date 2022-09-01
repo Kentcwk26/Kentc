@@ -1,3 +1,4 @@
+FUNCTION
 FUNCTION login()
     print("NEWLINE Welcome to Tenant Management System Login page. NEWLINE Please enter username and password to proceed.NEWLINE")
     chance=3
