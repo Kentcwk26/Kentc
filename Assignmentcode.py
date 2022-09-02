@@ -14,39 +14,35 @@ def register(listCode,code):                                               # Def
    tenantOrTransactionEntryForm(UserID,listCode,code)                      # Call function tenantOrTransactionEntryForm(UserID,listCode,code)
    return username,password                                                # Exit function and send the value back to the program
 
-def login():                                                               # Define login function
-   print("\nWelcome to Tenant Management System Login page.\nPlease enter username and password to proceed.\n") 
-   listCode = "u"                                                          # Set listCOde to 'u'
-   code = None                                                             # Set code to 'None'
-   while True:                                                             
-      new = input("[Y]-Yes I am.[Any Other Key]-No,I have an existing account\nAre you a new user: ")
-      if new in ["Y","y"]:                                                 # If new in ["Y","y"] Then:
-         username,password = register(listCode,code)                       # call function register(listCode,code)
+def login(listCode,code,nameInput,passInput):                                                               # Define login function
+   chance = 3
+   while chance > 0:
+      if nameInput and passInput:
+         username = nameInput
+         password = passInput
       else:                                                                # Other than that:
-         chance = 3                                                        # Specify login chances
-         while chance > 0:                                                 # Iterate when there are more than 0 chances remaining
-            username = input("\nUsername: ")                               # Input login credentials
-            password = input("Password: ")                                 # Input login credentials
-            with open(listIdentifier(listCode),"r") as userInfo:           # Open selected text file in read mode as userInfo and match for correct login credentials
-               userCheck = userInfo.readlines()                            # Read each lines in userInfo  
-               for record in userCheck:                                    # For each record in usercheck:
-                  listRecord = record.split(",")                           # Split the record with comma as a separator
-                  if username == listRecord[0]:                            # If username equals to listRecord that is in index 0:
-                     if password == listRecord[1]:                         # If password equals to listRecord that is in index 1:
-                        print("\n- Login successful -\n\n-----------------------------------------------------------------------------------------------------------------------------------------------------------------------")
-                        if (username == "john" and password == "1234u-78") or (username == "david" and password == "55467913"):     # Check for admin credentials
-                           UID = None                                      # UID set to 'None', activate admin access
-                        else:                                              # Other than that:
-                           with open("currentUser.txt","w") as current:    # Open currentUser text file in Write Mode as current
-                              current.write(record)                        # Write record into current
-                           UID = listRecord[2]                             # UID = listrecord index 2, deactivate admin access
-                        menu(UID,code)                                     # Call function menu(UID,code), redirect to menu
-                        chance = 0                                         # reassign login chances to 0
-                        break                                              # Break out of the function
-               else:                                                       # Other than that:
-                  chance -= 1                                              # Decrease chances by 1
-                  print("\nError, incorrect username or password.\n",chance,"chances remaining.")
-      break                                                                # Break out of the function
+         print("Please enter username and password to proceed.\n")
+         username = input("Username: ")                                    # Input login credentials
+         password = input("Password: ")                                    # Input login credentials
+      with open(listIdentifier(listCode),"r") as userInfo:              # Open selected text file in read mode as userInfo and match for correct login credentials
+         userCheck = userInfo.readlines()                               # Read each lines in userInfo  
+         for record in userCheck:                                       # For each record in usercheck:
+            listRecord = record.split(",")                              # Split the record with comma as a separator
+            if username == listRecord[0]:                               # If username equals to listRecord that is in index 0:
+               if password == listRecord[1]:                            # If password equals to listRecord that is in index 1:
+                  print("\n- Login successful -\n\n-----------------------------------------------------------------------------------------------------------------------------------------------------------------------")
+                  if (username == "john" and password == "1234u-78") or (username == "david" and password == "55467913"):     # Check for admin credentials
+                     UID = None                                         # UID set to 'None', activate admin access
+                  else:                                                 # Other than that:
+                     with open("currentUser.txt","w") as current:       # Open currentUser text file in Write Mode as current
+                        current.write(record)                           # Write record into current
+                     UID = listRecord[2]                                # UID = listrecord index 2, deactivate admin access
+                  menu(UID,code)                                        # Call function menu(UID,code), redirect to menu
+                  chance = 0                                            # reassign login chances to 0
+                  break
+         else:                                                          # Other than that:
+            chance -= 1                                                 # Decrease chances by 1
+            print("\nError, incorrect username or password.\n",chance,"chances remaining.")
 
 def menu(UID,code):                                                        # Define menu function
    mainMenu = True
@@ -63,11 +59,14 @@ def menu(UID,code):                                                        # Def
          apartment(UID,listCode,code)
       elif opt in ["P","p"]:
          listCode = "p"
+         print("- Transaction page -\n")
          tenantOrTransaction(UID,listCode,code)
       elif opt in ["T","t"]:
          listCode = "t"
+         print("- Tenant page -\n")
          tenantOrTransaction(UID,listCode,code)
       elif opt in ["D","d"]:                                                  # Check for quick functions
+         print("- Tenant and apartment details -")
          tenantAndApartment(UID)
       elif opt in ["I","i"] and UID == None:
          listCode = "t"
@@ -203,7 +202,6 @@ def getname(code,nameType):                                                   # 
       nameList = name.split(" ")                                              # Right stripped from the end of string (record) with the separators (all commas and newlines)
       if len(nameList) >= 2:                                                  # if the length of namelist is greater than or equal to 2 Then:
          for words in nameList:
-            print("Checking ",words)                                     
             if words.isalpha() or [character for character in words if(character in specials[12]) or (character in specials[22])]:
                if words[0].isupper():                                         # Checking words in index 0 is uppercased or not
                   code = None                                                 # Set code as 'None'
@@ -1097,136 +1095,136 @@ def editData(UID,listCode,code):                                                
          message(code)                                                                        # Print error message
          continue                                                                             # End loop and continue with the next iteration                                                                                      # Jump back to the top of loop, rerun again
       
-def deleteRecord(listCode,code):
+def deleteRecord(listCode,code):                                                              # Define deleteRecord function
    while True:                                                                               
-      print("\n- Delete Data -")
-      deletedata = input("\n1. Delete specified records\n2. Delete all records\n\n[E] - Exit\n\nPlease select and enter which operator that you want to proceed: ")
-      if deletedata == '1':
-         print("\n- 1. Delete specified records -")
-         deleteSpecRecord(listCode,code)
-      elif deletedata == '2':
-         print("\n- 2. Delete all records -")
-         deleteAllrecords(listCode)
-      elif deletedata in ["E","e"]:
-         break
+      print("\n- Delete Data -")                                                              # Print message 
+      deletedata = input("\n1. Delete specified records\n2. Delete all records\n\n[E] - Exit\n\nPlease select and enter which operator that you want to proceed: ")  # Print message and get deletedata
+      if deletedata == '1':                                                                   # If deletedata is equal to 1 Then:
+         print("\n- 1. Delete specified records -")                                           # Print message
+         deleteSpecRecord(listCode,code)                                                      # Call function deleteSpecRecord(listCode,code)
+      elif deletedata == '2':                                                                 # If deletedata is equal to 2 Then:
+         print("\n- 2. Delete all records -")                                                 # Print message
+         deleteAllrecords(listCode)                                                           # Call function deleteAllrecords(listCode)
+      elif deletedata in ["E","e"]:                                                           # If deletedata is equal to ["E","e"] Then:
+         break                                                                                # Break out of the function
       else:                                                                                   # Other than that:
          code = 0                                                                             # code equals to 0
          message(code)                                                                        # Print error message
          continue                                                                             # End loop and continue with the next iteration 
 
-def deleteSpecRecord(listCode,code):
-   modify = True
-   while True:                                                                               
-      readFile(listCode)
-      selecteddatarow = input("\nWhich data row that you want to delete? ")
-      if selecteddatarow.isdigit():
-         number = int(selecteddatarow)-1
-         editDataType = None
-         newData = None
-         confirmation = input("\nAre you sure that you want to delete all the record(s)?\nIt will be not recovered once you hit [X]. However, you still can discard this changes by hitting any other keys if you change your mind: ")
-         if confirmation in ["X","x"]:
-            replaceOldData(listCode,number,editDataType,newData)
-            print("\n- Delete successful -")
-         else:                                                                                                # Other than that:
-            print("\n- Delete unsuccessful -")
-      else:                                                                                                   # Other than that:
-         code = 0                                                                                             # code equals to 0
-         message(code)                                                                                        # Print error message
-         continue                                                                                             # End loop and continue with the next iteration                                                                                          # Jump back to the top of loop, rerun again
-      return modify
+def deleteSpecRecord(listCode,code):                                                          # Define deleteSpecRecord 
+   modify = True                                                                              # Modify equals to True
+   while True:
+      readFile(listCode)                                                                      # Call function readFile(listCode)
+      selecteddatarow = input("\nWhich data row that you want to delete? ")                   # Print message and get selecteddatarow 
+      if selecteddatarow.isdigit():                                                           # Data validation - Number check, if selecteddatarow only consists of numbers:
+         number = int(selecteddatarow)-1                                                      # number = selecteddatarow (in integer) subtract by 1 to search specific data location
+         editDataType = None                                                                  # editDataType equals to None
+         newData = None                                                                       # newData equals to None
+         confirmation = input("\nAre you sure that you want to delete all the record(s)?\nIt will be not recovered once you hit [X]. However, you still can discard this changes by hitting any other keys if you change your mind: ")  # Print message and get confirmation
+         if confirmation in ["X","x"]:                                                        # If confirmation equals to ["X","x"] Then:
+            replaceOldData(listCode,number,editDataType,newData)                              # call function replaceOldData(listCode,number,editDataType,newData)
+            print("\n- Delete successful -")                                                  # Print message
+         else:                                                                                # Other than that:
+            print("\n- Delete unsuccessful -")                                                # Print message
+      else:                                                                                   # Other than that:
+         code = 0                                                                             # code equals to 0
+         message(code)                                                                        # Print error message
+         continue                                                                             # End loop and continue with the next iteration
+      return modify                                                                           # Exit function and send the value back to the program
 
-def deleteAllrecords(listCode):
-   modify = True
-   while modify == True:
-      confirmation = input("\nAre you sure that you want to delete all the record(s)?\nIt will be not recovered once you hit [X]. However, you still can discard this changes by hitting any other keys if you change your mind: ")
-      if confirmation in ["X","x"]:
-         with open (listIdentifier(listCode),"r+") as ADeletedhandler:
-            ADeletedhandler.seek(0)
-            ADeletedhandler.truncate()
-            print("\n- Delete successful -")
-      else:                                                                                                # Other than that:
-         print("\n- Delete unsuccessful -")
-      return modify
+def deleteAllrecords(listCode):                                                               # Define deleteAllrecords function
+   modify = True                                                                              # modify equals to True
+   while modify == True:                                                                      # When modify equals to True Then:
+      confirmation = input("\nAre you sure that you want to delete all the record(s)?\nIt will be not recovered once you hit [X]. However, you still can discard this changes by hitting any other keys if you change your mind: ")  # Print message and get confirmation
+      if confirmation in ["X","x"]:                                                           # If confirmation equals to ["X","x"] Then:
+         with open (listIdentifier(listCode),"r+") as ADeletedhandler:                        # Open selected text file in read and write mode as Adeletehandler
+            ADeletedhandler.seek(0)                                                           # Absolute file positioning
+            ADeletedhandler.truncate()                                                        # Erase all data
+            print("\n- Delete successful -")                                                  # Print message
+      else:                                                                                   # Other than that:
+         print("\n- Delete unsuccessful -")                                                   # Print message
+      return modify                                                                           # Exit function and send the value back to the program
 
-def searchColumn(listCode,num,UID):
-   displayList=[]
-   with open (listIdentifier(listCode), "r") as Tread:
-      bulkData = Tread.readlines()
+def searchColumn(listCode,num,UID):                                                           # Define searchColumn function
+   displayList=[]                                                                             # Declare displayList as array
+   with open (listIdentifier(listCode), "r") as Tread:                                        # Open selected text file in read mode as Tread
+      bulkData = Tread.readlines()                                                            # Read each line in Tread
       for line in bulkData:
-         individualList = line.strip(",\n").split(",")
-         if listCode == "a":                                                                               # If listCode equals to "a" Then:
-            if int(num) < 7:
-               displayList.append(individualList[num])
-            else:
-               displayList.append(str(individualList[1])+" ;"+str(individualList[num]))
-         else:                                                                                             # Other than that:
-            if UID == None:                                                                                # Append information for admin
-               if listCode == "u":
-                  if num == 0:
-                     displayList.append("ID: "+str(individualList[num])+" ;relevant data: "+str(individualList[2]))
-                  else:                                                                                    # Other than that:
-                     displayList.append(individualList[num])
-               else:                                                                                       # Other than that:
-                  if num == 0:
-                     displayList.append(individualList[num])
-                  else:                                                                                    # Other than that:
-                     displayList.append("ID: "+str(individualList[0])+" ;relevant data: "+str(individualList[num]))
-            else:                                                                                          # Other than that:
-               if listCode == "t":
-                  if individualList[0] == UID:
-                     if num == 0:
-                        displayList.append(individualList[num])
-                        break
-                     else:                                                                                  # Other than that:
-                        displayList.append("ID: "+str(individualList[0])+" ;relevant data: "+str(individualList[num]))
-                        break
-                  else:                                                                                     # Other than that:
-                     displayList.append("")
-   if displayList == []:
-      code = 5
-      message(code)
-   else:                                                                                                    # Other than that:
-      return displayList
+         individualList = line.strip(",\n").split(",")                                        # Strip with comma and newline (",\n"), and split with comma (",")
+         if listCode == "a":                                                                  # If listCode equals to "a" Then:
+            if int(num) < 7:                                                                  # If num in integer less than 7 Then:
+               displayList.append(individualList[num])                                        # Append individualList (num location) into displayList
+            else:                                                                             # Other than that:
+               displayList.append(str(individualList[1])+" ;"+str(individualList[num]))       # Append individualist (first location in string), semicolon and individualList (num in string) into displayList
+         else:                                                                                # Other than that:
+            if UID == None:                                                                   # If UID equals to None Then:
+               if listCode == "u":                                                            # If listCode equals to "u" Then:
+                  if num == 0:                                                                # If num equals to 0 Then:
+                     displayList.append("ID: "+str(individualList[num])+" ;relevant data: "+str(individualList[2]))  # Append into displayList
+                  else:                                                                       # Other than that:
+                     displayList.append(individualList[num])                                  # Append individualList (num location) into displayList
+               else:                                                                          # Other than that:
+                  if num == 0:                                                                # If num is equal to 0 Then:
+                     displayList.append(individualList[num])                                  # Append individualList (num location) into displayList
+                  else:                                                                       # Other than that:
+                     displayList.append("ID: "+str(individualList[0])+" ;relevant data: "+str(individualList[num]))   # Append into displayList
+            else:                                                                             # Other than that:
+               if listCode == "t":                                                            # If listCode is equal to "t" Then:
+                  if individualList[0] == UID:                                                # If individualList (in zero location) is equals to UID Then:
+                     if num == 0:                                                             # If num equals to 0 Then:
+                        displayList.append(individualList[num])                               # Append individualList (num location) into displayList
+                        break                                                                 # Break out of the function
+                     else:                                                                    # Other than that:
+                        displayList.append("ID: "+str(individualList[0])+" ;relevant data: "+str(individualList[num]))  # Append into displayList
+                        break                                                                 # Break out of the function
+                  else:                                                                       # Other than that:
+                     displayList.append("")                                                   # Append ("") into displayList
+   if displayList == []:                                                                      # if display is equal to empty array [] Then:
+      code = 5                                                                                # code equals to 5
+      message(code)                                                                           # Print error message
+   else:                                                                                      # Other than that:
+      return displayList                                                                      # Exit function and send the value back to the program
 
-def searchBox(UID,code):                                                                                    # Define search function
+def searchBox(UID,code):                                                                      # Define search function
    while True:                                                                               
-      print("\n-----------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\nWelcome to search box!")
-      sourceFunction = "search"
-      num = None
+      print("\n-----------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\nWelcome to search box!")   # Print message
+      sourceFunction = "search"                                                               # sourceFunction equals to "search"
+      num = None                                                                              # num equals to None
       print("\n1. Search room specific details.\n2. Search transaction details.\n3. Search specific tenant details.\n4. Exit search box.\n")
-      option=input("Please type the search criteria based on the listing above: ")      # Print message and get option
-      if option.isdigit and option == "1":                                              # If option is digit and option equals to '1' Then:
-         listCode= "a"                                                                  # listCode is "a"
+      option=input("Please type the search criteria based on the listing above: ")            # Print message and get option
+      if option.isdigit and option == "1":                                                    # If option is digit and option equals to '1' Then:
+         listCode= "a"                                                                        # listCode is "a"
          opt = input("\n[C]-Room code, [D]- Dimension, [P]-Pricing, [A]- Apartment ID, [E]-Date of Acquisition, [R]-Rental History\nSearch?  ")   # Print message and get opt  
-         if opt in ["C","c"]:
-            num = 1                                                                              # num equals to 0
-         elif opt in ["D","d"]:
-            num = 2                                                                              # num equals to 0
-         elif opt in ["P","p"]:
-            num = 3                                                                              # num equals to 0
-         elif opt in ["A","a"]:
-            num = 4                                                                              # num equals to 0
-         elif opt in ["E","e"]:
-            num = 5                                                                              # num equals to 0
-         elif opt in ["R","r"]:
-            num = 6                                                                              # num equals to 0
-         else:                                                                          # Other than that:
-            code = 0                                                                             # code equals to 0
-            message(code)                                                                        # Print error message
-            continue                                                                             # End loop and continue with the next iteration
-         print(searchColumn(listCode,num,UID))
-      elif option.isdigit() and option == "2":
-         listCode = "p"
-         if UID:
-            num = 2                                                                              # num equals to 0
-         else:                                                                          # Other than that:
-            num = category(listCode,code,sourceFunction)
+         if opt in ["C","c"]:                                                                 # If opt is equal to ["C","c"] Then:
+            num = 1                                                                           # num equals to 0
+         elif opt in ["D","d"]:                                                               # If opt is equal to ["D","d"] Then:
+            num = 2                                                                           # num equals to 0
+         elif opt in ["P","p"]:                                                               # If opt is equal to ["P","p"] Then:
+            num = 3                                                                           # num equals to 0
+         elif opt in ["A","a"]:                                                               # If opt is equal to ["A","a"] Then:
+            num = 4                                                                           # num equals to 0
+         elif opt in ["E","e"]:                                                               # If opt is equal to ["E","e"] Then:
+            num = 5                                                                           # num equals to 0
+         elif opt in ["R","r"]:                                                               # If opt is equal to ["R","r"] Then:
+            num = 6                                                                           # num equals to 0
+         else:                                                                                # Other than that:
+            code = 0                                                                          # code equals to 0
+            message(code)                                                                     # Print error message
+            continue                                                                          # End loop and continue with the next iteration
+         print(searchColumn(listCode,num,UID))                                                # Print function (searchColumn(listCode,num,UID)) 
+      elif option.isdigit() and option == "2":                                                # If option only consists of number and option is equal to "2":
+         listCode = "p"                                                                       # listCode equals to "p"
+         if UID:                                                                              # If UID exists:
+            num = 2                                                                           # num equals to 2
+         else:                                                                                # Other than that:
+            num = category(listCode,code,sourceFunction)                                      # num = call function 
             print(searchColumn(listCode,num,UID))
       elif option.isdigit() and option == "3" :
          listCode = "t"
          if UID:
-            num = 0                                                                              # num equals to 0
-         else:                                                                          # Other than that:
+            num = 0                                                                           # num equals to 0
+         else:                                                                                # Other than that:
             num = category(listCode,code,sourceFunction)
             print(searchColumn(listCode,num,UID))
       elif option.isdigit() and option == "4":
@@ -1257,7 +1255,7 @@ def searchInformation(listCode,num,details):                                    
          for record in Xhandler:
             data=record.split(",")
             if searchInformation in data[num]:
-               print(record.rstrip(",").rstrip("\n"))("\n")
+               print(record.rstrip(",").rstrip("\n"))
                recordExist = True
             else:                                                                        # Other than that:
                continue                                                                  # Jump back to the top of loop, rerun again
@@ -1271,4 +1269,14 @@ def searchInformation(listCode,num,details):                                    
 
 
 import datetime as dt
-login()
+listCode = "u"                                                          # Set listCOde to 'u'
+code = None                                                             # Set code to 'None'
+username = None
+password = None
+print("\nWelcome to Tenant Management System.")
+new = input("[Y]-Yes I am.\n[Any Other Key]-No,I have an existing account\nAre you a new user: ")
+if new in ["Y","y"]:                                                 # If new in ["Y","y"] Then:
+   username,password = register(listCode,code)                       # call function register(listCode,code)
+   login(listCode,code,username,password)
+else:
+   login(listCode,code,username,password)

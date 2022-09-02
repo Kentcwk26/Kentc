@@ -13,4 +13,4 @@ Room Info: Medium Premium with attached bath / toilet (Twin),Code: MP1,Dimension
 Room Info: Medium Premium with attached bath / toilet (Single),Code: MP2,Dimensions: 160+ sqft,Pricing: RM1050,Apartment ID: A02-L03-R22 to A02-L03-R41,Date of Acquisition: 16/01/2021,Rental History: 28/02/2021 rent,Status: Available,
 Room Info: En-Suite Single (Super Premium - Triple),Code: ESS3,Dimensions: 160+ sqft,Pricing: RM700,Apartment ID: A02-L04-R01 to A02-L04-R41,Date of Acquisition: 25/02/2021,Rental History: 31/03/2021 rent,Status: Available,
 Room Info: En-Suite Single (Super Premium - Twin),Code: ESS2,Dimensions: 140+ sqft,Pricing: RM800,Apartment ID: A02-L04-R01 to A02-L04-R41,Date of Acquisition: 31/05/2022,Rental History: Empty,Status: Not Available,
-Room Info: En-Suite Twin (Super Premium),Code: EST2,Dimensions: 200+ sqft,Pricing: RM900,Apartment ID: A02-L05-R01 to A02-L05-R41,Date of Acquisition: 26/06/2022,Rental History: Empty,Status: Available,
+Room Info: En-Suite Twin (Super Premium),Code: EST2,Dimensions: 200+ sqft,Pricing: RM900,Apartment ID: A02-L05-R01 to A02-L05-R41,Date of Acquisition: 26/06/2022,Rental History: Empty,Status: Not Available,
