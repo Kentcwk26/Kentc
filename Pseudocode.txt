@@ -1,4 +1,4 @@
-FUNCTION register USING listCode AND code
+FUNCTION register(listCode,code)
     DECLARE userType,UID,username,password,userID,l AS STRING
     userType = "new"
     UID = NONE
@@ -6,19 +6,21 @@ FUNCTION register USING listCode AND code
     GET username
     PRINT("Next, create your account's password: ")
     GET password
-    CALL gettenantID with UID AND userType RETURNING UserID
-    PRINT ("UserID is" CONCATENATE UserID)
+    CALL gettenantID(UID,userType) RETURNING UserID
+    PRINT ("UserID is"+UserID)
     CALL listIdentifier WITH listCode RETURNING l
     OPENFILE l IN APPEND AS userAdd
         WRITE(username+","+password+","+UserID+",NEWLINE") TO userAdd
     CLOSEFILE
     listCode = "t"
-    CALL tenantOrTransactionEntryForm WITH UserID AND listCode AND code 
+    CALL tenantOrTransactionEntryForm(UserID,listCode,code)
     RETURN username AND password
 ENDFUNCTION
 
-FUNCTION login USING listCode AND code AND nameInput AND passInput
+FUNCTION login(listCode,code,nameInput,passInput)
     DECLARE chance AS INTEGER
+    DECLARE username,password,UID AS STRING
+    DECLARE listRecord AS ARRAY
     chance = 3
     DECLARE username, password AS STRING
     WHILE chance>0
@@ -31,9 +33,9 @@ FUNCTION login USING listCode AND code AND nameInput AND passInput
             GET username
             PRINT("Password: ")
             GET password
-        CALL listIdentifier WITH listCode RETURNING l
+        CALL listIdentifier(listCode) RETURNING l
         OPENFILE l IN READ AS userInfo
-            userCheck = READ userInfo LINE-BY-LINE()
+            userCheck = READ userInfo LINE-BY-LINE
             FOR record in userCheck
                 listRecord = SPLIT record INTO LIST WITH (",")
                 IF username == listRecord LOCATION 0 THEN
@@ -46,92 +48,100 @@ FUNCTION login USING listCode AND code AND nameInput AND passInput
                                 WRITE(record) TO current
                             CLOSEFILE
                             UID == listRecord LOCATION 2
-                        CALL menu WITH UID AND code
+                        CALL menu(UID,code)
                         chance = 0
                         BREAKLOOP
                         ENDIF
-                    ELSE
-                        CONTINUELOOP
                     ENDIF
-                ELSE
-                    CONTINUELOOP
                 ENDIF
             ELSE
                 chance -= 1
-                PRINT("Error, incorrect username or password."NEWLINE,chance,"chances remaining")
+                PRINT("Error, incorrect username or password.NEWLINE",chance,"chances remaining")
                 BREAKLOOP
             ENDFOR
         CLOSEFILE
     ENDWHILE
 ENDFUNCTION
 
-FUNCTION menu USING UID AND code
-    PRINT("NEWLINE - Welcome, you are now entering Tenant Management System -")
+FUNCTION menu(UID,code)
+    DECLARE listCode,opt,exitConfirmationKey,details AS STRING
+    DECLARE num AS INTEGER
     WHILE TRUE
-        PRINT("NEWLINE [S]-Search box NEWLINE  NEWLINE Review information about: NEWLINE)
-        IF masterKey == FALSE THEN
-            PRINT("[A]-Apartment NEWLINE [P]-Transaction NEWLINE [T]-My Tenant details NEWLINE NEWLINE [D]-Print my House and Tenant Details NEWLINE [E]-Exit NEWLINE ")
-        
-        ELSE THEN
-            PRINT("[A]-Apartment NEWLINE [P]-Transaction NEWLINE [T]-Tenant NEWLINE NEWLINE [D]-Print Specific House & Tenant Details NEWLINE [I]-Inquiry of Past Tenant Details NEWLINE [L]-Login History NEWLINE [E]- Exit NEWLINE")
-        
-        PRINT("Please select which operation that you want to do: ")
+        IF UID CONTAINS ANY VALUE THEN
+            PRINT("NEWLINEMain menu:NEWLINENEWLINE[S] - Search boxNEWLINENEWLINEReview information about:NEWLINE[A] - Available ApartmentsnNEWLINE[T] - My Tenant detailsNEWLINE[P] - My TransactionsNEWLINENEWLINEQuick functions:NEWLINE[D] - Print my House & Tenant DetailsNEWLINE[E] - Exit")
+        ELSE
+            PRINT("NEWLINEMain menu:NEWLINENEWLINE[S] - Search boxNEWLINENEWLINEReview information about:NEWLINE[A] - ApartmentsnNEWLINE[T] - TenantNEWLINE[P] - TransactionNEWLINENEWLINEQuick functions:NEWLINE[D] - Print Specific House & Tenant DetailsNEWLINE[I] - Inquiry of Past Tenant DetailsNEWLINE[E] - Exit")        
+        ENDIF
+        PRINT("NEWLINEPlease select which operation that you want to do: ")
         GET opt
-        
         IF opt IN ["S","s"] THEN
-
-            CALL searchbox()
-        
+            CALL searchbox(UID,code)
         ELSEIF opt IN ["A","a"] THEN
-            IF masterKey == FALSE THEN
-                CALL tenantApartment()
-            ELSE THEN 
-                CALL adminApartment()
-        
+            listCode = "a"
+            CALL apartment(UID,listCode,code)
         ELSEIF opt IN ["P","p"] THEN
-            CALL transaction(masterKey)
-
+            listCode = "p"
+            CALL tenantOrTransaction(UID,listCode,code)
         ELSEIF opt IN ["T","t"] THEN
-            CALL tenant(masterKey,UID)
-            
+            listCode = "t"
+            CALL tenantOrTransaction(UID,listCode,code)
         ELSEIF opt IN ["D","d"] THEN
-            CALL tenantAndApartment()
-        
-        ELSEIF opt in ["I","i"] AND masterKey == TRUE THEN
+            CALL tenantAndApartment(UID)
+        ELSEIF opt in ["I","i"] AND UID == NONE THEN
             listCode = "t"
             num = 6
             details = "past"
             CALL searchInformation(listCode,num,details)
-
-        ELSEIF opt in ["L","l"] AND masterKey == TRUE THEN
-            CALL loginHistory()
-
         ELSEIF opt IN ["E","e"] THEN
-
-            PRINT("NEWLINE Thank you for using, have a nice day~ NEWLINE")
-            RETURN FALSE
-
-        ELSE:
-
-            code = 3
+            PRINT("NEWLINE-----------------------------------------------------------------------------------------------------------------------------------------------------------------------NEWLINENEWLINEYou're about to leave Tenant Management System. Are you sure? [Enter]-Continue, [X]-Return to main menu): ")
+            GET exitConfirmationKey
+            IF exitConfirmationKey IN ["X","x"] THEN
+                CONTINUELOOP
+            ELSE
+                PRINT("NEWLINE-----------------------------------------------------------------------------------------------------------------------------------------------------------------------NEWLINENEWLINEExit successful, have a nice day~NEWLINE")
+                RETURN FALSE
+            ENDIF
+        ELSE
+            code = 0
             CALL message(code)
         ENDIF
     ENDWHILE
 ENDFUNCTION
 
-FUNCTION tenant(masterKey,UID)
-    listCode = "t"
-    IF masterKey == FALSE THEN
-        num = 0
-        CALL searchInformation(listCode,num,UID)
-    ELSE THEN
-        PRINT("Current Tenant Data:")
-        CALL readFile(listCode)
-        CALL modifyData(listCode)
-    ENDWHILE
+FUNCTION message(code)
+    DECLARE x,y,z AS STRING
+    x = "Error, "
+    y = "Incorrect "
+    z = " Please try again."
+    IF code == 0 THEN
+        PRINT("NEWLINE"+x+y+"input."+z)
+    ELSEIF code == 1 THEN
+        PRINT("\n"+x+y+"data type present."+z)
+    ELSEIF code == 2 THEN
+        PRINT("\n"+x+y+"format."+z)
+    ELSEIF code == 3 THEN
+        PRINT("\n"+x+y+"length."+z)
+    ELSEIF code == 4 THEN
+        PRINT("\n"+x+"data not found.")
+    ELSEIF code == 5 THEN
+        PRINT("\n"+x+"zero input."+z)
+    ENDIF
 ENDFUNCTION
 
-listIdentifier(listCode)
+FUNCTION specialCharacterList(SCL)
+    DECLARE list AS ARRAY
+    IF SCL == None:
+        list = ["~","`","!","@","#","$","%","^","&","*","(",")","-","_","=","+","{","}","[","]","|",",","\'",".","/","<",">","?",";",":","'",'"']
+    ELIF SCL == "SCL1":
+        list = ['~','`','!','@','#','$','%','^','&','*','(',')','-','_','=','+','{','}','[',']','|',',','\\','\'','\"','.','/','<','>','?',';',':']
+    ELIF SCL == "SCL2":
+        list = ['~','`','!','@','#','$','%','^','&','*','_','=','+','{','}','[',']','|','\\','\'','\"',',','.','/','<','>','?',':',';']
+    ENDIF
+    RETURN list
+ENDFUNCTION
+
+FUNCTION listIdentifier(listCode)
+    DECLARE l AS STRING
     IF listCode == "t" THEN
         l = "tenant.txt"
     ELSEIF listcode == "a" THEN
@@ -142,10 +152,286 @@ listIdentifier(listCode)
     RETURN l
 ENDFUNCTION
 
-FUNCTION transactionEntryForm()
+FUNCTION appendFile(list,listCode)
+    DECLARE l AS STRING
+    CALL listIdentifier(listCode) RETURNING l
+    OPENFILE l IN APPEND AS fAppend
+        FOR item IN list
+            WRITE item TO fAppend
+            WRITE "," TO fAppend
+        ENDFOR
+        WRITE "NEWLINE" TO fAppend
+    CLOSEFILE
 ENDFUNCTION
 
-FUNCTION log()
+FUNCTION readFile(listCode)
+    DECLARE l,stripped AS STRING
+    DECLARE splitRecord,string AS ARRAY
+    CALL listIdentifier(listCode) RETURNING l
+    OPENFILE l IN READ AS fRead
+        string = READ fRead line-by-line
+        FOR record IN string
+            stripped = record RIGHTSTRIP("NEWLINE") RIGHTSTRIP(",")
+            splitRecord = SPLIT stripped INTO LIST(",")
+            PRINT(splitRecord)
+        ENDFOR
+    CLOSEFILE
+ENDFUNCTION
+
+FUNCTION chooseItem(UID,listCode,displayColumn,currentColumn)
+    DECLARE index AS STRING
+    DECLARE code,listLength AS INTEGER
+    DECLARE displayRecord,currentRecord AS ARRAY
+    CALL searchColumn(listCode,displayColumn,UID) RETURNING displayRecord
+    CALL searchColumn(listCode,currentColumn,UID) RETURNING currentRecord
+    listLength = LENGTH(displayRecord)
+    FOR item FROM 0 TO listLength STEP 2
+        TRY
+            PRINT(displayRecord LOCATION item,"   ",displayRecord LOCATION item+1)
+        EXCEPT INDEXERROR
+            PRINT(displayRecord LOCATION item)
+        ENDTRY
+    ENDFOR
+    WHILE TRUE
+        PRINT("NEWLINENEWLINEOptions are indexed from upper-left to lower-right starting from 1 to",LENGTH(displayRecord))
+        PRINT("Choose one of the options: ")
+        GET index
+        IF index ISDECIMAL AND  0 < INTEGER(index) < LENGTH(displayRecord)+1 THEN
+            RETURN currentRecord LOCATION INTEGER(index)-1
+        else
+            code = 0
+            CALLFUNCTION message(code)
+            CONTINUELOOP
+        ENDIF
+    ENDWHILE
+ENDFUNCTION
+
+FUNCTION gettenantID(UID,userType):
+    DECLARE number,code,displayColumn,currentColumn AS INTEGER
+    DECLARE path AS STRING
+    DECLARE userRecord AS ARRAY
+    IF UID CONTAINS ANY VALUE THEN
+        OPENFILE "currentUser.txt" IN READ AS uRead
+            userRecord = READ AND SPLIT uRead INTO LIST WITH (",")
+            RETURN userRecord[2]
+        CLOSEFILE
+    ELSE
+        WHILE True:
+            number = None
+            IF userType == "new" THEN
+                number = 1
+            ELSE
+                PRINT("[1]-Generate new ID or [2]-Choose existing ID:NEWLINE")
+                GET path
+                IF path ISDECIMAL THEN
+                    number = INTEGER(path)
+                ELSE
+                    code = 1
+                    CALL message(code)
+                ENDIF
+            ENDIF
+            IF number == 1 THEN
+                RETURN CURRENT DATETIME CONVERTED INTO STRING IN FORMAT daymonthYEARHOURMINUTESECONDmicrosecond
+            ELSEIF number == 2:
+                listCode = "t"
+                displayColumn = 1
+                currentColumn = 0
+                RETURN chooseItem(UID,listCode,displayColumn,currentColumn)
+            ELSE
+                code = 0
+                CALL message(code)
+            ENDIF
+        ENDWHILE
+    ENDIF
+ENDFUNCTION
+
+FUNCTION getname(code,nameType)
+    DECLARE specials,nameList,SCL AS ARRAY
+    DECLARE name,retry AS STRING
+    SCL = NONE
+    CALL specialCharacterList(SCL) RETURNING specials
+    WHILE TRUE
+        PRINT("Format: Name Name or Name-Name Name or Na'me Name")
+        IF nameType == "tenant" THEN
+            PRINT("NEWLINEEnter tenant's fullname:")
+        ELSEIF nameType == "employer" THEN
+            PRINT("NEWLINEEnter tenant's current employer:")
+        ELSE
+            PRINT("NEWLINEEnter tenant's place-city-country of birth")
+        ENDIF
+        GET name
+        nameList  = SPLIT name INTO LIST WITH (" ")
+        IF LENGTH(nameList) >= 2 THEN
+            FOR words IN nameList
+                IF words ISALPHABET OR [character FOR character IN words IF(character IN specials LOCATION 12) OR (character IN specials LOCATION 22)] THEN
+                    IF words LOCATION 0 ISUPPERCASE THEN
+                        code = NONE
+                        CONTINUELOOP
+                    ELSE THEN
+                        code = 2
+                        BREAKLOOP
+                    ENDIF
+                ELSE
+                    code = 1
+                    BREAKLOOP
+                ENDIF
+            ENDFOR
+        ELSE
+            code = 3
+        ENDIF
+        IF code CONTAINS ANY VALUE THEN
+            CALL message(code)
+            PRINT("ATTENTION||Error detected.||ATTENTION")
+        ELSE
+            PRINT("No errors detected.")
+        ENDIF
+        PRINT("[R]-Retry,[Any other key]-Exit using "+name+"NEWLINE")
+        GET retry
+        IF retry IN ["R","r"] THEN
+            CONTINUELOOP
+        ELSE
+            RETURN name
+        ENDIF
+    ENDWHILE
+ENDFUNCTION
+
+FUNCTION getabbreviation(code,abbreviationType)
+    DECLARE abbreviation,retry AS STRING
+    WHILE TRUE
+        IF abbreviationType == "gender" THEN
+            PRINT("[M]-MaleNEWLINE[F]-FemaleNEWLINEEnter tenant gender:NEWLINE")
+        ELSE
+            PRINT("[M]-MalaysianNEWLINE[N]-non-MalaysianNEWLINEEnter tenant nationality:NEWLINE") 
+        ENDIF
+        GET abbreviation
+        IF LENGTH(abbreviation) == 1 THEN
+            IF abbreviation ISALPHABET THEN
+                IF abbreviationType == "gender" THEN
+                    IF abbreviation in ["M","m"] THEN
+                        code = NONE
+                        abbreviation = "Male"
+                    ELSEIF abbreviation in ["F","f"] THEN
+                        code = NONE
+                        abbreviation = "Female"
+                    ELSE
+                        code = 0
+                    ENDIF
+                ELSE
+                    IF abbreviation in ["M","m"] THEN
+                        code = NONE
+                        abbreviation = "Malaysian"
+                    ELSEIF abbreviation in ["N","n"] THEN
+                        code = NONE
+                        abbreviation = "non-Malaysian"
+                    ELSE
+                        code = 0
+                    ENDIF
+                ENDIF
+            ELSE
+                code = 1
+            ENDIF
+        ELSE
+            code = 3
+        ENDIF
+        IF code CONTAINS ANY VALUE OR code == 0:                 
+            CALL message(code)
+            PRINT("ATTENTION||Error detected.||ATTENTION")
+        ELSE
+            PRINT("No errors detected.")
+        ENDIF
+        PRINT("[R]-Retry,[Any other key]-Exit using "+abbreviation+"NEWLINE")
+        GET retry
+        IF retry IN ["R","r"] THEN
+            CONTINUELOOP
+        ELSE
+            RETURN abbreviation
+        ENDIF
+    ENDWHILE
+ENDFUNCTION
+
+FUNCTION getpNum(code)
+    DECLARE pNum,retry AS STRING
+    WHILE TRUE
+        PRINT("Format: ############NEWLINEEnter tenant phone number:NEWLINE")
+        GET pNum
+        IF 6 < LENGTH(pNum) < 16 THEN
+            FOR digit IN pNum
+                IF digit ISDIGIT THEN             
+                    code = None                  
+                    CONTINUELOOP                     
+                ELSE
+                    code = 1                     
+                    BREAKLOOP
+                ENDIF
+            ENDFOR
+        ELSE
+            code = 3
+        ENDIF
+        IF code CONTAINS ANY VALUE THEN
+            CALL message(code)
+            PRINT("ATTENTION||Error detected.||ATTENTION")
+        ELSE
+            PRINT("No errors detected.")
+        ENDIF
+        PRINT("[R]-Retry,[Any other key]-Exit using "+pNum+"NEWLINE")
+        GET retry
+        IF retry IN ["R","r"] THEN
+            CONTINUELOOP
+        ELSE
+            RETURN pNum
+        ENDIF
+    ENDWHILE
+ENDFUNCTION
+
+FUNCTION getDate(code,dateType)
+    DECLARE specials AS LIST
+    DECLARE path,date,retry AS STRING
+    CALL specialCharacterList(None) RETURNING specials
+    WHILE TRUE
+        IF dateType == "start" THEN
+            PRINT("Use current date as rental start date?\n[Y]-YesNEWLINE[Any Other Key]-NoNEWLINE")
+            GET path
+            IF path in ["Y","y"] THEN
+                date = CURRENT DATE CONVERTED INTO STRING WITH FORMAT YEARmonthday
+                PRINT("Current date:",date) 
+            ELSE
+                date = input("Format: YYYY/MM/DD\nEnter Rental start date:\n")
+        ELSEIF dateType == "birth" THEN
+            date = input("Format: YYYY/MM/DD\nEnter tenant birth date:\n")   
+        ELSE
+            date = input("Format: YYYY/MM/DD\nEnter transaction date:\n")    
+        IF LENGTH(date) == 10 THEN
+            IF date[4] == date[7] == specials[24] THEN
+                year,month,day = SPLIT date INTO LIST WITH("/")                              
+                TRY
+                    DATETIME(INTEGER(year),INTEGER(month),INTEGER(day))
+                    code = None              
+                EXCEPT VALUEERROR
+                    code = 1                 
+            ELSE
+                code = 2                    
+        ELSE
+            code = 3                       
+        IF code CONTAINS ANY VALUE THEN
+            CALL message(code)
+            PRINT("ATTENTION||Error detected.||ATTENTION")
+        ELSE
+            PRINT("No errors detected.")
+        ENDIF
+        retry = input("[R]-Retry,[Any other key]-Exit using "+date+"\n")    
+        if retry in ["R","r"]:            
+            continue                       
+        ELSE
+            return date
+ENDFUNCTION
+
+FUNCTION getincome():
+    PRINT("Enter tenant income range(RM):NEWLINE")
+    GET income
+    RETURN income
+ENDFUNCTION
+
+FUNCTION getstatus():
 ENDFUNCTION
 
 FUNCTION tenantEntryForm(tenantlist,n)
@@ -161,149 +447,6 @@ FUNCTION tenantEntryForm(tenantlist,n)
         status = CALL getstatus()
         APPEND [name,gender,pNum,nationality,startDate,income,status] TO tenantList
     RETURN tenantList
-ENDFUNCTION
-
-FUNCTION tenantDelete(recordName, recordNum)
-    OPENFILE "tenant.txt" IN READ AS Thandler
-        READ Thandler
-        Thandler STRIP (",") 
-        FOR record from list
-            FOR item in record
-ENDFUNCTION
-
-FUNCTION getname()
-    WHILE TRUE
-        code = NONE
-        PRINT("Format: Name Name..... NEWLINE Enter tenant fullname: NEWLINE")
-        GET name
-        IF DATATYPE(name) != INTEGER THEN
-            nameList = name.split(" ")
-            IF LENGTH(nameList) >= 2 THEN
-                FOR words IN nameList
-                    PRINT("Checking",words)
-                    IF words LOCATION 0 ISLOWERCASE THEN
-                        code = 2
-                        CALL message(code)
-                        BREAKLOOP
-                    ELSE THEN
-                        CONTINUELOOP
-            ELSE THEN
-                code = 3
-                CALL message(code)
-        ELSE THEN
-            code = 1
-            CALL message(code)
-        IF code THEN
-            PRINT("Error was detected. NEWLINE")
-        ELSE THEN
-            PRINT("No errors detected. NEWLINE")
-        PRINT("[R]-Retry,[Any other key]-Exit using "+name+" NEWLINE")
-        GET retry
-        IF retry IN ["R","r"] THEN
-            CONTINUELOOP
-        ELSE THEN
-            RETURN name
-
-FUNCTION getgender()
-    PRINT("Enter tenant gender: (m/f):NEWLINE")
-    GET gender
-    genderCheck = gender
-    IF genderCheck LENGTH == 1 THEN
-        IF genderCheck IS NOT A NUMBER THEN
-            BREAKLOOP
-        ELSE THEN
-            code = 1
-            CALL message(code)
-    ELSE THEN
-        code = 3
-        CALL message(code)
-    RETURN gender
-ENDFUNCTION
-
-FUNCTION getpNum():
-    PRINT("Enter tenant phone number: (############):NEWLINE")
-    GET pNum
-    pNumCheck=pNum
-    FOR digit IN pNum
-        IF digit IS INTEGER THEN
-            BREAKLOOP
-        ELSE THEN
-            code = 1
-            CALL message(code)
-        ENDIF
-    ENDFOR
-    RETURN pNum
-ENDFUNCTION
-
-FUNCTION getnationality():
-    PRINT("Enter tenant nationality: (M: Malaysian/N: non-Malaysian):NEWLINE")
-    GET nationality
-    nationality = nationalityCheck
-    IF nationalityCheck LENGTH = 1 THEN
-        BREAKLOOP
-    ELSE THEN 
-
-    RETURN nationality
-ENDFUNCTION
-
-FUNCTION getstartDate():
-    PRINT("Enter Rental start date: (YYYY,MM,DD):NEWLINE")
-    GET startDate
-    RETURN startDate
-ENDFUNCTION
-
-FUNCTION getincome():
-    PRINT("Enter tenant income range(RM):NEWLINE")
-    GET income
-    RETURN income
-ENDFUNCTION
-
-FUNCTION getstatus():
-ENDFUNCTION
-
-FUNCTION appendFile(list, listCode)
-    l = CALL listIdentifier(listCode)
-    OPENFILE l IN APPEND AS TAppend
-        FOR record IN list
-            FOR item IN record
-                WRITE item TO TAppend
-                WRITE "NEWLINE" TO TAppend
-            ENDFOR
-            WRITE "NEWLINE" TO TAppend
-        ENDFOR
-    CLOSEFILE
-ENDFUNCTION
-
-FUNCTION readFile(listCode):
-    l = CALL listIdentifier(listCode)
-    OPENFILE l IN READ AS fRead
-        string = READ fRead line-by-line
-        FOR record IN string
-            stripped = record RIGHTSTRIP("NEWLINE") RIGHTSTRIP(",")
-            splitRecord = SPLIT stripped INTO LIST(",")
-            PRINT(splitRecord)
-        ENDFOR
-    CLOSEFILE
-ENDFUNCTION
-
-FUNCTION message(code)
-    IF code == 0 THEN
-        PRINT("Incorrect input.")
-    ELSEIF code == 1 THEN
-        PRINT("Incorrect data type present.")
-    ELSEIF code == 2 THEN
-        PRINT("Format error.")
-    ELSEIF code == 3 THEN
-        PRINT("Length error.")
-    ELSEIF code == 4 THEN
-        PRINT("Data not found.")
-    PRINT("Please try again.")
-ENDFUNCTION
-
-FUNCTION transactionEntryForm()
-ENDFUNCTION
-
-FUNCTION log()
 ENDFUNCTION
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

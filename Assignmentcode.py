@@ -40,16 +40,12 @@ def login(listCode,code,nameInput,passInput):                                   
                   menu(UID,code)                                        # Call function menu(UID,code), redirect to menu
                   chance = 0                                            # reassign login chances to 0
                   break
-               else:
-                  continue
-            else:
-               continue
          else:                                                          # Other than that:
             chance -= 1                                                 # Decrease chances by 1
             print("\nError, incorrect username or password.\n",chance,"chances remaining.") # Print message
 
 def menu(UID,code):                                                           # Define menu function
-   while True:                                                                # when mainMenu is equal to True Then:
+   while True:                                                                # While the function is running
       if UID:                                                                 # If UID exists:
          print("\nMain menu:\n\n[S] - Search box\n\nReview information about:\n[A] - Available Apartments\n[T] - My Tenant details\n[P] - My Transactions\n\nQuick functions:\n[D] - Print my House & Tenant Details\n[E] - Exit")  # Print message
       else:                                                                   # Other than that:
@@ -71,11 +67,9 @@ def menu(UID,code):                                                           # 
       elif opt in ["I","i"] and UID == None:                                  # Check for quick functions, If opt is equal to ["I","i"] and UID equals to None Then:
          listCode = "t"                                                       # listCode equals to "t"
          searchInformation(listCode,9,"Past")                                 # Redirect to searchbox function, call function searchInformation(listCode,9,"Past")
-      elif opt in ["L","l"] and UID == None:                                  # Check for quick functions, If opt is equal to ["L","l"] and UID equals to None Then:
-         print("loginHistory()")                                              # Print function ("loginHistory()") 
       elif opt in ["E","e"]:                                                  # Get confirmation to exit
-         exitconfirmationkey = input("\n-----------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\nYou're about to leave Tenant Management System. Are you sure? [Enter]-Continue, [x]-Return to main menu): ") # Print message and get exitconfirmationkey
-         if exitconfirmationkey in ["X","x"]:                                 # If exitconfirmationkey is equal to ["X","x"] Then:
+         exitConfirmationKey = input("\n-----------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\nYou're about to leave Tenant Management System. Are you sure? [Enter]-Continue, [X]-Return to main menu): ") # Print message and get exitConfirmationKey
+         if exitConfirmationKey in ["X","x"]:                                 # If exitConfirmationKey is equal to ["X","x"] Then:
             continue                                                          # Continue the loop
          else:                                                                # Other than that:
             print("\n-----------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\nExit successful, have a nice day~\n") # Print message
@@ -126,27 +120,18 @@ def appendFile(list,listCode):                                                # 
       fAppend.write("\n")                                                     # Write a newline ("\n") into fAppend
 
 def readFile(listCode):                                                       # Define readFile function
-   returnList = []                                                            # Declare returnlist as array
    with open (listIdentifier(listCode),"r") as fRead:                         # Open selected text file in Read Mode as fRead
       line = fRead.readlines()                                                # line = read each line in fRead
       for record in line:                                                  
          stripped = record.rstrip("\n").rstrip(",")                           # stripped = Right stripped from the end of string (record) with the separators (all commas and newlines)
          splitRecord = stripped.split(",")                                    # splitRecord = Use comma as the separator to split from a string into a list
-         returnList.append(str(splitRecord))                                  # Append returnlist to splitRecord in string type
          print(int(line.index(record))+1,splitRecord)
-   return returnList                                                          # Exit function and send the value back to the program
 
 def chooseItem(UID,listCode,displayColumn,currentColumn):                     # Define chooseItem function
    displayRecord = searchColumn(listCode,displayColumn,UID)                   # displayRecord = call function searchColumn(listCode,displayColumn,UID)
    currentRecord = searchColumn(listCode,currentColumn,UID)                   # currentRecord = call function searchColumn(listCode,currentColumn,UID)
    listLength = len(displayRecord)                                            # Return the number of items in displayRecord
-   if listCode == "u":                                                        # If listCode is equal to 'u' Then:
-      startPoint = 2                                                          # startPoint equals to '2'
-      changeIndex = +1                                                        # changeIndex add 1 (+1)
-   else:                                                                      # Other than that:
-      startPoint = 0                                                          # startPoint set as 0
-      changeIndex = -1                                                        # changeIndex subtract 1 (-1)
-   for item in range(startPoint,listLength,2):                                # For item from startPoint to listLength, but incremented by 2
+   for item in range(0,listLength,2):                                      # For item from startPoint to listLength, but incremented by 2
       try:
          print(displayRecord[item],"   ",displayRecord[item+1])
       except IndexError:
@@ -155,7 +140,7 @@ def chooseItem(UID,listCode,displayColumn,currentColumn):                     # 
       print("\n\nOptions are indexed from upper-left to lower-right starting from 1 to",len(displayRecord)) # Print message
       index = input("Choose one of the options: ")                            # Print message and get index
       if index.isdecimal() and  0 < int(index) < len(displayRecord)+1:        # Number check, if index is decimal then:
-         return currentRecord[int(index)+changeIndex]                         # Exit a function and send the value back to the main program
+         return currentRecord[int(index)-1]                         # Exit a function and send the value back to the main program
       else:                                                                   # Other than that:
          code = 0                                                             # Error detected, code equals to '0'
          message(code)                                                        # Print error message, call function message(code)
@@ -219,7 +204,7 @@ def getname(code,nameType):                                                   # 
          print("ATTENTION||Error detected.||ATTENTION")                       # Print message
       else:                                                                   # Other than that:
          print("No errors detected.")                                         # Print message
-      retry = input("\n[R]-Retry,[Any other key]-Exit using "+name+"")        # Print message and get retry
+      retry = input("[R]-Retry,[Any other key]-Exit using "+name+"")        # Print message and get retry
       if retry in ["R","r"]:                                                  # If retry equal to ["R","r"] Then:
          continue                                                             # End loop and cntinue with the next iteration
       else:                                                                   # Other than that:
@@ -230,8 +215,8 @@ def getabbreviation(code,abbreviationType):                                   # 
       if abbreviationType == "gender":                                        # If abbreviation equals to "gender" Then:
          abbreviation = input("[M]-Male\n[F]-Female\nEnter tenant gender:\n") # Print messsage and get abbreviation
       else:                                                                   # Other than that:
-         abbreviation = input("[M]-Malaysian\n[N]-non-Malaysian\nEnter tenant nationality: \n") # Print messsage and get abbreviation
-      if len(abbreviation)== 1:                                               # If the length of abbreviation is equal to 1 Then:
+         abbreviation = input("[M]-Malaysian\n[N]-non-Malaysian\nEnter tenant nationality:\n") # Print messsage and get abbreviation
+      if len(abbreviation) == 1:                                               # If the length of abbreviation is equal to 1 Then:
          if abbreviation.isalpha():                                           # Alphahabet checking
             if abbreviationType == "gender":                                  # If abbreviation equals to "gender" Then:
                if abbreviation in ["M","m"]:                                  # If abbreviation equals to ["M","m"] Then:
