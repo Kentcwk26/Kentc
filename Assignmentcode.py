@@ -500,6 +500,7 @@ def tenantAndApartment(UID):                                                  # 
    reference2 = "a"                                                           # reference2 equals to "a"
    primaryKeys = []                                                           # Define primaryKeys as array
    TAList = []                                                                # Declare TAList as array
+   TARecord = []                                                              # Define TARecord as array
    with open(listIdentifier(listCode),"r") as pRead:                          # Open selected text file in read mode as pRead 
       file = pRead.readlines()                                                # Read each lines in pRead
       for record in file:
@@ -516,7 +517,6 @@ def tenantAndApartment(UID):                                                  # 
             else:                                                             # Other than that:
                continue                                                       # End loop and continue with the next iteration
    for item in primaryKeys:
-      TARecord = []                                                           # Define TARecord as array
       tenantID,ApartmentCode = item.split(",")                                # Split item using comma (",") as a separator
       with open(listIdentifier(reference1),"r") as tRead:                     # Open selected text file in read mode as tRead 
          file = tRead.readlines()                                             # Read each lines in tRead
