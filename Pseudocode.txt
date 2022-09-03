@@ -116,21 +116,21 @@ FUNCTION message(code)
     IF code == 0 THEN
         PRINT("NEWLINE"+x+y+"input."+z)
     ELSEIF code == 1 THEN
-        PRINT("\n"+x+y+"data type present."+z)
+        PRINT("NEWLINE"+x+y+"data type present."+z)
     ELSEIF code == 2 THEN
-        PRINT("\n"+x+y+"format."+z)
+        PRINT("NEWLINE"+x+y+"format."+z)
     ELSEIF code == 3 THEN
-        PRINT("\n"+x+y+"length."+z)
+        PRINT("NEWLINE"+x+y+"length."+z)
     ELSEIF code == 4 THEN
-        PRINT("\n"+x+"data not found.")
+        PRINT("NEWLINE"+x+"data not found.")
     ELSEIF code == 5 THEN
-        PRINT("\n"+x+"zero input."+z)
+        PRINT("NEWLINE"+x+"zero input."+z)
     ENDIF
 ENDFUNCTION
 
 FUNCTION specialCharacterList(SCL)
     DECLARE list AS ARRAY
-    IF SCL == None:
+    IF SCL == NONE:
         list = ["~","`","!","@","#","$","%","^","&","*","(",")","-","_","=","+","{","}","[","]","|",",","\'",".","/","<",">","?",";",":","'",'"']
     ELIF SCL == "SCL1":
         list = ['~','`','!','@','#','$','%','^','&','*','(',')','-','_','=','+','{','}','[',']','|',',','\\','\'','\"','.','/','<','>','?',';',':']
@@ -169,7 +169,7 @@ FUNCTION readFile(listCode)
     DECLARE splitRecord,string AS ARRAY
     CALL listIdentifier(listCode) RETURNING l
     OPENFILE l IN READ AS fRead
-        string = READ fRead line-by-line
+        string = READ fRead LINE-BY-LINE
         FOR record IN string
             stripped = record RIGHTSTRIP("NEWLINE") RIGHTSTRIP(",")
             splitRecord = SPLIT stripped INTO LIST(",")
@@ -200,7 +200,7 @@ FUNCTION chooseItem(UID,listCode,displayColumn,currentColumn)
             RETURN currentRecord LOCATION INTEGER(index)-1
         else
             code = 0
-            CALLFUNCTION message(code)
+            CALL message(code)
             CONTINUELOOP
         ENDIF
     ENDWHILE
@@ -216,8 +216,8 @@ FUNCTION gettenantID(UID,userType):
             RETURN userRecord[2]
         CLOSEFILE
     ELSE
-        WHILE True:
-            number = None
+        WHILE TRUE
+            number = NONE
             IF userType == "new" THEN
                 number = 1
             ELSE
@@ -247,7 +247,7 @@ ENDFUNCTION
 
 FUNCTION getname(code,nameType)
     DECLARE specials,nameList,SCL AS ARRAY
-    DECLARE name,retry AS STRING
+    DECLARE name,,SCL,retry AS STRING
     SCL = NONE
     CALL specialCharacterList(SCL) RETURNING specials
     WHILE TRUE
@@ -333,7 +333,7 @@ FUNCTION getabbreviation(code,abbreviationType)
         ELSE
             code = 3
         ENDIF
-        IF code CONTAINS ANY VALUE OR code == 0:                 
+        IF code CONTAINS ANY VALUE OR code == 0 THEN
             CALL message(code)
             PRINT("ATTENTION||Error detected.||ATTENTION")
         ELSE
@@ -356,11 +356,11 @@ FUNCTION getpNum(code)
         GET pNum
         IF 6 < LENGTH(pNum) < 16 THEN
             FOR digit IN pNum
-                IF digit ISDIGIT THEN             
-                    code = None                  
-                    CONTINUELOOP                     
+                IF digit ISDIGIT THEN
+                    code = NONE
+                    CONTINUELOOP
                 ELSE
-                    code = 1                     
+                    code = 1
                     BREAKLOOP
                 ENDIF
             ENDFOR
@@ -386,68 +386,385 @@ ENDFUNCTION
 FUNCTION getDate(code,dateType)
     DECLARE specials AS LIST
     DECLARE path,date,retry AS STRING
-    CALL specialCharacterList(None) RETURNING specials
+    DECLARE year,month,day AS INTEGER
+    CALL specialCharacterList(NONE) RETURNING specials
     WHILE TRUE
         IF dateType == "start" THEN
-            PRINT("Use current date as rental start date?\n[Y]-YesNEWLINE[Any Other Key]-NoNEWLINE")
+            PRINT("Use current date as rental start date?NEWLINE[Y]-YesNEWLINE[Any Other Key]-NoNEWLINE")
             GET path
             IF path in ["Y","y"] THEN
                 date = CURRENT DATE CONVERTED INTO STRING WITH FORMAT YEARmonthday
                 PRINT("Current date:",date) 
             ELSE
-                date = input("Format: YYYY/MM/DD\nEnter Rental start date:\n")
+                PRINT("Format: YYYY/MM/DDNEWLINEEnter Rental start date:NEWLINE")
+                GET date
+            ENDIF
         ELSEIF dateType == "birth" THEN
-            date = input("Format: YYYY/MM/DD\nEnter tenant birth date:\n")   
+            PRINT("Format: YYYY/MM/DDNEWLINEEnter tenant birth date:NEWLINE")
+            GET date
         ELSE
-            date = input("Format: YYYY/MM/DD\nEnter transaction date:\n")    
+            PRINT("Format: YYYY/MM/DDNEWLINEEnter transaction date:NEWLINE")
+            GET date
+        ENDIF
         IF LENGTH(date) == 10 THEN
-            IF date[4] == date[7] == specials[24] THEN
-                year,month,day = SPLIT date INTO LIST WITH("/")                              
+            IF date LOCATION 4 == date LOCATION 7 == specials LOCATION 24 THEN
+                year,month,day = SPLIT date INTO LIST WITH("/")
                 TRY
                     DATETIME(INTEGER(year),INTEGER(month),INTEGER(day))
-                    code = None              
+                    code = NONE
                 EXCEPT VALUEERROR
-                    code = 1                 
+                    code = 1
+                ENDTRY
             ELSE
-                code = 2                    
+                code = 2
+            ENDIF
         ELSE
-            code = 3                       
+            code = 3
+        ENDIF
         IF code CONTAINS ANY VALUE THEN
             CALL message(code)
             PRINT("ATTENTION||Error detected.||ATTENTION")
         ELSE
             PRINT("No errors detected.")
         ENDIF
-        retry = input("[R]-Retry,[Any other key]-Exit using "+date+"\n")    
-        if retry in ["R","r"]:            
-            continue                       
+        PRINT("[R]-Retry,[Any other key]-Exit using "+date+"NEWLINE")
+        GET retry
+        IF retry IN ["R","r"] THEN
+            CONTINUELOOP
         ELSE
-            return date
+            RETURN date
+        ENDIF
+    ENDWHILE
 ENDFUNCTION
 
-FUNCTION getincome():
-    PRINT("Enter tenant income range(RM):NEWLINE")
-    GET income
-    RETURN income
+FUNCTION getnumber(code,numberType)
+    DECLARE t,number AS STRING
+    DECLARE num AS INTEGER
+    WHILE TRUE
+        IF numberType == "workHistory" THEN
+            t = "Total work history is around "
+            PRINT(t+"NEWLINE[1]-1 to 2 monthNEWLINE[2]-2 to 3 monthsNEWLINE[3]-3 to 6 monthsNEWLINE[4]-6 to 9 monthsNEWLINE[5]-9 months to 1 yearNEWLINE[6]-1 to 2 yearsNEWLINE[7]-2 to 3 yearsNEWLINE[8]-3 to 4 yearsNEWLINE[9]-4 to 5 yearsNEWLINE[0]-5 years or moreNEWLINEChoose how long you have been working: ")
+        ELSE
+            PRINT("[1]-RM 1500~1599NEWLINE[2]-RM 1600~1699NEWLINE[3]-RM 1700~1799NEWLINE[4]-RM 1800~1899NEWLINE[5]-RM 1900~1999NEWLINE[6]-RM 2000~2099NEWLINE[7]-RM 2100~2199NEWLINE[8]-RM 2200~2499NEWLINE[9]-RM 2500~3000NEWLINE[0]-RM > 3000NEWLINEChoose tenant income range in Ringgit Malaysia: ")
+        GET number
+        IF number ISDIGIT THEN
+            num = INTEGER(number)
+            IF numberType == "workHistory" THEN
+                IF num == 1 THEN
+                    number = t + "1 to 2 months"
+                ELSEIF num == 2 THEN
+                    number = t + "2 to 3 months"
+                ELSEIF num == 3 THEN
+                    number = t + "3 to 6 months"
+                ELSEIF num == 4 THEN
+                    number = t + "6 to 9 months"
+                ELSEIF num == 5 THEN
+                    number = t + "9 months to 1 year
+                ELSEIF num == 6 THEN
+                    number = t + "1 to 2 years"
+                ELSEIF num == 7 THEN
+                    number = t + "2 to 3 years"
+                ELSEIF num == 8 THEN
+                    number = t + "3 to 4 years"
+                ELSEIF num == 9 THEN
+                    number = t + "4 to 5 years"
+                ELSEIF num == 0 THEN
+                    number = t + "5 years or more"
+                ELSE
+                    code = 0
+                    CALL message(code)
+                    CONTINUELOOP
+                ENDIF
+            ELSE
+                IF num == 1 THEN
+                    number = "RM 1500~1599"
+                ELSEIF num == 2 THEN
+                    number = "RM 1600~1699"
+                ELSEIF num == 3 THEN
+                    number = "RM 1700~1799"
+                ELSEIF num == 4 THEN
+                    number = "RM 1800~1899"
+                ELSEIF num == 5 THEN
+                    number = "RM 1900~1999"
+                ELSEIF num == 6 THEN
+                    number = "RM 2000~2099"
+                ELSEIF num == 7 THEN
+                    number = "RM 2100~2199"
+                ELSEIF num == 8 THEN
+                    number = "RM 2200~2499"
+                ELSEIF num == 9 THEN
+                    number = "RM 2500~3000"
+                ELSEIF num == 0 THEN
+                    number = "RM > 3000"
+                ELSE
+                    code = 0
+                    CALL message(code)
+                    CONTINUELOOP
+                ENDIF
+            ENDIF
+        ELSE
+            code = 0
+            CALL message(code)
+            CONTINUELOOP
+        ENDIF
+        PRINT("[R]-Retry,[Any other key]-Exit using "+number+"NEWLINE")
+        GET retry
+        IF retry IN ["R","r"] THEN
+            CONTINUELOOP
+        ELSE
+            RETURN number
+        ENDIF
+    ENDWHILE
 ENDFUNCTION
 
-FUNCTION getstatus():
+FUNCTION getrental(UID)
+    DECLARE rental AS STRING
+    IF UID CONTAINS ANY VALUE THEN
+        RETURN "Current"
+    ELSE
+        WHILE TRUE
+            PRINT("[P]-PastNEWLINE[Any other key]-CurrentNEWLINEChoose tenant rental status(current/past)NEWLINE")
+            IF rental IN ["P","p"] THEN
+                rental = "Past"
+            ELSE
+                rental = "Current"
+            ENDIF
+            retry = input("[R]-Retry,[Any other key]-Exit using "+rental+"NEWLINE")
+            IF retry IN ["R","r"] THEN
+                CONTINUELOOP
+            ELSE
+                RETURN rental
+            ENDIF
+        ENDWHILE
+    ENDIF
 ENDFUNCTION
 
-FUNCTION tenantEntryForm(tenantlist,n)
-    PRINT("Number of new tenants: ")
-    GET n
-    for i in range(n)
-        name = CALL FUNCTION getname()
-        gender = CALL getgender()
-        pNum = CALL getpNum()
-        nationality = CALL getnationality()
-        startDate = CALL getstartDate()
-        income = CALL getincome()
-        status = CALL getstatus()
-        APPEND [name,gender,pNum,nationality,startDate,income,status] TO tenantList
-    RETURN tenantList
+FUNCTION getreferenceNumber(code)
+    DECLARE SCL,referenceNumber,retry AS STRING
+    SCL = NONE
+    CALL specialCharacterList(SCL) RETURNING specials
+    WHILE TRUE
+        PRINT("Reference number comes from its relevant bank transaction. They cannot repeat.NEWLINEIf transaction is payed physically, please enter according to the format:   Tenantname year Month ; no special charactersNEWLINEEnter the reference number :NEWLINE")
+        GET referenceNumber
+        IF LENGTH(referenceNumber) > 5 THEN
+            FOR character IN referenceNumber
+                IF character NOT IN specials THEN
+                    code = NONE
+                    CONTINUELOOP
+                ELSE
+                    code = 2
+                    BREAKLOOP
+                ENDIF
+            ENDFOR
+        ELSE
+            code = 3
+        ENDIF
+        IF code CONTAINS ANY VALUE THEN
+            CALL message(code)
+            PRINT("ATTENTION||Error detected.||ATTENTIONNEWLINE")
+        ELSE
+            PRINT("No errors detected.NEWLINE")
+        ENDIF
+        PRINT("[R]-Retry,[Any other key]-Exit using "+referenceNumber+"NEWLINE")
+        GET retry
+        IF retry IN ["R","r"] THEN
+            CONTINUELOOP
+        ELSE
+            RETURN referenceNumber
+        ENDIF
+    ENDWHILE
 ENDFUNCTION
+
+FUNCTION getdecimal(code)                                                         # Define getdecimal function
+    DECLARE SCL,decimal,retry AS STRING
+    SCL = NONE
+    CALL specialCharacterList(SCL) RETURNING specials
+    WHILE TRUE
+        PRINT("Format: ########.##NEWLINEEnter the transaction amount in Ringgit Malaysia:NEWLINE")  # Print message and get decimal
+        GET decimal
+        IF specials[23] IN decimal THEN                                             # If the length in specials (location 23) is decimal Then:
+            money = SPLIT decimal INTO LIST WITH(".")                                           # Split the decimal using the separator (".") 
+            FOR numbers IN money
+                TRY
+                    numbers LOCATION 1 IN money LOCATION 1                                         # location 1 in numbers 
+                    IF (digits ISDIGIT FOR digits IN numbers) THEN                 # Data validation - number check
+                        code = NONE                                                 # code equals to None                                                
+                        CONTINUELOOP                                                    # End loop and continue with the next iteration
+                    ELSE                                                          # Other than that:
+                        code = 1                                                    # code equals to 1
+                        BREAKLOOP
+                    ENDIF
+                EXCEPT INDEXERROR
+                    code = 2                                                       # code equals to 2
+                    BREAKLOOP
+                ENDTRY
+            ENDFOR
+        ELSE                                                                   # Other than that:
+            code = 2
+        ENDIF
+        IF code CONTAINS ANY VALUE THEN
+            CALL message(code)                                                        # Print error message, call function message(code)
+            PRINT("ATTENTION||Error detected.||ATTENTIONNEWLINE")                     # Print message
+        ELSE                                                                   # Other than that:
+            PRINT("No errors detected.NEWLINE")
+        ENDIF
+        PRINT("[R]-Retry,[Any other key]-Exit using "+decimal+"NEWLINE")
+        GET retry
+        IF retry IN ["R","r"] THEN                                                  # If retry is equals to ["R","r"] Then:
+            continue                                                             # End loop and continue with the next iteration
+        ELSE                                                                   # Other than that:
+            return "RM" + decimal
+        ENDIF
+    ENDWHILE
+ENDFUNCTION
+
+FUNCTION tenantOrTransactionEntryForm(UID,listCode,code)
+    DECLARE n,UserID,name,gender,pNum,nationality,startDate,workHistory,employer,income,rental,birthDate,birthCity,referenceNumber,transactionDate,chooseList,apartmendCode,amount AS STRING
+    DECLARE displayColumn,currentColumn AS INTEGER
+    DECLARE list AS ARRAY
+    WHILE TRUE
+        IF UID == NONE                                                         # If UID equals to None Then:
+            PRINT("Number of new Records: ")
+            GET n
+            IF n ISDECIMAL THEN
+                code = NONE                                                       # code equals to None
+            ELSE
+                code = 0                                                          # code equals to 0
+                CALL message(code)                                                     # Print error message, call function message(code)
+                CONTINUELOOP
+            ENDIF
+        ELSE
+            n = 1
+        ENDIF
+        userType = "existing"
+        FOR list IN range(0,int(n))
+            IF listCode == "t" THEN
+                CALL gettenantID(UID,userType) RETURNING UserID
+                nameType = "tenant"
+                CALL getname(code,nameType) RETURNING name
+                abbreviationType = "gender"
+                CALL getabbreviation(code,abbreviationType) RETURNING gender                           # Get input for tenant data, gender = call function getabbreviation(code,"gender") 
+                CALL getpNum(code) RETURNING pNum
+                abbreviationType = "nationality"
+                CALL getabbreviation(code,abbreviationType) RETURNING nationality
+                dateType = "start"
+                CALL getDate(code,dateType) RETURNING startDate
+                numberType = "workHistory"
+                CALL getnumber(code,numberType) RETURNING workHistory
+                nameType = "employer"
+                CALL getname(code,nameType) RETURNING employer
+                numberType = "income"
+                CALL getnumber(code,numberType) RETURNING income                                 # Get input for tenant data, income = call function getnumber(code,"income") 
+                CALL getrental(UID) RETURNING rental
+                dateType = "birth"
+                CALL getDate(code,dateType) RETURNING birthDate
+                nameType = "city"
+                CALL getname(code,nameType) RETURNING birthCity                                  # Get input for tenant data, birthCity = call function getname(code,"city") 
+                list = [UserID,name,gender,pNum,nationality,startDate,workHistory,employer,income,rental,birthDate,birthCity]
+            ELSE
+                CALL getreferenceNumber(code) RETURNING referenceNumber
+                dateType = "transaction"
+                CALL getDate(code,dateType) RETURNING transactionDate                     # Get input for transaction data, transactionDate = call function getDate(code,"transaction")
+                CALL gettenantID(UID,userType) RETURNING UserID                            # Get input for transaction data, userID = call function gettenantID(UID,"existing")
+                chooseList = "a"                                                  # chooseList equals to "a"
+                displayColumn = 0                                                 # displayColoum equals to 0
+                currentColumn = 1                                                 # currentColumn equals to 1
+                CALL tenantAndApartment(UserID)                                        # Redirect to tenantAndApartment function
+                CALL chooseItem(UID,chooseList,displayColumn,currentColumn) RETURNING apartmendCode  # Get input for transaction data, apartmendCode = call function chooseItem(UID,chooseList,displayColumn,currentColumn)
+                CALL getdecimal(code) RETURNING amount                                         # Get input for transaction data, amount = call function getdecimal(code)
+                list = [referenceNumber,transactionDate,UserID,apartmendCode,amount]  # Declare list containing relevant input data
+            ENDIF
+            CALL appendFile(list,listCode)                                            # Call function appendFile(list,listCode)
+        ENDFOR
+        BREAKLOOP                                                                   # Break out of the fumction
+    ENDWHILE
+ENDFUNCTION
+
+FUNCTION tenantAndApartment(UID)
+    DECLARE listCode,reference1,reference2, AS STRING
+    DECLARE primaryKeys,TAList,file,list AS ARRAY
+    listCode = "p"                                                             # listCode equals to "p"
+    reference1 = "t"                                                           # reference1 equals to "t"
+    reference2 = "a"                                                           # reference2 equals to "a"
+    primaryKeys = []                                                           # Define primaryKeys as array
+    TAList = []
+    CALL listIdentifier(listCode) RETURNING l
+    OPENFILE l IN READ AS pRead
+        file = READ pRead LINE-BY-LINE
+        FOR record IN file
+            list = SPLIT record INTO LIST WITH(",")                                             # Split record by using comma (",") as a separator
+            IF UID CONTAINS ANY VALUE
+                IF UID IN list LOCATION 2 THEN                                               # If UID exists in the second location from list:
+                    primaryKeys.append(list[2]+","+list[3])                        # Append second and third location from list into primaryKeys
+                    break                                                          # Break out of the function
+                ELSE
+                    continue                                                       # End loop and continue with the next iteration
+            else:                                                                # Other than that:
+                IF str(list[2]+","+list[3]) NOT IN primaryKeys:                   # If second and third location from list (in string) not in primaryKeys:
+                    primaryKeys.append(list[2]+","+list[3])                        # Append the item in second and third location from list into primaryKeys
+                ELSE
+                    continue                                                       # End loop and continue with the next iteration
+    FOR item IN primaryKeys:
+        TARecord = []                                                           # Define TARecord as array
+        tenantID,ApartmentCode = item.split(",")                                # Split item using comma (",") as a separator
+        with open(listIdentifier(reference1),"r") as tRead:                     # Open selected text file in read mode as tRead 
+            file = tRead.readlines()                                             # Read each lines in tRead
+            FOR record IN file:
+                list = record.split(",")                                          # Split record using comma (",") as a separator
+                IF tenantID in list[0]:                                           # If tenantID is in the zero location from list:
+                TARecord.append(list[0]+","+list[1])                           # Append the item in zero and first location from list into TARecord
+                break                                                          # Break out of the function
+                ELSE
+                continue                                                       # End loop and continue with the next iteration
+        with open(listIdentifier(reference2),"r") as aRead:                     # Open selected text file in read mode as aRead:
+            file = aRead.readlines()                                             # Read each lines in aRead
+            FOR record IN file:
+                list = record.split(",")                                          # Split record using comma (",") as a separator 
+                IF ApartmentCode IN list[1]:                                      # If ApartmentCode is in the first location from list:
+                TARecord.append(list[1]+","+list[0]+","+list[3])               # Append the item in first, zero and third location from list into TARecord
+                break                                                          # Break out of the function
+                ELSE
+                continue                                                       # End loop and continue with the next iteration
+        TAList.append(str(TARecord).lstrip("[").rstrip("]"))                    # Append TARecord in string, leftstrip("["), and rightstrip("]") into TAList 
+    FOR item IN TAList:
+        print(item)
+      
+FUNCTION tenantOrTransaction(UID,listCode,code):                                   # Define tenantOrTransaction function
+    while True:                                                                               
+        IF UID:                                                                 # If UID exists:
+            IF listCode == "t":                                                  # If listCode equals to "t" Then:
+                num = 0                                                           # num equals t0 0
+            else:                                                                # Other than that:
+                num = 2                                                           # num equals to 2
+            searchInformation(listCode,num,UID)                                  # Call function searchInformation(listCode,num,UID)
+            IF listCode == "t":                                                  # If listCode equals to "t" Then:
+                print("\n[C]-Change my tenant details")                           # Print message
+            else:                                                                # Other than that:
+                print("[A]-Add new transaction")                                  # Print message
+            opt = input("[E]-Exit\nWhat would you like to do: ")                 # Print message and get opt 
+            IF opt IN ["C","c"] and listCode == "t":                             # If opt equals to ["C","c"] and listCode equals to "t" Then:
+                modifyData(UID,listCode,code,"2")                                 # Call function modifyData(UID,listCode,code,"2") 
+            elif opt IN ["A","a"] and listCode == "p":                           # If opt equals to ["A","a"] and listCode equals to "p" Then:
+                modifyData(UID,listCode,code,"1")                                 # Call function modifyData(UID,listCode,code,"1")
+            elif opt IN ["E","e"]:                                               # If opt equals to ["E","e"] Then:
+                break                                                             # Break out of the function
+            ELSE
+                message(0)                                                        # Print error message
+                continue                                                          # End loop and continue with the next iteration
+            break                                                                # Break out of the function
+        else:                                                                   # Other than that:
+            opt = input("[D]-Display existing Data, [M]-Modify Data\n[E]-Exit\nWhat would you like to do:")  # Print message and get opt
+            IF opt IN ["D","d"]:                                                 # If opt equals to ["D","d"] Then:
+                print("Current Data:")                                            # Print message 
+                readFile(listCode)                                                # Call function readFile(listCode)
+            elif opt IN ["M","m"]:                                               # If opt equals to ["M","m"] Then:
+                modifyData(UID,listCode,code,None)                                # Call function modifyData(UID,listCode,code,None)
+            elif opt IN ["E","e"]:                                               # If opt equals to ["E","e"] Then:
+                break                                                             # Break out of the function
+            ELSE
+                message(0)                                                        # Print error message
+                continue                                                          # End loop and continue with the next iteration
+            break                                                                # Break out of the function
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 FUNCTION adminApartment():

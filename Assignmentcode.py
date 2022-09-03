@@ -430,7 +430,7 @@ def getdecimal(code):                                                         # 
          money = decimal.split(".")                                           # Split the decimal using the separator (".") 
          for numbers in money:
             try:
-               numbers[1] in money[1]                                         # location 1 in numbers 
+               numbers[1] in money[1]                                         # Check if the hundreth digit exists
                if (digits.isnumeric() for digits in numbers):                 # Data validation - number check
                   code = None                                                 # code equals to None                                                
                   continue                                                    # End loop and continue with the next iteration
@@ -442,7 +442,6 @@ def getdecimal(code):                                                         # 
                break                                                          # Break out of the function
       else:                                                                   # Other than that:
          code = 2                                                             # code equals to 2
-         print(specials[23])                                                  # Print specials 23rd location
       if code:                                                                # If code exists:
          message(code)                                                        # Print error message, call function message(code)
          print("ATTENTION||Error detected.||ATTENTION\n")                     # Print message
@@ -468,7 +467,7 @@ def tenantOrTransactionEntryForm(UID,listCode,code):                          # 
          n = 1                                                                # n equals to 1
       for list in range(0,int(n)):                                            # Definite loops iterate through the members of a set from 0 to n in integer type
          if listCode == "t":                                                  # If listCode is equals to "t" Then:
-            UserID  = gettenantID(UID,"existing")                             # Get input for tenant data, userID = call function gettenantID(UID,"existing")
+            UserID = gettenantID(UID,"existing")                              # Get input for tenant data, userID = call function gettenantID(UID,"existing")
             name = getname(code,"tenant")                                     # Get input for tenant data, name = call function getname(code,"tenant")
             gender = getabbreviation(code,"gender")                           # Get input for tenant data, gender = call function getabbreviation(code,"gender") 
             pNum = getpNum(code)                                              # Get input for tenant data, pNum = call function getpNum(code)
