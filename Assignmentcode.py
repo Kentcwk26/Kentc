@@ -51,9 +51,9 @@ def login(listCode,code,nameInput,passInput):                                 # 
 def menu(UID,code):                                                           # Define menu function
    while True:                                                                # when mainMenu is equal to True Then:
       if UID:                                                                 # If UID exists:
-         print("\n---------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\nMain menu (Tenant Page):\n\nReview information about:\n[A] - Available Apartments\n[T] - My Tenant details\n[P] - My Transactions\n\nQuick functions:\n[D] - Print my House & Tenant Details\n[S] - Search box\n[E] - Exit")  # Print message
+         print("\n------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\nMain menu (Tenant Page):\n\nReview information about:\n[A] - Available Apartments\n[T] - My Tenant details\n[P] - My Transactions\n\nQuick functions:\n[D] - Print my House & Tenant Details\n[S] - Search box\n[E] - Exit")  # Print message
       else:                                                                   # Other than that:
-         print("\n---------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\nMain menu (Admin Page):\n\nReview information about:\n[A] - Apartment\n[T] - Tenant\n[P] - Transaction\n\nQuick functions:\n[D] - Print Specific House & Tenant Details\n[S] - Search box\n[I] - Inquiry of Past Tenant Details\n[E] - Exit")  # Print message 
+         print("\n------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\nMain menu (Admin Page):\n\nReview information about:\n[A] - Apartment\n[T] - Tenant\n[P] - Transaction\n\nQuick functions:\n[D] - Print Specific House & Tenant Details\n[S] - Search box\n[I] - Inquiry of Past Tenant Details\n[E] - Exit")  # Print message 
       opt=input("\nPlease enter which operation that you want to do: ")       # Print message and get opt
       if opt in ["S","s"]:                                                    # Check for basic Functions, If opt is equal to ["I","i"] Then:
          searchBox(UID,code)                                                  # Redirect to searchbox function, call function searchBox(UID,code)
@@ -320,7 +320,7 @@ def getDate(code,dateType):                                                   # 
          message(code)                                                        # Print error message, call function message(code)
          print("ATTENTION||Error detected.||ATTENTION\n")                     # Print message
       else:                                                                   # Other than that:
-         print("No errors detected.\n")                                       # Print message
+         print("No errors detected.")                                       # Print message
       retry = input("\n[R]-Retry,[Any other key]-Exit using "+date+"\nAnswer: ") # Print message and get retry
       if retry in ["R","r"]:                                                  # If retry is equal to ["R","r"] Then:
          continue                                                             # Continue the loop
@@ -390,7 +390,7 @@ def getnumber(code,numberType):                                               # 
          code = 0                                                             # code equals to 0
          message(code)                                                        # Print error message, call function message(code)
          continue                                                             # Continue the loop
-      retry = input("[R]-Retry,[Any other key]-Exit using "+number+"\nAnswer: ") # Print message and get retry
+      retry = input("\n[R]-Retry,[Any other key]-Exit using "+number+"\nAnswer: ") # Print message and get retry
       if retry in ["R","r"]:                                                  # If retry is equal to ["R","r"] Then:
          continue                                                             # Continue the loop
       else:                                                                   # Other than that:
@@ -595,7 +595,7 @@ def tenantOrTransaction(UID,listCode,code):                                   # 
 
 def apartment(UID,listCode,code):                                             # Define apartment function
    listCode = "a"                                                             # listCode equals to "a"
-   print("\n------------------------------------------------------------------------------------------------------------------------------------------------------\n- Apartment Info: -\n") # Print message
+   print("\n------------------------------------------------------------------------------------------------------------------------------------------------------\n\n- Apartment Info: -\n") # Print message
    list1 = ["Room Info: Standard Room (Triple)","Code: SR1","Dimensions: 140+ sqft","Pricing: RM350","Apartment ID: A01-L01-R01 to A01-L01-R21","Date of Acquisition: 03/01/2015","Rental History: 27/02/2015 rent","Status: Available"]        # Put sample data
    list2 = ["Room Info: Standard Room (Twin)","Code: SR2","Dimensions: 120+ sqft","Pricing: RM450","Apartment ID: A01-L01-R22 to A01-L01-R41","Date of Acquisition: 10/02/2015","Rental History: 28/03/2015 rent","Status: Available"]          # Put sample data
    list3 = ["Room Info: Standard Room A/C (Triple)","Code: SR3","Dimensions: 150+ sqft","Pricing: RM550","Apartment ID: A01-L02-R01 to A01-L02-R21","Date of Acquisition: 21/03/2016","Rental History: 24/04/2016 rent","Status: Available"]    # Put sample data
@@ -621,7 +621,6 @@ def apartment(UID,listCode,code):                                             # 
          apartmentHandler.write("\n")                                                         # Write a newline ("\n") into the text file  
    for item in ApartmentList:
       print(item,"\n")                                                                        # Print each item that inside the ApartmentList  
-   print("------------------------------------------------------------------------------------------------------------------------------------------------------------------------") # Print message
    if UID == None:                                                                            # If UID equals to None Then:
       modifyData(UID,listCode,code,None)                                                      # Call function modifyData(UID,listCode,code,None)
    else:                                                                                      # Other than that:
@@ -633,7 +632,7 @@ def modifyData(UID,listCode,code,modifyType):                                   
       if modifyType:                                                                          # If modifyType exists:
          dataInput = modifyType                                                               # dataInput is modifyTYpe
       else:                                                                                   # Other than that:
-         dataInput = input('\n- Modification of records: -\n\n1. Add data\n2. Edit Data\n3. Delete Data\n4. Exit\n\nPlease select which operation to perform task (1-4): ') # Print message and get dataInput
+         dataInput = input('\n-------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\nModification of records: -\n\n1. Add data\n2. Edit Data\n3. Delete Data\n4. Exit\n\nPlease select which operation to perform task (1-4): ') # Print message and get dataInput
       print("\n----------------------------------------------------------------------------------------------------------------------------------------------------------")
       if dataInput == "1":                                                                    # If dataInput equals to "1" Then:
          if listCode == "a":                                                                  # If listCode equals to "a" Then:
@@ -703,7 +702,7 @@ def newRoom():                                                                  
          continue                                                                             # Jump back to the top of loop, rerun again
       else:                                                                                   # Other than that:
          code = None                                                                          # Error not detected, remain the same value 'None'
-      if code == None:                                                                        # No error detected, correct input                                                                       # No error detected, correct input                                                                 
+      if code == None:                                                                        # No error detected, correct input                                                                
          newRoom.title()                                                                      # Return where the first character in each word is uppercase
          decisionkey = input("Save data? (Enter to continue, 'N' to return back):")           # Print message and get decisionkey
          if decisionkey in ['N','n']:                                                         # If decisionkey is equal to ["N","n"] Then:
