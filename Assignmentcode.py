@@ -7,7 +7,7 @@ def register(listCode,code):                                                  # 
    username = input("\nCreate your account's username: ")                     # Input login credentials
    password = input("Next, create your account's password: ")                 # Input login credentials
    UserID = gettenantID(UID,userType)                                         # UserID = call function gettenantID(UID,userType)
-   print("UserID is"+UserID)                                                  # Print userID
+   print("UserID is "+UserID)                                                 # Print userID
    with open (listIdentifier(listCode),"a") as userAdd:                       # Open selected text file in append mode as userAdd and match for correct login credentials
       userAdd.write(username+","+password+","+UserID+",\n")                   # Write username, password, userID into userAdd
    listCode = "t"                                                             # Set listCode as 't'
@@ -192,9 +192,9 @@ def gettenantID(UID,userType):                                                # 
 def getname(code,nameType):                                                   # Define getname function
    specials = specialCharacterList(None)                                      # specials = call function specialCharacterList(None)
    while True:
-      print("Format: Name Name or Name-Name Name or Na'me Name")              # Print message
+      print("\nFormat: Name Name or Name-Name Name or Na'me Name")            # Print message
       if nameType == "tenant":                                                # If nameType equals to "tenant" Then:
-         name = input("\nEnter tenant's fullname: ")                          # Print message and get name
+         name = input("Enter tenant's fullname: ")                            # Print message and get name
       elif nameType == "employer":                                            # If nameType equals to "employer" Then:
          name = input("\nEnter tenant's current employer: ")                  # Print message and get name
       else:                                                                   # Other than that:
@@ -228,9 +228,9 @@ def getname(code,nameType):                                                   # 
 def getabbreviation(code,abbreviationType):                                   # Define getabbreviation function
    while True:
       if abbreviationType == "gender":                                        # If abbreviation equals to "gender" Then:
-         abbreviation = input("[M]-Male\n[F]-Female\nEnter tenant gender: \n") # Print messsage and get abbreviation
+         abbreviation = input("\n[M]-Male\n[F]-Female\nEnter tenant gender: ") # Print messsage and get abbreviation
       else:                                                                   # Other than that:
-         abbreviation = input("[M]-Malaysian\n[N]-non-Malaysian\nEnter tenant nationality: \n") # Print messsage and get abbreviation
+         abbreviation = input("\n[M]-Malaysian\n[N]-non-Malaysian\nEnter tenant nationality: ") # Print messsage and get abbreviation
       if len(abbreviation)== 1:                                               # If the length of abbreviation is equal to 1 Then:
          if abbreviation.isalpha():                                           # Alphahabet checking
             if abbreviationType == "gender":                                  # If abbreviation equals to "gender" Then:
@@ -260,7 +260,7 @@ def getabbreviation(code,abbreviationType):                                   # 
          print("ATTENTION||Error detected.||ATTENTION")                       # Print message
       else:                                                                   # Other than that:
          print("No errors detected.")                                         # Print message
-      retry = input("[R]-Retry,[Any other key]-Exit using "+abbreviation+"\nAnswer: ") # Print message and get retry
+      retry = input("\n[R]-Retry,[Any other key]-Exit using "+abbreviation+"\nAnswer: ") # Print message and get retry
       if retry in ["R","r"]:                                                  # If abbreviation equals to ["M","m"] Then:
          continue                                                             # Continue the loop
       else:                                                                   # Other than that:
@@ -268,7 +268,7 @@ def getabbreviation(code,abbreviationType):                                   # 
 
 def getpNum(code):                                                            # Define getpNum function
    while True:
-      pNum = input("Format: ############\nEnter tenant phone number: \n")     # Print message and get pNum
+      pNum = input("\nFormat: ############\nEnter tenant phone number: ")     # Print message and get pNum
       if 6 < len(pNum) < 16:                                                  # if the length of pNum is lesser than 6 and 16: 
          for digit in pNum:
             if digit.isdigit():                                               # Number check
@@ -284,7 +284,7 @@ def getpNum(code):                                                            # 
          print("ATTENTION||Error detected.||ATTENTION")                       # Print message
       else:                                                                   # Other than that:
          print("No errors detected.")                                         # Print message
-      retry = input("[R]-Retry,[Any other key]-Exit using "+pNum+"\nAnswer: ") # Print message and get retry
+      retry = input("\n[R]-Retry,[Any other key]-Exit using "+pNum+"\nAnswer: ") # Print message and get retry
       if retry in ["R","r"]:                                                  # If retry is equal to ["R","r"] Then:
          continue                                                             # Continue the loop
       else:                                                                   # Other than that:
@@ -294,16 +294,16 @@ def getDate(code,dateType):                                                   # 
    specials = specialCharacterList(None)                                      # specials = call function specialCharacterList(None)
    while True:
       if dateType == "start":                                                 # If dateType equals to "start" Then:
-         path = input("Use current date as rental start date?\n[Y]-Yes\n[Any Other Key]-No\nAnswer: ") # Print message and get path
+         path = input("\nUse current date as rental start date?\n[Y]-Yes\n[Any Other Key]-No\nAnswer: ") # Print message and get path
          if path in ["Y","y"]:                                                # If path is equal to ["Y","y"] Then:
             date = dt.date.today().strftime("%Y/%m/%d")                       # Return a numpy array of datetime.date objects
             print("Current date:",date)                                       # Print message
          else:                                                                # Other than that:
-            date = input("Format: YYYY/MM/DD\nEnter Rental start date: \n")   # Print message and get date
+            date = input("\nFormat: YYYY/MM/DD\nEnter Rental start date: ")   # Print message and get date
       elif dateType == "birth":                                               # If dateType is equal to "birth" Then: 
-         date = input("Format: YYYY/MM/DD\nEnter tenant birth date: \n")      # Print message and get date
+         date = input("\nFormat: YYYY/MM/DD\nEnter tenant birth date: ")      # Print message and get date
       else:                                                                   # Other than that:
-         date = input("Format: YYYY/MM/DD\nEnter transaction date: \n")       # Print message and get date
+         date = input("\nFormat: YYYY/MM/DD\nEnter transaction date: ")       # Print message and get date
       if len(date) == 10:                                                     # If the date length is equal to 10:
          if date[4] == date[7] == specials[24]:                               # If the date in location 7 and 14 is equal to specials in location 24 Then:
             year,month,day = date.split("/")                                  # Split the date to year, month, day using the separator ("/") 
@@ -321,7 +321,7 @@ def getDate(code,dateType):                                                   # 
          print("ATTENTION||Error detected.||ATTENTION\n")                     # Print message
       else:                                                                   # Other than that:
          print("No errors detected.\n")                                       # Print message
-      retry = input("[R]-Retry,[Any other key]-Exit using "+date+"\nAnswer: ") # Print message and get retry
+      retry = input("\n[R]-Retry,[Any other key]-Exit using "+date+"\nAnswer: ") # Print message and get retry
       if retry in ["R","r"]:                                                  # If retry is equal to ["R","r"] Then:
          continue                                                             # Continue the loop
       else:                                                                   # Other than that:
@@ -331,9 +331,9 @@ def getnumber(code,numberType):                                               # 
     while True:                                                                               
       if numberType == "workHistory":                                         # If numberType is equal to "workHistory" Then:
          t = "Total work history is around "                                  # t is "Total work history is around"
-         number = input(t+"\n[1]-1 to 2 month\n[2]-2 to 3 months\n[3]-3 to 6 months\n[4]-6 to 9 months\n[5]-9 months to 1 year\n[6]-1 to 2 years\n[7]-2 to 3 years\n[8]-3 to 4 years\n[9]-4 to 5 years\n[0]-5 years or more\nChoose how long you have been working: ")
+         number = input("\n"+t+"\n[1]-1 to 2 month\n[2]-2 to 3 months\n[3]-3 to 6 months\n[4]-6 to 9 months\n[5]-9 months to 1 year\n[6]-1 to 2 years\n[7]-2 to 3 years\n[8]-3 to 4 years\n[9]-4 to 5 years\n[0]-5 years or more\nChoose how long you have been working: ")
       else:                                                                   # Other than that:
-         number = input("[1]-RM 1500~1599\n[2]-RM 1600~1699\n[3]-RM 1700~1799\n[4]-RM 1800~1899\n[5]-RM 1900~1999\n[6]-RM 2000~2099\n[7]-RM 2100~2199\n[8]-RM 2200~2499\n[9]-RM 2500~3000\n[0]-RM > 3000\nChoose tenant income range in Ringgit Malaysia: ")
+         number = input("\n[1]-RM 1500~1599\n[2]-RM 1600~1699\n[3]-RM 1700~1799\n[4]-RM 1800~1899\n[5]-RM 1900~1999\n[6]-RM 2000~2099\n[7]-RM 2100~2199\n[8]-RM 2200~2499\n[9]-RM 2500~3000\n[0]-RM > 3000\nChoose tenant income range in Ringgit Malaysia: ")
       if number.isdigit():                                                    # If number is digit Then:
          num = int(number)                                                    # Convert into integer
          if numberType == "workHistory":                                      # If numberType is equal to "workHistory" Then: 
@@ -390,7 +390,7 @@ def getnumber(code,numberType):                                               # 
          code = 0                                                             # code equals to 0
          message(code)                                                        # Print error message, call function message(code)
          continue                                                             # Continue the loop
-      retry = input("[R]-Retry,[Any other key]-Exit using "+number+"\n")      # Print message and get retry
+      retry = input("[R]-Retry,[Any other key]-Exit using "+number+"\nAnswer: ") # Print message and get retry
       if retry in ["R","r"]:                                                  # If retry is equal to ["R","r"] Then:
          continue                                                             # Continue the loop
       else:                                                                   # Other than that:
@@ -401,12 +401,12 @@ def getrental(UID):                                                           # 
       return "Current"                                                        # Exit function and send the value back to the program
    else:                                                                      # Other than that:
       while True:                                                                               
-         rental = input("[P]-Past\n[Any other key]-Current\nChoose tenant rental status(current/past)\n")   # Print message and give rental
+         rental = input("\n[P]-Past\n[Any other key]-Current\nChoose tenant rental status(current/past)\n")   # Print message and give rental
          if rental in ["P","p"]:                                              # If rental is equal to ["P","p"] Then:
             rental = "Past"                                                   # rental is equal to "Past"
          else:                                                                # Other than that:
             rental = "Current"                                                # rental is equal to "Current"
-         retry = input("[R]-Retry,[Any other key]-Exit using "+rental+"\n")   # Print message and get retry
+         retry = input("\n[R]-Retry,[Any other key]-Exit using "+rental+"\nAnswer: ")   # Print message and get retry
          if retry in ["R","r"]:                                               # If retry is equal to ["R","r"] Then:
             continue                                                          # Continue the loop
          else:                                                                # Other than that:
@@ -415,7 +415,7 @@ def getrental(UID):                                                           # 
 def getreferenceNumber(code):                                                 # Define getreferenceNumber function
    specials = specialCharacterList(None)                                      # specials = call function specialCharacterList(None)
    while True:                                                                               
-      referenceNumber = input("Reference number comes from its relevant bank transaction. They cannot repeat.\nIf transaction is payed physically, please enter according to the format:   Tenantname year Month ; no special characters\nEnter the reference number :\n")
+      referenceNumber = input("\nReference number comes from its relevant bank transaction. They cannot repeat.\nIf transaction is payed physically, please enter according to the format:   Tenantname year Month ; no special characters\nEnter the reference number :\n")
       if len(referenceNumber) > 5:                                            # If the length for referenceNumber is greater than 5 Then:
          for character in referenceNumber:                                    # Iterate through every character in the reference to check for special characters
             if character not in specials:                                     # If special character is not detected:
@@ -431,7 +431,7 @@ def getreferenceNumber(code):                                                 # 
          print("ATTENTION||Error detected.||ATTENTION\n")                     # Print message
       else:                                                                   # Other than that:
          print("No errors detected.\n")                                       # Print message
-      retry = input("[R]-Retry,[Any other key]-Exit using "+referenceNumber+"\n")  # Print message and get retry
+      retry = input("\n[R]-Retry,[Any other key]-Exit using "+referenceNumber+"\nAnswer: ")  # Print message and get retry
       if retry in ["R","r"]:                                                  # If retry is equal to ["R","r"] Then:
          continue                                                             # Continue the loop
       else:                                                                   # Other than that:
@@ -440,7 +440,7 @@ def getreferenceNumber(code):                                                 # 
 def getdecimal(code):                                                         # Define getdecimal function
    specials = specialCharacterList(None)                                      # specials = call function specialCharacterList(None)
    while True:                                                                               
-      decimal = input("Format: ########.##\nEnter the transaction amount in Ringgit Malaysia:\n")  # Print message and get decimal
+      decimal = input("\nFormat: ########.##\nEnter the transaction amount in Ringgit Malaysia:\n")  # Print message and get decimal
       if specials[23] in decimal:                                             # If the length in specials (location 23) is decimal Then:
          money = decimal.split(".")                                           # Split the decimal using the separator (".") 
          for numbers in money:
@@ -463,7 +463,7 @@ def getdecimal(code):                                                         # 
          print("ATTENTION||Error detected.||ATTENTION\n")                     # Print message
       else:                                                                   # Other than that:
          print("No errors detected.\n")                                       # Print message
-      retry = input("[R]-Retry,[Any other key]-Exit using "+decimal+"\n")     # Print message and get retry
+      retry = input("\n[R]-Retry,[Any other key]-Exit using "+decimal+"\nAnswer: ") # Print message and get retry
       if retry in ["R","r"]:                                                  # If retry is equals to ["R","r"] Then:
          continue                                                             # Continue the loop
       else:                                                                   # Other than that:
