@@ -30,7 +30,7 @@ def login(listCode,code,nameInput,passInput):                                 # 
             listRecord = record.split(",")                                    # Split the record with comma as a separator
             if username == listRecord[0]:                                     # If username equals to listRecord that is in index 0:
                if password == listRecord[1]:                                  # If password equals to listRecord that is in index 1:
-                  print("\n- Login successful -")                             # Print message
+                  print("\n------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\n- Login successful -") # Print message
                   if (username == "john" and password == "1234u-78") or (username == "david" and password == "55467913"):  # Check for admin credentials
                      UID = None                                               # UID set to 'None', activate admin access
                   else:                                                       # Other than that:
@@ -196,9 +196,9 @@ def getname(code,nameType):                                                   # 
       if nameType == "tenant":                                                # If nameType equals to "tenant" Then:
          name = input("Enter tenant's fullname: ")                            # Print message and get name
       elif nameType == "employer":                                            # If nameType equals to "employer" Then:
-         name = input("\nEnter tenant's current employer: ")                  # Print message and get name
+         name = input("Enter tenant's current employer: ")                    # Print message and get name
       else:                                                                   # Other than that:
-         name = input("\nEnter tenant's place-city-country of birth: ")       # Print message and get name
+         name = input("Enter tenant's place-city-country of birth: ")         # Print message and get name
       nameList = name.split(" ")                                              # Right stripped from the end of string (record) with the separators (all commas and newlines)
       if len(nameList) >= 2:                                                  # if the length of namelist is greater than or equal to 2 Then:
          for words in nameList:
@@ -1267,12 +1267,11 @@ def searchInformation(listCode,num,details):                                    
 import datetime as dt
 listCode = "u"                                                          # Set listCOde to 'u'
 code = None                                                             # Set code to 'None'
-username = None
-password = None
-print("\nWelcome to Tenant Management System.")
-new = input("[Y]-Yes I am.\n[Any Other Key]-No,I have an existing account\nAre you a new user: ")
-if new in ["Y","y"]:                                                 # If new in ["Y","y"] Then:
-   username,password = register(listCode,code)                       # call function register(listCode,code)
+username = None                                                         # Set username to 'None'
+password = None                                                         # Set password to 'None'
+new = input("\n----------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\n- Welcome to Tenant Management System -\n\nAre you a new user?\n[Y]-Yes I am.\n[Any Other Key]-No,I have an existing account\n\nAnswer: ")
+if new in ["Y","y"]:                                                    # If new in ["Y","y"] Then:
+   username,password = register(listCode,code)                          # call function register(listCode,code)
    login(listCode,code,username,password)
 else:
    login(listCode,code,username,password)
