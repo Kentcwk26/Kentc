@@ -33,6 +33,7 @@ FUNCTION login(listCode,code,nameInput,passInput)
             GET username
             PRINT("Password: ")
             GET password
+        ENDIF
         CALL listIdentifier(listCode) RETURNING l
         OPENFILE l IN READ AS userInfo
             userCheck = READ userInfo LINE-BY-LINE
@@ -41,7 +42,7 @@ FUNCTION login(listCode,code,nameInput,passInput)
                 IF username == listRecord LOCATION 0 THEN
                     IF password == listRecord LOCATION 1 THEN
                         PRINT("NEWLINE- Login successful -NEWLINE NEWLINE-----------------------------------------------------------------------------------------------------------------------------------------------------------------------")
-                        IF (username == "john" AND password == "1234u-78") OR (username == "david" AND password == "55467913"):
+                        IF (username == "john" AND password == "1234u-78") OR (username == "david" AND password == "55467913") THEN
                             UID = NONE
                         ELSE
                             OPENFILE "currentUser.txt" IN WRITE AS current
@@ -70,7 +71,7 @@ FUNCTION menu(UID,code)
         IF UID CONTAINS ANY VALUE THEN
             PRINT("NEWLINEMain menu:NEWLINENEWLINE[S] - Search boxNEWLINENEWLINEReview information about:NEWLINE[A] - Available ApartmentsnNEWLINE[T] - My Tenant detailsNEWLINE[P] - My TransactionsNEWLINENEWLINEQuick functions:NEWLINE[D] - Print my House & Tenant DetailsNEWLINE[E] - Exit")
         ELSE
-            PRINT("NEWLINEMain menu:NEWLINENEWLINE[S] - Search boxNEWLINENEWLINEReview information about:NEWLINE[A] - ApartmentsnNEWLINE[T] - TenantNEWLINE[P] - TransactionNEWLINENEWLINEQuick functions:NEWLINE[D] - Print Specific House & Tenant DetailsNEWLINE[I] - Inquiry of Past Tenant DetailsNEWLINE[E] - Exit")        
+            PRINT("NEWLINEMain menu:NEWLINENEWLINE[S] - Search boxNEWLINENEWLINEReview information about:NEWLINE[A] - ApartmentsnNEWLINE[T] - TenantNEWLINE[P] - TransactionNEWLINENEWLINEQuick functions:NEWLINE[D] - Print Specific House & Tenant DetailsNEWLINE[I] - Inquiry of Past Tenant DetailsNEWLINE[E] - Exit")
         ENDIF
         PRINT("NEWLINEPlease select which operation that you want to do: ")
         GET opt
@@ -130,11 +131,11 @@ ENDFUNCTION
 
 FUNCTION specialCharacterList(SCL)
     DECLARE list AS ARRAY
-    IF SCL == NONE:
+    IF SCL == NONE THEN
         list = ["~","`","!","@","#","$","%","^","&","*","(",")","-","_","=","+","{","}","[","]","|",",","\'",".","/","<",">","?",";",":","'",'"']
-    ELIF SCL == "SCL1":
+    ELIF SCL == "SCL1" THEN
         list = ['~','`','!','@','#','$','%','^','&','*','(',')','-','_','=','+','{','}','[',']','|',',','\\','\'','\"','.','/','<','>','?',';',':']
-    ELIF SCL == "SCL2":
+    ELIF SCL == "SCL2" THEN
         list = ['~','`','!','@','#','$','%','^','&','*','_','=','+','{','}','[',']','|','\\','\'','\"',',','.','/','<','>','?',':',';']
     ENDIF
     RETURN list
@@ -206,7 +207,7 @@ FUNCTION chooseItem(UID,listCode,displayColumn,currentColumn)
     ENDWHILE
 ENDFUNCTION
 
-FUNCTION gettenantID(UID,userType):
+FUNCTION gettenantID(UID,userType)
     DECLARE number,code,displayColumn,currentColumn AS INTEGER
     DECLARE path AS STRING
     DECLARE userRecord AS ARRAY
@@ -232,7 +233,7 @@ FUNCTION gettenantID(UID,userType):
             ENDIF
             IF number == 1 THEN
                 RETURN CURRENT DATETIME CONVERTED INTO STRING IN FORMAT daymonthYEARHOURMINUTESECONDmicrosecond
-            ELSEIF number == 2:
+            ELSEIF number == 2 THEN
                 listCode = "t"
                 displayColumn = 1
                 currentColumn = 0
@@ -446,6 +447,7 @@ FUNCTION getnumber(code,numberType)
             PRINT(t+"NEWLINE[1]-1 to 2 monthNEWLINE[2]-2 to 3 monthsNEWLINE[3]-3 to 6 monthsNEWLINE[4]-6 to 9 monthsNEWLINE[5]-9 months to 1 yearNEWLINE[6]-1 to 2 yearsNEWLINE[7]-2 to 3 yearsNEWLINE[8]-3 to 4 yearsNEWLINE[9]-4 to 5 yearsNEWLINE[0]-5 years or moreNEWLINEChoose how long you have been working: ")
         ELSE
             PRINT("[1]-RM 1500~1599NEWLINE[2]-RM 1600~1699NEWLINE[3]-RM 1700~1799NEWLINE[4]-RM 1800~1899NEWLINE[5]-RM 1900~1999NEWLINE[6]-RM 2000~2099NEWLINE[7]-RM 2100~2199NEWLINE[8]-RM 2200~2499NEWLINE[9]-RM 2500~3000NEWLINE[0]-RM > 3000NEWLINEChoose tenant income range in Ringgit Malaysia: ")
+        ENDIF
         GET number
         IF number ISDIGIT THEN
             num = INTEGER(number)
@@ -763,10 +765,10 @@ FUNCTION tenantOrTransaction(UID,listCode,code)
             ENDIF
             PRINT("[E]-ExitNEWLINEWhat would you like to do: ")
             GET opt
-            IF opt IN ["C","c"] and listCode == "t" THEN
+            IF opt IN ["C","c"] AND listCode == "t" THEN
                 modifyType = 2
                 CALL modifyData(UID,listCode,code,modifyType)
-            ELSEIF opt IN ["A","a"] and listCode == "p" THEN
+            ELSEIF opt IN ["A","a"] AND listCode == "p" THEN
                 modifyType = 1
                 CALL modifyData(UID,listCode,code,modifyType)
             ELSEIF opt IN ["E","e"] THEN
@@ -797,7 +799,7 @@ FUNCTION tenantOrTransaction(UID,listCode,code)
 ENDFUNCTION
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-FUNCTION adminApartment():
+FUNCTION adminApartment()
     
     DECLARE record AS ARRAY
 
@@ -823,23 +825,23 @@ FUNCTION adminApartment():
         APPEND [list1,list2,list3,list4,list5,list6,list7,list8,list9,list10,list11,list12,list13,list14,list15,list16] IN record
 
     OPENFILE "Apartment.txt" IN WRITE AS Ahandler
-        for item in record:
-            for data in item:
-                for element in data:
+        for item in record
+            for data in item
+                for element in data
                     WRITE element TO Ahandler
                 WRITE ", " TO Ahandler
             WRITE "NEWLINE" TO Ahandler
     CLOSE Apartment.txt
 
     OPENFILE "Apartment.txt" IN READ AS Ahandler
-        for item in Ahandler:
+        for item in Ahandler
             PRINT(item,RIGHTSTRIP() RIGHTSTRIP(","))
     CLOSE Apartment.txt
 
     CALLmodifydata()
 ENDFUNCTION
 
-FUNCTION modifyData(listCode):
+FUNCTION modifyData(listCode)
     DECLARE list AS ARRAY
     DECLARE dataInput AS INTEGER
     WHILE TRUE
@@ -925,9 +927,9 @@ FUNCTION apartmentAddData():
         IF addDataConfirmation == 1 THEN
 
             OPENFILE "Apartment.txt" IN WRITE AS Ahandler
-                FOR item FROM adddata:
-                    FOR data FROM item:
-                        FOR information FROM data:
+                FOR item FROM adddata
+                    FOR data FROM item
+                        FOR information FROM data
                             WRITE information TO Ahandler
                         WRITE ", " TO Ahandler
                     WRITE "NEWLINE" TO Ahandler
@@ -955,7 +957,7 @@ FUNCTION apartmentAddData():
             GET rewriteDataConfirmation
             IF rewriteDataConfirmation == 'W' THEN
                 RETURN TRUE
-            ELSE:
+            ELSE
                 PRINT("Return to main menu....")
                 RETURN FALSE
             ENDIF
@@ -968,7 +970,7 @@ FUNCTION apartmentAddData():
     ENDWHILE
 ENDFUNCTION
 
-FUNCTION apartmentEditData():
+FUNCTION apartmentEditData()
 
     DECLARE editdataconfirmation,editdataconfirmationpt1,editdataconfirmationpt2,editdataconfirmationpt3 AS INTEGER
         
@@ -1057,7 +1059,7 @@ FUNCTION apartmentDeleteData()
     WHILE TRUE
     DECLARE deletedataconfirmationpt1,deletedataconfirmationpt2 AS INTEGER
     OPENFILE "Apartment.txt" IN READ AS Ahandler
-        for item in Ahandler:
+        for item in Ahandler
             PRINT(item,RIGHTSTRIP() RIGHTSTRIP(","))
         ENDFOR
     CLOSEFILE
@@ -1147,18 +1149,19 @@ FUNCTION apartmentDeleteData()
     ENDIF
 ENDFUNCTION
 
-FUNCTION apartmentSearch(num):
+FUNCTION apartmentSearch(num)
     displaylist=[]
-    OPENFILE "Apartment.txt" IN READ AS tRead:
-    aCheck = tRead.readlines()
-    FOR record IN aCheck:
-        listRec = SPLIT record IN LIST(",")
-        displayList.append(listRec[num])
-    ENDFOR
+    OPENFILE "Apartment.txt" IN READ AS tRead
+        aCheck = tRead.readlines()
+        FOR record IN aCheck:
+            listRec = SPLIT record IN LIST(",")
+            displayList.append(listRec[num])
+        ENDFOR
+    CLOSEFILE
     PRINT(displayList)
 ENDFUNCTION
 
-FUNCTION searchbox():
+FUNCTION searchbox()
 
     DECLARE option,num,code AS INTEGER
     DECLARE opt,list AS STRING
@@ -1281,7 +1284,20 @@ FUNCTION searchInformation(listCode,num,details)
 ENDFUNCTION
 
 BEGIN
-PRINT("NEWLINE Welcome to Tenant Management System Login page. NEWLINE ")
 IMPORT datetime AS dt
-CALL login()
+DECLARE listCode,username,password AS STRING
+DECLARE code AS INTEGER
+listCode = "u"
+code = NONE
+username = NONE
+password = NONE
+PRINT("NEWLINE Welcome to Tenant Management System.")
+PRINT("[Y]-Yes I am.\n[Any Other Key]-No,I have an existing account\nAre you a new user: ")
+GET new
+IF new IN ["Y","y"] THEN
+    CALL register(listCode,code) RETURNING username,password
+    CALL login(listCode,code,username,password)
+ELSE
+    CALL login(listCode,code,username,password)
+ENDIF
 END
