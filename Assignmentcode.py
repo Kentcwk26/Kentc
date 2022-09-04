@@ -8,7 +8,7 @@ def register(listCode,code):                                                  # 
    password = input("Next, create your account's password: ")                 # Input login credentials
    UserID = gettenantID(UID,userType)                                         # UserID = call function gettenantID(UID,userType)
    print("UserID is "+UserID)                                                 # Print userID
-   with open (listIdentifier(listCode),"a") as userAdd:                       # Open selected text file in append mode as userAdd and match for correct login credentials
+   with open (listIdentifier(listCode),"a") as userAdd:                       # Open selected text file in append mode as userAdd
       userAdd.write(username+","+password+","+UserID+",\n")                   # Write username, password, userID into userAdd
    listCode = "t"                                                             # Set listCode as 't'
    tenantOrTransactionEntryForm(UserID,listCode,code)                         # Call function tenantOrTransactionEntryForm(UserID,listCode,code)
@@ -613,14 +613,15 @@ def apartment(UID,listCode,code):                                             # 
    list15 = ["Room Info: En-Suite Single (Super Premium - Twin)","Code: ESS2","Dimensions: 140+ sqft","Pricing: RM800","Apartment ID: A02-L04-R01 to A02-L04-R41","Date of Acquisition: 31/05/2022","Rental History: Empty","Status: Not Available"]                    # Put sample data
    list16 = ["Room Info: En-Suite Twin (Super Premium)","Code: EST2","Dimensions: 200+ sqft","Pricing: RM900","Apartment ID: A02-L05-R01 to A02-L05-R41","Date of Acquisition: 26/06/2022","Rental History: Empty","Status: Not Available"]                             # Put sample data
    ApartmentList = [list1,list2,list3,list4,list5,list6,list7,list8,list9,list10,list11,list12,list13,list14,list15,list16]    # Declare list containing relevant input data
-   with open(listIdentifier(listCode),"w") as apartmentHandler:                               # Open selected text file and named as apartmentHandler 
+   with open(listIdentifier(listCode),"w") as apartmentwHandler:                              # Open selected text file and named as apartmentwHandler 
       for record in ApartmentList:
          for data in record:
-            apartmentHandler.write(data)                                                      # Write data into the text file
-            apartmentHandler.write(",")                                                       # Write a comma (,) into the text file
-         apartmentHandler.write("\n")                                                         # Write a newline ("\n") into the text file  
-   for item in ApartmentList:
-      print(item,"\n")                                                                        # Print each item that inside the ApartmentList  
+            apartmentwHandler.write(data)                                                     # Write data into apartmentwHandler
+            apartmentwHandler.write(",")                                                      # Write a comma (,) into apartmentwHandler
+         apartmentwHandler.write("\n")                                                        # Write a newline ("\n") into apartmentwHandler
+   with open(listIdentifier(listCode),"r") as apartmentrHandler:                              # Open selected text file and named as apartmentrHandler 
+      for record in apartmentrHandler:
+         print(record.rstrip(","))                                                            # Print each record that inside the apartmentrHandler  
    if UID == None:                                                                            # If UID equals to None Then:
       modifyData(UID,listCode,code,None)                                                      # Call function modifyData(UID,listCode,code,None)
    else:                                                                                      # Other than that:
