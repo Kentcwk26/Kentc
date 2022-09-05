@@ -738,7 +738,7 @@ def newRoomCode():                                                              
       else:                                                                                   # Other than that:
          code = 2                                                                             # Error detected, code change from 'None' to '2'
          message(code)                                                                        # Print error message, call function message(code)
-         print("- Please fill in the correct format for room code. Refer to the description above for its details and format -")  # Error message explanation
+         print("- Please fill in the correct format for room code. Refer to the description for its details and format -")  # Error message explanation
          continue                                                                             # Jump back to the top of loop, rerun again
 
 def newRoomDimension():                                                                       # Define newRoomDimension function
@@ -757,18 +757,18 @@ def newRoomDimension():                                                         
       else:                                                                                   # Other than that:
          code = 2                                                                             # Error detected, incorrect input
          message(code)                                                                        # Print error message, call function message(code)
-         print("- Room dimension must consist of number(s) -")                                # Error message explanation
+         print("- Room dimension must consist of number(s) -\n")                                # Error message explanation
          continue                                                                             # Jump back to the top of loop, rerun again
       if code == None:                                                                        # No error detected, correct input
          decisionkey = input("Save data? (Enter to continue, 'N' to return back):")           # Print message and get decisionkey
          if decisionkey in ["N","n"]:                                                         # If decisionkey is equal to ["N","n"] Then:
             continue                                                                          # Jump back to the top of loop, rerun again
          else:                                                                                # Other than that:
-            return "Dimensions: " + newRoomDimension + "+ sqft"                               # Exit function and send the value back to the program
+            return "New Room Dimension: " + newRoomDimension + "+ sqft"                               # Exit function and send the value back to the program
       else:                                                                                   # Other than that:
          code = 2                                                                             # Error detected, code change from 'None' to '2'
          message(code)                                                                        # Print error message, call function message(code)
-         print("- Please fill in the correct format for room dimension. Refer to the description above for its details and format -\n")   # Error message explanation
+         print("- Please fill in the correct format for room dimension. Refer to the description for its details and format -\n")   # Error message explanation
          continue                                                                             # Jump back to the top of loop, rerun again
 
 def newRoompricing():                                                                         # Define newRoompricing function

@@ -956,7 +956,78 @@ ENDFUNCTION
 FUNCTION newRoomCode()
     WHILE TRUE
         code = None
-        PRINT("NEWLINERoom code only contains alphanumeric (A combination of uppercased alphabet and number), and no special characters NEWLINE Example: DKPRS1 NEWLINE NEWLINE Room Code: ")
+        PRINT("NEWLINE Room code only contains alphanumeric (A combination of uppercased alphabet and number), and no special characters NEWLINE Example: DKPRS1 NEWLINE NEWLINE Room Code: ")
+        GET newRoomCode
+        IF LENGTH(newRoomCode) <= 1:
+            code = 2
+            CALL message(code)
+            PRINT("- Room Code must contain at least 2 or more alphanumeric long - NEWLINE")
+            CONTINUELOOP
+        ELSE
+            code = None
+        ENDIF
+        IF newRoomCode.ISALNUM() THEN:
+            code = None
+        ELSE
+            code = 2
+            CALL message(code)
+            print("- Please note that room code is only acceptable when it contains alphanumeric only- NEWLINE")
+            CONTINUELOOP
+        ENDIF
+        IF code == None:
+            PRINT("Save data? (Enter to continue, 'N' to return back): ")
+            GET decisionkey
+            IF decisionkey IN ["N","n"] THEN:
+                CONTINUELOOP
+            ELSE:
+                RETURN "New Room Code: " + newRoomCode
+            ENDIF
+        ELSE
+            code = 2
+            CALL message(code)
+            PRINT("- Please fill in the correct format for room code. Refer to the description for its details and format -")
+            CONTINUELOOP
+        ENDIF
+    ENDWHILE
+ENDFUNCTION
+
+FUNCTION newRoomDimension()
+    WHILE TRUE
+        code = None
+        PRINT("NEWLINE Room Dimension only contains numbers, no alphabets and special characters (The unit (in sqft) will be provided at the back) NEWLINE Example: 300(+sqft) NEWLINE NEWLINE Room Dimension: ")
+        GET newRoomDimension
+        IF LENGTH(newRoomDimension) == 0:
+            code = 5
+            CALL message(code)
+            PRINT("- Please fill in the room dimension, and room dimension must have at least 100 or more sqft - NEWLINE")
+            CONTINUELOOP
+        ELSE
+            code = None
+        ENDIF
+        IF newRoomDimension.ISDIGIT() THEN:
+            code = None
+        ELSE
+            code = 2
+            CALL message(code)
+            print("- Room dimension must consist of number(s) -")
+            CONTINUELOOP
+        ENDIF
+        IF code == None:
+            PRINT("Save data? (Enter to continue, 'N' to return back): ")
+            GET decisionkey
+            IF decisionkey IN ["N","n"] THEN:
+                CONTINUELOOP
+            ELSE:
+                RETURN "New Room Dimension: " + newRoomDimension + "+ sqft"
+            ENDIF
+        ELSE
+            code = 2
+            CALL message(code)
+            PRINT("- Please fill in the correct format for room dimension. Refer to the description for its details and format -")
+            CONTINUELOOP
+        ENDIF
+    ENDWHILE
+ENDFUNCTION
 
 FUNCTION apartmentEditData()
 
