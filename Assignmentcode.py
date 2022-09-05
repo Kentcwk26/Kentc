@@ -198,7 +198,7 @@ def getname(code,nameType):                                                   # 
       elif nameType == "employer":                                            # If nameType equals to "employer" Then:
          name = input("Enter tenant's current employer: ")                    # Print message and get name
       else:                                                                   # Other than that:
-         name = input("Enter tenant's place-city-country of birth: ")         # Print message and get name
+         name = input("Enter tenant's place city country of birth: ")         # Print message and get name
       nameList = name.split(" ")                                              # Right stripped from the end of string (record) with the separators (all commas and newlines)
       if len(nameList) >= 2:                                                  # if the length of namelist is greater than or equal to 2 Then:
          for words in nameList:

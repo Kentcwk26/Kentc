@@ -1292,7 +1292,7 @@ code = NONE
 username = NONE
 password = NONE
 PRINT("NEWLINE Welcome to Tenant Management System.")
-PRINT("[Y]-Yes I am.\n[Any Other Key]-No,I have an existing account\nAre you a new user: ")
+PRINT("[Y]-Yes I am.NEWLINE[Any Other Key]-No,I have an existing accountNEWLINEAre you a new user: ")
 GET new
 IF new IN ["Y","y"] THEN
     CALL register(listCode,code) RETURNING username,password
