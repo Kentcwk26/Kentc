@@ -1265,13 +1265,13 @@ def searchInformation(listCode,num,details):                                    
          break
 
 import datetime as dt
-listCode = "u"                                                          # Set listCOde to 'u'
-code = None                                                             # Set code to 'None'
-username = None                                                         # Set username to 'None'
-password = None                                                         # Set password to 'None'
+listCode = "u"                                                                                # Set listCOde to 'u'
+code = None                                                                                   # Set code to 'None'
+username = None                                                                               # Set username to 'None'
+password = None                                                                               # Set password to 'None'
 new = input("\n----------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\n- Welcome to Tenant Management System -\n\nAre you a new user?\n[Y]-Yes I am.\n[Any Other Key]-No,I have an existing account\n\nAnswer: ")
-if new in ["Y","y"]:                                                    # If new in ["Y","y"] Then:
-   username,password = register(listCode,code)                          # call function register(listCode,code)
-   login(listCode,code,username,password)
-else:
-   login(listCode,code,username,password)
+if new in ["Y","y"]:                                                                          # If new in ["Y","y"] Then:
+   username,password = register(listCode,code)                                                # username, password = call function register(listCode,code)
+   login(listCode,code,username,password)                                                     # call function login(listCode,code,username,password)
+else:                                                                                         # Other than that:
+   login(listCode,code,username,password)                                                     # call function login(listCode,code,username,password)
