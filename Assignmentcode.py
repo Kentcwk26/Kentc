@@ -40,10 +40,6 @@ def login(listCode,code,nameInput,passInput):                                 # 
                   menu(UID,code)                                              # Call function menu(UID,code), redirect to menu
                   chance = 0                                                  # Reassign login chances to 0
                   break                                                       # Break out of the function
-               else:                                                          # Other than that:
-                  continue                                                    # Continue the loop
-            else:                                                             # Other than that:
-               continue                                                       # Continue the loop
          else:                                                                # Other than that:
             chance -= 1                                                       # Decrease chances by 1
             print("\nError, incorrect username or password.\n",chance,"chances remaining.") # Print message
@@ -634,7 +630,6 @@ def modifyData(UID,listCode,code,modifyType):                                   
          dataInput = modifyType                                                               # dataInput is modifyTYpe
       else:                                                                                   # Other than that:
          dataInput = input('\n-------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\nModification of records: -\n\n1. Add data\n2. Edit Data\n3. Delete Data\n4. Exit\n\nPlease select which operation to perform task (1-4): ') # Print message and get dataInput
-      print("\n----------------------------------------------------------------------------------------------------------------------------------------------------------")
       if dataInput == "1":                                                                    # If dataInput equals to "1" Then:
          if listCode == "a":                                                                  # If listCode equals to "a" Then:
             apartmentAddData(modify,listCode)                                                 # Call apartmentAddData(modify,listcode) functiom
@@ -705,7 +700,7 @@ def newRoom():                                                                  
          code = None                                                                          # Error not detected, remain the same value 'None'
       if code == None:                                                                        # No error detected, correct input                                                                
          newRoom.title()                                                                      # Return where the first character in each word is uppercase
-         decisionkey = input("Save data? (Enter to continue, 'N' to return back):")           # Print message and get decisionkey
+         decisionkey = input("Save data? (Enter to continue, 'N' to return back): ")          # Print message and get decisionkey
          if decisionkey in ['N','n']:                                                         # If decisionkey is equal to ["N","n"] Then:
             continue                                                                          # Jump back to the top of loop. rerun again
          else:                                                                                # Other than that:
@@ -713,7 +708,7 @@ def newRoom():                                                                  
       else:                                                                                   # Other than that:
          code = 2                                                                             # Error detected, code change from 'None' to '2'
          message(code)                                                                        # Print error message, call function message(code)
-         print("- Please fill in the correct format for room info. Refer to the description above for its details and format -")  # Error message explanation
+         print("- Please fill in the correct format for room info. Refer to the description for its details and format -")  # Error message explanation
          continue                                                                             # Jump back to the top of loop, rerun again 
 
 def newRoomCode():                                                                            # Define newRoomCode function
@@ -1118,7 +1113,7 @@ def deleteSpecRecord(listCode,code):                                            
          number = int(selecteddatarow)-1                                                      # number = selecteddatarow (in integer) subtract by 1 to search specific data location
          editDataType = None                                                                  # editDataType equals to None
          newData = None                                                                       # newData equals to None
-         confirmation = input("\nAre you sure that you want to delete all the record(s)?\nIt will be not recovered once you hit [X]. However, you still can discard this changes by hitting any other keys if you change your mind: ")  # Print message and get confirmation
+         confirmation = input("\nAre you sure that you want to delete selected record(s)?\nIt will be not recovered once you hit [X]. However, you still can discard this changes by hitting any other keys if you change your mind: ")  # Print message and get confirmation
          if confirmation in ["X","x"]:                                                        # If confirmation equals to ["X","x"] Then:
             replaceOldData(listCode,number,editDataType,newData)                              # call function replaceOldData(listCode,number,editDataType,newData)
             print("\n- Delete successful -")                                                  # Print message

@@ -1,8 +1,9 @@
 FUNCTION register(listCode,code)
     DECLARE userType,UID,username,password,userID,l AS STRING
+    DECLARE userAdd AS FILE
     userType = "new"
     UID = NONE
-    PRINT(" NEWLINE Create your account's username: ")
+    PRINT("NEWLINECreate your account's username: ")
     GET username
     PRINT("Next, create your account's password: ")
     GET password
@@ -21,9 +22,9 @@ FUNCTION login(listCode,code,nameInput,passInput)
     DECLARE chance AS INTEGER
     DECLARE username,password,UID AS STRING
     DECLARE listRecord AS ARRAY
+    DECLARE userInfo,current AS FILE
     chance = 3
-    DECLARE username, password AS STRING
-    WHILE chance>0
+    WHILE chance > 0
         IF nameInput AND passInput CONTAINS ANY VALUE THEN
             username = nameInput
             password = passInput
@@ -41,7 +42,7 @@ FUNCTION login(listCode,code,nameInput,passInput)
                 listRecord = SPLIT record INTO LIST WITH(",")
                 IF username == listRecord LOCATION 0 THEN
                     IF password == listRecord LOCATION 1 THEN
-                        PRINT("NEWLINE- Login successful -NEWLINE NEWLINE-----------------------------------------------------------------------------------------------------------------------------------------------------------------------")
+                        PRINT("NEWLINE- Login successful -")
                         IF (username == "john" AND password == "1234u-78") OR (username == "david" AND password == "55467913") THEN
                             UID = NONE
                         ELSE
@@ -58,7 +59,6 @@ FUNCTION login(listCode,code,nameInput,passInput)
             ELSE
                 chance -= 1
                 PRINT("Error, incorrect username or password.NEWLINE",chance,"chances remaining")
-                BREAKLOOP
             ENDFOR
         CLOSEFILE
     ENDWHILE
@@ -69,7 +69,7 @@ FUNCTION menu(UID,code)
     DECLARE num AS INTEGER
     WHILE TRUE
         IF UID CONTAINS ANY VALUE THEN
-            PRINT("NEWLINEMain menu:NEWLINENEWLINE[S] - Search boxNEWLINENEWLINEReview information about:NEWLINE[A] - Available ApartmentsnNEWLINE[T] - My Tenant detailsNEWLINE[P] - My TransactionsNEWLINENEWLINEQuick functions:NEWLINE[D] - Print my House & Tenant DetailsNEWLINE[E] - Exit")
+            PRINT("NEWLINEMain menu:NEWLINENEWLINE[S] - Search boxNEWLINENEWLINEReview information about:NEWLINE[A] - Available ApartmentsNEWLINE[T] - My Tenant detailsNEWLINE[P] - My TransactionsNEWLINENEWLINEQuick functions:NEWLINE[D] - Print my House & Tenant DetailsNEWLINE[E] - Exit")
         ELSE
             PRINT("NEWLINEMain menu:NEWLINENEWLINE[S] - Search boxNEWLINENEWLINEReview information about:NEWLINE[A] - ApartmentsnNEWLINE[T] - TenantNEWLINE[P] - TransactionNEWLINENEWLINEQuick functions:NEWLINE[D] - Print Specific House & Tenant DetailsNEWLINE[I] - Inquiry of Past Tenant DetailsNEWLINE[E] - Exit")
         ENDIF
@@ -94,12 +94,12 @@ FUNCTION menu(UID,code)
             details = "past"
             CALL searchInformation(listCode,num,details)
         ELSEIF opt IN ["E","e"] THEN
-            PRINT("NEWLINE-----------------------------------------------------------------------------------------------------------------------------------------------------------------------NEWLINENEWLINEYou're about to leave Tenant Management System. Are you sure? [Enter]-Continue, [X]-Return to main menu): ")
+            PRINT("You're about to leave Tenant Management System. Are you sure? [Enter]-Continue, [X]-Return to main menu): ")
             GET exitConfirmationKey
             IF exitConfirmationKey IN ["X","x"] THEN
                 CONTINUELOOP
             ELSE
-                PRINT("NEWLINE-----------------------------------------------------------------------------------------------------------------------------------------------------------------------NEWLINENEWLINEExit successful, have a nice day~NEWLINE")
+                PRINT("Exit successful, have a nice day~")
                 RETURN FALSE
             ENDIF
         ELSE
@@ -147,14 +147,17 @@ FUNCTION listIdentifier(listCode)
         l = "tenant.txt"
     ELSEIF listcode == "a" THEN
         l = "Apartment.txt"
-    ELSE THEN
+    ELSEIF listcode == "p" THEN
         l = "transaction.txt"
+    ELSEIF listcode == "u" THEN
+        l = "user.txt"
     ENDIF
     RETURN l
 ENDFUNCTION
 
 FUNCTION appendFile(list,listCode)
     DECLARE l AS STRING
+    DECLARE fAppend AS FILE
     CALL listIdentifier(listCode) RETURNING l
     OPENFILE l IN APPEND AS fAppend
         FOR item IN list
@@ -168,6 +171,7 @@ ENDFUNCTION
 FUNCTION readFile(listCode)
     DECLARE l,stripped AS STRING
     DECLARE splitRecord,string AS ARRAY
+    DECLARE fRead AS FILE
     CALL listIdentifier(listCode) RETURNING l
     OPENFILE l IN READ AS fRead
         string = READ fRead LINE-BY-LINE
@@ -211,6 +215,7 @@ FUNCTION gettenantID(UID,userType)
     DECLARE number,code,displayColumn,currentColumn AS INTEGER
     DECLARE path AS STRING
     DECLARE userRecord AS ARRAY
+    DECLARE uRead AS FILE
     IF UID CONTAINS ANY VALUE THEN
         OPENFILE "currentUser.txt" IN READ AS uRead
             userRecord = READ AND SPLIT uRead INTO LIST WITH(",")
@@ -685,6 +690,7 @@ ENDFUNCTION
 FUNCTION tenantAndApartment(UID)
     DECLARE listCode,reference1,reference2, AS STRING
     DECLARE primaryKeys,TAList,file,list,TARecord AS ARRAY
+    DECLARE pRead,tRead,aRead AS FILE
     listCode = "p"
     reference1 = "t"
     reference2 = "a"
@@ -797,178 +803,160 @@ FUNCTION tenantOrTransaction(UID,listCode,code)
         ENDIF
     ENDWHILE
 ENDFUNCTION
+
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-FUNCTION adminApartment()
+FUNCTION apartment(UID,listCode,code)
     
-    DECLARE record AS ARRAY
+    listCode = "a"
+    PRINT("\n------------------------------------------------------------------------------------------------------------------------------------------------------\n\n- Apartment Info: -\n")
+    SET list1=[["Standard Room (Triple)"],["Code: SR1"],["Dimensions: 140+ sqft"],["Pricing: RM350"],["Number of Rooms: 20"],["Apartment ID: A01-L1-R1 to A01-L1-R21"]]
+    SET list2=[["Standard Room (Twin)"],["Code: SR2"],["Dimensions: 120+ sqft"],["Pricing: RM450"],["Number of Rooms: 20"],["Apartment ID: A01-L1-R22 to A01-L1-R41"]]
+    SET list3=[["Standard Room A/C (Triple)"],["Code: SR3"],["Dimensions: 150+ sqft"],["Pricing: RM550"],["Number of Rooms: 20"],["Apartment ID: A01-L2-R1 to A01-L2-R21"]]
+    SET list4=[["Standard Room A/C (Twin)"],["Code: SR4"],["Dimensions: 130+ sqft"],["Pricing: RM650"],["Number of Rooms: 20"],["Apartment ID: A01-L2-R22 to A01-L2-R41"]]
+    SET list5=[["Deluxe Room (Triple)"],["Code: DR1"],["Dimensions: 170+ sqft"],["Pricing: RM750"],["Number of Rooms: 20"],["Apartment ID: A01-L4-R1 to A01-L4-R21"]]
+    SET list6=[["Deluxe Room (Twin)"],["Code: DR2"],["Dimensions: 160+ sqft"],["Pricing: RM840"],["Number of Rooms: 20"],["Apartment ID: A01-L4-R22 to A01-L4-R41"]]
+    SET list7=[["Deluxe Room A/C with shared attached bath / toilet (Triple)"],["Code: DR3"],["Dimensions: 180+ sqft"],["Pricing: RM950"],["Number of Rooms: 20"],["Apartment ID: A01-L3-R1 to A01-L3-R21"]]
+    SET list8=[["Deluxe Room A/C with shared attached bath / toilet"],["Code: DR4"],["Dimensions: 170+ sqft"],["Pricing: RM1040"],["Number of Rooms: 20"],["Apartment ID: A01-L3-R22 to A01-L3-R41"]]
+    SET list9=[["Compact Premium Single"],["Code: CPS"],["Dimensions: 130+ sqft"],["Pricing: RM690"],["Number of Rooms: 20"],["Apartment ID: A01-L5-R1 to A01-L5-R41"]]
+    SET list10=[["Medium Premium Single"],["Code: MPS"],["Dimensions: 150+ sqft"],["Pricing: RM750"],["Number of Rooms: 20"],["Apartment ID: A02-L1-R1 to A02-L1-R21"]]
+    SET list11=[["Medium Premium Twin"],["Code: MPT"],["Dimensions: 180+ sqft"],["Pricing: RM890"],["Number of Rooms: 20"],["Apartment ID: A02-L2-R1 to A02-L2-R21"]]
+    SET list12=[["Medium Premium with attached bath / toilet (Twin)"],["Code: MP1"],["Dimensions: 180+ sqft"],["Pricing: RM940"],["Number of Rooms: 20"],["Apartment ID: A02-L3-R1 to A02-L3-R21"]]
+    SET list13=[["Medium Premium with attached bath / toilet (Single)"],["Code: MP2"],["Dimensions: 160+ sqft"],["Pricing: RM1050"],["Number of Rooms: 20"],["Apartment ID: A02-L3-R22 to A02-L3-R41"]]
+    SET list14=[["En-Suite Single (Super Premium - Triple)"],["Code: ESS3"],["Dimensions: 160+ sqft"],["Pricing: RM700"],["Number of Rooms: 20"],["Apartment ID: A02-L4-R1 to A02-L4-R41"]]
+    SET list15=[["En-Suite Single (Super Premium - Twin)"],["Code: ESS2"],["Dimensions: 140+ sqft"],["Pricing: RM800"],["Number of Rooms: 20"],["Apartment ID: A02-L4-R1 to A02-L4-R41"]]
+    SET list16=[["En-Suite Twin (Super Premium)"],["Code: EST2"],["Dimensions: 200+ sqft"],["Pricing: RM900"],["Number of Rooms: 20"],["Apartment ID: A02-L5-R1 to A02-L5-R41"]]
+    ApartmentList = [list1,list2,list3,list4,list5,list6,list7,list8,list9,list10,list11,list12,list13,list14,list15,list16] IN record
 
-    START
-        PRINT("NEWLINE Apartment Info: NEWLINE")
-
-        SET list1=[["Standard Room (Triple)"],["Code: SR1"],["Dimensions: 140+ sqft"],["Pricing: RM350"],["Number of Rooms: 20"],["Apartment ID: A01-L1-R1 to A01-L1-R21"]]
-        SET list2=[["Standard Room (Twin)"],["Code: SR2"],["Dimensions: 120+ sqft"],["Pricing: RM450"],["Number of Rooms: 20"],["Apartment ID: A01-L1-R22 to A01-L1-R41"]]
-        SET list3=[["Standard Room A/C (Triple)"],["Code: SR3"],["Dimensions: 150+ sqft"],["Pricing: RM550"],["Number of Rooms: 20"],["Apartment ID: A01-L2-R1 to A01-L2-R21"]]
-        SET list4=[["Standard Room A/C (Twin)"],["Code: SR4"],["Dimensions: 130+ sqft"],["Pricing: RM650"],["Number of Rooms: 20"],["Apartment ID: A01-L2-R22 to A01-L2-R41"]]
-        SET list5=[["Deluxe Room (Triple)"],["Code: DR1"],["Dimensions: 170+ sqft"],["Pricing: RM750"],["Number of Rooms: 20"],["Apartment ID: A01-L4-R1 to A01-L4-R21"]]
-        SET list6=[["Deluxe Room (Twin)"],["Code: DR2"],["Dimensions: 160+ sqft"],["Pricing: RM840"],["Number of Rooms: 20"],["Apartment ID: A01-L4-R22 to A01-L4-R41"]]
-        SET list7=[["Deluxe Room A/C with shared attached bath / toilet (Triple)"],["Code: DR3"],["Dimensions: 180+ sqft"],["Pricing: RM950"],["Number of Rooms: 20"],["Apartment ID: A01-L3-R1 to A01-L3-R21"]]
-        SET list8=[["Deluxe Room A/C with shared attached bath / toilet"],["Code: DR4"],["Dimensions: 170+ sqft"],["Pricing: RM1040"],["Number of Rooms: 20"],["Apartment ID: A01-L3-R22 to A01-L3-R41"]]
-        SET list9=[["Compact Premium Single"],["Code: CPS"],["Dimensions: 130+ sqft"],["Pricing: RM690"],["Number of Rooms: 20"],["Apartment ID: A01-L5-R1 to A01-L5-R41"]]
-        SET list10=[["Medium Premium Single"],["Code: MPS"],["Dimensions: 150+ sqft"],["Pricing: RM750"],["Number of Rooms: 20"],["Apartment ID: A02-L1-R1 to A02-L1-R21"]]
-        SET list11=[["Medium Premium Twin"],["Code: MPT"],["Dimensions: 180+ sqft"],["Pricing: RM890"],["Number of Rooms: 20"],["Apartment ID: A02-L2-R1 to A02-L2-R21"]]
-        SET list12=[["Medium Premium with attached bath / toilet (Twin)"],["Code: MP1"],["Dimensions: 180+ sqft"],["Pricing: RM940"],["Number of Rooms: 20"],["Apartment ID: A02-L3-R1 to A02-L3-R21"]]
-        SET list13=[["Medium Premium with attached bath / toilet (Single)"],["Code: MP2"],["Dimensions: 160+ sqft"],["Pricing: RM1050"],["Number of Rooms: 20"],["Apartment ID: A02-L3-R22 to A02-L3-R41"]]
-        SET list14=[["En-Suite Single (Super Premium - Triple)"],["Code: ESS3"],["Dimensions: 160+ sqft"],["Pricing: RM700"],["Number of Rooms: 20"],["Apartment ID: A02-L4-R1 to A02-L4-R41"]]
-        SET list15=[["En-Suite Single (Super Premium - Twin)"],["Code: ESS2"],["Dimensions: 140+ sqft"],["Pricing: RM800"],["Number of Rooms: 20"],["Apartment ID: A02-L4-R1 to A02-L4-R41"]]
-        SET list16=[["En-Suite Twin (Super Premium)"],["Code: EST2"],["Dimensions: 200+ sqft"],["Pricing: RM900"],["Number of Rooms: 20"],["Apartment ID: A02-L5-R1 to A02-L5-R41"]]
-        APPEND [list1,list2,list3,list4,list5,list6,list7,list8,list9,list10,list11,list12,list13,list14,list15,list16] IN record
-
-    OPENFILE "Apartment.txt" IN WRITE AS Ahandler
-        for item in record
-            for data in item
-                for element in data
-                    WRITE element TO Ahandler
-                WRITE ", " TO Ahandler
-            WRITE "NEWLINE" TO Ahandler
+    OPENFILE "Apartment.txt" IN WRITE MODE AS apartmentwHandler
+        FOR record IN apartmentwHandler
+            FOR data IN record
+                WRITE data TO apartmentwHandler
+                WRITE ", " TO apartmentwHandler
+            WRITE "NEWLINE" TO apartmentwHandler
     CLOSE Apartment.txt
 
-    OPENFILE "Apartment.txt" IN READ AS Ahandler
-        for item in Ahandler
-            PRINT(item,RIGHTSTRIP() RIGHTSTRIP(","))
+    OPENFILE "Apartment.txt" IN READ MODE AS apartmentrHandler
+        FOR record IN apartmentrHandler
+            PRINT(record.RIGHTSTRIP(","))
     CLOSE Apartment.txt
 
-    CALLmodifydata()
+    IF UID == None Then:
+        CALLmodifydata(UID,listCode,code,None)
+    ELSE
+        RETURN FALSE
+    ENDIF
 ENDFUNCTION
 
-FUNCTION modifyData(listCode)
-    DECLARE list AS ARRAY
-    DECLARE dataInput AS INTEGER
+FUNCTION modifyData(UID,listCode,code,modifyType)
+    modify = True
     WHILE TRUE
-        PRINT("NEWLINE 1. Add data NEWLINE 2. Edit Data NEWLINE 3. Delete Data NEWLINE 4. Exit NEWLINE")
-        PRINT("Please select which operation: ")
-        GET dataInput
-        list = []
-        IF dataInput == 1 THEN
-            PRINT("NEWLINE Add Data NEWLINE")
+        IF modifyType THEN:
+            dataInput = modifyType
+        ELSE:
+            PRINT ("NEWLINE-------------------------------------------------------------------------------------------------------------------------------------------------------------------------NEWLINE NEWLINE Modification of records: -\n\n1. Add data\n2. Edit Data\n3. Delete Data\n4. Exit\n\nPlease select which operation to perform task (1-4): ')
+            GET dataInput
+        IF dataInput == "1" THEN
             IF listCode == "a" THEN
-                CALL apartmentAddData()
-            ELSEIF listCode == "t" THEN
-                list = CALL tenantEntryForm(list)
-            ELSE THEN
-                CALL transactionEntryForm()
-        appendFile(list,listCode)
-
+                CALL apartmentAddData(modify,listCode) 
+            ELSE
+                CALL tenantOrTransactionEntryForm(UID,listCode,code)
+            ENDIF
         ELSEIF dataInput==2 THEN
-            PRINT("NEWLINE Edit Data NEWLINE")
-            IF listCode == "a" THEN
-                CALL apartmentEditData()
-            ELSEIF listCode == "t" THEN
-                CALL tenantEdit()
-            ELSE THEN
-                CALL transactionEdit()
-
+            CALL editData(UID,listCode,code) 
         ELSEIF dataInput==3 THEN
-            PRINT("NEWLINE Delete Data NEWLINE")
-            IF listCode == "a" THEN
-                CALL apartmentDeleteData()
-            ELSEIF listcode == "t" THEN
-                CALL tenantDelete()
-            ELSE THEN
-                CALL transactionDelete()
-
-        ELSE IF dataInput==4 THEN
-            PRINT("Exit")
-            RETURN False
-        ELSE THEN
+            CALL deleteRecord(listCode,code)
+        ELSEIF dataInput==4 THEN
+            BREAKLOOP
+        ELSE
             code = 0
-            message(code)
+            CALL message(code)
+            CONTINUELOOP
+        ENDIF
+        IF UID == None
+            CONTINUELOOP
+        ELSE
+            BREAKLOOP
         ENDIF
     ENDWHILE
 ENDFUNCTION
 
-FUNCTION apartmentAddData():
-    
-    WHILE TRUE:
-        DECLARE addDataNum,newapartmentnumberofrooms,addDataConfirmation,rewriteDataConfirmation,addDataConfirmation2 AS INTEGER
-        DEFINE adddata AS ARRAY
+FUNCTION apartmentAddData(modify,listCode):
+    DECLARE adddatalist as ARRAY
+    PRINT("NEWLINEDear admin, we need your ATTENTION !\n\nFor your information, all the new data will only be stored if you insert each information with the correct format provided.\n\nOnce you finish each entry,a confirmation message will appear. Please ensure that the data is typed correctly before saving.\n- Now, you are required to enter new data. -\n\n----------------------------------------------------------------------------------------------------------------------------------------------------------")
+    CALL newRoom() RETURNING newroom
+    CALL newRoomCode() RETURNING newroomcode
+    CALL newRoomDimension() RETURNING newroomdimension
+    CALL newRoompricing() RETURNING newroompricing
+    CALL newRoomID() RETURNING newroomID
+    dateType = "Acquisition"
+    CALL newRoomDate(dateType) RETURNING newroomdateofacquisition
+    dateTyoe = "History"
+    CALL newRoomDate(dateType) RETURNING newroomrentalhistory
+    CALL newRoomStatus() RETURNING newroomstatus
+    APPEND [newapartment,newapartmentcode,newapartmentdimension,newapartmentpricing,newapartmentnumberofrooms,newapartmentID] in string TO adddata
+    PRINT("NEWLINE New Data:",adddatalist)
+    PRINT("NEWLINE Are you sure with the records you inserted just now? Enter to continue, 'N' to unsave: ")
+    IF addDataconfirmation IN ["N","n"] Then:
+        CLEAR adddatalist
+    ELSE
+        CALL appendFile(adddatalist,listCode)
+        PRINT("NEWLINE- Data Saved -NEWLINE NEWLINE----------------------------------------------------------------------------------------------------------------------------------------------------------")
+    RETURN modify
+    ENDIF
+ENDFUNCTION
 
-        PRINT("NEWLINE Dear admin, how many record(s) that you decide to add??")
-        GET adddatanum
-        PRINT("NEWLINE Now, you are required to enter the new data NEWLINE")
-
-        FOR i FROM 0 TO addDataNum
-        WHILE (adddatanum ==1) OR (adddatanum >=1) THEN
-            PRINT("Room Type: ")
-            GET newapartment
-            PRINT("Code: ")
-            GET newapartmentcode
-            PRINT("Dimension (in range): ")
-            GET newapartmentdimension
-            PRINT("Pricing in RM: ")
-            GET newapartmentpricing
-            PRINT("Number of rooms: ")
-            GET newapartmentnumberofrooms
-            PRINT("Apartment ID: ")
-            GEt newapartmentID
-            APPEND [newapartment,newapartmentcode,newapartmentdimension,newapartmentpricing,newapartmentnumberofrooms,newapartmentID] TO adddata
-
-        WHILE (adddatanum == 0) THEN
-            PRINT("Error, cannot insert zero records")
-            code=0
+FUNCTION newRoom()
+    WHILE TRUE
+        code = None
+        SCL = "SCL2"
+        specials = CALL specialCharacterList(SCL)
+        PRINT("NEWLINE Room info only contains alphabets, no numbers and special characters [Except these special characters: '(' ')' '/' '-' ]NEWLINE Example: Dual Key Premium Rooms - Single Room NEWLINE NEWLINE Room Info: ")
+        GET newRoom
+        IF [character FOR character IN newRoom IF (character IN specials)] THEN:
+            code = 2
             CALL message(code)
-            RETURN TRUE
-
-        ENDFOR
-
-        PRINT("Are you sure with the records you inserted just now? Enter '1' to save record, Enter '0' to unsave record: )
-        GET addDataConfirmation
-
-        IF addDataConfirmation == 1 THEN
-
-            OPENFILE "Apartment.txt" IN WRITE AS Ahandler
-                FOR item FROM adddata
-                    FOR data FROM item
-                        FOR information FROM data
-                            WRITE information TO Ahandler
-                        WRITE ", " TO Ahandler
-                    WRITE "NEWLINE" TO Ahandler
-            CLOSE FILE
-            PRINT("NEWLINE Data Saved NEWLINE ")
-            
-            PRINT("Are you going to add more data? Yes/No")
-            GET addDataConfirmation2
-            IF addDataConfirmation2 == 'Yes' THEN
-                PRINT("NEWLINE Return to main menu")
-                RETURN FALSE
-
-            ELSE IF addDataConfirmation2 == 'No' THEN
-                RETURN TRUE
-
-            ELSE
-                code = 0
-                CALL message(code)
-
-            ENDIF
-
-        ELSEIF addDataConfirmation == 0 THEN
-
-            PRINT("NEWLINE Enter 'W' to rewrite the data again, Enter any key to exit: ")
-            GET rewriteDataConfirmation
-            IF rewriteDataConfirmation == 'W' THEN
-                RETURN TRUE
-            ELSE
-                PRINT("Return to main menu....")
-                RETURN FALSE
-            ENDIF
-
-        ELSE THEN
-            code = 0
+            PRINT("- Room info does not contain special character(s) -")
+            CONTINUELoELSE
+            code = None
+        ENDIF
+        IF 0 <= LENGTH(newRoom) < 6 THEN:
+            code = 2
             CALL message(code)
-            RETURN TRUE
+            PRINT("-  Refer to the Room Info to look for its details and format -")
+            CONTINUE
+        ELSE
+            code = None
+        ENDIF
+        IF newRoom ISDIGIT AND ANY(location ISDIGIT FOR location IN newRoom) THEN
+            code = 1
+            CALL message(code)
+            PRINT("- Room info does not contain number(s) -") 
+            CONTINUELOOP
+        ELSE
+            code = None
+        ENDIF
+        IF code == None THEN:
+            TITLE newRoom
+            PRINT("Save data? (Enter to continue, 'N' to return back): ")
+            IF decisionkey IN ['N','n'] THEN:
+                CONTINUELOOP
+            ELSE
+                RETURN "New Room Info: " + newRoom
+            ENDIF
+        ELSE
+            code = 2
+            CALL message(code)
+            PRINTprint("- Please fill in the correct format for room info. Refer to the description for its details and format -")
+            CONTINUELOOP
         ENDIF
     ENDWHILE
 ENDFUNCTION
+
+FUNCTION newRoomCode()
+    WHILE TRUE
+        code = None
+        PRINT("NEWLINERoom code only contains alphanumeric (A combination of uppercased alphabet and number), and no special characters NEWLINE Example: DKPRS1 NEWLINE NEWLINE Room Code: ")
 
 FUNCTION apartmentEditData()
 
