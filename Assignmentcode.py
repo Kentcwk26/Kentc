@@ -815,7 +815,7 @@ def newRoomID():                                                                
                if decisionkey in ["N","n"]:                                                   # If decisionkey is equal to ["N","n"] Then:
                   continue                                                                    # Jump back to the top of loop, rerun again
                else:                                                                          # Other than that:
-                  return "Apartment ID: " + newRoomID                                         # Exit function and send the value back to the program
+                  return "New Room ID: " + newRoomID                                         # Exit function and send the value back to the program
             else:                                                                             # Other than that:
                code = 1                                                                       # code equals to 1
                message(code)                                                                  # Print error message, call function message(code)
@@ -847,7 +847,7 @@ def newRoomDate(dateType):                                                      
             if decisionkey in ["N","n"]:                                                      # If decisionkey is equal to ["N","n"] Then:
                continue                                                                       # Jump back to the top of loop, rerun again
             else:                                                                             # Other than that:
-               return "Acquisition Date: " + roomDate                                         # Exit function and send the value back to the program
+               return "Date: " + roomDate                                         # Exit function and send the value back to the program
          else:                                                                                # Other than that:
             code = 2                                                                          # Code equals to 2
             message(code)                                                                     # Print error message, call function message(code)
@@ -872,64 +872,64 @@ def newRoomStatus():                                                            
          if decisionkey in ["N","n"]:                                                         # If decisionkey is equal to ["N","n"] Then:
             continue                                                                          # Jump back to the top of loop, rerun again
          else:                                                                                # Other than that:
-            return "Status: "+newRoomStatus                                                   # Exit function and send the value back to the program
+            return "Status: " + newRoomStatus                                                   # Exit function and send the value back to the program
       else:                                                                                   # Other than that:
          code = 3                                                                             # code equals to 3
          message(code)                                                                        # Print error message, call function message(code)
-         print("Please insert the correct format for room status. Refer to the description above for its details and format -\n")  # Print error message explanation
+         print("Please insert the correct format for room status. Refer to the description for its details and format -\n")  # Print error message explanation
          continue                                                                             # Jump back to the top of loop, rerun again
 
 def inputidentifier(UID,listCode,editDataType,code):                                          # Define inputidentifier function
    if listCode == "a":                                                                        # If listCode equals to "a" Then:
       if editDataType == 0:                                                                   # If editDataType equals to 0 Then:
          return newRoom()                                                                     # Exit function and send the value back to the program
-      elif editDataType == 1:                                                                 # If editDataType equals to 0 Then:
+      elif editDataType == 1:                                                                 # If editDataType equals to 1 Then:
          return newRoomCode()                                                                 # Exit function and send the value back to the program
-      elif editDataType == 2:                                                                 # If editDataType equals to 0 Then:
+      elif editDataType == 2:                                                                 # If editDataType equals to 2 Then:
          return newRoomDimension()                                                            # Exit function and send the value back to the program
-      elif editDataType == 3:                                                                 # If editDataType equals to 0 Then:
+      elif editDataType == 3:                                                                 # If editDataType equals to 3 Then:
          return newRoompricing()                                                              # Exit function and send the value back to the program
-      elif editDataType == 4:                                                                 # If editDataType equals to 0 Then:
+      elif editDataType == 4:                                                                 # If editDataType equals to 4 Then:
          return newRoomID()                                                                   # Exit function and send the value back to the program
-      elif editDataType == 5:                                                                 # If editDataType equals to 0 Then:
+      elif editDataType == 5:                                                                 # If editDataType equals to 5 Then:
          return newRoomDate("acquisition")                                                    # Exit function and send the value back to the program
-      elif editDataType == 6:                                                                 # If editDataType equals to 0 Then:
+      elif editDataType == 6:                                                                 # If editDataType equals to 6 Then:
          return newRoomDate("history")                                                        # Exit function and send the value back to the program
       else:                                                                                   # Other than that:
          return newRoomStatus()                                                               # Exit function and send the value back to the program
    elif listCode == "t":
       if editDataType == 0:                                                                   # If editDataType equals to 0 Then:
          return gettenantID(UID,"existing")                                                   # Exit function and send the value back to the program
-      elif editDataType == 1:                                                                 # If editDataType equals to 0 Then:
+      elif editDataType == 1:                                                                 # If editDataType equals to 1 Then:
          return getname(code,"tenant")                                                        # Exit function and send the value back to the program
-      elif editDataType == 2:                                                                 # If editDataType equals to 0 Then:
+      elif editDataType == 2:                                                                 # If editDataType equals to 2 Then:
          return getabbreviation(code,"gender")                                                # Exit function and send the value back to the program
-      elif editDataType == 3:                                                                 # If editDataType equals to 0 Then:
+      elif editDataType == 3:                                                                 # If editDataType equals to 3 Then:
          return getpNum(code)                                                                 # Exit function and send the value back to the program
-      elif editDataType == 4:                                                                 # If editDataType equals to 0 Then:
+      elif editDataType == 4:                                                                 # If editDataType equals to 4 Then:
          return getabbreviation(code,"nationality")                                           # Exit function and send the value back to the program
-      elif editDataType == 5:                                                                 # If editDataType equals to 0 Then:
+      elif editDataType == 5:                                                                 # If editDataType equals to 5 Then:
          return getDate(code,"start")                                                         # Exit function and send the value back to the program
-      elif editDataType == 6:                                                                 # If editDataType equals to 0 Then:
+      elif editDataType == 6:                                                                 # If editDataType equals to 6 Then:
          return getnumber(code,"workHistory")                                                 # Exit function and send the value back to the program
-      elif editDataType == 7:                                                                 # If editDataType equals to 0 Then:
+      elif editDataType == 7:                                                                 # If editDataType equals to 7 Then:
          return getname(code,"employer")                                                      # Exit function and send the value back to the program
-      elif editDataType == 8:                                                                 # If editDataType equals to 0 Then:
+      elif editDataType == 8:                                                                 # If editDataType equals to 8 Then:
          return getnumber(code,"income")                                                      # Exit function and send the value back to the program
-      elif editDataType == 9:                                                                 # If editDataType equals to 0 Then:
+      elif editDataType == 9:                                                                 # If editDataType equals to 9 Then:
          return getrental(UID)                                                                # Exit function and send the value back to the program
-      elif editDataType == 10:                                                                # If editDataType equals to 0 Then:
+      elif editDataType == 10:                                                                # If editDataType equals to 10 Then:
          return getDate(code,"birth")                                                         # Exit function and send the value back to the program
       else:                                                                                   # Other than that:
          return getname(code,"city")                                                          # Exit function and send the value back to the program
    else:                                                                                      # Other than that:
       if editDataType == 0:                                                                   # If editDataType equals to 0 Then:
          return getreferenceNumber(code)                                                      # Exit function and send the value back to the program
-      elif editDataType == 1:                                                                 # If editDataType equals to 0 Then:
+      elif editDataType == 1:                                                                 # If editDataType equals to 1 Then:
          return getDate(code,"transaction")                                                   # Exit function and send the value back to the program
-      elif editDataType == 2:                                                                 # If editDataType equals to 0 Then:
+      elif editDataType == 2:                                                                 # If editDataType equals to 2 Then:
          return gettenantID(UID,"existing")                                                   # Exit function and send the value back to the program
-      elif editDataType == 3:                                                                 # If editDataType equals to 0 Then:
+      elif editDataType == 3:                                                                 # If editDataType equals to 3 Then:
          chooseList = "a"                                                                     # chooseList equals to "a"
          displayColumn = 0                                                                    # displayColoumn equals to 0
          currentColumn = 1                                                                    # currentColoumn equals to 1
