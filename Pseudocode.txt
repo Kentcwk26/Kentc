@@ -1004,7 +1004,7 @@ FUNCTION newRoomDimension()
         ELSE
             code = None
         ENDIF
-        IF newRoomDimension.ISDIGIT() THEN:
+        IF newRoomDimension ISDIGIT THEN:
             code = None
         ELSE
             code = 2
@@ -1028,6 +1028,228 @@ FUNCTION newRoomDimension()
         ENDIF
     ENDWHILE
 ENDFUNCTION
+
+FUNCTION newRoomID()
+    WHILE TRUE
+        code = None
+        PRINT("NEWLINEThis is the correct format for RoomID: A(01)-L(01)-R(01)x(to)xA(99)-L(99)-R(99), x means space NEWLINE Please enter the new Room ID: ")
+        GET newRoomID
+        IF 0 <= LENGTH(newRoomID) <= 25:
+            PRINT("- Please fill in the new room ID with the correct format -")
+            CONTINUELOOP
+        ELSE
+            IF (newRoomID[0] == 'A' AND newRoomID[3] == '-' AND newRoomID[4] == 'L' AND newRoomID[7] == '-' AND newRoomID[8] == 'R' AND newRoomID[11] == ' ' AND newRoomID[12] == 't' AND newRoomID[13] == 'o' AND newRoomID[14] == ' ' AND newRoomID[15] == 'A' AND newRoomID[18] == '-' AND newRoomID[19] == 'L' AND newRoomID[22] == '-' AND newRoomID[23] == 'R') THEN:
+                IF ((newRoomID[1] AND newRoomID[2] AND newRoomID[5] AND newRoomID[6] AND newRoomID[9] AND newRoomID[10] AND newRoomID[16] AND newRoomID[17] AND newRoomID[20] AND newRoomID[21] AND newRoomID[24] AND newRoomID[25]) ISDIGIT) THEN
+                    PRINT("Save data? (Enter to continue, 'N' to return back):")
+                    GET decisionkey
+                    IF decisionkey IN ["N","n"] THEN:
+                        CONTINUELOOP
+                    ELSE
+                        RETURN "New Room ID: " + newRoomID
+                ELSE
+                    code = 1
+                    CALL message(code)
+                    CONTINUELOOP
+            ELSE
+                code = 2
+                CALL message(code)
+                PRINT("- Incorrect Room ID -")
+                CONTINUELOOP
+            ENDIF
+        ENDIF
+    ENDWHILE
+ENDFUNCTION
+
+FUNCTION newRoomDate(dateType)
+    WHILE TRUE
+        code = None
+        IF dateType == 'Acquisition' THEN:
+            PRINT("NEWLINE Room Date of Acquisition: dd/mm/yyyy NEWLINE No special characters included, except '/' NEWLINE NEWLINE Room Acquisition Date: ")
+            GET roomDate
+        ELSE
+            PRINT(" NEWLINE Room Rental History: (Accepted input: 'dd/mm/yyyy' or 'Empty') NEWLINE No special characters included, except '/' NEWLINE NEWLINE Room Rental History: ")
+            GET roomDate
+        ENDIF
+        IF ANY(Location ISDIGIT FOR location IN roomDate) AND LENGTH(roomDate) == 10 THEN:
+            day,month,year = SPLIT date INTO LIST WITH("/")
+            ValidDate = True
+            TRY
+                DATETIME(INTEGER(year),INTEGER(month),INTEGER(day))
+                code = NONE
+            EXCEPT VALUEERROR
+                ValidDate = False
+            ENDTRY
+            IF code == None:
+                PRINT("Save data? (Enter to continue, 'N' to return back): ")
+                GET decisionkey
+                IF decisionkey IN ["N","n"] THEN:
+                    CONTINUELOOP
+                ELSE:
+                    RETURN "Date: " + roomDate
+                ENDIF
+            ELSE
+                code = 2
+                CALL message(code)
+                PRINT("- The given date is not valid - NEWLINE")
+                CONTINUELOOP
+            ENDIF
+        ELSE
+            code = 2
+            CALL message(code)
+            PRINT("- Wrong Date Format (dd/mm/yyyy) - NEWLINE")
+            CONTINUELOOP
+        ENDIF
+    ENDWHILE
+ENDFUNCTION
+
+FUNCTION newRoomStatus()
+    WHILE TRUE
+        code = None
+        PRINT("NEWLINE Room Status: [A]-Available; [Any other key]-Not Available') NEWLINE NEWLINE Room Status ( Available / Not Available ): ")
+        GET newRoomStatus
+        IF newRoomStatus IN ["N","n"] THEN:
+            newRoomStatus = "Available"
+        ELSE
+            newRoomStatus = "Not Available"
+        ENDIF
+        IF code == None:
+            PRINT("Save data? (Enter to continue, 'N' to return back): ")
+            GET decisionkey
+            IF decisionkey IN ["N","n"] THEN:
+                CONTINUELOOP
+            ELSE:
+                RETURN "Status: " + newRoomStatus
+            ENDIF
+        ELSE
+            code = 3
+            CALL message(code)
+            PRINT("- Please fill in the correct format for room status. Refer to the description for its details and format -")
+            CONTINUELOOP
+        ENDIF
+    ENDWHILE
+ENDFUNCTION
+
+FUNCTION inputidentifier(UID,listCode,editDataType,code)
+    IF listCode == "a" THEN:
+        IF editDataType == 0 THEN:
+            RETURN newRoom()                                             
+        ELSE IF editDataType == 1 THEN:
+            RETURN newRoomCode()                                         
+        ELSE IF editDataType == 2 THEN:
+            RETURN newRoomDimension()                                    
+        ELSE IF editDataType == 3 THEN:
+            RETURN newRoompricing()                                      
+        ELSE IF editDataType == 4 THEN:
+            RETURN newRoomID()                                           
+        ELSE IF editDataType == 5 THEN:
+            RETURN newRoomDate("acquisition")                            
+        ELSE IF editDataType == 6 THEN:
+            RETURN newRoomDate("history")                                
+        ELSE
+            RETURN newRoomStatus()
+        ENDIF
+    ELSE IF listCode == "t" THEN:        
+        IF editDataType == 0:  
+            RETURN gettenantID(UID,"existing")                           
+        ELSE IF editDataType == 1 THEN:
+            RETURN getname(code,"tenant")                                
+        ELSE IF editDataType == 2 THEN:
+            RETURN getabbreviation(code,"gender")                        
+        ELSE IF editDataType == 3 THEN:
+            RETURN getpNum(code)                                         
+        ELSE IF editDataType == 4 THEN:
+            RETURN getabbreviation(code,"nationality")                   
+        ELSE IF editDataType == 5 THEN:
+            RETURN getDate(code,"start")                                 
+        ELSE IF editDataType == 6 THEN:
+            RETURN getnumber(code,"workHistory")                         
+        ELSE IF editDataType == 7 THEN:
+            RETURN getname(code,"employer")                              
+        ELSE IF editDataType == 8 THEN:
+            RETURN getnumber(code,"income")                              
+        ELSE IF editDataType == 9 THEN:
+            RETURN getrental(UID)                                        
+        ELSE IF editDataType == 1 THEN:
+            RETURN getDate(code,"birth")                                 
+        ELSE
+            RETURN getname(code,"city")
+        ENDIF
+    ELSE   
+        IF editDataType == 0:  
+            RETURN getreferenceNumber(code)                              
+        ELSE IF editDataType == 1 THEN:
+            RETURN getDate(code,"transaction")                           
+        ELSE IF editDataType == 2 THEN:
+            RETURN gettenantID(UID,"existing")                           
+        ELSE IF editDataType == 3 THEN:
+            chooseList = "a"
+            displayColumn = 0
+            currentColumn = 1
+            RETURN chooseItem(UID,chooseList,displayColumn,currentColumn)
+        ELSE
+            RETURN getdecimal(code)
+        ENDIF
+    ENDIF
+ENDFUNCTION
+
+FUNCTION ApartmentDataInfo()
+    data = True
+    WHILE data == True THEN:
+        PRINT"\n[R] - Room Info [C] - Room code, [D] - Dimensions, [P] - Pricing, [A] - Apartment ID, [E] - Date of Acquisition, [H] - Rental History, [S] - Status \nAnswer: ")
+        GET opt
+        IF opt in ["R","r"] THEN:
+            num = 0
+        ELSE IF opt in ["C","c"] THEN:
+            num = 1
+        ELSE IF opt in ["D","d"] THEN:
+            num = 2
+        ELSE IF opt in ["P","p"] THEN:
+            num = 3
+        ELSE IF opt in ["A","a"] THEN:
+            num = 4
+        ELSE IF opt in ["E","e"] THEN:
+            num = 5
+        ELSE IF opt in ["H","h"] THEN:
+            num = 6
+        ELSE IF opt in ["S","s"] THEN:
+            num = 7
+        ELSE
+            code = 0
+            CALL message(code)
+            CONTINUELOOP
+        ENDIF
+        RETURN num
+    ENDWHILE
+ENDFUNCTION
+
+FUNCTION category(listCode,code,sourceFunction)
+    WHILE TRUE
+        IF listCode == "p" THEN:
+        PRINT("NEWLINE [R]-Reference number,[D]-Transaction date,[T]-TenantID,[A]-Apartment code,[S]-Amount NEWLINE Choose a category: ")
+        GET opt
+        IF opt in ["R","r"] THEN:
+            num = 0
+        ELSE IF opt in ["D","d"] THEN:
+            num = 1
+        ELSE IF opt in ["T","t"] THEN:
+            num = 2
+        ELSE IF opt in ["A","a"] THEN:
+            num = 3
+        ELSE IF opt in ["S","s"] THEN:
+            num = 4
+        ELSE
+            code = 0
+            CALL message(code)
+            CONTINUELOOP
+        ENDIF
+    ELSE
+        IF sourceFunction = "edit" THEN:
+            PRINT("NEWLINE [N]-Name,[G]-Gender,[P]-Phone number,[R]-Nationality,[D]-Rental start date,[W]-Work history,[E]-Employer,[I]-Income,[S]-Tenant status,[B]-Birthdate,[C]-Birth City")
+        ELSE
+            PRINT("NEWLINE [U]-User ID,[N]-Name,[G]-Gender,[P]-Phone number,[R]-Nationality,[D]-Rental start date,[W]-Work history,[E]-Employer,[I]-Income,[S]-Tenant status,[B]-Birthdate,[C]-Birth City")
+        ENDIF
+        PRINT("Choose a category: ")
+        GET opt  
 
 FUNCTION apartmentEditData()
 
