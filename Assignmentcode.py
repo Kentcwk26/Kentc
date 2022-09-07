@@ -161,7 +161,7 @@ def gettenantID(UID,userType):                                                # 
    if UID:                                                                    # Fetch existing UID
       with open("currentUser.txt","r") as uRead:                              # Open currentUser.txt file in Read Mode as uRead
          userRecord = uRead.read().split(",")                                 # Read and split the record with comma as a separator
-         return userRecord[2]                                                 # Exit function and send the value back to the program
+      return userRecord[2]                                                 # Exit function and send the value back to the program
    else:                                                                      # Other than that:
       while True:
          number = None                                                        # Set number as None
@@ -174,6 +174,7 @@ def gettenantID(UID,userType):                                                # 
             else:                                                             # Other than that:
                code = 1                                                       # Code equals to 1
                message(code)                                                  # Print error message, call function message(code)
+               continue                                                       # Continue the loop
          if number == 1:                                                      # If number equals to 1 Then:
             return dt.datetime.now().strftime("%d%m%Y%H%M%S%f")               # Exit function and send the value back to the program
          elif number == 2:                                                    # If number equals to 2 Then:
@@ -1056,7 +1057,7 @@ def editData(UID,listCode,code):                                                
                except IndexError:
                   print(display[item])
             print("\nPlacement of items displayed above are labeled from upper-left to lower-right starting from 1 to",len(display))  # Print message
-            selectedData = input("\nPlease enter the number of the item to edit:")            # Print message and get selectedData
+            selectedData = input("\nPlease enter the number of the item to edit: ")           # Print message and get selectedData
             if selectedData.isdecimal():                                                      # Data validation, Number check - If selectedData only consists of numbers Then:
                recordindex = int(selectedData)-1                                              # recordindex = selectedData (in integer) subtract by 1 to search specific data location
                oldDataFormat = True                                                           # oldDataFormat equal to True
@@ -1071,7 +1072,7 @@ def editData(UID,listCode,code):                                                
                   oldDataFormat = True                                                        # oldDataFormaat equal to True
                else:                                                                          # Other than that:
                   continue                                                                    # Jump back to the top of loop, rerun again
-      print("\nPlease insert the new data with the correct format as below: ")                # Print message
+      print("\nPlease insert the new data with the correct format: ")                         # Print message
       newData = inputidentifier(UID,listCode,editDataType,code)                               # newData = call function inputidentifier(UID,listCode,editDataType,code)
       editdataconfirmation = input("\nAre you sure with your records just now? ([Y]-Yes/[N]-No): ")  # Print message and get editdataconfirmation
       if editdataconfirmation in ["Y","y"]:                                                   # If editdataconfirmation is equal to ["Y","y"] Then:
@@ -1085,7 +1086,7 @@ def editData(UID,listCode,code):                                                
       else:                                                                                   # Other than that:
          code = 0                                                                             # code equals to 0
          message(code)                                                                        # Print error message, call function message(code)
-         continue                                                                             # Continue the loop                                                                                      # Jump back to the top of loop, rerun again
+         continue                                                                             # Jump back to the top of loop, rerun again
       
 def deleteRecord(listCode,code):                                                              # Define deleteRecord function
    while True:                                                                               
@@ -1093,10 +1094,10 @@ def deleteRecord(listCode,code):                                                
       deletedata = input("\n1. Delete specified records\n2. Delete all records\n\n[E] - Exit\n\nPlease select and enter which operator that you want to proceed: ")  # Print message and get deletedata
       if deletedata == '1':                                                                   # If deletedata is equal to 1 Then:
          print("\n- 1. Delete specified records -")                                           # Print message
-         deleteSpecRecord(listCode,code)                                                      # Call function deleteSpecRecord(listCode,code)
+         deleteSpecApartRecord(listCode,code)                                                      # Call function deleteSpecRecord(listCode,code)
       elif deletedata == '2':                                                                 # If deletedata is equal to 2 Then:
          print("\n- 2. Delete all records -")                                                 # Print message
-         deleteAllrecords(listCode)                                                           # Call function deleteAllrecords(listCode)
+         deleteAllApartrecords(listCode)                                                           # Call function deleteAllrecords(listCode)
       elif deletedata in ["E","e"]:                                                           # If deletedata is equal to ["E","e"] Then:
          break                                                                                # Break out of the function
       else:                                                                                   # Other than that:
@@ -1104,7 +1105,7 @@ def deleteRecord(listCode,code):                                                
          message(code)                                                                        # Print error message, call function message(code)
          continue                                                                             # Continue the loop 
 
-def deleteSpecRecord(listCode,code):                                                          # Define deleteSpecRecord 
+def deleteSpecApartRecord(listCode,code) :                                                          # Define deleteSpecRecord 
    modify = True                                                                              # Modify equals to True
    while True:
       readFile(listCode)                                                                      # Call function readFile(listCode)
@@ -1125,10 +1126,10 @@ def deleteSpecRecord(listCode,code):                                            
          continue                                                                             # Continue the loop
       return modify                                                                           # Exit function and send the value back to the program
 
-def deleteAllrecords(listCode):                                                               # Define deleteAllrecords function
+def deleteAllApartrecords(listCode):                                                               # Define deleteAllrecords function
    modify = True                                                                              # modify equals to True
    while modify == True:                                                                      # When modify equals to True Then:
-      confirmation = input("\nAre you sure that you want to delete all the record(s)?\nIt will be not recovered once you hit [X]. However, you still can discard this changes by hitting any other keys if you change your mind: ")  # Print message and get confirmation
+      confirmation = input("\nAre you sure that you want to delete all record(s)?\nIt will be not recovered once you hit [X]. However, you still can discard this changes by hitting any other keys if you change your mind: ")  # Print message and get confirmation
       if confirmation in ["X","x"]:                                                           # If confirmation equals to ["X","x"] Then:
          with open (listIdentifier(listCode),"r+") as ADeletedhandler:                        # Open selected text file in read and write mode as Adeletehandler
             ADeletedhandler.seek(0)                                                           # Absolute file positioning
