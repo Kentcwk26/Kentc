@@ -266,7 +266,7 @@ FUNCTION getname(code,nameType)
         ELSEIF nameType == "employer" THEN
             PRINT("NEWLINEEnter tenant's current employer:")
         ELSE
-            PRINT("NEWLINEEnter tenant's place-city-country of birth")
+            PRINT("NEWLINEEnter tenant's place-city-country of birth:")
         ENDIF
         GET name
         nameList  = SPLIT name INTO LIST WITH(" ")
@@ -290,7 +290,7 @@ FUNCTION getname(code,nameType)
         ENDIF
         IF code CONTAINS ANY VALUE THEN
             CALL message(code)
-            PRINT("ATTENTION||Error detected.||ATTENTION")
+            PRINT("Error detected.")
         ELSE
             PRINT("No errors detected.")
         ENDIF
@@ -344,7 +344,7 @@ FUNCTION getabbreviation(code,abbreviationType)
         ENDIF
         IF code CONTAINS ANY VALUE OR code == 0 THEN
             CALL message(code)
-            PRINT("ATTENTION||Error detected.||ATTENTION")
+            PRINT("Error detected.")
         ELSE
             PRINT("No errors detected.")
         ENDIF
@@ -378,7 +378,7 @@ FUNCTION getpNum(code)
         ENDIF
         IF code CONTAINS ANY VALUE THEN
             CALL message(code)
-            PRINT("ATTENTION||Error detected.||ATTENTION")
+            PRINT("Error detected.")
         ELSE
             PRINT("No errors detected.")
         ENDIF
@@ -432,7 +432,7 @@ FUNCTION getDate(code,dateType)
         ENDIF
         IF code CONTAINS ANY VALUE THEN
             CALL message(code)
-            PRINT("ATTENTION||Error detected.||ATTENTION")
+            PRINT("Error detected.")
         ELSE
             PRINT("No errors detected.")
         ENDIF
@@ -447,7 +447,7 @@ FUNCTION getDate(code,dateType)
 ENDFUNCTION
 
 FUNCTION getnumber(code,numberType)
-    DECLARE t,number AS STRING
+    DECLARE t,number,retry AS STRING
     DECLARE num AS INTEGER
     WHILE TRUE
         IF numberType == "workHistory" THEN
