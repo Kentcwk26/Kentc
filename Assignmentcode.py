@@ -12,6 +12,8 @@ def register(listCode,code):                                                  # 
       userAdd.write(username+","+password+","+UserID+",\n")                   # Write username, password, userID into userAdd
    listCode = "t"                                                             # Set listCode as 't'
    tenantOrTransactionEntryForm(UserID,listCode,code)                         # Call function tenantOrTransactionEntryForm(UserID,listCode,code)
+   with open("currentUser.txt","w") as current:                               # Open currentUser text file in Write Mode as current
+      current.write(username+","+password+","+UserID+",\n")                   # Write record into current
    return username,password                                                   # Exit function and send the value back to the program
 
 def login(listCode,code,nameInput,passInput):                                 # Define login function
@@ -478,34 +480,34 @@ def tenantOrTransactionEntryForm(UID,listCode,code):                          # 
             continue                                                          # Continue the loop
       else:                                                                   # Other than that:
          n = 1                                                                # n equals to 1
-      for list in range(0,int(n)):                                            # Definite loops iterate through the members of a set from 0 to n in integer type
-         if listCode == "t":                                                  # If listCode is equals to "t" Then:
-            UserID  = gettenantID(UID,"existing")                             # Get input for tenant data, userID = call function gettenantID(UID,"existing")
-            name = getname(code,"tenant")                                     # Get input for tenant data, name = call function getname(code,"tenant")
-            gender = getabbreviation(code,"gender")                           # Get input for tenant data, gender = call function getabbreviation(code,"gender") 
-            pNum = getpNum(code)                                              # Get input for tenant data, pNum = call function getpNum(code)
-            nationality = getabbreviation(code,"nationality")                 # Get input for tenant data, nationality = call function getabbreviation(code,"nationality")
-            startDate = getDate(code,"start")                                 # Get input for tenant data, startDate = call function getDate(code,"start") 
-            workHistory = getnumber(code,"workHistory")                       # Get input for tenant data, workHistory = call function getnumber(code,"workHistory") 
-            employer = getname(code,"employer")                               # Get input for tenant data, employer = call function getname(code,"employer")
-            income = getnumber(code,"income")                                 # Get input for tenant data, income = call function getnumber(code,"income") 
-            rental = getrental(UID)                                           # Get input for tenant data, rental = call function getrental(UID)
-            birthDate = getDate(code,"birth")                                 # Get input for tenant data, birthDate = call function getDate(code,"birth")
-            birthCity = getname(code,"city")                                  # Get input for tenant data, birthCity = call function getname(code,"city") 
-            list = [UserID,name,gender,pNum,nationality,startDate,workHistory,employer,income,rental,birthDate,birthCity]   # Declare list containing relevant input data
-         else:                                                                # Other than that:
-            referenceNumber = getreferenceNumber(code)                        # Get input for transaction data, referenceNumber = call function getreferenceNumber(code)
-            transactionDate = getDate(code,"transaction")                     # Get input for transaction data, transactionDate = call function getDate(code,"transaction")
-            UserID  = gettenantID(UID,"existing")                             # Get input for transaction data, userID = call function gettenantID(UID,"existing")
-            chooseList = "a"                                                  # chooseList equals to "a"
-            displayColumn = 0                                                 # displayColoum equals to 0
-            currentColumn = 1                                                 # currentColumn equals to 1
-            tenantAndApartment(UserID)                                        # Redirect to tenantAndApartment function
-            apartmendCode = chooseItem(UID,chooseList,displayColumn,currentColumn) # Get input for transaction data, apartmendCode = call function chooseItem(UID,chooseList,displayColumn,currentColumn)
-            amount = getdecimal(code)                                         # Get input for transaction data, amount = call function getdecimal(code)
-            list = [referenceNumber,transactionDate,UserID,apartmendCode,amount]  # Declare list containing relevant input data
-         appendFile(list,listCode)                                            # Call function appendFile(list,listCode)
-      break                                                                   # Break out of the fumction
+      break                                                                   # Break out of the first Loop
+   for list in range(0,int(n)):                                               # Definite loops iterate through the members of a set from 0 to n in integer type
+      if listCode == "t":                                                     # If listCode is equals to "t" Then:
+         UserID  = gettenantID(UID,"existing")                                # Get input for tenant data, userID = call function gettenantID(UID,"existing")
+         name = getname(code,"tenant")                                        # Get input for tenant data, name = call function getname(code,"tenant")
+         gender = getabbreviation(code,"gender")                              # Get input for tenant data, gender = call function getabbreviation(code,"gender") 
+         pNum = getpNum(code)                                                 # Get input for tenant data, pNum = call function getpNum(code)
+         nationality = getabbreviation(code,"nationality")                    # Get input for tenant data, nationality = call function getabbreviation(code,"nationality")
+         startDate = getDate(code,"start")                                    # Get input for tenant data, startDate = call function getDate(code,"start") 
+         workHistory = getnumber(code,"workHistory")                          # Get input for tenant data, workHistory = call function getnumber(code,"workHistory") 
+         employer = getname(code,"employer")                                  # Get input for tenant data, employer = call function getname(code,"employer")
+         income = getnumber(code,"income")                                    # Get input for tenant data, income = call function getnumber(code,"income") 
+         rental = getrental(UID)                                              # Get input for tenant data, rental = call function getrental(UID)
+         birthDate = getDate(code,"birth")                                    # Get input for tenant data, birthDate = call function getDate(code,"birth")
+         birthCity = getname(code,"city")                                     # Get input for tenant data, birthCity = call function getname(code,"city") 
+         list = [UserID,name,gender,pNum,nationality,startDate,workHistory,employer,income,rental,birthDate,birthCity]   # Declare list containing relevant input data
+      else:                                                                   # Other than that:
+         referenceNumber = getreferenceNumber(code)                           # Get input for transaction data, referenceNumber = call function getreferenceNumber(code)
+         transactionDate = getDate(code,"transaction")                        # Get input for transaction data, transactionDate = call function getDate(code,"transaction")
+         UserID  = gettenantID(UID,"existing")                                # Get input for transaction data, userID = call function gettenantID(UID,"existing")
+         chooseList = "a"                                                     # chooseList equals to "a"
+         displayColumn = 0                                                    # displayColoum equals to 0
+         currentColumn = 1                                                    # currentColumn equals to 1
+         tenantAndApartment(UserID)                                           # Redirect to tenantAndApartment function
+         apartmendCode = chooseItem(UID,chooseList,displayColumn,currentColumn) # Get input for transaction data, apartmendCode = call function chooseItem(UID,chooseList,displayColumn,currentColumn)
+         amount = getdecimal(code)                                            # Get input for transaction data, amount = call function getdecimal(code)
+         list = [referenceNumber,transactionDate,UserID,apartmendCode,amount] # Declare list containing relevant input data
+      appendFile(list,listCode)                                               # Call function appendFile(list,listCode)
 
 def tenantAndApartment(UID):                                                  # Define tennantAndApartment function
    listCode = "p"                                                             # listCode equals to "p"
@@ -590,8 +592,8 @@ def tenantOrTransaction(UID,listCode,code):                                   # 
             continue                                                          # Continue the loop
          break                                                                # Break out of the function
 
-def apartment(UID,listCode,code):                                             # Define apartment function
-   listCode = "a"                                                             # listCode equals to "a"
+def apartment(UID,listCode,code):                                                             # Define apartment function
+   listCode = "a"                                                                             # listCode equals to "a"
    print("\n------------------------------------------------------------------------------------------------------------------------------------------------------\n\n- Apartment Info: -\n") # Print message
    list1 = ["Room Info: Standard Room (Triple)","Code: SR1","Dimensions: 140+ sqft","Pricing: RM350","Apartment ID: A01-L01-R01 to A01-L01-R21","Date of Acquisition: 03/01/2015","Rental History: 27/02/2015 rent","Status: Available"]        # Put sample data
    list2 = ["Room Info: Standard Room (Twin)","Code: SR2","Dimensions: 120+ sqft","Pricing: RM450","Apartment ID: A01-L01-R22 to A01-L01-R41","Date of Acquisition: 10/02/2015","Rental History: 28/03/2015 rent","Status: Available"]          # Put sample data
@@ -630,7 +632,7 @@ def modifyData(UID,listCode,code,modifyType):                                   
       if modifyType:                                                                          # If modifyType exists:
          dataInput = modifyType                                                               # dataInput is modifyTYpe
       else:                                                                                   # Other than that:
-         dataInput = input('\n-------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\nModification of records: -\n\n1. Add data\n2. Edit Data\n3. Delete Data\n4. Exit\n\nPlease select which operation to perform task (1-4): ') # Print message and get dataInput
+         dataInput = input('\n-------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\nModification of records: \n\n1. Add data\n2. Edit Data\n3. Delete Data\n4. Exit\n\nPlease select which operation to perform task (1-4): ') # Print message and get dataInput
       if dataInput == "1":                                                                    # If dataInput equals to "1" Then:
          if listCode == "a":                                                                  # If listCode equals to "a" Then:
             apartmentAddData(modify,listCode)                                                 # Call apartmentAddData(modify,listcode) functiom
@@ -653,7 +655,7 @@ def modifyData(UID,listCode,code,modifyType):                                   
    
 def apartmentAddData(modify,listCode):                                                        # Define apartmentAddData function
    adddatalist = []                                                                           # Declare adddatalist as array
-   print("\nDear admin, we need your ATTENTION !\n\nFor your information, all the new data will only be stored if you insert each information with the correct format provided.\n\nOnce you finish each entry,a confirmation message will appear. Please ensure that the data is typed correctly before saving.\n- Now, you are required to enter new data. -\n\n----------------------------------------------------------------------------------------------------------------------------------------------------------") # Print message
+   print("\n-------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\nDear admin, we need your ATTENTION !\n\nFor your information, all the new data will only be stored if you insert each information with the correct format provided.\n\nOnce you finish each entry,a confirmation message will appear. Please ensure that the data is typed correctly before saving.\nNow, you are required to enter new data.\n\n----------------------------------------------------------------------------------------------------------------------------------------------------------") # Print message
    newroom = newRoom()                                                                        # newroom = call function newRoom()
    newroomcode = newRoomCode()                                                                # newroomcode = call function newRoomCode()
    newroomdimension = newRoomDimension()                                                      # newroomdimension = call function newRoomDimension()
@@ -669,7 +671,7 @@ def apartmentAddData(modify,listCode):                                          
       adddatalist.clear()                                                                     # Clear all the data that inserted previously
    else:                                                                                      # Other than that:
       appendFile(adddatalist,listCode)                                                        # Append each record into the selected text file 
-      print("\n- Data Saved -\n\n----------------------------------------------------------------------------------------------------------------------------------------------------------")
+      print("\n- Data Saved -")                                                             # Print message
    return modify                                                                              # Exit function and send the value back to the program
 
 def newRoom():                                                                                # Define newRoom function
@@ -805,7 +807,7 @@ def newRoompricing():                                                           
 def newRoomID():                                                                              # Define newRoomID function
    while True:                                                                               
       code = None                                                                             # code equals to None 
-      newRoomID = input('\nThis is the correct format for RoomID: A(01)-L(01)-R(01)x(to)xA(99)-L(99)-R(99), x means space\nPlease enter the new Room ID: ') # Print message and get newRoomID
+      newRoomID = input('\nThis is the correct format for RoomID: A(01)-L(01)-R(01)x(to)xA(99)-L(99)-R(99), x means space\nExample: A01-L01-R01 to A01-L01-R21\n\nPlease enter the new Room ID: ') # Print message and get newRoomID
       if 0 <= len(newRoomID) <= 25:                                                           # If len(newRoomID) is between range 0 to 25 Then:
          print("\n- Please fill in the new room ID with the correct format -")                # Print message
          continue                                                                             # Jump back to the top of loop, rerun again
@@ -848,7 +850,7 @@ def newRoomDate(dateType):                                                      
             if decisionkey in ["N","n"]:                                                      # If decisionkey is equal to ["N","n"] Then:
                continue                                                                       # Jump back to the top of loop, rerun again
             else:                                                                             # Other than that:
-               return "Date: " + roomDate                                         # Exit function and send the value back to the program
+               return "Date: " + roomDate                                                     # Exit function and send the value back to the program
          else:                                                                                # Other than that:
             code = 2                                                                          # Code equals to 2
             message(code)                                                                     # Print error message, call function message(code)
