@@ -13,6 +13,9 @@ FUNCTION register(listCode,code)
     OPENFILE l IN APPEND AS userAdd
         WRITE(username+","+password+","+userID+",NEWLINE") TO userAdd
     CLOSEFILE
+    OPENFILE "currentUser.txt" IN WRITE AS current
+        WRITE(username+","+password+","+userID+",NEWLINE") TO current
+    CLOSEFILE
     listCode = "t"
     CALL tenantOrTransactionEntryForm(userID,listCode,code)
     RETURN username AND password
@@ -806,7 +809,8 @@ FUNCTION tenantOrTransaction(UID,listCode,code)
             ELSEIF opt IN ["E","e"] THEN
                 BREAKLOOP
             ELSE
-                CALL message(0)
+                code = 0
+                CALL message(code)
                 CONTINUELOOP
             ENDIF
             BREAKLOOP
