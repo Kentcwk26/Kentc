@@ -10,10 +10,10 @@ def register(listCode,code):                                                  # 
    print("UserID is "+UserID)                                                 # Print userID
    with open (listIdentifier(listCode),"a") as userAdd:                       # Open selected text file in append mode as userAdd
       userAdd.write(username+","+password+","+UserID+",\n")                   # Write username, password, userID into userAdd
-   listCode = "t"                                                             # Set listCode as 't'
-   tenantOrTransactionEntryForm(UserID,listCode,code)                         # Call function tenantOrTransactionEntryForm(UserID,listCode,code)
    with open("currentUser.txt","w") as current:                               # Open currentUser text file in Write Mode as current
       current.write(username+","+password+","+UserID+",\n")                   # Write record into current
+   listCode = "t"                                                             # Set listCode as 't'
+   tenantOrTransactionEntryForm(UserID,listCode,code)                         # Call function tenantOrTransactionEntryForm(UserID,listCode,code)
    return username,password                                                   # Exit function and send the value back to the program
 
 def login(listCode,code,nameInput,passInput):                                 # Define login function
@@ -521,7 +521,7 @@ def tenantAndApartment(UID):                                                  # 
          list = record.split(",")                                             # Split record by using comma (",") as a separator
          if UID:                                                              # If UID exists:
             if UID in list[2]:                                                # If UID exists in the second location from list:
-               primaryKeys.append(list[2]+","+list[3])                        # Append second and third location from list into primaryKeys
+               primaryKeys.append(list[2]+","+list[3])                       # Append second and third location from list into primaryKeys
                break                                                          # Break out of the function
             else:                                                             # Other than that:
                continue                                                       # Continue the loop
@@ -551,7 +551,7 @@ def tenantAndApartment(UID):                                                  # 
                break                                                          # Break out of the function
             else:                                                             # Other than that:
                continue                                                       # Continue the loop
-      TAList.append(str(TARecord).lstrip("[").rstrip("]"))                    # Append TARecord in string, leftstrip("["), and rightstrip("]") into TAList 
+      TAList.append("\n"+str(TARecord).lstrip("[").rstrip("]"))               # Append TARecord in string, leftstrip("["), and rightstrip("]") into TAList 
    for item in TAList:
       print(item)
       
@@ -1147,6 +1147,7 @@ def searchColumn(listCode,num,UID):                                             
       bulkData = Tread.readlines()                                                            # Read each line in Tread
       for line in bulkData:
          individualList = line.strip(",\n").split(",")                                        # Strip with comma and newline (",\n"), and split with comma (",")
+         print()                                                                              # Print empty
          if listCode == "a":                                                                  # If listCode equals to "a" Then:
             if int(num) < 7:                                                                  # If num in integer less than 7 Then:
                displayList.append(individualList[num])                                        # Append individualList (num location) into displayList
