@@ -403,7 +403,7 @@ FUNCTION getDate(code,dateType)
             GET path
             IF path in ["Y","y"] THEN
                 date = CURRENT DATE CONVERTED INTO STRING WITH FORMAT YEARmonthday
-                PRINT("Current date:",date) 
+                PRINT("Current date:",date)
             ELSE
                 PRINT("Format: YYYY/MM/DDNEWLINEEnter Rental start date:NEWLINE")
                 GET date
