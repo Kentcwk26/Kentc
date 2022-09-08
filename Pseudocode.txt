@@ -272,7 +272,12 @@ FUNCTION getname(code,nameType)
         nameList  = SPLIT name INTO LIST WITH(" ")
         IF LENGTH(nameList) >= 2 THEN
             FOR words IN nameList
-                IF words ISALPHABET OR [character FOR character IN words IF(character IN specials LOCATION 12) OR (character IN specials LOCATION 22)] THEN
+                IF
+                words ISALPHABET
+                OR [
+                FOR character IN words
+                    IF(character IN specials LOCATION 12) OR (character IN specials LOCATION 22)
+                ]ENDFOR THEN
                     IF words LOCATION 0 ISUPPERCASE THEN
                         code = NONE
                         CONTINUELOOP
@@ -534,6 +539,7 @@ FUNCTION getrental(UID)
     ELSE
         WHILE TRUE
             PRINT("[P]-PastNEWLINE[Any other key]-CurrentNEWLINEChoose tenant rental status(current/past)NEWLINE")
+            GET rental
             IF rental IN ["P","p"] THEN
                 rental = "Past"
             ELSE
@@ -551,6 +557,7 @@ ENDFUNCTION
 
 FUNCTION getreferenceNumber(code)
     DECLARE SCL,referenceNumber,retry AS STRING
+    DECLARE specials AS ARRAY 
     SCL = NONE
     CALL specialCharacterList(SCL) RETURNING specials
     WHILE TRUE
@@ -592,7 +599,7 @@ FUNCTION getdecimal(code)
     WHILE TRUE
         PRINT("Format: ########.##NEWLINEEnter the transaction amount in Ringgit Malaysia:NEWLINE")
         GET decimal
-        IF specials[23] IN decimal THEN
+        IF specials LOCATION 23 IN decimal THEN
             money = SPLIT decimal INTO LIST WITH(".")
             FOR numbers IN money
                 TRY
@@ -646,39 +653,41 @@ FUNCTION tenantOrTransactionEntryForm(UID,listCode,code)
         ELSE
             n = 1
         ENDIF
+        BREAKLOOP
+    ENDWHILE
         userType = "existing"
         FOR list IN range(0,int(n))
             IF listCode == "t" THEN
-                CALL gettenantID(UID,userType) RETURNING UserID
                 nameType = "tenant"
-                CALL getname(code,nameType) RETURNING name
                 abbreviationType = "gender"
+                CALL gettenantID(UID,userType) RETURNING UserID
+                CALL getname(code,nameType) RETURNING name
                 CALL getabbreviation(code,abbreviationType) RETURNING gender
                 CALL getpNum(code) RETURNING pNum
                 abbreviationType = "nationality"
-                CALL getabbreviation(code,abbreviationType) RETURNING nationality
                 dateType = "start"
-                CALL getDate(code,dateType) RETURNING startDate
                 numberType = "workHistory"
-                CALL getnumber(code,numberType) RETURNING workHistory
                 nameType = "employer"
+                CALL getabbreviation(code,abbreviationType) RETURNING nationality
+                CALL getDate(code,dateType) RETURNING startDate
+                CALL getnumber(code,numberType) RETURNING workHistory
                 CALL getname(code,nameType) RETURNING employer
                 numberType = "income"
+                dateType = "birth"
+                nameType = "city"
                 CALL getnumber(code,numberType) RETURNING income
                 CALL getrental(UID) RETURNING rental
-                dateType = "birth"
                 CALL getDate(code,dateType) RETURNING birthDate
-                nameType = "city"
                 CALL getname(code,nameType) RETURNING birthCity
                 list = [UserID,name,gender,pNum,nationality,startDate,workHistory,employer,income,rental,birthDate,birthCity]
             ELSE
-                CALL getreferenceNumber(code) RETURNING referenceNumber
                 dateType = "transaction"
-                CALL getDate(code,dateType) RETURNING transactionDate
-                CALL gettenantID(UID,userType) RETURNING UserID
                 chooseList = "a"
                 displayColumn = 0
                 currentColumn = 1
+                CALL getreferenceNumber(code) RETURNING referenceNumber
+                CALL getDate(code,dateType) RETURNING transactionDate
+                CALL gettenantID(UID,userType) RETURNING UserID
                 CALL tenantAndApartment(UserID)
                 CALL chooseItem(UID,chooseList,displayColumn,currentColumn) RETURNING apartmendCode
                 CALL getdecimal(code) RETURNING amount
@@ -686,12 +695,10 @@ FUNCTION tenantOrTransactionEntryForm(UID,listCode,code)
             ENDIF
             CALL appendFile(list,listCode)
         ENDFOR
-        BREAKLOOP
-    ENDWHILE
 ENDFUNCTION
 
 FUNCTION tenantAndApartment(UID)
-    DECLARE listCode,reference1,reference2, AS STRING
+    DECLARE listCode,reference1,reference2 AS STRING
     DECLARE primaryKeys,TAList,file,list,TARecord AS ARRAY
     DECLARE pRead,tRead,aRead AS FILE
     listCode = "p"
