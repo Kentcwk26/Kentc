@@ -69,8 +69,6 @@ def menu(UID,code):                                                           # 
       elif opt in ["I","i"] and UID == None:                                  # Check for quick functions, If opt is equal to ["I","i"] and UID equals to None Then:
          listCode = "t"                                                       # listCode equals to "t"
          searchInformation(listCode,9,"Past")                                 # Redirect to searchbox function, call function searchInformation(listCode,9,"Past")
-      elif opt in ["L","l"] and UID == None:                                  # Check for quick functions, If opt is equal to ["L","l"] and UID equals to None Then:
-         print("loginHistory()")                                              # Print function ("loginHistory()") 
       elif opt in ["E","e"]:                                                  # Get confirmation to exit
          exitconfirmationkey = input("\n----------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\nYou're about to leave Tenant Management System. Are you sure? [Enter]-Continue, [x]-Return to main menu): ") # Print message and get exitconfirmationkey
          if exitconfirmationkey in ["X","x"]:                                 # If exitconfirmationkey is equal to ["X","x"] Then:
@@ -120,7 +118,7 @@ def appendFile(list,listCode):                                                # 
    with open (listIdentifier(listCode), "a") as fAppend:                      # Open selected text file in Append Mode as fAppend
       for item in list:
          fAppend.write(item)                                                  # Write item into fAppend
-         fAppend.write(", ")                                                  # Write a comma and space (", ") into fAppend
+         fAppend.write(",")                                                  # Write a comma and space (", ") into fAppend
       fAppend.write("\n")                                                     # Write a newline ("\n") into fAppend
 
 def readFile(listCode):                                                       # Define readFile function
@@ -593,8 +591,6 @@ def tenantOrTransaction(UID,listCode,code):                                   # 
          break                                                                # Break out of the function
 
 def apartment(UID,listCode,code):                                                             # Define apartment function
-   listCode = "a"                                                                             # listCode equals to "a"
-   print("\n------------------------------------------------------------------------------------------------------------------------------------------------------\n\n- Apartment Info: -\n") # Print message
    list1 = ["Room Info: Standard Room (Triple)","Code: SR1","Dimensions: 140+ sqft","Pricing: RM350","Apartment ID: A01-L01-R01 to A01-L01-R21","Date of Acquisition: 03/01/2015","Rental History: 27/02/2015 rent","Status: Available"]        # Put sample data
    list2 = ["Room Info: Standard Room (Twin)","Code: SR2","Dimensions: 120+ sqft","Pricing: RM450","Apartment ID: A01-L01-R22 to A01-L01-R41","Date of Acquisition: 10/02/2015","Rental History: 28/03/2015 rent","Status: Available"]          # Put sample data
    list3 = ["Room Info: Standard Room A/C (Triple)","Code: SR3","Dimensions: 150+ sqft","Pricing: RM550","Apartment ID: A01-L02-R01 to A01-L02-R21","Date of Acquisition: 21/03/2016","Rental History: 24/04/2016 rent","Status: Available"]    # Put sample data
@@ -618,9 +614,9 @@ def apartment(UID,listCode,code):                                               
             apartmentwHandler.write(data)                                                     # Write data into apartmentwHandler
             apartmentwHandler.write(",")                                                      # Write a comma (,) into apartmentwHandler
          apartmentwHandler.write("\n")                                                        # Write a newline ("\n") into apartmentwHandler
-   with open(listIdentifier(listCode),"r") as apartmentrHandler:                              # Open selected text file and named as apartmentrHandler 
-      for record in apartmentrHandler:
-         print(record.rstrip(","))                                                            # Print each record that inside the apartmentrHandler  
+   print("\n------------------------------------------------------------------------------------------------------------------------------------------------------\n\n- Apartment Info: -\n") # Print message
+   for record in ApartmentList:
+      print(record)                                                            # Print each record that inside the apartmentrHandler  
    if UID == None:                                                                            # If UID equals to None Then:
       modifyData(UID,listCode,code,None)                                                      # Call function modifyData(UID,listCode,code,None)
    else:                                                                                      # Other than that:
@@ -654,23 +650,23 @@ def modifyData(UID,listCode,code,modifyType):                                   
          break                                                                                # Break and end the loop
    
 def apartmentAddData(modify,listCode):                                                        # Define apartmentAddData function
-   adddatalist = []                                                                           # Declare adddatalist as array
+   addDataList = []                                                                           # Declare addDataList as array
    print("\n-------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\nDear admin, we need your ATTENTION !\n\nFor your information, all the new data will only be stored if you insert each information with the correct format provided.\n\nOnce you finish each entry,a confirmation message will appear. Please ensure that the data is typed correctly before saving.\nNow, you are required to enter new data.\n\n----------------------------------------------------------------------------------------------------------------------------------------------------------") # Print message
    newroom = newRoom()                                                                        # newroom = call function newRoom()
    newroomcode = newRoomCode()                                                                # newroomcode = call function newRoomCode()
    newroomdimension = newRoomDimension()                                                      # newroomdimension = call function newRoomDimension()
    newroompricing = newRoompricing()                                                          # newroompricing = call function newRoompricing()
    newroomID = newRoomID()                                                                    # newroomID = call function newRoomID()
-   newroomdateofacquisition = newRoomDate("Acquisition")                                      # newroomdateofacquisition = call function newRoomDate("Acquisition") 
-   newroomrentalhistory = newRoomDate("History")                                              # newroomrentalhistory = call function newRoomDate("History")
+   newroomdateofacquisition = newRoomDate("acquisition")                                      # newroomdateofacquisition = call function newRoomDate("acquisition") 
+   newroomrentalhistory = newRoomDate("history")                                              # newroomrentalhistory = call function newRoomDate("history")
    newroomstatus = newRoomStatus()                                                            # newroomstatus = call function newRoomStatus()
-   adddatalist = [str(newroom),str(newroomcode),str(newroomdimension),str(newroompricing),str(newroomID),str(newroomdateofacquisition),str(newroomrentalhistory),str(newroomstatus)]   # Apply data to the list
-   print("\nNew Data:",adddatalist)                                                           # Print all the add data details to display and easier to make admin do their checking 
+   addDataList = [str(newroom),str(newroomcode),str(newroomdimension),str(newroompricing),str(newroomID),str(newroomdateofacquisition),str(newroomrentalhistory),str(newroomstatus)]   # Apply data to the list
+   print("\nNew Data:",addDataList)                                                           # Print all the add data details to display and easier to make admin do their checking 
    addDataconfirmation = input("\nAre you sure with the records you inserted just now? Enter to continue, 'N' to unsave: ") # Print message and get addDataconfirmation
    if addDataconfirmation in ["N","n"]:                                                       # If addDataconfirmation is equal to ["N","n"] Then:
-      adddatalist.clear()                                                                     # Clear all the data that inserted previously
+      addDataList.clear()                                                                     # Clear all the data that inserted previously
    else:                                                                                      # Other than that:
-      appendFile(adddatalist,listCode)                                                        # Append each record into the selected text file 
+      appendFile(addDataList,listCode)                                                        # Append each record into the selected text file 
       print("\n- Data Saved -")                                                             # Print message
    return modify                                                                              # Exit function and send the value back to the program
 
@@ -832,7 +828,7 @@ def newRoomID():                                                                
 def newRoomDate(dateType):                                                                    # Define newRoomDate function
    while True:                                                                               
       code = None                                                                             # code equals to None
-      if dateType == "Acquisition":                                                           # if dataType equals to "Acquisition" Then:
+      if dateType == "acquisition":                                                           # if dataType equals to "acquisition" Then:
          roomDate = input("\nRoom Date of Acquisition: dd/mm/yyyy\nNo special characters included, except '/'\n\nRoom Acquisition Date: ")  # Print message and getroomDate
       else:                                                                                   # Other than that:
          roomDate = input("\nRoom Rental History: (Accepted input: 'dd/mm/yyyy' or 'Empty')\nNo special characters included, except '/'\n\nRoom Rental History: ")  # Print message and getroomDate
@@ -1022,11 +1018,11 @@ def category(listCode,code,sourceFunction):                                     
 
 def replaceOldData(listCode,recordindex,editDataType,newData):                                # Define replaceOldData function
    with open(listIdentifier(listCode),"r") as Xhandler:                                       # Open selected text file in read mode as Xhandler
-      updatedData = []                                                                        # Declare adddatalist as array
-      newRecord = []                                                                          # Declare adddatalist as array
+      updatedData = []                                                                        # Declare updatedData and newRecord initially as an empty array
+      newRecord = []
       dataRead = Xhandler.readlines()                                                         # Read each lines in Xhandler
       for record in dataRead:
-         strippedRecord = record.rstrip(",\n").split(",")                                     # Rightstrip comma and newline (",\n"), and split record by using comma {","} as a separator
+         strippedRecord = record.rstrip(",\n").split(",")                                     # Rightstrip comma and newline then split record by using comma {","} as a separator
          if dataRead.index(record) == int(recordindex):
             if newData:                                                                       # If newData exists:
                strippedRecord[int(editDataType)] = newData                                    # Modify the record with new data
@@ -1147,7 +1143,6 @@ def searchColumn(listCode,num,UID):                                             
       bulkData = Tread.readlines()                                                            # Read each line in Tread
       for line in bulkData:
          individualList = line.strip(",\n").split(",")                                        # Strip with comma and newline (",\n"), and split with comma (",")
-         print()                                                                              # Print empty
          if listCode == "a":                                                                  # If listCode equals to "a" Then:
             if int(num) < 7:                                                                  # If num in integer less than 7 Then:
                displayList.append(individualList[num])                                        # Append individualList (num location) into displayList
