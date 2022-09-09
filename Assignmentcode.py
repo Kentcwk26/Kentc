@@ -122,15 +122,11 @@ def appendFile(list,listCode):                                                # 
       fAppend.write("\n")                                                     # Write a newline ("\n") into fAppend
 
 def readFile(listCode):                                                       # Define readFile function
-   returnList = []                                                            # Declare returnlist as array
    with open (listIdentifier(listCode),"r") as fRead:                         # Open selected text file in Read Mode as fRead
       line = fRead.readlines()                                                # line = read each line in fRead
       for record in line:                                                  
-         stripped = record.rstrip("\n").rstrip(",")                           # stripped = Right stripped from the end of string (record) with the separators (all commas and newlines)
-         splitRecord = stripped.split(",")                                    # splitRecord = Use comma as the separator to split from a string into a list
-         returnList.append(str(splitRecord))                                  # Append returnlist to splitRecord in string type
-         print(int(line.index(record))+1,splitRecord)
-   return returnList                                                          # Exit function and send the value back to the program
+         stripped = record.rstrip(",\n")                           # stripped = Right stripped from the end of string (record) with the separators (all commas and newlines)
+         print(line.index(record)+1,stripped,"\n")
 
 def chooseItem(UID,listCode,displayColumn,currentColumn):                     # Define chooseItem function
    displayRecord = searchColumn(listCode,displayColumn,UID)                   # displayRecord = call function searchColumn(listCode,displayColumn,UID)
@@ -591,32 +587,29 @@ def tenantOrTransaction(UID,listCode,code):                                   # 
          break                                                                # Break out of the function
 
 def apartment(UID,listCode,code):                                                             # Define apartment function
-   list1 = ["Room Info: Standard Room (Triple)","Code: SR1","Dimensions: 140+ sqft","Pricing: RM350","Apartment ID: A01-L01-R01 to A01-L01-R21","Date of Acquisition: 03/01/2015","Rental History: 27/02/2015 rent","Status: Available"]        # Put sample data
-   list2 = ["Room Info: Standard Room (Twin)","Code: SR2","Dimensions: 120+ sqft","Pricing: RM450","Apartment ID: A01-L01-R22 to A01-L01-R41","Date of Acquisition: 10/02/2015","Rental History: 28/03/2015 rent","Status: Available"]          # Put sample data
-   list3 = ["Room Info: Standard Room A/C (Triple)","Code: SR3","Dimensions: 150+ sqft","Pricing: RM550","Apartment ID: A01-L02-R01 to A01-L02-R21","Date of Acquisition: 21/03/2016","Rental History: 24/04/2016 rent","Status: Available"]    # Put sample data
-   list4 = ["Room Info: Standard Room A/C (Twin)","Code: SR4","Dimensions: 130+ sqft","Pricing: RM650","Apartment ID: A01-L02-R22 to A01-L02-R41","Date of Acquisition: 02/04/2016","Rental History: 20/05/2016 rent","Status: Available"]      # Put sample data
-   list5 = ["Room Info: Deluxe Room (Triple)","Code: DR1","Dimensions: 170+ sqft","Pricing: RM750","Apartment ID: A01-L04-R01 to A01-L04-R21","Date of Acquisition: 11/05/2017","Rental History: 21/06/2017 rent","Status: Available"]          # Put sample data
-   list6 = ["Room Info: Deluxe Room (Twin)","Code: DR2","Dimensions: 160+ sqft","Pricing: RM840","Apartment ID: A01-L04-R22 to A01-L04-R41","Date of Acquisition: 22/06/2017","Rental History: 22/07/2017 rent","Status: Available"]            # Put sample data
-   list7 = ["Room Info: Deluxe Room A/C with shared attached bath / toilet (Triple)","Code: DR3","Dimensions: 180+ sqft","Pricing: RM950","Apartment ID: A01-L03-R1 to A01-L03-R21","Date of Acquisition: 30/07/2018","Rental History: 25/08/2018 rent","Status: Available"]  # Put sample data
-   list8 = ["Room Info: Deluxe Room A/C with shared attached bath / toilet","Code: DR4","Dimensions: 170+ sqft","Pricing: RM1040","Apartment ID: A01-L03-R22 to A01-L03-R41","Date of Acquisition: 16/08/2018","Rental History: 18/09/2018 rent","Status: Available"]         # Put sample data
-   list9 = ["Room Info: Compact Premium Single","Code: CPS1","Dimensions: 130+ sqft","Pricing: RM690","Apartment ID: A01-L05-R01 to A01-L05-R41","Date of Acquisition: 02/09/2019","Rental History: 29/10/2019 rent","Status: Available"]          # Put sample data
-   list10 = ["Room Info: Medium Premium Single","Code: MPS1","Dimensions: 150+ sqft","Pricing: RM750","Apartment ID: A02-L01-R01 to A02-L01-R21","Date of Acquisition: 15/10/2019","Rental History: 31/11/2019 rent","Status: Available"]       # Put sample data
-   list11 = ["Room Info: Medium Premium Twin","Code: MPT1","Dimensions: 180+ sqft","Pricing: RM890","Apartment ID: A02-L02-R01 to A02-L02-R21","Date of Acquisition: 25/11/2020","Rental History: 31/12/2020 rent","Status: Available"]         # Put sample data
-   list12 = ["Room Info: Medium Premium with attached bath / toilet (Twin)","Code: MP1","Dimensions: 180+ sqft","Pricing: RM940","Apartment ID: A02-L03-R01 to A02-L03-R21","Date of Acquisition: 30/12/2020","Rental History: 31/01/2020 rent","Status: Available"]    # Put sample data
-   list13 = ["Room Info: Medium Premium with attached bath / toilet (Single)","Code: MP2","Dimensions: 160+ sqft","Pricing: RM1050","Apartment ID: A02-L03-R22 to A02-L03-R41","Date of Acquisition: 16/01/2021","Rental History: 28/02/2021 rent","Status: Available"] # Put sample data
-   list14 = ["Room Info: En-Suite Single (Super Premium - Triple)","Code: ESS3","Dimensions: 160+ sqft","Pricing: RM700","Apartment ID: A02-L04-R01 to A02-L04-R41","Date of Acquisition: 25/02/2021","Rental History: 31/03/2021 rent","Status: Available"]            # Put sample data
-   list15 = ["Room Info: En-Suite Single (Super Premium - Twin)","Code: ESS2","Dimensions: 140+ sqft","Pricing: RM800","Apartment ID: A02-L04-R01 to A02-L04-R41","Date of Acquisition: 31/05/2022","Rental History: Empty","Status: Not Available"]                    # Put sample data
-   list16 = ["Room Info: En-Suite Twin (Super Premium)","Code: EST2","Dimensions: 200+ sqft","Pricing: RM900","Apartment ID: A02-L05-R01 to A02-L05-R41","Date of Acquisition: 26/06/2022","Rental History: Empty","Status: Not Available"]                             # Put sample data
+   list1 = "Room Info: Standard Room (Triple),Code: SR1,Dimensions: 140+ sqft,Pricing: RM350,Apartment ID: A01-L01-R01 to A01-L01-R21,Date of Acquisition: 03/01/2015,Rental History: 27/02/2015 rent,Status: Available"        # Put sample data
+   list2 = "Room Info: Standard Room (Twin),Code: SR2,Dimensions: 120+ sqft,Pricing: RM450,Apartment ID: A01-L01-R22 to A01-L01-R41,Date of Acquisition: 10/02/2015,Rental History: 28/03/2015 rent,Status: Available"          # Put sample data
+   list3 = "Room Info: Standard Room A/C (Triple),Code: SR3,Dimensions: 150+ sqft,Pricing: RM550,Apartment ID: A01-L02-R01 to A01-L02-R21,Date of Acquisition: 21/03/2016,Rental History: 24/04/2016 rent,Status: Available"    # Put sample data
+   list4 = "Room Info: Standard Room A/C (Twin),Code: SR4,Dimensions: 130+ sqft,Pricing: RM650,Apartment ID: A01-L02-R22 to A01-L02-R41,Date of Acquisition: 02/04/2016,Rental History: 20/05/2016 rent,Status: Available"      # Put sample data
+   list5 = "Room Info: Deluxe Room (Triple),Code: DR1,Dimensions: 170+ sqft,Pricing: RM750,Apartment ID: A01-L04-R01 to A01-L04-R21,Date of Acquisition: 11/05/2017,Rental History: 21/06/2017 rent,Status: Available"          # Put sample data
+   list6 = "Room Info: Deluxe Room (Twin),Code: DR2,Dimensions: 160+ sqft,Pricing: RM840,Apartment ID: A01-L04-R22 to A01-L04-R41,Date of Acquisition: 22/06/2017,Rental History: 22/07/2017 rent,Status: Available"            # Put sample data
+   list7 = "Room Info: Deluxe Room A/C with shared attached bath / toilet (Triple),Code: DR3,Dimensions: 180+ sqft,Pricing: RM950,Apartment ID: A01-L03-R1 to A01-L03-R21,Date of Acquisition: 30/07/2018,Rental History: 25/08/2018 rent,Status: Available"  # Put sample data
+   list8 = "Room Info: Deluxe Room A/C with shared attached bath / toilet,Code: DR4,Dimensions: 170+ sqft,Pricing: RM1040,Apartment ID: A01-L03-R22 to A01-L03-R41,Date of Acquisition: 16/08/2018,Rental History: 18/09/2018 rent,Status: Available"         # Put sample data
+   list9 = "Room Info: Compact Premium Single,Code: CPS1,Dimensions: 130+ sqft,Pricing: RM690,Apartment ID: A01-L05-R01 to A01-L05-R41,Date of Acquisition: 02/09/2019,Rental History: 29/10/2019 rent,Status: Available"          # Put sample data
+   list10 = "Room Info: Medium Premium Single,Code: MPS1,Dimensions: 150+ sqft,Pricing: RM750,Apartment ID: A02-L01-R01 to A02-L01-R21,Date of Acquisition: 15/10/2019,Rental History: 31/11/2019 rent,Status: Available"       # Put sample data
+   list11 = "Room Info: Medium Premium Twin,Code: MPT1,Dimensions: 180+ sqft,Pricing: RM890,Apartment ID: A02-L02-R01 to A02-L02-R21,Date of Acquisition: 25/11/2020,Rental History: 31/12/2020 rent,Status: Available"         # Put sample data
+   list12 = "Room Info: Medium Premium with attached bath / toilet (Twin),Code: MP1,Dimensions: 180+ sqft,Pricing: RM940,Apartment ID: A02-L03-R01 to A02-L03-R21,Date of Acquisition: 30/12/2020,Rental History: 31/01/2020 rent,Status: Available"    # Put sample data
+   list13 = "Room Info: Medium Premium with attached bath / toilet (Single),Code: MP2,Dimensions: 160+ sqft,Pricing: RM1050,Apartment ID: A02-L03-R22 to A02-L03-R41,Date of Acquisition: 16/01/2021,Rental History: 28/02/2021 rent,Status: Available" # Put sample data
+   list14 = "Room Info: En-Suite Single (Super Premium - Triple),Code: ESS3,Dimensions: 160+ sqft,Pricing: RM700,Apartment ID: A02-L04-R01 to A02-L04-R41,Date of Acquisition: 25/02/2021,Rental History: 31/03/2021 rent,Status: Available"            # Put sample data
+   list15 = "Room Info: En-Suite Single (Super Premium - Twin),Code: ESS2,Dimensions: 140+ sqft,Pricing: RM800,Apartment ID: A02-L04-R01 to A02-L04-R41,Date of Acquisition: 31/05/2022,Rental History: Empty,Status: Not Available"                    # Put sample data
+   list16 = "Room Info: En-Suite Twin (Super Premium),Code: EST2,Dimensions: 200+ sqft,Pricing: RM900,Apartment ID: A02-L05-R01 to A02-L05-R41,Date of Acquisition: 26/06/2022,Rental History: Empty,Status: Not Available"                             # Put sample data
    ApartmentList = [list1,list2,list3,list4,list5,list6,list7,list8,list9,list10,list11,list12,list13,list14,list15,list16]    # Declare list containing relevant input data
    with open(listIdentifier(listCode),"w") as apartmentwHandler:                              # Open selected text file and named as apartmentwHandler 
       for record in ApartmentList:
-         for data in record:
-            apartmentwHandler.write(data)                                                     # Write data into apartmentwHandler
-            apartmentwHandler.write(",")                                                      # Write a comma (,) into apartmentwHandler
-         apartmentwHandler.write("\n")                                                        # Write a newline ("\n") into apartmentwHandler
+         apartmentwHandler.write(record)                                                     # Write data into apartmentwHandler
+         apartmentwHandler.write(",\n")                                                        # Write a newline ("\n") into apartmentwHandler
    print("\n------------------------------------------------------------------------------------------------------------------------------------------------------\n\n- Apartment Info: -\n") # Print message
-   for record in ApartmentList:
-      print(record)                                                            # Print each record that inside the apartmentrHandler  
+   readFile(listCode)                                                                          # Call function readFile(listCode)
    if UID == None:                                                                            # If UID equals to None Then:
       modifyData(UID,listCode,code,None)                                                      # Call function modifyData(UID,listCode,code,None)
    else:                                                                                      # Other than that:
