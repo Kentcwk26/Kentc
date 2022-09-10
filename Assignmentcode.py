@@ -665,7 +665,6 @@ def apartmentAddData(modify,listCode):                                          
 
 def newRoom():                                                                                # Define newRoom function
    while True:
-      code = None                                                                             # Code set as 'None' 
       SCL = 'SCL2'                                                                            # Set specials as 'SCL2'
       specials = specialCharacterList(SCL)                                                    # specials = call function specialCharacterList(SCL)
       newRoom = input("\nRoom info only contains alphabets, no numbers and special characters [Except these special characters: '(' ')' '/' '-' ]\nExample: Dual Key Premium Rooms - Single Room\n\nRoom Info: ") # Print message and get newroom
@@ -674,124 +673,83 @@ def newRoom():                                                                  
          message(code)                                                                        # Print error message, call function message(code)
          print("- Room info does not contain special character(s) -")                         # Error message explanation
          continue                                                                             # Jump back to the top of loop, rerun again 
-      else:                                                                                   # Other than that:
-         code = None                                                                          # Error not detected, remain the same value 'None'
-      if 0 <= len(newRoom) < 6:                                                               # 2nd Data Validation - Input length check
-         code = 2                                                                             # Error detected, code change from 'None' to '2'
+      elif 0 <= len(newRoom) < 6:                                                               # 2nd Data Validation - Input length check
+         code = 3                                                                             # Error detected, code change from 'None' to '2'
          message(code)                                                                        # Print error message, call function message(code)
          print("-  Refer to the Room Info to look for its details and format -")              # Error message explanation
          continue                                                                             # Jump back to the top of loop, rerun again 
-      else:                                                                                   # Other than that:
-         code = None                                                                          # Error not detected, remain the same value 'None'
-      if newRoom.isdigit() and any(location.isdigit() for location in newRoom):               # 3rd Data Validation - Check numbers 
+      elif newRoom.isdigit() or any(location.isdigit() for location in newRoom):               # 3rd Data Validation - Check numbers 
          code = 1                                                                             # Error detected, code change from 'None' to '1'
          message(code)                                                                        # Print error message, call function message(code)
          print("- Room info does not contain number(s) -")                                    # Error message explanation
          continue                                                                             # Jump back to the top of loop, rerun again
       else:                                                                                   # Other than that:
-         code = None                                                                          # Error not detected, remain the same value 'None'
-      if code == None:                                                                        # No error detected, correct input                                                                
          newRoom.title()                                                                      # Return where the first character in each word is uppercase
          decisionkey = input("Save data? (Enter to continue, 'N' to return back): ")          # Print message and get decisionkey
          if decisionkey in ['N','n']:                                                         # If decisionkey is equal to ["N","n"] Then:
             continue                                                                          # Jump back to the top of loop. rerun again
          else:                                                                                # Other than that:
             return "New Room Info: " + newRoom                                                # Exit function and send the value back to the program
-      else:                                                                                   # Other than that:
-         code = 2                                                                             # Error detected, code change from 'None' to '2'
-         message(code)                                                                        # Print error message, call function message(code)
-         print("- Please fill in the correct format for room info. Refer to the description for its details and format -")  # Error message explanation
-         continue                                                                             # Jump back to the top of loop, rerun again 
-
+   
 def newRoomCode():                                                                            # Define newRoomCode function
    while True:                                                                               
-      code = None                                                                             # Code set as 'None' 
       newRoomCode = input("\nRoom code only contains alphanumeric (A combination of uppercased alphabet and number), and no special characters\nExample: DKPRS1\n\nRoom Code: ")    # Get input from admin
       if len(newRoomCode) <= 1 :                                                              # 1st Data Validation - Check empty input and length input
-         code = 2                                                                             # Error detected, code change from 'None' to '2'
+         code = 3                                                                             # Error detected, code change from 'None' to '2'
          message(code)                                                                        # Print error message, call function message(code)
          print("- Room Code must contain at least 2 or more alphanumeric long -\n")           # Error message explanation
          continue                                                                             # Jump back to the top of loop, rerun again
-      else:                                                                                   # Other than that:
-         code = None                                                                          # Error not detected, remain the same value 'None'
-      if newRoomCode.isalnum():                                                               # 2nd Data Validation - Check input contains alphanumeric or not
-         code = None                                                                          # Error not detected, remain the same value 'None'
-      else:                                                                                   # Other than that:
+      elif not(newRoomCode.isalnum()):                                                               # 2nd Data Validation - Check input contains alphanumeric or not
          code = 2                                                                             # Error detected, code change from 'None' to '2'
          message(code)                                                                        # Print error message, call function message(code)
          print("- Please note that room code is only acceptable when it contains alphanumeric only-\n")  # Error message explanation
          continue                                                                             # Jump back to the top of loop, rerun again
-      if code == None:                                                                        # No error detected, correct input                                                                   
+      else:                                                                        # No error detected, correct input                                                                   
          decisionkey = input("Save data? (Enter to continue, 'N' to return back): ")          # Save Data Confirmation Message
          if decisionkey in ['N','n']:                                                         # If decisionkey equals to ["N","n"] Then:
             continue                                                                          # Jump back to the top of loop, rerun again
          else:                                                                                # Other than that:
             return "New Room Code: " + newRoomCode                                            # Exit function and send the value back to the program
-      else:                                                                                   # Other than that:
-         code = 2                                                                             # Error detected, code change from 'None' to '2'
-         message(code)                                                                        # Print error message, call function message(code)
-         print("- Please fill in the correct format for room code. Refer to the description for its details and format -")  # Error message explanation
-         continue                                                                             # Jump back to the top of loop, rerun again
 
 def newRoomDimension():                                                                       # Define newRoomDimension function
    while True:                                                                               
-      code = None                                                                             # Code set as 'None' 
       newRoomDimension=input("\nRoom Dimension only contains numbers, no alphabets and special characters (The unit (in sqft) will be provided at the back)\nExample: 300(+sqft)\n\nRoom Dimension: ")   # Get input from admin 
       if len(newRoomDimension) == 0:                                                          # 1st Data Validation - Check empty input exist or not
          code = 5                                                                             # Error detected, incorrect input
          message(code)                                                                        # Print error message, call function message(code)
          print("- Please fill in the room dimension, and room dimension must have at least 100 or more sqft -\n")  # Error message explanation
          continue                                                                             # Jump back to the top of loop, rerun again
-      else:                                                                                   # Other than that:
-         code = None                                                                          # Error not detected, remain the same value 'None'
-      if newRoomDimension.isdigit():                                                          # 2nd data Validation - Input check that only contain numbers  
-         code = None                                                                          # Error not detected, remain the same value 'None'
-      else:                                                                                   # Other than that:
+      elif not(newRoomDimension.isdigit()):                                                     # 2nd data Validation - Input check that only contain numbers  
          code = 2                                                                             # Error detected, incorrect input
          message(code)                                                                        # Print error message, call function message(code)
          print("- Room dimension must consist of number(s) -\n")                                # Error message explanation
          continue                                                                             # Jump back to the top of loop, rerun again
-      if code == None:                                                                        # No error detected, correct input
+      else:                                                                        # No error detected, correct input
          decisionkey = input("Save data? (Enter to continue, 'N' to return back):")           # Print message and get decisionkey
          if decisionkey in ["N","n"]:                                                         # If decisionkey is equal to ["N","n"] Then:
             continue                                                                          # Jump back to the top of loop, rerun again
          else:                                                                                # Other than that:
             return "New Room Dimension: " + newRoomDimension + "+ sqft"                               # Exit function and send the value back to the program
-      else:                                                                                   # Other than that:
-         code = 2                                                                             # Error detected, code change from 'None' to '2'
-         message(code)                                                                        # Print error message, call function message(code)
-         print("- Please fill in the correct format for room dimension. Refer to the description for its details and format -\n")   # Error message explanation
-         continue                                                                             # Jump back to the top of loop, rerun again
 
 def newRoompricing():                                                                         # Define newRoompricing function
    while True:                                                                               
-      code = None                                                                             # Code set as 'None' 
       newRoompricing=input("\nRoom Pricing only contain numbers, no special characters (The unit (in RM) will be provided at the front)\nExample: (RM)500\n\nRoom Pricing: ")    # Get input from admin
-      if newRoompricing.isdigit():                                                            # Validation - Input check that only contain numbers 
-         nRp=int(newRoompricing)                                                              # Convert to integer 
-         if nRp >= 350:                                                                       # If nRp equals or greater than 350 Then:
-            code = None                                                                       # No error detected, correct input, code equals to None
-         else:                                                                                # Other than that:
-            code = 1                                                                          # Error detected, code change from 'None' to '1' 
-            message(code)                                                                     # Print error message, call function message(code)
-            print("- Minimum starting price starts from RM350 and above -\n")                 # Error message confirmation
-            continue                                                                          # Jump back to the top of loop, rerun again
-      else:                                                                                   # Other than that:
+      if not(newRoompricing.isdigit()):                                                            # Validation - Input check that only contain numbers 
          code = 2                                                                             # Error detected, code change from 'None' to '2'
          message(code)                                                                        # Print error message, call function message(code)
          print("- Please fill in the room pricing, it must be in numeric and the minimum starting price starts from RM350 and above -\n")  # Error message explanation
          continue                                                                             # Jump back to the top of loop, rerun again
-      if code == None:                                                                        # No error detected, correct input                                                                       # No error detected, correct input
+      elif int(newRoompricing) < 350:                                                         # If nRP less than 350 Then:
+         code = 1                                                                          # Error detected, code change from 'None' to '1' 
+         message(code)                                                                     # Print error message, call function message(code)
+         print("- Minimum starting price starts from RM350 and above -\n")                 # Error message confirmation
+         continue                                                                          # Jump back to the top of loop, rerun again
+      else:                                                                                   # Other than that:
          decisionkey = input("Save data? (Enter to continue, 'N' to return back):")           # Print message and get decisionkey
          if decisionkey in ["N","n"]:                                                         # If decisionkey is equal to ["N","n"] Then:
             continue                                                                          # Jump back to the top of loop, rerun again
          else:                                                                                # Other than that:
             return "Pricing: RM" + newRoompricing                                             # Exit function and send the value back to the program
-      else:                                                                                   # Other than that:
-         code = 2                                                                             # code equals to 2
-         message(code)                                                                        # Print error message, call function message(code)
-         print("- Please follow the correct format for new room pricing. Refer to the description above to know its details and format -\n") # Print error message explanation
-         continue                                                                             # Jump back to the top of loop, rerun again
 
 def newRoomID():                                                                              # Define newRoomID function
    while True:                                                                               

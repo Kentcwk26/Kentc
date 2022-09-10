@@ -929,19 +929,17 @@ FUNCTION newRoom()
         CALL specialCharacterList(SCL) RETURNING specials
         PRINT("NEWLINE Room info only contains alphabets, no numbers and special characters [Except these special characters: '(' ')' '/' '-' ]NEWLINE Example: Dual Key Premium Rooms - Single Room NEWLINE NEWLINE Room Info: ")
         GET newRoom
-        IF [
-        FOR character IN newRoom 
-            IF (character IN specials)
-        ENDFOR] THEN
-            code = 2
-            CALL message(code)
-            PRINT("- Room info does not contain special character(s) -")
-            CONTINUELOOP
+        FOR character IN newRoom
+            IF character IN specials THEN
+                code = 2
+                CALL message(code)
+                PRINT("- Room info does not contain special character(s) -")
+                BREAKLOOP
         ELSE
             code = None
         ENDIF
         IF 0 <= LENGTH(newRoom) < 6 THEN:
-            code = 2
+            code = 3
             CALL message(code)
             PRINT("-  Refer to the Room Info to look for its details and format -")
             CONTINUE
@@ -949,7 +947,7 @@ FUNCTION newRoom()
             code = None
         ENDIF
         IF 
-        newRoom ISDIGIT AND 
+        newRoom ISDIGIT OR  
         ANY(LOCATION ISDIGIT FOR LOCATION IN newRoom) THEN
             code = 1
             CALL message(code)
