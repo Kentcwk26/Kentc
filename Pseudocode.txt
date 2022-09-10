@@ -9,7 +9,7 @@ FUNCTION register(listCode,code)
     GET password
     CALL gettenantID(UID,userType) RETURNING userID
     PRINT ("UserID is"+userID)
-    CALL listIdentifier WITH listCode RETURNING l
+    CALL listIdentifier(listCode) RETURNING l
     OPENFILE l IN APPEND AS userAdd
         WRITE(username+","+password+","+userID+",NEWLINE") TO userAdd
     CLOSEFILE
@@ -821,33 +821,7 @@ FUNCTION tenantOrTransaction(UID,listCode,code)
 ENDFUNCTION
 
 FUNCTION apartment(UID,listCode,code)
-    DECLARE list1,list2,list3,list4,list5,list6,list7,list8,list9,list10,list11,list12,list13,list14,list15,list16 AS STRING
-    DECLARE ApartmentList AS ARRAY
-    DECLARE apartmentwHandler,apartmentrHandler AS FILE
-    list1 = "Room Info: Standard Room (Triple),Code: SR1,Dimensions: 140+ sqft,Pricing: RM350,Apartment ID: A01-L01-R01 to A01-L01-R21,Date of Acquisition: 03/01/2015,Rental History: 27/02/2015 rent,Status: Available"
-    list2 = "Room Info: Standard Room (Twin),Code: SR2,Dimensions: 120+ sqft,Pricing: RM450,Apartment ID: A01-L01-R22 to A01-L01-R41,Date of Acquisition: 10/02/2015,Rental History: 28/03/2015 rent,Status: Available"
-    list3 = "Room Info: Standard Room A/C (Triple),Code: SR3,Dimensions: 150+ sqft,Pricing: RM550,Apartment ID: A01-L02-R01 to A01-L02-R21,Date of Acquisition: 21/03/2016,Rental History: 24/04/2016 rent,Status: Available"
-    list4 = "Room Info: Standard Room A/C (Twin),Code: SR4,Dimensions: 130+ sqft,Pricing: RM650,Apartment ID: A01-L02-R22 to A01-L02-R41,Date of Acquisition: 02/04/2016,Rental History: 20/05/2016 rent,Status: Available"
-    list5 = "Room Info: Deluxe Room (Triple),Code: DR1,Dimensions: 170+ sqft,Pricing: RM750,Apartment ID: A01-L04-R01 to A01-L04-R21,Date of Acquisition: 11/05/2017,Rental History: 21/06/2017 rent,Status: Available"
-    list6 = "Room Info: Deluxe Room (Twin),Code: DR2,Dimensions: 160+ sqft,Pricing: RM840,Apartment ID: A01-L04-R22 to A01-L04-R41,Date of Acquisition: 22/06/2017,Rental History: 22/07/2017 rent,Status: Available"
-    list7 = "Room Info: Deluxe Room A/C with shared attached bath / toilet (Triple),Code: DR3,Dimensions: 180+ sqft,Pricing: RM950,Apartment ID: A01-L03-R1 to A01-L03-R21,Date of Acquisition: 30/07/2018,Rental History: 25/08/2018 rent,Status: Available"
-    list8 = "Room Info: Deluxe Room A/C with shared attached bath / toilet,Code: DR4,Dimensions: 170+ sqft,Pricing: RM1040,Apartment ID: A01-L03-R22 to A01-L03-R41,Date of Acquisition: 16/08/2018,Rental History: 18/09/2018 rent,Status: Available"
-    list9 = "Room Info: Compact Premium Single,Code: CPS1,Dimensions: 130+ sqft,Pricing: RM690,Apartment ID: A01-L05-R01 to A01-L05-R41,Date of Acquisition: 02/09/2019,Rental History: 29/10/2019 rent,Status: Available"
-    list10 = "Room Info: Medium Premium Single,Code: MPS1,Dimensions: 150+ sqft,Pricing: RM750,Apartment ID: A02-L01-R01 to A02-L01-R21,Date of Acquisition: 15/10/2019,Rental History: 31/11/2019 rent,Status: Available"
-    list11 = "Room Info: Medium Premium Twin,Code: MPT1,Dimensions: 180+ sqft,Pricing: RM890,Apartment ID: A02-L02-R01 to A02-L02-R21,Date of Acquisition: 25/11/2020,Rental History: 31/12/2020 rent,Status: Available"
-    list12 = "Room Info: Medium Premium with attached bath / toilet (Twin),Code: MP1,Dimensions: 180+ sqft,Pricing: RM940,Apartment ID: A02-L03-R01 to A02-L03-R21,Date of Acquisition: 30/12/2020,Rental History: 31/01/2020 rent,Status: Available"
-    list13 = "Room Info: Medium Premium with attached bath / toilet (Single),Code: MP2,Dimensions: 160+ sqft,Pricing: RM1050,Apartment ID: A02-L03-R22 to A02-L03-R41,Date of Acquisition: 16/01/2021,Rental History: 28/02/2021 rent,Status: Available"
-    list14 = "Room Info: En-Suite Single (Super Premium - Triple),Code: ESS3,Dimensions: 160+ sqft,Pricing: RM700,Apartment ID: A02-L04-R01 to A02-L04-R41,Date of Acquisition: 25/02/2021,Rental History: 31/03/2021 rent,Status: Available"
-    list15 = "Room Info: En-Suite Single (Super Premium - Twin),Code: ESS2,Dimensions: 140+ sqft,Pricing: RM800,Apartment ID: A02-L04-R01 to A02-L04-R41,Date of Acquisition: 31/05/2022,Rental History: Empty,Status: Not Available"
-    list16 = "Room Info: En-Suite Twin (Super Premium),Code: EST2,Dimensions: 200+ sqft,Pricing: RM900,Apartment ID: A02-L05-R01 to A02-L05-R41,Date of Acquisition: 26/06/2022,Rental History: Empty,Status: Not Available"
-    ApartmentList = [list1,list2,list3,list4,list5,list6,list7,list8,list9,list10,list11,list12,list13,list14,list15,list16]
-    OPENFILE "Apartment.txt" IN WRITE AS apartmentwHandler
-        FOR record IN ApartmentList
-            WRITE record TO apartmentwHandler
-            WRITE ",NEWLINE" TO apartmentwHandler
-        ENDFOR
-    CLOSEFILE
-    PRINT("\n------------------------------------------------------------------------------------------------------------------------------------------------------\n\n- Apartment Info: -\n")
+    PRINT("NEWLINE------------------------------------------------------------------------------------------------------------------------------------------------------NEWLINENEWLINE- Apartment Info: -NEWLINE")
     CALL readFile(listCode)
     IF UID == NONE THEN
         modifyType = NONE
@@ -910,7 +884,7 @@ FUNCTION apartmentAddData(modify,listCode)
     addDataList = [newroom,newroomcode,newroomdimension,newroompricing,newroomID,newroomdateofacquisition,newroomrentalhistory,newroomstatus]
     PRINT("NEWLINE New Data:",addDataList)
     PRINT("NEWLINE Are you sure with the records you inserted just now? Enter to continue, 'N' to unsave: ")
-    IF addDataconfirmation IN ["N","n"] Then:
+    IF addDataconfirmation IN ["N","n"] THEN
         CLEAR addDataList
     ELSE
         CALL appendFile(addDataList,listCode)
@@ -924,59 +898,46 @@ FUNCTION newRoom()
     DECLARE SCL,newRoom,decisionkey AS STRING
     DECLARE specials AS ARRAY
     WHILE TRUE
-        code = None
         SCL = "SCL2"
         CALL specialCharacterList(SCL) RETURNING specials
         PRINT("NEWLINE Room info only contains alphabets, no numbers and special characters [Except these special characters: '(' ')' '/' '-' ]NEWLINE Example: Dual Key Premium Rooms - Single Room NEWLINE NEWLINE Room Info: ")
         GET newRoom
+        IF
         FOR character IN newRoom
             IF character IN specials THEN
                 code = 2
                 CALL message(code)
                 PRINT("- Room info does not contain special character(s) -")
                 BREAKLOOP
-        ELSE
-            code = None
-        ENDIF
-        IF 0 <= LENGTH(newRoom) < 6 THEN:
+        ELSEIF 0 <= LENGTH(newRoom) < 6 THEN
             code = 3
             CALL message(code)
             PRINT("-  Refer to the Room Info to look for its details and format -")
             CONTINUE
-        ELSE
-            code = None
-        ENDIF
-        IF 
-        newRoom ISDIGIT OR  
-        ANY(LOCATION ISDIGIT FOR LOCATION IN newRoom) THEN
+        ELSEIF 
+        newRoom ISDIGIT OR [
+        FOR location IN newRoom
+            IF location ISDIGIT
+        ] ENDFOR THEN
             code = 1
             CALL message(code)
             PRINT("- Room info does not contain number(s) -") 
             CONTINUELOOP
         ELSE
-            code = None
-        ENDIF
-        IF code == None THEN:
             TITLE newRoom
             PRINT("Save data? (Enter to continue, 'N' to return back): ")
             GET decisionkey
-            IF decisionkey IN ['N','n'] THEN:
+            IF decisionkey IN ['N','n'] THEN
                 CONTINUELOOP
             ELSE
                 RETURN "New Room Info: " + newRoom
             ENDIF
-        ELSE
-            code = 2
-            CALL message(code)
-            PRINT("- Please fill in the correct format for room info. Refer to the description for its details and format -")
-            CONTINUELOOP
         ENDIF
     ENDWHILE
 ENDFUNCTION
 
 FUNCTION newRoomCode()
     WHILE TRUE
-        code = None
         PRINT("NEWLINE Room code only contains alphanumeric (A combination of uppercased alphabet and number), and no special characters NEWLINE Example: DKPRS1 NEWLINE NEWLINE Room Code: ")
         GET newRoomCode
         IF LENGTH(newRoomCode) <= 1:
@@ -984,37 +945,25 @@ FUNCTION newRoomCode()
             CALL message(code)
             PRINT("- Room Code must contain at least 2 or more alphanumeric long - NEWLINE")
             CONTINUELOOP
-        ELSE
-            code = None
-        ENDIF
-        IF newRoomCode.ISALNUM() THEN:
-            code = None
-        ELSE
+        ELSEIF NOT(newRoomCode.ISALNUM()) THEN
             code = 2
             CALL message(code)
             print("- Please note that room code is only acceptable when it contains alphanumeric only- NEWLINE")
             CONTINUELOOP
-        ENDIF
-        IF code == None:
+        ELSE
             PRINT("Save data? (Enter to continue, 'N' to return back): ")
             GET decisionkey
-            IF decisionkey IN ["N","n"] THEN:
+            IF decisionkey IN ["N","n"] THEN
                 CONTINUELOOP
             ELSE:
                 RETURN "New Room Code: " + newRoomCode
             ENDIF
-        ELSE
-            code = 2
-            CALL message(code)
-            PRINT("- Please fill in the correct format for room code. Refer to the description for its details and format -")
-            CONTINUELOOP
         ENDIF
     ENDWHILE
 ENDFUNCTION
 
 FUNCTION newRoomDimension()
     WHILE TRUE
-        code = None
         PRINT("NEWLINE Room Dimension only contains numbers, no alphabets and special characters (The unit (in sqft) will be provided at the back) NEWLINE Example: 300(+sqft) NEWLINE NEWLINE Room Dimension: ")
         GET newRoomDimension
         IF LENGTH(newRoomDimension) == 0:
@@ -1022,34 +971,49 @@ FUNCTION newRoomDimension()
             CALL message(code)
             PRINT("- Please fill in the room dimension, and room dimension must have at least 100 or more sqft - NEWLINE")
             CONTINUELOOP
-        ELSE
-            code = None
-        ENDIF
-        IF newRoomDimension ISDIGIT THEN:
-            code = None
-        ELSE
+        ELSEIF NOT(newRoomDimension ISDIGIT) THEN
             code = 2
             CALL message(code)
             print("- Room dimension must consist of number(s) -")
             CONTINUELOOP
-        ENDIF
-        IF code == None:
+        ELSE
             PRINT("Save data? (Enter to continue, 'N' to return back): ")
             GET decisionkey
-            IF decisionkey IN ["N","n"] THEN:
+            IF decisionkey IN ["N","n"] THEN
                 CONTINUELOOP
             ELSE:
                 RETURN "New Room Dimension: " + newRoomDimension + "+ sqft"
             ENDIF
-        ELSE
-            code = 2
-            CALL message(code)
-            PRINT("- Please fill in the correct format for room dimension. Refer to the description for its details and format -")
-            CONTINUELOOP
         ENDIF
     ENDWHILE
 ENDFUNCTION
 
+FUNCTION newRoompricing()
+    WHILE TRUE
+        PRINT("NEWLINE Room Pricing only contain numbers, no special characters (The unit (in RM) will be provided at the front) NEWLINE Example: (RM)500 NEWLINE NEWLINE Room Pricing: "")
+        GET newRoompricing
+        IF NOT newRoompricing iS DIGIT THEN
+            code = 2
+            CALL message(code)
+            PRINT("- Please fill in the room pricing, it must be in numeric and the minimum starting price starts from RM350 and above - NEWLINE ")
+            CONTINUELOOP
+        ELIF INTEGER(newRoompricing) < 350:
+            code = 1
+            CALL message(code)
+            PRINT("- Minimum starting price starts from RM350 and above - NEWLINE")
+            CONTINUELOOP
+        ELSE
+            PRINT("Save data? (Enter to continue, 'N' to return back): ")
+            GET decisionkey
+            IF decisionkey IN ["N","n"] THEN
+                CONTINUELOOP
+            ELSE:
+                RETURN "Pricing: RM" + newRoompricing
+            ENDIF
+        ENDIF
+    ENDWHILE
+ENDFUNCTION
+            
 FUNCTION newRoomID()
     WHILE TRUE
         code = None
@@ -1059,11 +1023,11 @@ FUNCTION newRoomID()
             PRINT("- Please fill in the new room ID with the correct format -")
             CONTINUELOOP
         ELSE
-            IF (newRoomID[0] == 'A' AND newRoomID[3] == '-' AND newRoomID[4] == 'L' AND newRoomID[7] == '-' AND newRoomID[8] == 'R' AND newRoomID[11] == ' ' AND newRoomID[12] == 't' AND newRoomID[13] == 'o' AND newRoomID[14] == ' ' AND newRoomID[15] == 'A' AND newRoomID[18] == '-' AND newRoomID[19] == 'L' AND newRoomID[22] == '-' AND newRoomID[23] == 'R') THEN:
+            IF (newRoomID[0] == 'A' AND newRoomID[3] == '-' AND newRoomID[4] == 'L' AND newRoomID[7] == '-' AND newRoomID[8] == 'R' AND newRoomID[11] == ' ' AND newRoomID[12] == 't' AND newRoomID[13] == 'o' AND newRoomID[14] == ' ' AND newRoomID[15] == 'A' AND newRoomID[18] == '-' AND newRoomID[19] == 'L' AND newRoomID[22] == '-' AND newRoomID[23] == 'R') THEN
                 IF ((newRoomID[1] AND newRoomID[2] AND newRoomID[5] AND newRoomID[6] AND newRoomID[9] AND newRoomID[10] AND newRoomID[16] AND newRoomID[17] AND newRoomID[20] AND newRoomID[21] AND newRoomID[24] AND newRoomID[25]) ISDIGIT) THEN
                     PRINT("Save data? (Enter to continue, 'N' to return back):")
                     GET decisionkey
-                    IF decisionkey IN ["N","n"] THEN:
+                    IF decisionkey IN ["N","n"] THEN
                         CONTINUELOOP
                     ELSE
                         RETURN "New Room ID: " + newRoomID
@@ -1084,14 +1048,14 @@ ENDFUNCTION
 FUNCTION newRoomDate(dateType)
     WHILE TRUE
         code = None
-        IF dateType == 'acquisition' THEN:
+        IF dateType == 'acquisition' THEN
             PRINT("NEWLINE Room Date of Acquisition: dd/mm/yyyy NEWLINE No special characters included, except '/' NEWLINE NEWLINE Room Acquisition Date: ")
             GET roomDate
         ELSE
             PRINT(" NEWLINE Room Rental History: (Accepted input: 'dd/mm/yyyy' or 'Empty') NEWLINE No special characters included, except '/' NEWLINE NEWLINE Room Rental History: ")
             GET roomDate
         ENDIF
-        IF ANY(LOCATION ISDIGIT FOR LOCATION IN roomDate) AND LENGTH(roomDate) == 10 THEN:
+        IF ANY(LOCATION ISDIGIT FOR LOCATION IN roomDate) AND LENGTH(roomDate) == 10 THEN
             day,month,year = SPLIT date INTO LIST WITH("/")
             ValidDate = True
             TRY
@@ -1103,7 +1067,7 @@ FUNCTION newRoomDate(dateType)
             IF code == None:
                 PRINT("Save data? (Enter to continue, 'N' to return back): ")
                 GET decisionkey
-                IF decisionkey IN ["N","n"] THEN:
+                IF decisionkey IN ["N","n"] THEN
                     CONTINUELOOP
                 ELSE:
                     RETURN "Date: " + roomDate
@@ -1128,7 +1092,7 @@ FUNCTION newRoomStatus()
         code = None
         PRINT("NEWLINE Room Status: [A]-Available; [Any other key]-Not Available') NEWLINE NEWLINE Room Status ( Available / Not Available ): ")
         GET newRoomStatus
-        IF newRoomStatus IN ["N","n"] THEN:
+        IF newRoomStatus IN ["N","n"] THEN
             newRoomStatus = "Available"
         ELSE
             newRoomStatus = "Not Available"
@@ -1136,7 +1100,7 @@ FUNCTION newRoomStatus()
         IF code == None:
             PRINT("Save data? (Enter to continue, 'N' to return back): ")
             GET decisionkey
-            IF decisionkey IN ["N","n"] THEN:
+            IF decisionkey IN ["N","n"] THEN
                 CONTINUELOOP
             ELSE:
                 RETURN "Status: " + newRoomStatus
@@ -1151,46 +1115,46 @@ FUNCTION newRoomStatus()
 ENDFUNCTION
 
 FUNCTION inputidentifier(UID,listCode,editDataType,code)
-    IF listCode == "a" THEN:
-        IF editDataType == 0 THEN:
+    IF listCode == "a" THEN
+        IF editDataType == 0 THEN
             RETURN newRoom()                                             
-        ELSE IF editDataType == 1 THEN:
+        ELSE IF editDataType == 1 THEN
             RETURN newRoomCode()                                         
-        ELSE IF editDataType == 2 THEN:
+        ELSE IF editDataType == 2 THEN
             RETURN newRoomDimension()                                    
-        ELSE IF editDataType == 3 THEN:
+        ELSE IF editDataType == 3 THEN
             RETURN newRoompricing()                                      
-        ELSE IF editDataType == 4 THEN:
+        ELSE IF editDataType == 4 THEN
             RETURN newRoomID()                                           
-        ELSE IF editDataType == 5 THEN:
+        ELSE IF editDataType == 5 THEN
             RETURN newRoomDate("acquisition")                            
-        ELSE IF editDataType == 6 THEN:
+        ELSE IF editDataType == 6 THEN
             RETURN newRoomDate("history")                                
         ELSE
             RETURN newRoomStatus()
         ENDIF
-    ELSE IF listCode == "t" THEN:        
+    ELSE IF listCode == "t" THEN        
         IF editDataType == 0:  
             RETURN gettenantID(UID,"existing")                           
-        ELSE IF editDataType == 1 THEN:
+        ELSE IF editDataType == 1 THEN
             RETURN getname(code,"tenant")                                
-        ELSE IF editDataType == 2 THEN:
+        ELSE IF editDataType == 2 THEN
             RETURN getabbreviation(code,"gender")                        
-        ELSE IF editDataType == 3 THEN:
+        ELSE IF editDataType == 3 THEN
             RETURN getpNum(code)                                         
-        ELSE IF editDataType == 4 THEN:
+        ELSE IF editDataType == 4 THEN
             RETURN getabbreviation(code,"nationality")                   
-        ELSE IF editDataType == 5 THEN:
+        ELSE IF editDataType == 5 THEN
             RETURN getDate(code,"start")                                 
-        ELSE IF editDataType == 6 THEN:
+        ELSE IF editDataType == 6 THEN
             RETURN getnumber(code,"workHistory")                         
-        ELSE IF editDataType == 7 THEN:
+        ELSE IF editDataType == 7 THEN
             RETURN getname(code,"employer")                              
-        ELSE IF editDataType == 8 THEN:
+        ELSE IF editDataType == 8 THEN
             RETURN getnumber(code,"income")                              
-        ELSE IF editDataType == 9 THEN:
+        ELSE IF editDataType == 9 THEN
             RETURN getrental(UID)                                        
-        ELSE IF editDataType == 1 THEN:
+        ELSE IF editDataType == 1 THEN
             RETURN getDate(code,"birth")                                 
         ELSE
             RETURN getname(code,"city")
@@ -1198,11 +1162,11 @@ FUNCTION inputidentifier(UID,listCode,editDataType,code)
     ELSE   
         IF editDataType == 0:  
             RETURN getreferenceNumber(code)                              
-        ELSE IF editDataType == 1 THEN:
+        ELSE IF editDataType == 1 THEN
             RETURN getDate(code,"transaction")                           
-        ELSE IF editDataType == 2 THEN:
+        ELSE IF editDataType == 2 THEN
             RETURN gettenantID(UID,"existing")                           
-        ELSE IF editDataType == 3 THEN:
+        ELSE IF editDataType == 3 THEN
             chooseList = "a"
             displayColumn = 0
             currentColumn = 1
@@ -1215,24 +1179,24 @@ ENDFUNCTION
 
 FUNCTION ApartmentDataInfo()
     data = True
-    WHILE data == True THEN:
-        PRINT"\n[R] - Room Info [C] - Room code, [D] - Dimensions, [P] - Pricing, [A] - Apartment ID, [E] - Date of Acquisition, [H] - Rental History, [S] - Status \nAnswer: ")
+    WHILE data == True THEN
+        PRINT"NEWLINE[R] - Room Info [C] - Room code, [D] - Dimensions, [P] - Pricing, [A] - Apartment ID, [E] - Date of Acquisition, [H] - Rental History, [S] - Status NEWLINEAnswer: ")
         GET opt
-        IF opt in ["R","r"] THEN:
+        IF opt in ["R","r"] THEN
             num = 0
-        ELSE IF opt in ["C","c"] THEN:
+        ELSE IF opt in ["C","c"] THEN
             num = 1
-        ELSE IF opt in ["D","d"] THEN:
+        ELSE IF opt in ["D","d"] THEN
             num = 2
-        ELSE IF opt in ["P","p"] THEN:
+        ELSE IF opt in ["P","p"] THEN
             num = 3
-        ELSE IF opt in ["A","a"] THEN:
+        ELSE IF opt in ["A","a"] THEN
             num = 4
-        ELSE IF opt in ["E","e"] THEN:
+        ELSE IF opt in ["E","e"] THEN
             num = 5
-        ELSE IF opt in ["H","h"] THEN:
+        ELSE IF opt in ["H","h"] THEN
             num = 6
-        ELSE IF opt in ["S","s"] THEN:
+        ELSE IF opt in ["S","s"] THEN
             num = 7
         ELSE
             code = 0
@@ -1244,19 +1208,19 @@ FUNCTION ApartmentDataInfo()
 ENDFUNCTION
 
 FUNCTION category(listCode,code,sourceFunction)
-    WHILE TRUE THEN:
-        IF listCode == "p" THEN:
+    WHILE TRUE THEN
+        IF listCode == "p" THEN
             PRINT("NEWLINE [R]-Reference number,[D]-Transaction date,[T]-TenantID,[A]-Apartment code,[S]-Amount NEWLINE Choose a category: ")
             GET opt
-            IF opt IN ["R","r"] THEN:
+            IF opt IN ["R","r"] THEN
                 num = 0
-            ELSE IF opt IN ["D","d"] THEN:
+            ELSE IF opt IN ["D","d"] THEN
                 num = 1
-            ELSE IF opt IN ["T","t"] THEN:
+            ELSE IF opt IN ["T","t"] THEN
                 num = 2
-            ELSE IF opt IN ["A","a"] THEN:
+            ELSE IF opt IN ["A","a"] THEN
                 num = 3
-            ELSE IF opt IN ["S","s"] THEN:
+            ELSE IF opt IN ["S","s"] THEN
                 num = 4
             ELSE
                 code = 0
@@ -1264,36 +1228,36 @@ FUNCTION category(listCode,code,sourceFunction)
                 CONTINUELOOP
             ENDIF
         ELSE
-            IF sourceFunction == "edit" THEN:
+            IF sourceFunction == "edit" THEN
                 PRINT("NEWLINE [N]-Name,[G]-Gender,[P]-Phone number,[R]-Nationality,[D]-Rental start date,[W]-Work history,[E]-Employer,[I]-Income,[S]-Tenant status,[B]-Birthdate,[C]-Birth City")
             ELSE
                 PRINT("NEWLINE [U]-User ID,[N]-Name,[G]-Gender,[P]-Phone number,[R]-Nationality,[D]-Rental start date,[W]-Work history,[E]-Employer,[I]-Income,[S]-Tenant status,[B]-Birthdate,[C]-Birth City")
             ENDIF
             PRINT("CHoose a category: ")
             GET opt
-            IF opt IN ["U","u"] and sourceFunction == "search" THEN:
+            IF opt IN ["U","u"] and sourceFunction == "search" THEN
                 num = 0
-            ELSE IF opt IN ["N","n"] THEN:
+            ELSE IF opt IN ["N","n"] THEN
                 num = 1
-            ELSE IF opt IN ["G","g"] THEN:
+            ELSE IF opt IN ["G","g"] THEN
                 num = 2
-            ELSE IF opt IN ["R","r"] THEN:
+            ELSE IF opt IN ["R","r"] THEN
                 num = 3
-            ELSE IF opt IN ["D","d"] THEN:
+            ELSE IF opt IN ["D","d"] THEN
                 num = 4
-            ELSE IF opt IN ["W","w"] THEN:
+            ELSE IF opt IN ["W","w"] THEN
                 num = 5
-            ELSE IF opt IN ["E","e"] THEN:
+            ELSE IF opt IN ["E","e"] THEN
                 num = 6
-            ELSE IF opt IN ["I","i"] THEN:
+            ELSE IF opt IN ["I","i"] THEN
                 num = 7
-            ELSE IF opt IN ["S","s"] THEN:
+            ELSE IF opt IN ["S","s"] THEN
                 num = 8
-            ELSE IF opt IN ["N","n"] THEN:
+            ELSE IF opt IN ["N","n"] THEN
                 num = 9
-            ELSE IF opt IN ["B","b"] THEN:
+            ELSE IF opt IN ["B","b"] THEN
                 num = 10
-            ELSE IF opt IN ["C","c"] THEN:
+            ELSE IF opt IN ["C","c"] THEN
                 num = 11
             ELSE
                 code = 0
@@ -1312,9 +1276,9 @@ FUNCTION replaceOldData(listCode,recordindex,editDataType,newData)
     DECLARE newRecord AS ARRAY
     dataRead = READ Xhandler LINE-BY-LINE
     FOR record IN dataRead
-        strippedRecord = record RIGHTSTRIP(", NEWLINE") SPLIT(",")
-        IF dataRead ISINDEX(record) == INTEGER(recordindex) THEN:
-            IF newData CONTAINS ANY VALUE THEN:
+        strippedRecord = record RIGHTSTRIP(",NEWLINE") SPLIT RECORD INTO LIST WITH(",")
+        IF dataRead ISINDEX(record) == INTEGER(recordindex) THEN
+            IF newData CONTAINS ANY VALUE THEN
                 strippedRecord[INTEGER(editDataType)] = newData
                 newRecord = JOIN strippedRecord with ","
                 APPEND(newRecord + NEWLINE) INTO updatedData
@@ -1336,7 +1300,7 @@ ENDFUNCTION
 FUNCTION editData(UID,listCode,code)
     sourceFunction == "edit"
     WHILE TRUE
-        IF listCode == "a" THEN:
+        IF listCode == "a" THEN
             editDataType = CALL ApartmentDataInfo()
         ELSE
             editDataType = CALL category(listCode,code,sourceFunction)
@@ -1344,7 +1308,7 @@ FUNCTION editData(UID,listCode,code)
         display = CALL searchColumn(listCode,editDataType,UID)
         oldDataFormat = False
         WHILE oldDataFormat = False
-            IF UID == None THEN:
+            IF UID == None THEN
                 listLength = LENGTH(display)
                 FOR item IN range(0,listlength,2)
                     TRY
@@ -1356,7 +1320,7 @@ FUNCTION editData(UID,listCode,code)
                 PRINT("NEWLINE Placement of items displayed above are labeled from upper-left to lower-right starting from 1 to",len(display))
                 PRINT("NEWLINE Please enter the number of the item to edit: ")
                 GET selectedData
-                IF selectedData IS DECIMAL THEN:
+                IF selectedData IS DECIMAL THEN
                     recordindex = INTEGER(selectedData)-1
                     oldDataFormat = True
                 ELSE
@@ -1366,7 +1330,7 @@ FUNCTION editData(UID,listCode,code)
                 ENDIF
             ELSE
                 FOR item IN range(0,len(display))
-                    IF item == len(display)-1 THEN:
+                    IF item == len(display)-1 THEN
                         recordindex = item
                         oldDataFormat = True
                     ELSE
@@ -1378,12 +1342,12 @@ FUNCTION editData(UID,listCode,code)
         newData = CALL inputidentifier(UID,listCode,editDataType,code)
         PRINT("NEWLINE Are you sure with your records just now? ([Y]-Yes/[N]-No): ")
         GET editdataconfirmation
-        IF editdataconfirmation IN ["Y","y"] THEN:
+        IF editdataconfirmation IN ["Y","y"] THEN
             PRINT("NEWLINE - Data updated -")
             CALL replaceOldData(listCode,recordindex,editDataType,newData)
             PRINT("NEWLINE ---------------------------------------------------------------------------------------------------------------------------------------------------------------------")
             BREAKLOOP
-        ELSE IF editdataconfirmation IN ["N","n"] THEN:
+        ELSE IF editdataconfirmation IN ["N","n"] THEN
             PRINT("NEWLINE ---------------------------------------------------------------------------------------------------------------------------------------------------------------------")
             BREAKLOOP
         ELSE
@@ -1399,13 +1363,13 @@ FUNCTION deleteRecord(listCode,code)
         PRINT("NEWLINE - Delete Data -")
         PRINT("NEWLINE 1. Delete specified records NEWLINE 2. Delete all records NEWLINE NEWLINE [E] - Exit NEWLINE NEWLINE Please select and enter which operator that you want to proceed: ")
         GET deletedata
-        IF deletedata == '1' THEN:
+        IF deletedata == '1' THEN
             PRINT("NEWLINE - 1. Delete specified records -")                                           # Print message
             CALL deleteSpecApartRecord(listCode,code)
-        ELSE IF deletedata == '2' THEN:
-            PRINT("\n- 2. Delete all records -")                                                 # Print message
+        ELSE IF deletedata == '2' THEN
+            PRINT("NEWLINE- 2. Delete all records -")                                                 # Print message
             CALL deleteAllApartrecords(listCode) 
-        ELSE IF deletedata IN ["E","e"] THEN:
+        ELSE IF deletedata IN ["E","e"] THEN
             BREAKLOOP
         ELSE
             code = 0
@@ -1427,7 +1391,7 @@ FUNCTION deleteSpecApartRecord(listCode,code)
             newData = None
             PRINT("NEWLINE Are you sure that you want to delete selected record(s)? NEWLINE It will be not recovered once you hit [X]. However, you still can discard this changes by hitting any other keys if you change your mind: ")
             GET confirmation
-            IF confirmation IN ["X","x"] THEN:
+            IF confirmation IN ["X","x"] THEN
                 CALL replaceOldData(listCode,number,editDataType,newData)
                 PRINT("NEWLINE - Delete successful -")  
             ELSE
@@ -1447,7 +1411,7 @@ FUNCTION apartmentDeleteData()
     WHILE modify == TRUE
         PRINT("NEWLINE Are you sure that you want to delete all records? NEWLINE It will be not recovered once you hit [X]. However, you still can discard this changes by hitting any other keys if you change your mind: ")
         GET confirmation
-        IF confirmation IN ["X","x"] THEN:
+        IF confirmation IN ["X","x"] THEN
             OPENFILE "Apartment.txt" IN READ+ AS Ahandler
             SEEK ADeletedhandler FROM LOCATION 0 
             TRUNCATE ADeletedhandler
@@ -1466,30 +1430,30 @@ FUNCTION searchColumn(listCode,num,UID)
         bulkData = READ Tread LINE-BY-LINE
         FOR line IN bulkData:
             individualList = RIGHTSTRIP(", NEWLINE") SPLIT (",") line
-            IF listCode == "a" THEN:
-                IF INTEGER(num) < 7 THEN:
+            IF listCode == "a" THEN
+                IF INTEGER(num) < 7 THEN
                     APPEND(individualList[num]) INTO displayList
                 ELSE
                     APPEND(STRING(individualList[1])) + " ;" + STRING(individualList[num]))
                 ENDIF
             ELSE
                 IF UID == None
-                    IF listCode == "u" THEN:
-                        IF num == 0 THEN:
+                    IF listCode == "u" THEN
+                        IF num == 0 THEN
                             APPEND ("ID: " + STRING(individualList[num]) + " ;relevant data: " + STRING(individualList[2])) INTO displayList
                         ELSE
                             APPEND(individualList[num]) INTO displayList
                         ENDIF
                     ELSE
-                        IF num == 0 THEN:
+                        IF num == 0 THEN
                             APPEND(individualList[num]) INTO displayList
                         ELSE
                             APPEND("ID: " + STRING(individualList[0]) + " ;relevant data: " + STRING(individualList[num])) INTO displayList
                         ENDIF
                     ENDIF
                 ELSE
-                    IF listCode == "t" THEN:
-                        IF individualList LOCATION 0 == UID THEN:
+                    IF listCode == "t" THEN
+                        IF individualList LOCATION 0 == UID THEN
                             IF num == 0: 
                                 APPEND(individualList[num]) INTO displayList
                                 BREAKLOOP
@@ -1498,9 +1462,9 @@ FUNCTION searchColumn(listCode,num,UID)
                                 BREAKLOOP
                             ENDIF
                         ELSE
-                            APPEND displayList WITH ("")
+                            APPEND displayList WITH("")
                         ENDIF
-            IF displayList == [] THEN:
+            IF displayList == [] THEN
                 code = 5
                 CALL message(code)
             ELSE
@@ -1542,7 +1506,7 @@ FUNCTION searchBox(UID,code)
             ENDIF
         ELSEIF option ISDIGIT AND option == "2" THEN
             listCode = "p"
-            IF UID CONTAINS ANY VALUE THEN:
+            IF UID CONTAINS ANY VALUE THEN
                 num = 2
             ELSE THEN
                 num = CALL category(listCode,code,sourceFunction)
@@ -1550,7 +1514,7 @@ FUNCTION searchBox(UID,code)
             ENDIF
         ELSEIF option ISDIGIT AND option == "3" THEN
             listCode = "t"
-            IF UID CONTAINS ANY VALUE THEN:
+            IF UID CONTAINS ANY VALUE THEN
                 num = 2
             ELSE THEN
                 num = CALL category(listCode,code,sourceFunction)
@@ -1563,8 +1527,8 @@ FUNCTION searchBox(UID,code)
             CALL message(code)
             CONTINUELOOP
         ENDIF
-        IF UID CONTAINS ANY VALUE THEN:
-            IF listCode == "a" THEN:
+        IF UID CONTAINS ANY VALUE THEN
+            IF listCode == "a" THEN
                 details = None
             ELSE THEN
                 details = UID

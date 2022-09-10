@@ -110,7 +110,7 @@ def listIdentifier(listCode):                                                 # 
       l = "Apartment.txt"                                                     # l is "Apartment.txt"
    elif listCode == "p":                                                      # If listCode equals to "p" Then:
       l = "transaction.txt"                                                   # l is "transaction.txt"
-   elif listCode == "u":                                                      # If listCode equals to "u" Then:
+   else:                                                                      # If listCode equals to "u" Then:
       l = "user.txt"                                                          # l is "user.txt"
    return l                                                                   # Exit function and send the value back to the program
 
@@ -119,7 +119,7 @@ def appendFile(list,listCode):                                                # 
       for item in list:
          fAppend.write(item)                                                  # Write item into fAppend
          fAppend.write(",")                                                  # Write a comma and space (", ") into fAppend
-      fAppend.write(",\n")                                                     # Write a newline ("\n") into fAppend
+      fAppend.write("\n")                                                     # Write a newline ("\n") into fAppend
 
 def readFile(listCode):                                                       # Define readFile function
    with open (listIdentifier(listCode),"r") as fRead:                         # Open selected text file in Read Mode as fRead
@@ -140,9 +140,9 @@ def chooseItem(UID,listCode,displayColumn,currentColumn):                     # 
       changeIndex = -1                                                        # changeIndex subtract 1 (-1)
    for item in range(startPoint,listLength,2):                                # For item from startPoint to listLength, but incremented by 2
       try:
-         print(displayRecord[item],"   ",displayRecord[item+1])
+         print(item+1,displayRecord[item],"\t",item+1,displayRecord[item+1])
       except IndexError:
-         print(displayRecord[item])
+         print(item+1,displayRecord[item])
    while True:
       print("\n\nOptions are indexed from upper-left to lower-right starting from 1 to",len(displayRecord)) # Print message
       index = input("Choose one of the options: ")                            # Print message and get index
@@ -639,8 +639,6 @@ def apartmentAddData(modify,listCode):                                          
       addDataList.clear()                                                                     # Clear all the data that inserted previously
    else:                                                                                      # Other than that:
       appendFile(addDataList,listCode)                                                        # Append each record into the selected text file
-      listCode = "b"
-      appendFile(addDataList,listCode)
       print("\n- Data Saved -")                                                             # Print message
    return modify                                                                              # Exit function and send the value back to the program
 
@@ -654,12 +652,12 @@ def newRoom():                                                                  
          message(code)                                                                        # Print error message, call function message(code)
          print("- Room info does not contain special character(s) -")                         # Error message explanation
          continue                                                                             # Jump back to the top of loop, rerun again 
-      elif 0 <= len(newRoom) < 6:                                                               # 2nd Data Validation - Input length check
+      elif 0 <= len(newRoom) < 6:                                                             # 2nd Data Validation - Input length check
          code = 3                                                                             # Error detected, code change from 'None' to '2'
          message(code)                                                                        # Print error message, call function message(code)
          print("-  Refer to the Room Info to look for its details and format -")              # Error message explanation
          continue                                                                             # Jump back to the top of loop, rerun again 
-      elif newRoom.isdigit() or any(location.isdigit() for location in newRoom):               # 3rd Data Validation - Check numbers 
+      elif newRoom.isdigit() or any(location.isdigit() for location in newRoom):              # 3rd Data Validation - Check numbers 
          code = 1                                                                             # Error detected, code change from 'None' to '1'
          message(code)                                                                        # Print error message, call function message(code)
          print("- Room info does not contain number(s) -")                                    # Error message explanation
@@ -764,16 +762,23 @@ def newRoomDate(dateType):                                                      
          roomDate = input("\nRoom Date of Acquisition: dd/mm/yyyy\nNo special characters included, except '/'\n\nRoom Acquisition Date: ")  # Print message and getroomDate
       else:                                                                                   # Other than that:
          roomDate = input("\nRoom Rental History: (Accepted input: 'dd/mm/yyyy' or 'Empty')\nNo special characters included, except '/'\n\nRoom Rental History: ")  # Print message and getroomDate
+      if roomDate in ["Empty","empty"]:
+         code = None
+      else:
+         code = 2                                                                             # Code equals to 2
+         message(code)                                                                        # Print error message, call function message(code)
+         print("- Invalid input -\n")                                                         # Error message explanation
+         continue                                                                             # Jump back to the top of loop, rerun again
       if any(location.isdigit() for location in roomDate) and len(roomDate) == 10:            # Data validation: Date check, check roomDate only consists numbers and length must have 10 characters long
          day,month,year = roomDate.split('/')                                                 # Split roomDate to day, month, and year using ("/") as a separator 
-         ValidDate = True                                                                     # ValidDate equals to True
          try:
             dt.datetime(int(year),int(month),int(day))                                        # Insert the year, month, day in integer
-            ValidDate = True                                                                  # ValidDate equals to True
-         except ValueError:
-            ValidDate = False                                                                 # ValidDate equals to False
-         if ValidDate == True :                                                               # If ValidDate equals to True:
             code = None                                                                       # code equals to None
+         except ValueError:
+            code = 1
+            message(code)
+            continue
+         if code == None :                                                               # If code equals to None:
             decisionkey = input("Save data? (Enter to continue, 'N' to return back):")        # Print message and get decisionkey
             if decisionkey in ["N","n"]:                                                      # If decisionkey is equal to ["N","n"] Then:
                continue                                                                       # Jump back to the top of loop, rerun again
@@ -795,23 +800,16 @@ def newRoomDate(dateType):                                                      
 
 def newRoomStatus():                                                                          # Define newRoomStatus
    while True:                                                                               
-      code = None                                                                             # code equals to None
       newRoomStatus = input("\nRoom Status: [A]-Available; [Any other key]-Not Available')\n\nRoom Status ( Available / Not Available ): ")  # Print message and get nreRoomStatus
       if newRoomStatus in ["A","a"]:                                                          # If decisionkey is equal to ["N","n"] Then:
          newRoomStatus = "Available"                                                          # newRoomStatus equals to "Available"
       else:                                                                                   # Other than that:
          newRoomStatus = "Not Available"                                                      # newRoomStatus equals to "Not Available"
-      if code == None:                                                                        # No error detected, correct input
-         decisionkey = input("Save data? (Enter to continue, 'N' to return back):")           # Print message and get decisionkey
-         if decisionkey in ["N","n"]:                                                         # If decisionkey is equal to ["N","n"] Then:
-            continue                                                                          # Jump back to the top of loop, rerun again
-         else:                                                                                # Other than that:
-            return "Status: " + newRoomStatus                                                   # Exit function and send the value back to the program
-      else:                                                                                   # Other than that:
-         code = 3                                                                             # code equals to 3
-         message(code)                                                                        # Print error message, call function message(code)
-         print("Please insert the correct format for room status. Refer to the description for its details and format -\n")  # Print error message explanation
-         continue                                                                             # Jump back to the top of loop, rerun again
+      decisionkey = input("Save data? (Enter to continue, 'N' to return back):")           # Print message and get decisionkey
+      if decisionkey in ["N","n"]:                                                         # If decisionkey is equal to ["N","n"] Then:
+         continue                                                                          # Jump back to the top of loop, rerun again
+      else:                                                                                # Other than that:
+         return "Status: " + newRoomStatus                                                   # Exit function and send the value back to the program
 
 def inputidentifier(UID,listCode,editDataType,code):                                          # Define inputidentifier function
    if listCode == "a":                                                                        # If listCode equals to "a" Then:
@@ -982,13 +980,14 @@ def editData(UID,listCode,code):                                                
       display = searchColumn(listCode,editDataType,UID)                                       # display = call function searchColumn(listCode,editDataType,UID) 
       oldDataFormat = False                                                                   # oldDataFormat equals to False
       while oldDataFormat == False:                                                           # When oldDataFormat equals to False Then:
+         print()                                                                              # print empty line
          if UID == None:                                                                      # If UID equals to None
             listLength = len(display)                                                         # listlength = the length of display
             for item in range(0,listLength,2):                                                # For item from 0 to listLength, but incremented by 2
                try:
-                  print(display[item],"   ",display[item+1])
+                  print(item+1,display[item],"\t",item+2,display[item+1])
                except IndexError:
-                  print(display[item])
+                  print(item+1,display[item])
             print("\nPlacement of items displayed above are labeled from upper-left to lower-right starting from 1 to",len(display))  # Print message
             selectedData = input("\nPlease enter the number of the item to edit: ")           # Print message and get selectedData
             if selectedData.isdecimal():                                                      # Data validation, Number check - If selectedData only consists of numbers Then:
@@ -1011,7 +1010,6 @@ def editData(UID,listCode,code):                                                
       if editdataconfirmation in ["Y","y"]:                                                   # If editdataconfirmation is equal to ["Y","y"] Then:
          print("\n- Data updated -")
          replaceOldData(listCode,recordindex,editDataType,newData)                            # Call function replaceOldData(listCode,recordindex,editDataType,newData)
-         print("\n---------------------------------------------------------------------------------------------------------------------------------------------------------------------")  # Print message
          break                                                                                # Break and end the loop
       elif editdataconfirmation in ["N","n"]:                                                 # If editdataconfirmation is equal to ["N","n"] Then:
          print("\n---------------------------------------------------------------------------------------------------------------------------------------------------------------------")  # Print message
@@ -1052,7 +1050,8 @@ def deleteSpecApartRecord(listCode,code) :                                      
             replaceOldData(listCode,number,editDataType,newData)                              # call function replaceOldData(listCode,number,editDataType,newData)
             print("\n- Delete successful -")                                                  # Print message
          else:                                                                                # Other than that:
-            print("\n- Delete unsuccessful -")                                                # Print message
+            print("\n- Delete unsuccessful -")
+         print("\n---------------------------------------------------------------------------------------------------------------------------------------------------------------------")                                                # Print message
       else:                                                                                   # Other than that:
          code = 0                                                                             # code equals to 0
          message(code)                                                                        # Print error message, call function message(code)
