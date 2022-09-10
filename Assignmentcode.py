@@ -69,8 +69,6 @@ def menu(UID,code):                                                           # 
       elif opt in ["I","i"] and UID == None:                                  # Check for quick functions, If opt is equal to ["I","i"] and UID equals to None Then:
          listCode = "t"                                                       # listCode equals to "t"
          searchInformation(listCode,9,"Past")                                 # Redirect to searchbox function, call function searchInformation(listCode,9,"Past")
-      elif opt in ["L","l"] and UID == None:                                  # Check for quick functions, If opt is equal to ["L","l"] and UID equals to None Then:
-         print("loginHistory()")                                              # Print function ("loginHistory()") 
       elif opt in ["E","e"]:                                                  # Get confirmation to exit
          exitconfirmationkey = input("\n----------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\nYou're about to leave Tenant Management System. Are you sure? [Enter]-Continue, [x]-Return to main menu): ") # Print message and get exitconfirmationkey
          if exitconfirmationkey in ["X","x"]:                                 # If exitconfirmationkey is equal to ["X","x"] Then:
@@ -120,19 +118,15 @@ def appendFile(list,listCode):                                                # 
    with open (listIdentifier(listCode), "a") as fAppend:                      # Open selected text file in Append Mode as fAppend
       for item in list:
          fAppend.write(item)                                                  # Write item into fAppend
-         fAppend.write(", ")                                                  # Write a comma and space (", ") into fAppend
+         fAppend.write(",")                                                  # Write a comma and space (", ") into fAppend
       fAppend.write("\n")                                                     # Write a newline ("\n") into fAppend
 
 def readFile(listCode):                                                       # Define readFile function
-   returnList = []                                                            # Declare returnlist as array
    with open (listIdentifier(listCode),"r") as fRead:                         # Open selected text file in Read Mode as fRead
       line = fRead.readlines()                                                # line = read each line in fRead
       for record in line:                                                  
-         stripped = record.rstrip("\n").rstrip(",")                           # stripped = Right stripped from the end of string (record) with the separators (all commas and newlines)
-         splitRecord = stripped.split(",")                                    # splitRecord = Use comma as the separator to split from a string into a list
-         returnList.append(str(splitRecord))                                  # Append returnlist to splitRecord in string type
-         print(int(line.index(record))+1,splitRecord)
-   return returnList                                                          # Exit function and send the value back to the program
+         stripped = record.rstrip(",\n")                           # stripped = Right stripped from the end of string (record) with the separators (all commas and newlines)
+         print(line.index(record)+1,stripped,"\n")
 
 def chooseItem(UID,listCode,displayColumn,currentColumn):                     # Define chooseItem function
    displayRecord = searchColumn(listCode,displayColumn,UID)                   # displayRecord = call function searchColumn(listCode,displayColumn,UID)
@@ -593,6 +587,7 @@ def tenantOrTransaction(UID,listCode,code):                                   # 
          break                                                                # Break out of the function
 
 def apartment(UID,listCode,code):                                                             # Define apartment function
+
    listCode = "a"                                                                             # listCode equals to "a"
    print("\n------------------------------------------------------------------------------------------------------------------------------------------------------\n\n- Apartment Info: -\n") # Print message
    list1 = ["Room Info: Standard Room (Triple)","Code: SR1","Dimensions: 140+ sqft","Pricing: RM350","Apartment ID: A01-L01-R01 to A01-L01-R21","Date of Acquisition: 03/01/2015","Rental History: 27/02/2015 rent","Status: Available"]        # Put sample data
@@ -611,16 +606,29 @@ def apartment(UID,listCode,code):                                               
    list14 = ["Room Info: En-Suite Single (Super Premium - Triple)","Code: ESS3","Dimensions: 160+ sqft","Pricing: RM700","Apartment ID: A02-L04-R01 to A02-L04-R41","Date of Acquisition: 25/02/2021","Rental History: 31/03/2021 rent","Status: Available"]            # Put sample data
    list15 = ["Room Info: En-Suite Single (Super Premium - Twin)","Code: ESS2","Dimensions: 140+ sqft","Pricing: RM800","Apartment ID: A02-L04-R01 to A02-L04-R41","Date of Acquisition: 31/05/2022","Rental History: Empty","Status: Not Available"]                    # Put sample data
    list16 = ["Room Info: En-Suite Twin (Super Premium)","Code: EST2","Dimensions: 200+ sqft","Pricing: RM900","Apartment ID: A02-L05-R01 to A02-L05-R41","Date of Acquisition: 26/06/2022","Rental History: Empty","Status: Not Available"]                             # Put sample data
+   list1 = "Room Info: Standard Room (Triple),Code: SR1,Dimensions: 140+ sqft,Pricing: RM350,Apartment ID: A01-L01-R01 to A01-L01-R21,Date of Acquisition: 03/01/2015,Rental History: 27/02/2015 rent,Status: Available"        # Put sample data
+   list2 = "Room Info: Standard Room (Twin),Code: SR2,Dimensions: 120+ sqft,Pricing: RM450,Apartment ID: A01-L01-R22 to A01-L01-R41,Date of Acquisition: 10/02/2015,Rental History: 28/03/2015 rent,Status: Available"          # Put sample data
+   list3 = "Room Info: Standard Room A/C (Triple),Code: SR3,Dimensions: 150+ sqft,Pricing: RM550,Apartment ID: A01-L02-R01 to A01-L02-R21,Date of Acquisition: 21/03/2016,Rental History: 24/04/2016 rent,Status: Available"    # Put sample data
+   list4 = "Room Info: Standard Room A/C (Twin),Code: SR4,Dimensions: 130+ sqft,Pricing: RM650,Apartment ID: A01-L02-R22 to A01-L02-R41,Date of Acquisition: 02/04/2016,Rental History: 20/05/2016 rent,Status: Available"      # Put sample data
+   list5 = "Room Info: Deluxe Room (Triple),Code: DR1,Dimensions: 170+ sqft,Pricing: RM750,Apartment ID: A01-L04-R01 to A01-L04-R21,Date of Acquisition: 11/05/2017,Rental History: 21/06/2017 rent,Status: Available"          # Put sample data
+   list6 = "Room Info: Deluxe Room (Twin),Code: DR2,Dimensions: 160+ sqft,Pricing: RM840,Apartment ID: A01-L04-R22 to A01-L04-R41,Date of Acquisition: 22/06/2017,Rental History: 22/07/2017 rent,Status: Available"            # Put sample data
+   list7 = "Room Info: Deluxe Room A/C with shared attached bath / toilet (Triple),Code: DR3,Dimensions: 180+ sqft,Pricing: RM950,Apartment ID: A01-L03-R1 to A01-L03-R21,Date of Acquisition: 30/07/2018,Rental History: 25/08/2018 rent,Status: Available"  # Put sample data
+   list8 = "Room Info: Deluxe Room A/C with shared attached bath / toilet,Code: DR4,Dimensions: 170+ sqft,Pricing: RM1040,Apartment ID: A01-L03-R22 to A01-L03-R41,Date of Acquisition: 16/08/2018,Rental History: 18/09/2018 rent,Status: Available"         # Put sample data
+   list9 = "Room Info: Compact Premium Single,Code: CPS1,Dimensions: 130+ sqft,Pricing: RM690,Apartment ID: A01-L05-R01 to A01-L05-R41,Date of Acquisition: 02/09/2019,Rental History: 29/10/2019 rent,Status: Available"          # Put sample data
+   list10 = "Room Info: Medium Premium Single,Code: MPS1,Dimensions: 150+ sqft,Pricing: RM750,Apartment ID: A02-L01-R01 to A02-L01-R21,Date of Acquisition: 15/10/2019,Rental History: 31/11/2019 rent,Status: Available"       # Put sample data
+   list11 = "Room Info: Medium Premium Twin,Code: MPT1,Dimensions: 180+ sqft,Pricing: RM890,Apartment ID: A02-L02-R01 to A02-L02-R21,Date of Acquisition: 25/11/2020,Rental History: 31/12/2020 rent,Status: Available"         # Put sample data
+   list12 = "Room Info: Medium Premium with attached bath / toilet (Twin),Code: MP1,Dimensions: 180+ sqft,Pricing: RM940,Apartment ID: A02-L03-R01 to A02-L03-R21,Date of Acquisition: 30/12/2020,Rental History: 31/01/2020 rent,Status: Available"    # Put sample data
+   list13 = "Room Info: Medium Premium with attached bath / toilet (Single),Code: MP2,Dimensions: 160+ sqft,Pricing: RM1050,Apartment ID: A02-L03-R22 to A02-L03-R41,Date of Acquisition: 16/01/2021,Rental History: 28/02/2021 rent,Status: Available" # Put sample data
+   list14 = "Room Info: En-Suite Single (Super Premium - Triple),Code: ESS3,Dimensions: 160+ sqft,Pricing: RM700,Apartment ID: A02-L04-R01 to A02-L04-R41,Date of Acquisition: 25/02/2021,Rental History: 31/03/2021 rent,Status: Available"            # Put sample data
+   list15 = "Room Info: En-Suite Single (Super Premium - Twin),Code: ESS2,Dimensions: 140+ sqft,Pricing: RM800,Apartment ID: A02-L04-R01 to A02-L04-R41,Date of Acquisition: 31/05/2022,Rental History: Empty,Status: Not Available"                    # Put sample data
+   list16 = "Room Info: En-Suite Twin (Super Premium),Code: EST2,Dimensions: 200+ sqft,Pricing: RM900,Apartment ID: A02-L05-R01 to A02-L05-R41,Date of Acquisition: 26/06/2022,Rental History: Empty,Status: Not Available"                             # Put sample data
    ApartmentList = [list1,list2,list3,list4,list5,list6,list7,list8,list9,list10,list11,list12,list13,list14,list15,list16]    # Declare list containing relevant input data
    with open(listIdentifier(listCode),"w") as apartmentwHandler:                              # Open selected text file and named as apartmentwHandler 
       for record in ApartmentList:
-         for data in record:
-            apartmentwHandler.write(data)                                                     # Write data into apartmentwHandler
-            apartmentwHandler.write(",")                                                      # Write a comma (,) into apartmentwHandler
-         apartmentwHandler.write("\n")                                                        # Write a newline ("\n") into apartmentwHandler
-   with open(listIdentifier(listCode),"r") as apartmentrHandler:                              # Open selected text file and named as apartmentrHandler 
-      for record in apartmentrHandler:
-         print(record.rstrip(","))                                                            # Print each record that inside the apartmentrHandler  
+         apartmentwHandler.write(record)                                                     # Write data into apartmentwHandler
+         apartmentwHandler.write(",\n")                                                        # Write a newline ("\n") into apartmentwHandler
+   print("\n------------------------------------------------------------------------------------------------------------------------------------------------------\n\n- Apartment Info: -\n") # Print message
+   readFile(listCode)                                                                          # Call function readFile(listCode)
    if UID == None:                                                                            # If UID equals to None Then:
       modifyData(UID,listCode,code,None)                                                      # Call function modifyData(UID,listCode,code,None)
    else:                                                                                      # Other than that:
@@ -654,29 +662,28 @@ def modifyData(UID,listCode,code,modifyType):                                   
          break                                                                                # Break and end the loop
    
 def apartmentAddData(modify,listCode):                                                        # Define apartmentAddData function
-   adddatalist = []                                                                           # Declare adddatalist as array
+   addDataList = []                                                                           # Declare addDataList as array
    print("\n-------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\nDear admin, we need your ATTENTION !\n\nFor your information, all the new data will only be stored if you insert each information with the correct format provided.\n\nOnce you finish each entry,a confirmation message will appear. Please ensure that the data is typed correctly before saving.\nNow, you are required to enter new data.\n\n----------------------------------------------------------------------------------------------------------------------------------------------------------") # Print message
    newroom = newRoom()                                                                        # newroom = call function newRoom()
    newroomcode = newRoomCode()                                                                # newroomcode = call function newRoomCode()
    newroomdimension = newRoomDimension()                                                      # newroomdimension = call function newRoomDimension()
    newroompricing = newRoompricing()                                                          # newroompricing = call function newRoompricing()
    newroomID = newRoomID()                                                                    # newroomID = call function newRoomID()
-   newroomdateofacquisition = newRoomDate("Acquisition")                                      # newroomdateofacquisition = call function newRoomDate("Acquisition") 
-   newroomrentalhistory = newRoomDate("History")                                              # newroomrentalhistory = call function newRoomDate("History")
+   newroomdateofacquisition = newRoomDate("acquisition")                                      # newroomdateofacquisition = call function newRoomDate("acquisition") 
+   newroomrentalhistory = newRoomDate("history")                                              # newroomrentalhistory = call function newRoomDate("history")
    newroomstatus = newRoomStatus()                                                            # newroomstatus = call function newRoomStatus()
-   adddatalist = [str(newroom),str(newroomcode),str(newroomdimension),str(newroompricing),str(newroomID),str(newroomdateofacquisition),str(newroomrentalhistory),str(newroomstatus)]   # Apply data to the list
-   print("\nNew Data:",adddatalist)                                                           # Print all the add data details to display and easier to make admin do their checking 
+   addDataList = [str(newroom),str(newroomcode),str(newroomdimension),str(newroompricing),str(newroomID),str(newroomdateofacquisition),str(newroomrentalhistory),str(newroomstatus)]   # Apply data to the list
+   print("\nNew Data:",addDataList)                                                           # Print all the add data details to display and easier to make admin do their checking 
    addDataconfirmation = input("\nAre you sure with the records you inserted just now? Enter to continue, 'N' to unsave: ") # Print message and get addDataconfirmation
    if addDataconfirmation in ["N","n"]:                                                       # If addDataconfirmation is equal to ["N","n"] Then:
-      adddatalist.clear()                                                                     # Clear all the data that inserted previously
+      addDataList.clear()                                                                     # Clear all the data that inserted previously
    else:                                                                                      # Other than that:
-      appendFile(adddatalist,listCode)                                                        # Append each record into the selected text file 
+      appendFile(addDataList,listCode)                                                        # Append each record into the selected text file 
       print("\n- Data Saved -")                                                             # Print message
    return modify                                                                              # Exit function and send the value back to the program
 
 def newRoom():                                                                                # Define newRoom function
    while True:
-      code = None                                                                             # Code set as 'None' 
       SCL = 'SCL2'                                                                            # Set specials as 'SCL2'
       specials = specialCharacterList(SCL)                                                    # specials = call function specialCharacterList(SCL)
       newRoom = input("\nRoom info only contains alphabets, no numbers and special characters [Except these special characters: '(' ')' '/' '-' ]\nExample: Dual Key Premium Rooms - Single Room\n\nRoom Info: ") # Print message and get newroom
@@ -685,124 +692,83 @@ def newRoom():                                                                  
          message(code)                                                                        # Print error message, call function message(code)
          print("- Room info does not contain special character(s) -")                         # Error message explanation
          continue                                                                             # Jump back to the top of loop, rerun again 
-      else:                                                                                   # Other than that:
-         code = None                                                                          # Error not detected, remain the same value 'None'
-      if 0 <= len(newRoom) < 6:                                                               # 2nd Data Validation - Input length check
-         code = 2                                                                             # Error detected, code change from 'None' to '2'
+      elif 0 <= len(newRoom) < 6:                                                               # 2nd Data Validation - Input length check
+         code = 3                                                                             # Error detected, code change from 'None' to '2'
          message(code)                                                                        # Print error message, call function message(code)
          print("-  Refer to the Room Info to look for its details and format -")              # Error message explanation
          continue                                                                             # Jump back to the top of loop, rerun again 
-      else:                                                                                   # Other than that:
-         code = None                                                                          # Error not detected, remain the same value 'None'
-      if newRoom.isdigit() and any(location.isdigit() for location in newRoom):               # 3rd Data Validation - Check numbers 
+      elif newRoom.isdigit() or any(location.isdigit() for location in newRoom):               # 3rd Data Validation - Check numbers 
          code = 1                                                                             # Error detected, code change from 'None' to '1'
          message(code)                                                                        # Print error message, call function message(code)
          print("- Room info does not contain number(s) -")                                    # Error message explanation
          continue                                                                             # Jump back to the top of loop, rerun again
       else:                                                                                   # Other than that:
-         code = None                                                                          # Error not detected, remain the same value 'None'
-      if code == None:                                                                        # No error detected, correct input                                                                
          newRoom.title()                                                                      # Return where the first character in each word is uppercase
          decisionkey = input("Save data? (Enter to continue, 'N' to return back): ")          # Print message and get decisionkey
          if decisionkey in ['N','n']:                                                         # If decisionkey is equal to ["N","n"] Then:
             continue                                                                          # Jump back to the top of loop. rerun again
          else:                                                                                # Other than that:
             return "New Room Info: " + newRoom                                                # Exit function and send the value back to the program
-      else:                                                                                   # Other than that:
-         code = 2                                                                             # Error detected, code change from 'None' to '2'
-         message(code)                                                                        # Print error message, call function message(code)
-         print("- Please fill in the correct format for room info. Refer to the description for its details and format -")  # Error message explanation
-         continue                                                                             # Jump back to the top of loop, rerun again 
-
+   
 def newRoomCode():                                                                            # Define newRoomCode function
    while True:                                                                               
-      code = None                                                                             # Code set as 'None' 
       newRoomCode = input("\nRoom code only contains alphanumeric (A combination of uppercased alphabet and number), and no special characters\nExample: DKPRS1\n\nRoom Code: ")    # Get input from admin
       if len(newRoomCode) <= 1 :                                                              # 1st Data Validation - Check empty input and length input
-         code = 2                                                                             # Error detected, code change from 'None' to '2'
+         code = 3                                                                             # Error detected, code change from 'None' to '2'
          message(code)                                                                        # Print error message, call function message(code)
          print("- Room Code must contain at least 2 or more alphanumeric long -\n")           # Error message explanation
          continue                                                                             # Jump back to the top of loop, rerun again
-      else:                                                                                   # Other than that:
-         code = None                                                                          # Error not detected, remain the same value 'None'
-      if newRoomCode.isalnum():                                                               # 2nd Data Validation - Check input contains alphanumeric or not
-         code = None                                                                          # Error not detected, remain the same value 'None'
-      else:                                                                                   # Other than that:
+      elif not(newRoomCode.isalnum()):                                                               # 2nd Data Validation - Check input contains alphanumeric or not
          code = 2                                                                             # Error detected, code change from 'None' to '2'
          message(code)                                                                        # Print error message, call function message(code)
          print("- Please note that room code is only acceptable when it contains alphanumeric only-\n")  # Error message explanation
          continue                                                                             # Jump back to the top of loop, rerun again
-      if code == None:                                                                        # No error detected, correct input                                                                   
+      else:                                                                        # No error detected, correct input                                                                   
          decisionkey = input("Save data? (Enter to continue, 'N' to return back): ")          # Save Data Confirmation Message
          if decisionkey in ['N','n']:                                                         # If decisionkey equals to ["N","n"] Then:
             continue                                                                          # Jump back to the top of loop, rerun again
          else:                                                                                # Other than that:
             return "New Room Code: " + newRoomCode                                            # Exit function and send the value back to the program
-      else:                                                                                   # Other than that:
-         code = 2                                                                             # Error detected, code change from 'None' to '2'
-         message(code)                                                                        # Print error message, call function message(code)
-         print("- Please fill in the correct format for room code. Refer to the description for its details and format -")  # Error message explanation
-         continue                                                                             # Jump back to the top of loop, rerun again
 
 def newRoomDimension():                                                                       # Define newRoomDimension function
    while True:                                                                               
-      code = None                                                                             # Code set as 'None' 
       newRoomDimension=input("\nRoom Dimension only contains numbers, no alphabets and special characters (The unit (in sqft) will be provided at the back)\nExample: 300(+sqft)\n\nRoom Dimension: ")   # Get input from admin 
       if len(newRoomDimension) == 0:                                                          # 1st Data Validation - Check empty input exist or not
          code = 5                                                                             # Error detected, incorrect input
          message(code)                                                                        # Print error message, call function message(code)
          print("- Please fill in the room dimension, and room dimension must have at least 100 or more sqft -\n")  # Error message explanation
          continue                                                                             # Jump back to the top of loop, rerun again
-      else:                                                                                   # Other than that:
-         code = None                                                                          # Error not detected, remain the same value 'None'
-      if newRoomDimension.isdigit():                                                          # 2nd data Validation - Input check that only contain numbers  
-         code = None                                                                          # Error not detected, remain the same value 'None'
-      else:                                                                                   # Other than that:
+      elif not(newRoomDimension.isdigit()):                                                     # 2nd data Validation - Input check that only contain numbers  
          code = 2                                                                             # Error detected, incorrect input
          message(code)                                                                        # Print error message, call function message(code)
          print("- Room dimension must consist of number(s) -\n")                                # Error message explanation
          continue                                                                             # Jump back to the top of loop, rerun again
-      if code == None:                                                                        # No error detected, correct input
+      else:                                                                        # No error detected, correct input
          decisionkey = input("Save data? (Enter to continue, 'N' to return back):")           # Print message and get decisionkey
          if decisionkey in ["N","n"]:                                                         # If decisionkey is equal to ["N","n"] Then:
             continue                                                                          # Jump back to the top of loop, rerun again
          else:                                                                                # Other than that:
             return "New Room Dimension: " + newRoomDimension + "+ sqft"                               # Exit function and send the value back to the program
-      else:                                                                                   # Other than that:
-         code = 2                                                                             # Error detected, code change from 'None' to '2'
-         message(code)                                                                        # Print error message, call function message(code)
-         print("- Please fill in the correct format for room dimension. Refer to the description for its details and format -\n")   # Error message explanation
-         continue                                                                             # Jump back to the top of loop, rerun again
 
 def newRoompricing():                                                                         # Define newRoompricing function
    while True:                                                                               
-      code = None                                                                             # Code set as 'None' 
       newRoompricing=input("\nRoom Pricing only contain numbers, no special characters (The unit (in RM) will be provided at the front)\nExample: (RM)500\n\nRoom Pricing: ")    # Get input from admin
-      if newRoompricing.isdigit():                                                            # Validation - Input check that only contain numbers 
-         nRp=int(newRoompricing)                                                              # Convert to integer 
-         if nRp >= 350:                                                                       # If nRp equals or greater than 350 Then:
-            code = None                                                                       # No error detected, correct input, code equals to None
-         else:                                                                                # Other than that:
-            code = 1                                                                          # Error detected, code change from 'None' to '1' 
-            message(code)                                                                     # Print error message, call function message(code)
-            print("- Minimum starting price starts from RM350 and above -\n")                 # Error message confirmation
-            continue                                                                          # Jump back to the top of loop, rerun again
-      else:                                                                                   # Other than that:
+      if not(newRoompricing.isdigit()):                                                            # Validation - Input check that only contain numbers 
          code = 2                                                                             # Error detected, code change from 'None' to '2'
          message(code)                                                                        # Print error message, call function message(code)
          print("- Please fill in the room pricing, it must be in numeric and the minimum starting price starts from RM350 and above -\n")  # Error message explanation
          continue                                                                             # Jump back to the top of loop, rerun again
-      if code == None:                                                                        # No error detected, correct input                                                                       # No error detected, correct input
+      elif int(newRoompricing) < 350:                                                         # If nRP less than 350 Then:
+         code = 1                                                                          # Error detected, code change from 'None' to '1' 
+         message(code)                                                                     # Print error message, call function message(code)
+         print("- Minimum starting price starts from RM350 and above -\n")                 # Error message confirmation
+         continue                                                                          # Jump back to the top of loop, rerun again
+      else:                                                                                   # Other than that:
          decisionkey = input("Save data? (Enter to continue, 'N' to return back):")           # Print message and get decisionkey
          if decisionkey in ["N","n"]:                                                         # If decisionkey is equal to ["N","n"] Then:
             continue                                                                          # Jump back to the top of loop, rerun again
          else:                                                                                # Other than that:
             return "Pricing: RM" + newRoompricing                                             # Exit function and send the value back to the program
-      else:                                                                                   # Other than that:
-         code = 2                                                                             # code equals to 2
-         message(code)                                                                        # Print error message, call function message(code)
-         print("- Please follow the correct format for new room pricing. Refer to the description above to know its details and format -\n") # Print error message explanation
-         continue                                                                             # Jump back to the top of loop, rerun again
 
 def newRoomID():                                                                              # Define newRoomID function
    while True:                                                                               
@@ -832,7 +798,7 @@ def newRoomID():                                                                
 def newRoomDate(dateType):                                                                    # Define newRoomDate function
    while True:                                                                               
       code = None                                                                             # code equals to None
-      if dateType == "Acquisition":                                                           # if dataType equals to "Acquisition" Then:
+      if dateType == "acquisition":                                                           # if dataType equals to "acquisition" Then:
          roomDate = input("\nRoom Date of Acquisition: dd/mm/yyyy\nNo special characters included, except '/'\n\nRoom Acquisition Date: ")  # Print message and getroomDate
       else:                                                                                   # Other than that:
          roomDate = input("\nRoom Rental History: (Accepted input: 'dd/mm/yyyy' or 'Empty')\nNo special characters included, except '/'\n\nRoom Rental History: ")  # Print message and getroomDate
@@ -1022,11 +988,11 @@ def category(listCode,code,sourceFunction):                                     
 
 def replaceOldData(listCode,recordindex,editDataType,newData):                                # Define replaceOldData function
    with open(listIdentifier(listCode),"r") as Xhandler:                                       # Open selected text file in read mode as Xhandler
-      updatedData = []                                                                        # Declare adddatalist as array
-      newRecord = []                                                                          # Declare adddatalist as array
+      updatedData = []                                                                        # Declare updatedData and newRecord initially as an empty array
+      newRecord = []
       dataRead = Xhandler.readlines()                                                         # Read each lines in Xhandler
       for record in dataRead:
-         strippedRecord = record.rstrip(",\n").split(",")                                     # Rightstrip comma and newline (",\n"), and split record by using comma {","} as a separator
+         strippedRecord = record.rstrip(",\n").split(",")                                     # Rightstrip comma and newline then split record by using comma {","} as a separator
          if dataRead.index(record) == int(recordindex):
             if newData:                                                                       # If newData exists:
                strippedRecord[int(editDataType)] = newData                                    # Modify the record with new data
@@ -1147,7 +1113,6 @@ def searchColumn(listCode,num,UID):                                             
       bulkData = Tread.readlines()                                                            # Read each line in Tread
       for line in bulkData:
          individualList = line.strip(",\n").split(",")                                        # Strip with comma and newline (",\n"), and split with comma (",")
-         print()                                                                              # Print empty
          if listCode == "a":                                                                  # If listCode equals to "a" Then:
             if int(num) < 7:                                                                  # If num in integer less than 7 Then:
                displayList.append(individualList[num])                                        # Append individualList (num location) into displayList
