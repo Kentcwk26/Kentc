@@ -997,7 +997,7 @@ FUNCTION newRoompricing()
             CALL message(code)
             PRINT("- Please fill in the room pricing, it must be in numeric and the minimum starting price starts from RM350 and above - NEWLINE ")
             CONTINUELOOP
-        ELIF INTEGER(newRoompricing) < 350:
+        ELSEIF INTEGER(newRoompricing) < 350:
             code = 1
             CALL message(code)
             PRINT("- Minimum starting price starts from RM350 and above - NEWLINE")
@@ -1462,7 +1462,7 @@ FUNCTION searchColumn(listCode,num,UID)
                                 BREAKLOOP
                             ENDIF
                         ELSE
-                            APPEND displayList WITH("")
+                            APPEND ("") INTO displayList
                         ENDIF
             IF displayList == [] THEN
                 code = 5
