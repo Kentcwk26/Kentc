@@ -119,13 +119,13 @@ def appendFile(list,listCode):                                                # 
       for item in list:
          fAppend.write(item)                                                  # Write item into fAppend
          fAppend.write(",")                                                  # Write a comma and space (", ") into fAppend
-      fAppend.write("\n")                                                     # Write a newline ("\n") into fAppend
+      fAppend.write(",\n")                                                     # Write a newline ("\n") into fAppend
 
 def readFile(listCode):                                                       # Define readFile function
    with open (listIdentifier(listCode),"r") as fRead:                         # Open selected text file in Read Mode as fRead
       line = fRead.readlines()                                                # line = read each line in fRead
       for record in line:                                                  
-         stripped = record.rstrip(",\n")                           # stripped = Right stripped from the end of string (record) with the separators (all commas and newlines)
+         stripped = record.rstrip(",\n")                                     # stripped = Right stripped from the end of string (record) with the separators (all commas and newlines)
          print(line.index(record)+1,stripped,"\n")
 
 def chooseItem(UID,listCode,displayColumn,currentColumn):                     # Define chooseItem function
@@ -587,29 +587,7 @@ def tenantOrTransaction(UID,listCode,code):                                   # 
          break                                                                # Break out of the function
 
 def apartment(UID,listCode,code):                                                             # Define apartment function
-   listCode = "a"                                                                             # listCode equals to "a"
    print("\n------------------------------------------------------------------------------------------------------------------------------------------------------\n\n- Apartment Info: -\n") # Print message
-   list1 = ["Room Info: Standard Room (Triple)","Code: SR1","Dimensions: 140+ sqft","Pricing: RM350","Apartment ID: A01-L01-R01 to A01-L01-R21","Date of Acquisition: 03/01/2015","Rental History: 27/02/2015 rent","Status: Available"]        # Put sample data
-   list2 = ["Room Info: Standard Room (Twin)","Code: SR2","Dimensions: 120+ sqft","Pricing: RM450","Apartment ID: A01-L01-R22 to A01-L01-R41","Date of Acquisition: 10/02/2015","Rental History: 28/03/2015 rent","Status: Available"]          # Put sample data
-   list3 = ["Room Info: Standard Room A/C (Triple)","Code: SR3","Dimensions: 150+ sqft","Pricing: RM550","Apartment ID: A01-L02-R01 to A01-L02-R21","Date of Acquisition: 21/03/2016","Rental History: 24/04/2016 rent","Status: Available"]    # Put sample data
-   list4 = ["Room Info: Standard Room A/C (Twin)","Code: SR4","Dimensions: 130+ sqft","Pricing: RM650","Apartment ID: A01-L02-R22 to A01-L02-R41","Date of Acquisition: 02/04/2016","Rental History: 20/05/2016 rent","Status: Available"]      # Put sample data
-   list5 = ["Room Info: Deluxe Room (Triple)","Code: DR1","Dimensions: 170+ sqft","Pricing: RM750","Apartment ID: A01-L04-R01 to A01-L04-R21","Date of Acquisition: 11/05/2017","Rental History: 21/06/2017 rent","Status: Available"]          # Put sample data
-   list6 = ["Room Info: Deluxe Room (Twin)","Code: DR2","Dimensions: 160+ sqft","Pricing: RM840","Apartment ID: A01-L04-R22 to A01-L04-R41","Date of Acquisition: 22/06/2017","Rental History: 22/07/2017 rent","Status: Available"]            # Put sample data
-   list7 = ["Room Info: Deluxe Room A/C with shared attached bath / toilet (Triple)","Code: DR3","Dimensions: 180+ sqft","Pricing: RM950","Apartment ID: A01-L03-R1 to A01-L03-R21","Date of Acquisition: 30/07/2018","Rental History: 25/08/2018 rent","Status: Available"]  # Put sample data
-   list8 = ["Room Info: Deluxe Room A/C with shared attached bath / toilet","Code: DR4","Dimensions: 170+ sqft","Pricing: RM1040","Apartment ID: A01-L03-R22 to A01-L03-R41","Date of Acquisition: 16/08/2018","Rental History: 18/09/2018 rent","Status: Available"]         # Put sample data
-   list9 = ["Room Info: Compact Premium Single","Code: CPS1","Dimensions: 130+ sqft","Pricing: RM690","Apartment ID: A01-L05-R01 to A01-L05-R41","Date of Acquisition: 02/09/2019","Rental History: 29/10/2019 rent","Status: Available"]       # Put sample data
-   list10 = ["Room Info: Medium Premium Single","Code: MPS1","Dimensions: 150+ sqft","Pricing: RM750","Apartment ID: A02-L01-R01 to A02-L01-R21","Date of Acquisition: 15/10/2019","Rental History: 31/11/2019 rent","Status: Available"]       # Put sample data
-   list11 = ["Room Info: Medium Premium Twin","Code: MPT1","Dimensions: 180+ sqft","Pricing: RM890","Apartment ID: A02-L02-R01 to A02-L02-R21","Date of Acquisition: 25/11/2020","Rental History: 31/12/2020 rent","Status: Available"]         # Put sample data
-   list12 = ["Room Info: Medium Premium with attached bath / toilet (Twin)","Code: MP1","Dimensions: 180+ sqft","Pricing: RM940","Apartment ID: A02-L03-R01 to A02-L03-R21","Date of Acquisition: 30/12/2020","Rental History: 31/01/2020 rent","Status: Available"]    # Put sample data
-   list13 = ["Room Info: Medium Premium with attached bath / toilet (Single)","Code: MP2","Dimensions: 160+ sqft","Pricing: RM1050","Apartment ID: A02-L03-R22 to A02-L03-R41","Date of Acquisition: 16/01/2021","Rental History: 28/02/2021 rent","Status: Available"] # Put sample data
-   list14 = ["Room Info: En-Suite Single (Super Premium - Triple)","Code: ESS3","Dimensions: 160+ sqft","Pricing: RM700","Apartment ID: A02-L04-R01 to A02-L04-R41","Date of Acquisition: 25/02/2021","Rental History: 31/03/2021 rent","Status: Available"]            # Put sample data
-   list15 = ["Room Info: En-Suite Single (Super Premium - Twin)","Code: ESS2","Dimensions: 140+ sqft","Pricing: RM800","Apartment ID: A02-L04-R01 to A02-L04-R41","Date of Acquisition: 31/05/2022","Rental History: Empty","Status: Not Available"]                    # Put sample data
-   list16 = ["Room Info: En-Suite Twin (Super Premium)","Code: EST2","Dimensions: 200+ sqft","Pricing: RM900","Apartment ID: A02-L05-R01 to A02-L05-R41","Date of Acquisition: 26/06/2022","Rental History: Empty","Status: Not Available"]                             # Put sample data
-   ApartmentList = [list1,list2,list3,list4,list5,list6,list7,list8,list9,list10,list11,list12,list13,list14,list15,list16]    # Declare list containing relevant input data
-   with open(listIdentifier(listCode),"w") as apartmentwHandler:                              # Open selected text file and named as apartmentwHandler 
-      for record in ApartmentList:
-         apartmentwHandler.write(record)                                                      # Write data into apartmentwHandler
-         apartmentwHandler.write(",\n")                                                       # Write a newline ("\n") into apartmentwHandler
    readFile(listCode)                                                                         # Call function readFile(listCode)
    if UID == None:                                                                            # If UID equals to None Then:
       modifyData(UID,listCode,code,None)                                                      # Call function modifyData(UID,listCode,code,None)
@@ -660,7 +638,9 @@ def apartmentAddData(modify,listCode):                                          
    if addDataconfirmation in ["N","n"]:                                                       # If addDataconfirmation is equal to ["N","n"] Then:
       addDataList.clear()                                                                     # Clear all the data that inserted previously
    else:                                                                                      # Other than that:
-      appendFile(addDataList,listCode)                                                        # Append each record into the selected text file 
+      appendFile(addDataList,listCode)                                                        # Append each record into the selected text file
+      listCode = "b"
+      appendFile(addDataList,listCode)
       print("\n- Data Saved -")                                                             # Print message
    return modify                                                                              # Exit function and send the value back to the program
 
@@ -723,28 +703,28 @@ def newRoomDimension():                                                         
       elif not(newRoomDimension.isdigit()):                                                     # 2nd data Validation - Input check that only contain numbers  
          code = 2                                                                             # Error detected, incorrect input
          message(code)                                                                        # Print error message, call function message(code)
-         print("- Room dimension must consist of number(s) -\n")                                # Error message explanation
+         print("- Room dimension must consist of number(s) -\n")                              # Error message explanation
          continue                                                                             # Jump back to the top of loop, rerun again
-      else:                                                                        # No error detected, correct input
+      else:                                                                                   # Other than that
          decisionkey = input("Save data? (Enter to continue, 'N' to return back):")           # Print message and get decisionkey
          if decisionkey in ["N","n"]:                                                         # If decisionkey is equal to ["N","n"] Then:
             continue                                                                          # Jump back to the top of loop, rerun again
          else:                                                                                # Other than that:
-            return "New Room Dimension: " + newRoomDimension + "+ sqft"                               # Exit function and send the value back to the program
+            return "New Room Dimension: " + newRoomDimension + "+ sqft"                       # Exit function and send the value back to the program
 
 def newRoompricing():                                                                         # Define newRoompricing function
    while True:                                                                               
       newRoompricing=input("\nRoom Pricing only contain numbers, no special characters (The unit (in RM) will be provided at the front)\nExample: (RM)500\n\nRoom Pricing: ")    # Get input from admin
-      if not(newRoompricing.isdigit()):                                                            # Validation - Input check that only contain numbers 
+      if not(newRoompricing.isdigit()):                                                       # Validation - Input check that only contain numbers 
          code = 2                                                                             # Error detected, code change from 'None' to '2'
          message(code)                                                                        # Print error message, call function message(code)
          print("- Please fill in the room pricing, it must be in numeric and the minimum starting price starts from RM350 and above -\n")  # Error message explanation
          continue                                                                             # Jump back to the top of loop, rerun again
       elif int(newRoompricing) < 350:                                                         # If nRP less than 350 Then:
-         code = 1                                                                          # Error detected, code change from 'None' to '1' 
-         message(code)                                                                     # Print error message, call function message(code)
-         print("- Minimum starting price starts from RM350 and above -\n")                 # Error message confirmation
-         continue                                                                          # Jump back to the top of loop, rerun again
+         code = 1                                                                             # Error detected, code change from 'None' to '1' 
+         message(code)                                                                        # Print error message, call function message(code)
+         print("- Minimum starting price starts from RM350 and above -\n")                    # Error message confirmation
+         continue                                                                             # Jump back to the top of loop, rerun again
       else:                                                                                   # Other than that:
          decisionkey = input("Save data? (Enter to continue, 'N' to return back):")           # Print message and get decisionkey
          if decisionkey in ["N","n"]:                                                         # If decisionkey is equal to ["N","n"] Then:
@@ -798,7 +778,10 @@ def newRoomDate(dateType):                                                      
             if decisionkey in ["N","n"]:                                                      # If decisionkey is equal to ["N","n"] Then:
                continue                                                                       # Jump back to the top of loop, rerun again
             else:                                                                             # Other than that:
-               return "Date: " + roomDate                                                     # Exit function and send the value back to the program
+               if dateType == "acquisition":
+                  return "Date of Acquisition: " + roomDate                                   # Exit function and send the value back to the program
+               else:
+                  return "Rental History: " + roomDate
          else:                                                                                # Other than that:
             code = 2                                                                          # Code equals to 2
             message(code)                                                                     # Print error message, call function message(code)
