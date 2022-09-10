@@ -608,10 +608,9 @@ def apartment(UID,listCode,code):                                               
    ApartmentList = [list1,list2,list3,list4,list5,list6,list7,list8,list9,list10,list11,list12,list13,list14,list15,list16]    # Declare list containing relevant input data
    with open(listIdentifier(listCode),"w") as apartmentwHandler:                              # Open selected text file and named as apartmentwHandler 
       for record in ApartmentList:
-         apartmentwHandler.write(record)                                                     # Write data into apartmentwHandler
-         apartmentwHandler.write(",\n")                                                        # Write a newline ("\n") into apartmentwHandler
-   print("\n------------------------------------------------------------------------------------------------------------------------------------------------------\n\n- Apartment Info: -\n") # Print message
-   readFile(listCode)                                                                          # Call function readFile(listCode)
+         apartmentwHandler.write(record)                                                      # Write data into apartmentwHandler
+         apartmentwHandler.write(",\n")                                                       # Write a newline ("\n") into apartmentwHandler
+   readFile(listCode)                                                                         # Call function readFile(listCode)
    if UID == None:                                                                            # If UID equals to None Then:
       modifyData(UID,listCode,code,None)                                                      # Call function modifyData(UID,listCode,code,None)
    else:                                                                                      # Other than that:
