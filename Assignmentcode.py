@@ -726,14 +726,15 @@ def newRoompricing():                                                           
 
 def newRoomID():                                                                              # Define newRoomID function
    while True:                                                                               
-      code = None                                                                             # code equals to None 
       newRoomID = input('\nThis is the correct format for RoomID: A(01)-L(01)-R(01)x(to)xA(99)-L(99)-R(99), x means space\nExample: A01-L01-R01 to A01-L01-R21\n\nPlease enter the new Room ID: ') # Print message and get newRoomID
       if 0 <= len(newRoomID) <= 25:                                                           # If len(newRoomID) is between range 0 to 25 Then:
+         code = 3
+         message(code)
          print("\n- Please fill in the new room ID with the correct format -")                # Print message
          continue                                                                             # Jump back to the top of loop, rerun again
       else:                                                                                   # Other than that:
          if (newRoomID[0] == 'A' and newRoomID[3] == '-' and newRoomID[4] == 'L' and newRoomID[7] == '-' and newRoomID[8] == 'R' and newRoomID[11] == ' ' and newRoomID[12] == 't' and newRoomID[13] == 'o' and newRoomID[14] == ' ' and newRoomID[15] == 'A' and newRoomID[18] == '-' and newRoomID[19] == 'L' and newRoomID[22] == '-' and newRoomID[23] == 'R'):
-            if ((newRoomID[1] and newRoomID[2] and newRoomID[5] and newRoomID[6] and newRoomID[9] and newRoomID[10] and newRoomID[16] and newRoomID[17] and newRoomID[20] and newRoomID[21] and newRoomID[24] and newRoomID[25]).isdigit): # Data validation - 
+            if (newRoomID[1] and newRoomID[2] and newRoomID[5] and newRoomID[6] and newRoomID[9] and newRoomID[10] and newRoomID[16] and newRoomID[17] and newRoomID[20] and newRoomID[21] and newRoomID[24] and newRoomID[25]).isdigit: # Data validation - 
                decisionkey = input("Save data? (Enter to continue, 'N' to return back):")     # Print message and get decisionkey
                if decisionkey in ["N","n"]:                                                   # If decisionkey is equal to ["N","n"] Then:
                   continue                                                                    # Jump back to the top of loop, rerun again
