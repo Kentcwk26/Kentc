@@ -3,7 +3,7 @@ FUNCTION register(listCode,code)
     DECLARE userAdd AS FILE
     userType = "new"
     UID = NONE
-    PRINT("NEWLINECreate your account's username: ")
+    PRINT("Create your account's username: ")
     GET username
     PRINT("Next, create your account's password: ")
     GET password
@@ -32,7 +32,7 @@ FUNCTION login(listCode,code,nameInput,passInput)
             username = nameInput
             password = passInput
         ELSE
-            PRINT("Please enter username and password to proceed.NEWLINE")
+            PRINT("Please enter username and password to proceed.")
             PRINT("Username: ")
             GET username
             PRINT("Password: ")
@@ -45,7 +45,7 @@ FUNCTION login(listCode,code,nameInput,passInput)
                 listRecord = SPLIT record INTO LIST WITH(",")
                 IF username == listRecord LOCATION 0 THEN
                     IF password == listRecord LOCATION 1 THEN
-                        PRINT("NEWLINE- Login successful -")
+                        PRINT("- Login successful -")
                         IF (username == "john" AND password == "1234u-78") OR (username == "david" AND password == "55467913") THEN
                             UID = NONE
                         ELSE
@@ -61,7 +61,7 @@ FUNCTION login(listCode,code,nameInput,passInput)
                 ENDIF
             ELSE
                 chance -= 1
-                PRINT("Error, incorrect username or password.NEWLINE",chance,"chances remaining")
+                PRINT("Error, incorrect username or password.",chance,"chances remaining")
             ENDFOR
         CLOSEFILE
     ENDWHILE
@@ -72,11 +72,11 @@ FUNCTION menu(UID,code)
     DECLARE num AS INTEGER
     WHILE TRUE
         IF UID CONTAINS ANY VALUE THEN
-            PRINT("NEWLINEMain menu(Tenant Page):NEWLINENEWLINEReview information about:NEWLINE[A] - All ApartmentsNEWLINE[T] - My Tenant detailsNEWLINE[P] - My TransactionsNEWLINENEWLINEQuick functions:NEWLINE[D] - Print my House & Tenant DetailsNEWLINE[S] - Search boxNEWLINE[E] - Exit")
+            PRINT("Main menu(Tenant Page): Review information about: [A] - All Apartments [T] - My Tenant details [P] - My Transactions Quick functions: [D] - Print my House & Tenant Details [S] - Search box [E] - Exit")
         ELSE
-            PRINT("NEWLINEMain menu(Admin Page):NEWLINENEWLINEReview information about:NEWLINE[A] - ApartmentsNEWLINE[T] - TenantNEWLINE[P] - TransactionNEWLINENEWLINEQuick functions:NEWLINE[D] - Print Specific House & Tenant DetailsNEWLINE[S] - Search boxNEWLINE[I] - Inquiry of Past Tenant DetailsNEWLINE[E] - Exit")
+            PRINT(" Main menu(Admin Page): Review information about: [A] - Apartments [T] - Tenant [P] - Transaction  Quick functions: [D] - Print Specific House & Tenant Details [S] - Search box [I] - Inquiry of Past Tenant Details [E] - Exit")
         ENDIF
-        PRINT("NEWLINEPlease select which operation that you want to do: ")
+        PRINT(" Please select which operation that you want to do: ")
         GET opt
         IF opt IN ["S","s"] THEN
             CALL searchbox(UID,code)
@@ -118,17 +118,17 @@ FUNCTION message(code)
     y = "Incorrect "
     z = " Please try again."
     IF code == 0 THEN
-        PRINT("NEWLINE"+x+y+"input."+z)
+        PRINT(x+y+"input."+z)
     ELSEIF code == 1 THEN
-        PRINT("NEWLINE"+x+y+"data type present."+z)
+        PRINT(x+y+"data type present."+z)
     ELSEIF code == 2 THEN
-        PRINT("NEWLINE"+x+y+"format."+z)
+        PRINT(x+y+"format."+z)
     ELSEIF code == 3 THEN
-        PRINT("NEWLINE"+x+y+"length."+z)
+        PRINT(x+y+"length."+z)
     ELSEIF code == 4 THEN
-        PRINT("NEWLINE"+x+"data not found.")
+        PRINT(x+"data not found.")
     ELSEIF code == 5 THEN
-        PRINT("NEWLINE"+x+"zero input."+z)
+        PRINT(x+"zero input."+z)
     ENDIF
 ENDFUNCTION
 
@@ -180,7 +180,7 @@ FUNCTION readFile(listCode)
         line = READ fRead LINE-BY-LINE
         FOR record IN line
             stripped = record RIGHTSTRIP(",NEWLINE")
-            PRINT(INDEX OF line LOCATION record +1,stripped,"NEWLINE")
+            PRINT(INDEX OF line LOCATION record +1,stripped)
         ENDFOR
     CLOSEFILE
 ENDFUNCTION
@@ -200,7 +200,7 @@ FUNCTION chooseItem(UID,listCode,displayColumn,currentColumn)
         ENDTRY
     ENDFOR
     WHILE TRUE
-        PRINT("NEWLINENEWLINEOptions are indexed from upper-left to lower-right starting from 1 to",LENGTH(displayRecord))
+        PRINT("Options are indexed from upper-left to lower-right starting from 1 to",LENGTH(displayRecord))
         PRINT("Choose one of the options: ")
         GET index
         IF index ISDECIMAL AND  0 < INTEGER(index) < LENGTH(displayRecord)+1 THEN
@@ -229,7 +229,7 @@ FUNCTION gettenantID(UID,userType)
             IF userType == "new" THEN
                 number = 1
             ELSE
-                PRINT("[1]-Generate new ID or [2]-Choose existing ID:NEWLINE")
+                PRINT("[1]-Generate new ID or [2]-Choose existing ID: ")
                 GET path
                 IF path ISDECIMAL THEN
                     number = INTEGER(path)
@@ -301,7 +301,7 @@ FUNCTION getname(code,nameType)
         ELSE
             PRINT("No errors detected.")
         ENDIF
-        PRINT("[R]-Retry,[Any other key]-Exit using "+name+"NEWLINE")
+        PRINT("[R]-Retry,[Any other key]-Exit using "+name+"Answer: ")
         GET retry
         IF retry IN ["R","r"] THEN
             CONTINUELOOP
@@ -315,9 +315,9 @@ FUNCTION getabbreviation(code,abbreviationType)
     DECLARE abbreviation,retry AS STRING
     WHILE TRUE
         IF abbreviationType == "gender" THEN
-            PRINT("[M]-MaleNEWLINE[F]-FemaleNEWLINEEnter tenant gender:NEWLINE")
+            PRINT("[M]-Male [F]-Female Enter tenant gender: ")
         ELSE
-            PRINT("[M]-MalaysianNEWLINE[N]-non-MalaysianNEWLINEEnter tenant nationality:NEWLINE") 
+            PRINT("[M]-Malaysian [N]-non-Malaysian Enter tenant nationality: ") 
         ENDIF
         GET abbreviation
         IF LENGTH(abbreviation) == 1 THEN
@@ -355,7 +355,7 @@ FUNCTION getabbreviation(code,abbreviationType)
         ELSE
             PRINT("No errors detected.")
         ENDIF
-        PRINT("[R]-Retry,[Any other key]-Exit using "+abbreviation+"NEWLINE")
+        PRINT("[R]-Retry,[Any other key]-Exit using "+abbreviation+"Answer: ")
         GET retry
         IF retry IN ["R","r"] THEN
             CONTINUELOOP
@@ -368,7 +368,7 @@ ENDFUNCTION
 FUNCTION getpNum(code)
     DECLARE pNum,retry AS STRING
     WHILE TRUE
-        PRINT("Format: ############NEWLINEEnter tenant phone number:NEWLINE")
+        PRINT("Format: ############ Enter tenant phone number: ")
         GET pNum
         IF 6 < LENGTH(pNum) < 16 THEN
             FOR digit IN pNum
@@ -389,7 +389,7 @@ FUNCTION getpNum(code)
         ELSE
             PRINT("No errors detected.")
         ENDIF
-        PRINT("[R]-Retry,[Any other key]-Exit using "+pNum+"NEWLINE")
+        PRINT("[R]-Retry,[Any other key]-Exit using "+pNum+"Answer: ")
         GET retry
         IF retry IN ["R","r"] THEN
             CONTINUELOOP
@@ -406,20 +406,20 @@ FUNCTION getDate(code,dateType)
     CALL specialCharacterList(NONE) RETURNING specials
     WHILE TRUE
         IF dateType == "start" THEN
-            PRINT("Use current date as rental start date?NEWLINE[Y]-YesNEWLINE[Any Other Key]-NoNEWLINE")
+            PRINT("Use current date as rental start date? [Y]-Yes [Any Other Key]-No ")
             GET path
             IF path in ["Y","y"] THEN
                 date = CURRENT DATE CONVERTED INTO STRING WITH FORMAT YEARmonthday
                 PRINT("Current date:",date)
             ELSE
-                PRINT("Format: YYYY/MM/DDNEWLINEEnter Rental start date:NEWLINE")
+                PRINT("Format: YYYY/MM/DD Enter Rental start date: ")
                 GET date
             ENDIF
         ELSEIF dateType == "birth" THEN
-            PRINT("Format: YYYY/MM/DDNEWLINEEnter tenant birth date:NEWLINE")
+            PRINT("Format: YYYY/MM/DD Enter tenant birth date: ")
             GET date
         ELSE
-            PRINT("Format: YYYY/MM/DDNEWLINEEnter transaction date:NEWLINE")
+            PRINT("Format: YYYY/MM/DD Enter transaction date: ")
             GET date
         ENDIF
         IF LENGTH(date) == 10 THEN
@@ -443,7 +443,7 @@ FUNCTION getDate(code,dateType)
         ELSE
             PRINT("No errors detected.")
         ENDIF
-        PRINT("[R]-Retry,[Any other key]-Exit using "+date+"NEWLINE")
+        PRINT("[R]-Retry,[Any other key]-Exit using "+date+"Answer: ")
         GET retry
         IF retry IN ["R","r"] THEN
             CONTINUELOOP
@@ -459,9 +459,9 @@ FUNCTION getnumber(code,numberType)
     WHILE TRUE
         IF numberType == "workHistory" THEN
             t = "Total work history is around "
-            PRINT(t+"NEWLINE[1]-1 to 2 monthNEWLINE[2]-2 to 3 monthsNEWLINE[3]-3 to 6 monthsNEWLINE[4]-6 to 9 monthsNEWLINE[5]-9 months to 1 yearNEWLINE[6]-1 to 2 yearsNEWLINE[7]-2 to 3 yearsNEWLINE[8]-3 to 4 yearsNEWLINE[9]-4 to 5 yearsNEWLINE[0]-5 years or moreNEWLINEChoose how long you have been working: ")
+            PRINT(t+" [1]-1 to 2 month [2]-2 to 3 months [3]-3 to 6 months [4]-6 to 9 months [5]-9 months to 1 year [6]-1 to 2 years [7]-2 to 3 years [8]-3 to 4 years [9]-4 to 5 years [0]-5 years or more Choose how long you have been working: ")
         ELSE
-            PRINT("[1]-RM 1500~1599NEWLINE[2]-RM 1600~1699NEWLINE[3]-RM 1700~1799NEWLINE[4]-RM 1800~1899NEWLINE[5]-RM 1900~1999NEWLINE[6]-RM 2000~2099NEWLINE[7]-RM 2100~2199NEWLINE[8]-RM 2200~2499NEWLINE[9]-RM 2500~3000NEWLINE[0]-RM > 3000NEWLINEChoose tenant income range in Ringgit Malaysia: ")
+            PRINT("[1]-RM 1500~1599 [2]-RM 1600~1699 [3]-RM 1700~1799 [4]-RM 1800~1899 [5]-RM 1900~1999 [6]-RM 2000~2099 [7]-RM 2100~2199 [8]-RM 2200~2499 [9]-RM 2500~3000 [0]-RM > 3000 Choose tenant income range in Ringgit Malaysia: ")
         ENDIF
         GET number
         IF number ISDIGIT THEN
@@ -524,7 +524,7 @@ FUNCTION getnumber(code,numberType)
             CALL message(code)
             CONTINUELOOP
         ENDIF
-        PRINT("[R]-Retry,[Any other key]-Exit using "+number+"NEWLINE")
+        PRINT("[R]-Retry,[Any other key]-Exit using "+number+"Answer: ")
         GET retry
         IF retry IN ["R","r"] THEN
             CONTINUELOOP
@@ -540,14 +540,14 @@ FUNCTION getrental(UID)
         RETURN "Current"
     ELSE
         WHILE TRUE
-            PRINT("[P]-PastNEWLINE[Any other key]-CurrentNEWLINEChoose tenant rental status(current/past)NEWLINE")
+            PRINT("[P]-Past [Any other key]-Current Choose tenant rental status(current/past) ")
             GET rental
             IF rental IN ["P","p"] THEN
                 rental = "Past"
             ELSE
                 rental = "Current"
             ENDIF
-            retry = input("[R]-Retry,[Any other key]-Exit using "+rental+"NEWLINE")
+            retry = input("[R]-Retry,[Any other key]-Exit using "+rental+"Answer: ")
             IF retry IN ["R","r"] THEN
                 CONTINUELOOP
             ELSE
@@ -563,7 +563,7 @@ FUNCTION getreferenceNumber(code)
     SCL = NONE
     CALL specialCharacterList(SCL) RETURNING specials
     WHILE TRUE
-        PRINT("Reference number comes from its relevant bank transaction. They cannot repeat.NEWLINEIf transaction is payed physically, please enter according to the format:   Tenantname year Month ; no special charactersNEWLINEEnter the reference number :NEWLINE")
+        PRINT("Reference number comes from its relevant bank transaction. They cannot repeat. If transaction is payed physically, please enter according to the format:   Tenantname year Month ; no special characters Enter the reference number : ")
         GET referenceNumber
         IF LENGTH(referenceNumber) > 5 THEN
             FOR character IN referenceNumber
@@ -580,11 +580,11 @@ FUNCTION getreferenceNumber(code)
         ENDIF
         IF code CONTAINS ANY VALUE THEN
             CALL message(code)
-            PRINT("ATTENTION||Error detected.||ATTENTIONNEWLINE")
+            PRINT("ATTENTION||Error detected.||ATTENTION")
         ELSE
-            PRINT("No errors detected.NEWLINE")
+            PRINT("No errors detected.")
         ENDIF
-        PRINT("[R]-Retry,[Any other key]-Exit using "+referenceNumber+"NEWLINE")
+        PRINT("[R]-Retry,[Any other key]-Exit using "+referenceNumber+"Answer: ")
         GET retry
         IF retry IN ["R","r"] THEN
             CONTINUELOOP
@@ -599,7 +599,7 @@ FUNCTION getdecimal(code)
     SCL = NONE
     CALL specialCharacterList(SCL) RETURNING specials
     WHILE TRUE
-        PRINT("Format: ########.##NEWLINEEnter the transaction amount in Ringgit Malaysia:NEWLINE")
+        PRINT("Format: ########.## Enter the transaction amount in Ringgit Malaysia: ")
         GET decimal
         IF specials LOCATION 23 IN decimal THEN
             money = SPLIT decimal INTO LIST WITH(".")
@@ -626,11 +626,11 @@ FUNCTION getdecimal(code)
         ENDIF
         IF code CONTAINS ANY VALUE THEN
             CALL message(code)
-            PRINT("ATTENTION||Error detected.||ATTENTIONNEWLINE")
+            PRINT("ATTENTION||Error detected.||ATTENTION")
         ELSE
-            PRINT("No errors detected.NEWLINE")
+            PRINT("No errors detected.")
         ENDIF
-        PRINT("[R]-Retry,[Any other key]-Exit using "+decimal+"NEWLINE")
+        PRINT("[R]-Retry,[Any other key]-Exit using "+decimal+"Answer: ")
         GET retry
         IF retry IN ["R","r"] THEN
             continue
@@ -780,11 +780,11 @@ FUNCTION tenantOrTransaction(UID,listCode,code)
             ENDIF
             CALL searchInformation(listCode,num,UID)
             IF listCode == "t" THEN
-                PRINT("NEWLINE[C]-Change my tenant details")
+                PRINT("[C]-Change my tenant details")
             ELSE
                 PRINT("[A]-Add new transaction")
             ENDIF
-            PRINT("[E]-ExitNEWLINEWhat would you like to do: ")
+            PRINT("[E]-Exit What would you like to do: ")
             GET opt
             IF opt IN ["C","c"] AND listCode == "t" THEN
                 modifyType = 2
@@ -801,7 +801,7 @@ FUNCTION tenantOrTransaction(UID,listCode,code)
             ENDIF
             BREAKLOOP
         ELSE
-            PRINT("[D]-Display existing Data, [M]-Modify DataNEWLINE[E]-ExitNEWLINEWhat would you like to do:")
+            PRINT("[D]-Display existing Data, [M]-Modify Data [E]-Exit What would you like to do:")
             GET opt
             IF opt IN ["D","d"] THEN
                 PRINT("Current Data:")
@@ -821,7 +821,7 @@ FUNCTION tenantOrTransaction(UID,listCode,code)
 ENDFUNCTION
 
 FUNCTION apartment(UID,listCode,code)
-    PRINT("NEWLINE------------------------------------------------------------------------------------------------------------------------------------------------------NEWLINENEWLINE- Apartment Info: -NEWLINE")
+    PRINT("- Apartment Info: -")
     CALL readFile(listCode)
     IF UID == NONE THEN
         modifyType = NONE
@@ -839,7 +839,7 @@ FUNCTION modifyData(UID,listCode,code,modifyType)
         IF modifyType CONTAINS ANY VALUE THEN
             dataInput = modifyType
         ELSE
-            PRINT ("NEWLINE-------------------------------------------------------------------------------------------------------------------------------------------------------------------------NEWLINENEWLINEModification of records: NEWLINENEWLINE1. Add dataNEWLINE2. Edit DataNEWLINE3. Delete DataNEWLINE4. ExitNEWLINENEWLINEPlease select which operation to perform task (1-4): ")
+            PRINT ("Modification of records: 1. Add data2. Edit Data3. Delete Data 4. Exit Please select which operation to perform task (1-4): ")
             GET dataInput
         ENDIF
         IF dataInput == "1" THEN
@@ -870,7 +870,7 @@ ENDFUNCTION
 FUNCTION apartmentAddData(modify,listCode)
     DECLARE newroom,newroomcode,newroomdimension,newroompricing,newroomID,newroomdateofacquisition,newroomrentalhistory,newroomstatus AS STRING
     DECLARE addDataList as ARRAY
-    PRINT("NEWLINE-------------------------------------------------------------------------------------------------------------------------------------------------------------------------NEWLINEDear admin, we need your ATTENTION !NEWLINENEWLINEFor your information, all the new data will only be stored if you insert each information with the correct format provided.NEWLINENEWLINEOnce you finish each entry,a confirmation message will appear. Please ensure that the data is typed correctly before saving.NEWLINE- Now, you are required to enter new data. -NEWLINENEWLINE----------------------------------------------------------------------------------------------------------------------------------------------------------")
+    PRINT("Dear admin, we need your ATTENTION ! For your information, all the new data will only be stored if you insert each information with the correct format provided. Once you finish each entry,a confirmation message will appear. Please ensure that the data is typed correctly before saving. - Now, you are required to enter new data. -")
     CALL newRoom() RETURNING newroom
     CALL newRoomCode() RETURNING newroomcode
     CALL newRoomDimension() RETURNING newroomdimension
@@ -882,13 +882,13 @@ FUNCTION apartmentAddData(modify,listCode)
     CALL newRoomDate(dateType) RETURNING newroomrentalhistory
     CALL newRoomStatus() RETURNING newroomstatus
     addDataList = [newroom,newroomcode,newroomdimension,newroompricing,newroomID,newroomdateofacquisition,newroomrentalhistory,newroomstatus]
-    PRINT("NEWLINE New Data:",addDataList)
-    PRINT("NEWLINE Are you sure with the records you inserted just now? Enter to continue, 'N' to unsave: ")
+    PRINT(" New Data:",addDataList)
+    PRINT(" Are you sure with the records you inserted just now? Enter to continue, 'N' to unsave: ")
     IF addDataconfirmation IN ["N","n"] THEN
         CLEAR addDataList
     ELSE
         CALL appendFile(addDataList,listCode)
-        PRINT("NEWLINE- Data Saved -")
+        PRINT("- Data Saved -")
     RETURN modify
     ENDIF
 ENDFUNCTION
@@ -900,7 +900,7 @@ FUNCTION newRoom()
     WHILE TRUE
         SCL = "SCL2"
         CALL specialCharacterList(SCL) RETURNING specials
-        PRINT("NEWLINE Room info only contains alphabets, no numbers and special characters [Except these special characters: '(' ')' '/' '-' ]NEWLINE Example: Dual Key Premium Rooms - Single Room NEWLINE NEWLINE Room Info: ")
+        PRINT("Room info only contains alphabets, no numbers and special characters [Except these special characters: '(' ')' '/' '-' ]  Example: Dual Key Premium Rooms - Single Room     Room Info: ")
         GET newRoom
         IF [
         FOR character IN newRoom
@@ -941,17 +941,17 @@ FUNCTION newRoomCode()
     DECLARE newRoomCode,decisionkey AS STRING
     DECLARE code AS INTEGER
     WHILE TRUE
-        PRINT("NEWLINE Room code only contains alphanumeric (A combination of uppercased alphabet and number), and no special characters NEWLINE Example: DKPRS1 NEWLINE NEWLINE Room Code: ")
+        PRINT("Room code only contains alphanumeric (A combination of uppercased alphabet and number), and no special characters Example: DKPRS1    Room Code: ")
         GET newRoomCode
         IF LENGTH(newRoomCode) <= 1:
             code = 2
             CALL message(code)
-            PRINT("- Room Code must contain at least 2 or more alphanumeric long - NEWLINE")
+            PRINT("- Room Code must contain at least 2 or more alphanumeric long -")
             CONTINUELOOP
         ELSEIF NOT(newRoomCode ISALPHANUMERIC) THEN
             code = 2
             CALL message(code)
-            PRINT("- Please note that room code is only acceptable when it contains alphanumeric only- NEWLINE")
+            PRINT("- Please note that room code is only acceptable when it contains alphanumeric only- ")
             CONTINUELOOP
         ELSE
             PRINT("Save data? (Enter to continue, 'N' to return back): ")
@@ -969,12 +969,12 @@ FUNCTION newRoomDimension()
     DECLARE newRoomDimension,decisionkey AS STRING
     DECLARE code AS INTEGER
     WHILE TRUE
-        PRINT("NEWLINE Room Dimension only contains numbers, no alphabets and special characters (The unit (in sqft) will be provided at the back) NEWLINE Example: 300(+sqft) NEWLINE NEWLINE Room Dimension: ")
+        PRINT("Room Dimension only contains numbers, no alphabets and special characters (The unit (in sqft) will be provided at the back) Example: 300(+sqft)   Room Dimension: ")
         GET newRoomDimension
         IF LENGTH(newRoomDimension) == 0:
             code = 5
             CALL message(code)
-            PRINT("- Please fill in the room dimension, and room dimension must have at least 100 or more sqft - NEWLINE")
+            PRINT("- Please fill in the room dimension, and room dimension must have at least 100 or more sqft -")
             CONTINUELOOP
         ELSEIF NOT(newRoomDimension ISDIGIT) THEN
             code = 2
@@ -997,17 +997,17 @@ FUNCTION newRoompricing()
     DECLARE newRoompricing,decisionkey AS STRING
     DECLARE code AS INTEGER
     WHILE TRUE
-        PRINT("NEWLINE Room Pricing only contain numbers, no special characters (The unit (in RM) will be provided at the front) NEWLINE Example: (RM)500 NEWLINE NEWLINE Room Pricing: "")
+        PRINT("Room Pricing only contain numbers, no special characters (The unit (in RM) will be provided at the front)  Example: (RM)500   Room Pricing: "")
         GET newRoompricing
         IF NOT newRoompricing ISDIGIT THEN
             code = 2
             CALL message(code)
-            PRINT("- Please fill in the room pricing, it must be in numeric and the minimum starting price starts from RM350 and above - NEWLINE ")
+            PRINT("- Please fill in the room pricing, it must be in numeric and the minimum starting price starts from RM350 and above -")
             CONTINUELOOP
         ELSEIF INTEGER(newRoompricing) < 350:
             code = 1
             CALL message(code)
-            PRINT("- Minimum starting price starts from RM350 and above - NEWLINE")
+            PRINT("- Minimum starting price starts from RM350 and above -")
             CONTINUELOOP
         ELSE
             PRINT("Save data? (Enter to continue, 'N' to return back): ")
@@ -1026,7 +1026,7 @@ FUNCTION newRoomID()
     DECLARE code AS INTEGER
     WHILE TRUE
         code = None
-        PRINT("NEWLINEThis is the correct format for RoomID: A(01)-L(01)-R(01)x(to)xA(99)-L(99)-R(99), x means space NEWLINE Please enter the new Room ID: ")
+        PRINT("This is the correct format for RoomID: A(01)-L(01)-R(01)x(to)xA(99)-L(99)-R(99), x means space    Please enter the new Room ID: ")
         GET newRoomID
         IF 0 <= LENGTH(newRoomID) <= 25 THEN
             PRINT("- Please fill in the new room ID with the correct format -")
@@ -1061,10 +1061,10 @@ FUNCTION newRoomDate(dateType)
     DECLARE code AS INTEGER
     WHILE TRUE
         IF dateType == 'acquisition' THEN
-            PRINT("NEWLINERoom Date of Acquisition: dd/mm/yyyy NEWLINE No special characters included, except '/' NEWLINE NEWLINE Room Acquisition Date: ")
+            PRINT("Room Date of Acquisition: dd/mm/yyyy  No special characters included, except '/'   Room Acquisition Date: ")
             GET roomDate
         ELSE
-            PRINT(" NEWLINERoom Rental History: (Accepted input: 'dd/mm/yyyy' or 'Empty') NEWLINE No special characters included, except '/' NEWLINE NEWLINE Room Rental History: ")
+            PRINT(" Room Rental History: (Accepted input: 'dd/mm/yyyy' or 'Empty')  No special characters included, except '/'   Room Rental History: ")
             GET roomDate
         ENDIF
         IF (any(location.isdigit() for location in roomDate) and len(roomDate) == 10) THEN
@@ -1100,7 +1100,7 @@ ENDFUNCTION
 FUNCTION newRoomStatus()
     DECLARE newRoomStatus,decisionkey AS STRING
     WHILE TRUE
-        PRINT("NEWLINE Room Status: [A]-Available; [Any other key]-Not Available') NEWLINE NEWLINE Room Status ( Available / Not Available ): ")
+        PRINT("Room Status: [A]-Available; [Any other key]-Not Available')   Room Status ( Available / Not Available ): ")
         GET newRoomStatus
         IF newRoomStatus IN ["N","n"] THEN
             newRoomStatus = "Available"
@@ -1188,7 +1188,7 @@ FUNCTION ApartmentDataInfo()
     DECLARE num,code AS INTEGER
     data = True
     WHILE data == True THEN
-        PRINT"NEWLINE[R] - Room Info [C] - Room code, [D] - Dimensions, [P] - Pricing, [A] - Apartment ID, [E] - Date of Acquisition, [H] - Rental History, [S] - Status NEWLINEAnswer: ")
+        PRINT"[R] - Room Info [C] - Room code, [D] - Dimensions, [P] - Pricing, [A] - Apartment ID, [E] - Date of Acquisition, [H] - Rental History, [S] - Status Answer: ")
         GET opt
         IF opt in ["R","r"] THEN
             num = 0
@@ -1220,7 +1220,7 @@ FUNCTION category(listCode,code,sourceFunction)
     DECLARE num,code AS INTEGER
     WHILE TRUE
         IF listCode == "p" THEN
-            PRINT("NEWLINE [R]-Reference number,[D]-Transaction date,[T]-TenantID,[A]-Apartment code,[S]-Amount NEWLINE Choose a category: ")
+            PRINT("[R]-Reference number,[D]-Transaction date,[T]-TenantID,[A]-Apartment code,[S]-Amount  Choose a category: ")
             GET opt
             IF opt IN ["R","r"] THEN
                 num = 0
@@ -1239,9 +1239,9 @@ FUNCTION category(listCode,code,sourceFunction)
             ENDIF
         ELSE
             IF sourceFunction == "edit" THEN
-                PRINT("NEWLINE [N]-Name,[G]-Gender,[P]-Phone number,[R]-Nationality,[D]-Rental start date,[W]-Work history,[E]-Employer,[I]-Income,[S]-Tenant status,[B]-Birthdate,[C]-Birth City")
+                PRINT("[N]-Name,[G]-Gender,[P]-Phone number,[R]-Nationality,[D]-Rental start date,[W]-Work history,[E]-Employer,[I]-Income,[S]-Tenant status,[B]-Birthdate,[C]-Birth City")
             ELSE
-                PRINT("NEWLINE [U]-User ID,[N]-Name,[G]-Gender,[P]-Phone number,[R]-Nationality,[D]-Rental start date,[W]-Work history,[E]-Employer,[I]-Income,[S]-Tenant status,[B]-Birthdate,[C]-Birth City")
+                PRINT("[U]-User ID,[N]-Name,[G]-Gender,[P]-Phone number,[R]-Nationality,[D]-Rental start date,[W]-Work history,[E]-Employer,[I]-Income,[S]-Tenant status,[B]-Birthdate,[C]-Birth City")
             ENDIF
             PRINT("CHoose a category: ")
             GET opt
@@ -1333,8 +1333,8 @@ FUNCTION editData(UID,listCode,code)
                         PRINT(item+1,display[item])
                     ENDTRY
                 ENDFOR
-                PRINT("NEWLINE Placement of items displayed above are labeled from upper-left to lower-right starting from 1 to",len(display))
-                PRINT("NEWLINE Please enter the number of the item to edit: ")
+                PRINT("Placement of items displayed above are labeled from upper-left to lower-right starting from 1 to",len(display))
+                PRINT("Please enter the number of the item to edit: ")
                 GET selectedData
                 IF selectedData IS DECIMAL THEN
                     recordindex = INTEGER(selectedData)-1
@@ -1354,17 +1354,15 @@ FUNCTION editData(UID,listCode,code)
                     ENDIF
             ENDIF
         ENDWHILE
-        PRINT("NEWLINE Please insert the new data with the correct format: ")
+        PRINT("Please insert the new data with the correct format: ")
         newData = CALL inputidentifier(UID,listCode,editDataType,code)
-        PRINT("NEWLINE Are you sure with your records just now? ([Y]-Yes/[N]-No): ")
+        PRINT("Are you sure with your records just now? ([Y]-Yes/[N]-No): ")
         GET editdataconfirmation
         IF editdataconfirmation IN ["Y","y"] THEN
-            PRINT("NEWLINE - Data updated -")
+            PRINT("- Data updated -")
             CALL replaceOldData(listCode,recordindex,editDataType,newData)
-            PRINT("NEWLINE ---------------------------------------------------------------------------------------------------------------------------------------------------------------------")
             BREAKLOOP
         ELSEIF editdataconfirmation IN ["N","n"] THEN
-            PRINT("NEWLINE ---------------------------------------------------------------------------------------------------------------------------------------------------------------------")
             BREAKLOOP
         ELSE
             code = 0
@@ -1377,14 +1375,14 @@ ENDFUNCTION
 FUNCTION deleteRecord(listCode,code)
     DECLARE deletedata AS STRING
     WHILE TRUE
-        PRINT("NEWLINE - Delete Data -")
-        PRINT("NEWLINE 1. Delete specified records NEWLINE 2. Delete all records NEWLINE NEWLINE [E] - Exit NEWLINE NEWLINE Please select and enter which operator that you want to proceed: ")
+        PRINT("- Delete Data -")
+        PRINT("1. Delete specified records 2. Delete all records [E] - Exit Please select and enter which operator that you want to proceed: ")
         GET deletedata
         IF deletedata == '1' THEN
-            PRINT("NEWLINE - 1. Delete specified records -")
+            PRINT("- 1. Delete specified records -")
             CALL deleteSpecApartRecord(listCode,code)
         ELSEIF deletedata == '2' THEN
-            PRINT("NEWLINE- 2. Delete all records -")
+            PRINT("- 2. Delete all records -")
             CALL deleteAllApartrecords(listCode) 
         ELSEIF deletedata IN ["E","e"] THEN
             BREAKLOOP
@@ -1403,19 +1401,19 @@ FUNCTION deleteSpecApartRecord(listCode,code)
     modify = TRUE
     WHILE TRUE
         CALL readFile(listCode)
-        PRINT("NEWLINE Which data row that you want to delete? ")
+        PRINT("Which data row that you want to delete? ")
         GET selecteddatarow
         IF selecteddatarow IS DIGIT THEN
             number = INTEGER(selecteddatarow)-1
             editDataType = None
             newData = None
-            PRINT("NEWLINE Are you sure that you want to delete selected record(s)? NEWLINE It will be not recovered once you hit [X]. However, you still can discard this changes by hitting any other keys if you change your mind: ")
+            PRINT("Are you sure that you want to delete selected record(s)?  It will be not recovered once you hit [X]. However, you still can discard this changes by hitting any other keys if you change your mind: ")
             GET confirmation
             IF confirmation IN ["X","x"] THEN
                 CALL replaceOldData(listCode,number,editDataType,newData)
-                PRINT("NEWLINE - Delete successful -")  
+                PRINT("- Delete successful -")  
             ELSE
-                PRINT("NEWLINE - Delete unsuccessful -")
+                PRINT("- Delete unsuccessful -")
             ENDIF
         ELSE
             code = 0
@@ -1432,16 +1430,16 @@ FUNCTION deleteAllApartrecords(listCode)
     DECLARE confirmation AS STRING
     modify = TRUE
     WHILE modify == TRUE
-        PRINT("NEWLINE Are you sure that you want to delete all records? NEWLINE It will be not recovered once you hit [X]. However, you still can discard this changes by hitting any other keys if you change your mind: ")
+        PRINT("Are you sure that you want to delete all records? It will be not recovered once you hit [X]. However, you still can discard this changes by hitting any other keys if you change your mind: ")
         GET confirmation
         IF confirmation IN ["X","x"] THEN
             OPENFILE "Apartment.txt" IN READ+ AS Ahandler
                 SEEK ADeletedhandler FROM LOCATION 0 
                 TRUNCATE ADeletedhandler
             CLOSEFILE
-            PRINT("NEWLINE - Delete successful -")
+            PRINT("- Delete successful -")
         ELSE
-            PRINT("NEWLINE - Delete unsuccessful -")
+            PRINT("- Delete unsuccessful -")
         ENDIF
     ENDWHILE
 ENDFUNCTION
@@ -1505,15 +1503,15 @@ FUNCTION searchBox(UID,code)
     DECLARE sourceFunction,option,listCode,opt AS STRING
     DECLARE num AS INTEGER
     WHILE TRUE
-        PRINT("NEWLINE ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- NEWLINE NEWLINE Welcome to search box!")
+        PRINT("Welcome to search box!")
         sourceFunction = "search"
         num = NONE
-        PRINT("NEWLINE 1. Search room specific details. NEWLINE 2. Search transaction details. NEWLINE 3. Search specific tenant details. NEWLINE NEWLINE 4. Exit search box. NEWLINE")
-        PRINT("NEWLINE Please type the search criteria based on the keywords above: NEWLINE")
+        PRINT("1. Search room specific details. 2. Search transaction details. 3. Search specific tenant details. 4. Exit search box.")
+        PRINT("Please type the search criteria based on the keywords above: ")
         GET option
         IF option IS DIGIT AND option == "1" THEN
             listCode = "a"
-            PRINT("NEWLINE [C]-Room code, [D]- Dimension, [P]-Pricing, [A]- Apartment ID, [E]-Date of Acquisition, [R]-Rental History NEWLINE Search?  ")
+            PRINT("[C]-Room code, [D]- Dimension, [P]-Pricing, [A]- Apartment ID, [E]-Date of Acquisition, [R]-Rental History Search?  ")
             GET opt
             IF opt IN ["C","c"] THEN
                 num = 1
@@ -1583,12 +1581,11 @@ FUNCTION searchInformation(listCode,num,details)
         recordExist = FALSE
         CALL listIdentifier(listCode) RETURNING l
         OPENFILE l IN READ AS Xhandler
-            PRINT("NEWLINE ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- NEWLINE NEWLINE Results: NEWLINE")
+            PRINT("Results: ")
             FOR record IN Xhandler
                 data = SPLIT record INTO LIST WITH(",")
                 IF searchInformation IN data LOCATION num THEN
                     PRINT(record RIGHTSTRIP(",") RIGHTSTRIP("NEWLINE"))
-                    PRINT("NEWLINE")
                     recordExist = TRUE
                 ELSE
                     CONTINUELOOP
@@ -1614,8 +1611,8 @@ listCode = "u"
 code = NONE
 username = NONE
 password = NONE
-PRINT("NEWLINE Welcome to Tenant Management System.")
-PRINT("[Y]-Yes I am.NEWLINE[Any Other Key]-No,I have an existing accountNEWLINEAre you a new user: ")
+PRINT("Welcome to Tenant Management System.")
+PRINT("[Y]-Yes I am. [Any Other Key]-No,I have an existing account Are you a new user: ")
 GET new
 IF new IN ["Y","y"] THEN
     CALL register(listCode,code) RETURNING username,password

@@ -52,7 +52,7 @@ def menu(UID,code):                                                           # 
          print("\n------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\nMain menu (Tenant Page):\n\nReview information about:\n[A] - All Apartments\n[T] - My Tenant details\n[P] - My Transactions\n\nQuick functions:\n[D] - Print my House & Tenant Details\n[S] - Search box\n[E] - Exit")  # Print message
       else:                                                                   # Other than that:
          print("\n------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\nMain menu (Admin Page):\n\nReview information about:\n[A] - Apartment\n[T] - Tenant\n[P] - Transaction\n\nQuick functions:\n[D] - Print Specific House & Tenant Details\n[S] - Search box\n[I] - Inquiry of Past Tenant Details\n[E] - Exit")  # Print message 
-      opt = input("\nPlease enter which operation that you want to do: ")       # Print message and get opt
+      opt = input("\nPlease enter which operation that you want to do: ")     # Print message and get opt
       if opt in ["S","s"]:                                                    # Check for basic Functions, If opt is equal to ["I","i"] Then:
          searchBox(UID,code)                                                  # Redirect to searchbox function, call function searchBox(UID,code)
       elif opt in ["A","a"]:                                                  # Check for basic Functions, If opt is equal to ["A","i\a"] Then:
