@@ -118,7 +118,7 @@ def appendFile(list,listCode):                                                # 
    with open (listIdentifier(listCode), "a") as fAppend:                      # Open selected text file in Append Mode as fAppend
       for item in list:
          fAppend.write(item)                                                  # Write item into fAppend
-         fAppend.write(",")                                                  # Write a comma and space (", ") into fAppend
+         fAppend.write(",")                                                   # Write a comma (",") into fAppend
       fAppend.write("\n")                                                     # Write a newline ("\n") into fAppend
 
 def readFile(listCode):                                                       # Define readFile function
@@ -151,7 +151,7 @@ def gettenantID(UID,userType):                                                # 
    if UID:                                                                    # Fetch existing UID
       with open("currentUser.txt","r") as uRead:                              # Open currentUser.txt file in Read Mode as uRead
          userRecord = uRead.read().split(",")                                 # Read and split the record with comma as a separator
-      return userRecord[2]                                                 # Exit function and send the value back to the program
+      return userRecord[2]                                                    # Exit function and send the value back to the program
    else:                                                                      # Other than that:
       while True:
          number = None                                                        # Set number as None
