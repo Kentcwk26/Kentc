@@ -1300,21 +1300,22 @@ FUNCTION replaceOldData(listCode,recordindex,editDataType,newData)
     DECLARE Xhandler,fUpdate AS FILE
     CALL listIdentifier(listCode) RETURNING l
     OPENFILE l IN READ AS Xhandler
-    updatedData = []
-    newRecord = []
-    dataRead = READ Xhandler LINE-BY-LINE
-    FOR record IN dataRead
-        strippedRecord = record RIGHTSTRIP(",NEWLINE") AND SPLIT RECORD INTO LIST WITH(",")
-        IF INDEX of dataRead LOCATION record == INTEGER(recordindex) THEN
-            IF newData CONTAINS ANY VALUE THEN
-                strippedRecord LOCATION INTEGER(editDataType) = newData
-                newRecord = JOIN strippedRecord INTO STRING WITH","
-                APPEND(newRecord + ",NEWLINE") INTO updatedData
+        updatedData = []
+        newRecord = []
+        dataRead = READ Xhandler LINE-BY-LINE
+        FOR record IN dataRead
+            strippedRecord = record RIGHTSTRIP(",NEWLINE") AND SPLIT RECORD INTO LIST WITH(",")
+            IF INDEX of dataRead LOCATION record == INTEGER(recordindex) THEN
+                IF newData CONTAINS ANY VALUE THEN
+                    strippedRecord LOCATION INTEGER(editDataType) = newData
+                    newRecord = JOIN strippedRecord INTO STRING WITH(",")
+                    APPEND(newRecord + ",NEWLINE") INTO updatedData
+                ELSE
+                    CONTINUELOOP
+                ENDIF
             ELSE
-                CONTINUELOOP
+                APPEND RECORD INTO updatedData
             ENDIF
-        ELSE
-            APPEND RECORD INTO updatedData
     CLOSEFILE
     CALL listIdentifier(listCode) RETURNING l
     OPENFILE l IN WRITE AS fUpdate
@@ -1332,26 +1333,26 @@ FUNCTION editData(UID,listCode,code)
     sourceFunction == "edit"
     WHILE TRUE
         IF listCode == "a" THEN
-            editDataType = CALL ApartmentDataInfo()
+            CALL ApartmentDataInfo() RETURNING editDataType
         ELSE
-            editDataType = CALL category(listCode,code,sourceFunction)
+            CALL category(listCode,code,sourceFunction) RETURNING editDataType
         ENDIF
-        display = CALL searchColumn(listCode,editDataType,UID)
+        CALL searchColumn(listCode,editDataType,UID) RETURNING display
         oldDataFormat = FALSE
         WHILE oldDataFormat = FALSE
             IF UID == None THEN
                 listLength = LENGTH(display)
                 FOR item FROM 0 TO listlength STEP 2
                     TRY
-                        PRINT(item+1,display[item],"TAB",item+1,display[item+1])
+                        PRINT(item+1,display[item],"TAB",item+2,display[item+1])
                     EXCEPT INDEXERROR
                         PRINT(item+1,display[item])
                     ENDTRY
                 ENDFOR
-                PRINT("Placement of items displayed above are labeled from upper-left to lower-right starting from 1 to",len(display))
+                PRINT("Placement of items displayed above are labeled from upper-left to lower-right starting from 1 to",LENGTH(display))
                 PRINT("Please enter the number of the item to edit: ")
                 GET selectedData
-                IF selectedData IS DECIMAL THEN
+                IF selectedData ISDECIMAL THEN
                     recordindex = INTEGER(selectedData)-1
                     oldDataFormat = TRUE
                 ELSE
@@ -1361,16 +1362,16 @@ FUNCTION editData(UID,listCode,code)
                 ENDIF
             ELSE
                 FOR item FROM 0 TO LENGTH(display)
-                    IF item == len(display)-1 THEN
+                    IF item == LENGTH(display)-1 THEN
                         recordindex = item
-                        oldDataFormat = True
+                        oldDataFormat = TRUE
                     ELSE
                         CONTINUELOOP
                     ENDIF
             ENDIF
         ENDWHILE
         PRINT("Please insert the new data with the correct format: ")
-        newData = CALL inputidentifier(UID,listCode,editDataType,code)
+        CALL inputidentifier(UID,listCode,editDataType,code) RETURNING newData
         PRINT("Are you sure with your records just now? ([Y]-Yes/[N]-No): ")
         GET editdataconfirmation
         IF editdataconfirmation IN ["Y","y"] THEN
