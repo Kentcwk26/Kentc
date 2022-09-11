@@ -909,12 +909,12 @@ FUNCTION newRoom()
             code = 2
             CALL message(code)
             PRINT("- Room info does not contain special character(s) -")
-            CONTINUE
+            CONTINUELOOP
         ELSEIF 0 <= LENGTH(newRoom) < 6 THEN
             code = 3
             CALL message(code)
             PRINT("-  Refer to the Room Info to look for its details and format -")
-            CONTINUE
+            CONTINUELOOP
         ELSEIF 
         newRoom ISDIGIT OR [
         FOR location IN newRoom
