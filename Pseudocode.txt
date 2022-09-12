@@ -1399,7 +1399,7 @@ FUNCTION deleteRecord(listCode,code)
             CALL deleteSpecApartRecord(listCode,code)
         ELSEIF deletedata == '2' THEN
             PRINT("- 2. Delete all records -")
-            CALL deleteAllApartrecords(listCode) 
+            CALL deleteAllApartrecords(listCode)
         ELSEIF deletedata IN ["E","e"] THEN
             BREAKLOOP
         ELSE
@@ -1419,7 +1419,7 @@ FUNCTION deleteSpecApartRecord(listCode,code)
         CALL readFile(listCode)
         PRINT("Which data row that you want to delete? ")
         GET selecteddatarow
-        IF selecteddatarow IS DIGIT THEN
+        IF selecteddatarow ISDIGIT THEN
             number = INTEGER(selecteddatarow)-1
             editDataType = None
             newData = None
@@ -1427,7 +1427,7 @@ FUNCTION deleteSpecApartRecord(listCode,code)
             GET confirmation
             IF confirmation IN ["X","x"] THEN
                 CALL replaceOldData(listCode,number,editDataType,newData)
-                PRINT("- Delete successful -")  
+                PRINT("- Delete successful -")
             ELSE
                 PRINT("- Delete unsuccessful -")
             ENDIF
@@ -1449,14 +1449,15 @@ FUNCTION deleteAllApartrecords(listCode)
         PRINT("Are you sure that you want to delete all records? It will be not recovered once you hit [X]. However, you still can discard this changes by hitting any other keys if you change your mind: ")
         GET confirmation
         IF confirmation IN ["X","x"] THEN
-            OPENFILE "Apartment.txt" IN READ+ AS Ahandler
-                SEEK ADeletedhandler FROM LOCATION 0 
+            OPENFILE "Apartment.txt" IN READ+ AS ADeletedhandler
+                SEEK ADeletedhandler FROM LOCATION 0
                 TRUNCATE ADeletedhandler
             CLOSEFILE
             PRINT("- Delete successful -")
         ELSE
             PRINT("- Delete unsuccessful -")
         ENDIF
+        RETURN modify
     ENDWHILE
 ENDFUNCTION
 
