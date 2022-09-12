@@ -1412,7 +1412,7 @@ ENDFUNCTION
 
 FUNCTION deleteSpecApartRecord(listCode,code)
     DECLARE modify AS BOOLEAN
-    DECALRE selecteddatarow,newData AS STRING
+    DECLARE selecteddatarow,newData AS STRING
     DECLARE number,editDataType AS INTEGER
     modify = TRUE
     WHILE TRUE
@@ -1421,8 +1421,8 @@ FUNCTION deleteSpecApartRecord(listCode,code)
         GET selecteddatarow
         IF selecteddatarow ISDIGIT THEN
             number = INTEGER(selecteddatarow)-1
-            editDataType = None
-            newData = None
+            editDataType = NONE
+            newData = NONE
             PRINT("Are you sure that you want to delete selected record(s)?  It will be not recovered once you hit [X]. However, you still can discard this changes by hitting any other keys if you change your mind: ")
             GET confirmation
             IF confirmation IN ["X","x"] THEN
