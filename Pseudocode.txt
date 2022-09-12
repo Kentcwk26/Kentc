@@ -1463,13 +1463,13 @@ ENDFUNCTION
 
 FUNCTION searchColumn(listCode,num,UID)
     DECLARE displayList,bulkData,individualList AS ARRAY
-    DECLARE Tread AS STRING
+    DECLARE Tread AS FILE
     displayList = []
     CALL listIdentifier(listCode) RETURNING l
     OPENFILE l IN READ AS Tread
         bulkData = READ Tread LINE-BY-LINE
         FOR line IN bulkData
-            individualList = RIGHTSTRIP(",NEWLINE") SPLIT (",") line
+            individualList = RIGHTSTRIP(",NEWLINE") SPLIT line INTO LIST WITH(",")
             IF listCode == "a" THEN
                 IF INTEGER(num) < 7 THEN
                     APPEND(individualList LOCATION num) INTO displayList
@@ -1477,7 +1477,7 @@ FUNCTION searchColumn(listCode,num,UID)
                     APPEND(STRING(individualList LOCATION 1)) + " ;" + STRING(individualList LOCATION num))
                 ENDIF
             ELSE
-                IF UID == None
+                IF UID == NONE THEN
                     IF listCode == "u" THEN
                         IF num == 0 THEN
                             APPEND ("ID: " + STRING(individualList LOCATION num) + " ;relevant data: " + STRING(individualList LOCATION 2)) INTO displayList
@@ -1494,7 +1494,7 @@ FUNCTION searchColumn(listCode,num,UID)
                 ELSE
                     IF listCode == "t" THEN
                         IF individualList LOCATION 0 == UID THEN
-                            IF num == 0: 
+                            IF num == 0 THEN
                                 APPEND(individualList LOCATION num) INTO displayList
                                 BREAKLOOP
                             ELSE
@@ -1506,23 +1506,24 @@ FUNCTION searchColumn(listCode,num,UID)
                         ENDIF
                     ENDIF
                 ENDIF
-            IF displayList == [] THEN
-                code = 5
-                CALL message(code)
-            ELSE
-                RETURN displayList
             ENDIF           
         ENDFOR
+    IF displayList == [] THEN
+        code = 5
+        CALL message(code)
+    ELSE
+        RETURN displayList
     CLOSEFILE
 ENDFUNCTION
 
 FUNCTION searchBox(UID,code)
     DECLARE sourceFunction,option,listCode,opt AS STRING
+    DECLARE display AS ARRAY
     DECLARE num AS INTEGER
     WHILE TRUE
-        PRINT("Welcome to search box!")
         sourceFunction = "search"
         num = NONE
+        PRINT("Welcome to search box!")
         PRINT("1. Search room specific details. 2. Search transaction details. 3. Search specific tenant details. 4. Exit search box.")
         PRINT("Please type the search criteria based on the keywords above: ")
         GET option
@@ -1546,23 +1547,26 @@ FUNCTION searchBox(UID,code)
                 code = 0
                 CALL message(code)
                 CONTINUELOOP
-            PRINT(searchColumn(listCode,num,UID))
+            CALL searchColumn(listCode,num,UID) RETURNING display
+            PRINT(display)
             ENDIF
         ELSEIF option ISDIGIT AND option == "2" THEN
             listCode = "p"
             IF UID CONTAINS ANY VALUE THEN
                 num = 2
             ELSE THEN
-                num = CALL category(listCode,code,sourceFunction)
-                PRINT(searchColumn(listCode,num,UID))
+                CALL category(listCode,code,sourceFunction) RETURNING num
+                CALL searchColumn(listCode,num,UID) RETURNING display
+                PRINT(display)
             ENDIF
         ELSEIF option ISDIGIT AND option == "3" THEN
             listCode = "t"
             IF UID CONTAINS ANY VALUE THEN
                 num = 2
             ELSE THEN
-                num = CALL category(listCode,code,sourceFunction)
-                PRINT(searchColumn(listCode,num,UID))
+                CALL category(listCode,code,sourceFunction) RETURNING num
+                CALL searchColumn(listCode,num,UID) RETURNING display
+                PRINT(display)
             ENDIF
         ELSEIF option == 4 THEN
             BREAKLOOP
@@ -1573,7 +1577,7 @@ FUNCTION searchBox(UID,code)
         ENDIF
         IF UID CONTAINS ANY VALUE THEN
             IF listCode == "a" THEN
-                details = None
+                details = NONE
             ELSE THEN
                 details = UID
             ENDIF
@@ -1585,13 +1589,14 @@ FUNCTION searchBox(UID,code)
 ENDFUNCTION
 
 FUNCTION searchInformation(listCode,num,details)
+    DECLARE recordExist AS BOOLEAN
     DECLARE searchInformation,l AS STRING
     DECLARE Xhandler AS FILE
     DECLARE data AS ARRAY
     WHILE TRUE
         IF details CONTAINS ANY VALUE THEN
             searchInformation == details
-        ELSE THEN
+        ELSE
             PRINT("Select and enter text to begin search: ")
             GET searchInformation
         ENDIF
@@ -1608,7 +1613,6 @@ FUNCTION searchInformation(listCode,num,details)
                     CONTINUELOOP
                 ENDIF
             IF recordExist == TRUE THEN
-                code = 0
                 PRINT("- Matching Records ends here -")
             ELSE
                 code = 4
