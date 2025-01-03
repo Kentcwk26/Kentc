@@ -6,6 +6,7 @@ Using datetime library, no external packages and a local file systems
 Prerequisites: 
 - Python 3.10 or above
 - Visual Studio Code
+
 How to launch project:
 1. Install Python 3.10 or above version
 2. Open the project in Visual Studio Code and run
