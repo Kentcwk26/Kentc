@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Run Python in GitHub Pages</title>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/brython/3.11.3/brython.min.js"></script>
+</head>
+<body onload="brython()">
+    <h1>Python on GitHub Pages</h1>
+    <textarea id="code" rows="5" cols="40">print("Hello, GitHub Pages!")</textarea>
+    <br>
+    <button onclick="runPython()">Run Python</button>
+    <pre id="output"></pre>
+
+    <script type="text/python">
+        from browser import document
+
+        def runPython(event):
+            code = document["code"].value
+            try:
+                result = eval(code)
+                document["output"].text = str(result)
+            except Exception as e:
+                document["output"].text = str(e)
+
+        document["runPython"].bind("click", runPython)
+    </script>
+</body>
+</html>
